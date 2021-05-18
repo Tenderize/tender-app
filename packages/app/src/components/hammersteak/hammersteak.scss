@@ -1,0 +1,53 @@
+
+#hammer {
+    animation: hammerMove 1.3s infinite;
+    top: -50px;
+    position:absolute;
+    left:-20px;
+  }
+
+#meat {
+    animation: meatMove 1.3s infinite;
+    top: 70px;
+    position:absolute;
+    left:-120px;
+  }
+
+  .wrapper {
+    top: 20px;
+    height: 200px;
+     position: relative;
+  }
+  
+  @keyframes hammerMove {
+    0% {
+      transform: rotate(0deg);
+      transform-origin: right;
+    }
+    5% {
+      transform: rotate(-40deg);
+      transform-origin: right;
+    }
+    100% {
+      transform: rotate(0deg);
+      transform-origin: right;
+    }
+  }
+  
+  @keyframes meatMove {
+    0% {
+      transform: scaleX(1);
+    }
+    5% {
+      transform: scaleX(1);
+    }
+    10% {
+      transform: scaleX(1.1);
+    }
+    40% {
+      transform: scaleX(1.1);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
