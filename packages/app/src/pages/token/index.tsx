@@ -1,6 +1,6 @@
-import React, { useState} from "react";
+import { useState} from "react";
 import { Card, Button, Heading, Text, Avatar, Input } from "rimble-ui";
-import { Container, Row, Col, Tabs, Tab, Form } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ethers from "ethers";
 import classNames from "classnames";
@@ -21,19 +21,6 @@ type CardInfo = {
   logo: string;
   symbol: string;
 };
-
-interface State {
-  tokenAddress: string;
-  tenderTokenAddress: string;
-  tokenBalance: string;
-  tenderBalance: string;
-  tokenAllowance: string;
-  tenderAllowance: string;
-  depositAmount: string;
-  withdrawAmount: string;
-  transactionModalOpen: boolean;
-  activeTab: string;
-}
 
 function Token() {
 

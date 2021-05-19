@@ -4,8 +4,6 @@ import { Button, Avatar } from "rimble-ui";
 import classNames from "classnames";
 import "./tokenCard.scss";
 
-import { ethers } from "ethers";
-
 type TokenCardProps = {
   url: string;
   info: CardInfo;
