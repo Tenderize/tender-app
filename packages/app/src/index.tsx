@@ -11,7 +11,7 @@ import './index.css';
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Mainnet,
   readOnlyUrls: {
-    [ChainId.Mainnet]: 'http://127.0.0.1:8545',
+    [ChainId.Mainnet]: process.env.JSON_RPC || "https://127.0.0.1:8545",
   },
 }
 
