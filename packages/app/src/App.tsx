@@ -6,8 +6,10 @@ import { ThemeProvider } from "styled-components";
 import { Container } from "react-bootstrap";
 
 import Background from "./components/background"
+import TestnetBanner from "./components/testnet-banner"
 import Home from './pages/home'
-
+import Token from './pages/token'
+import Nav from './components/nav'
 import './App.scss';
 
  // a theme with custom spacing and font sizes
@@ -28,18 +30,15 @@ function App() {
       <ThemeProvider theme={customTheme}>
       <BaseStyles>
         <Background />
+        <TestnetBanner/>
           <Router>
-              {/* <Nav
-                address={this.state.address}
-                cachedProvider={this.web3Modal.cachedProvider}
-                onConnect={this.onConnect}
-              /> */}
+            <Nav />
             <Switch>
               <Route exact path="/" component={Home}/>
-              {/* <Route
+              <Route
                 path="/stakers/:id"
-                component={TokenPage}
-              /> */}
+                component={Token}
+              />
             </Switch>
           </Router>
       </BaseStyles>

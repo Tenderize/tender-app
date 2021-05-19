@@ -2,6 +2,7 @@
     text-align: right;
     padding: 0;
     margin-bottom: 10px;
+    text-decoration: none;
   }
   .coming-soon {
     cursor: default !important;
@@ -10,3 +11,7 @@
       color: #a8b7f0 !important;
     }
   }
+
+.card-link {
+  text-decoration: none !important;
+}

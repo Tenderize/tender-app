@@ -4,6 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChainId, DAppProvider, Config } from '@usedapp/core'
 
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 

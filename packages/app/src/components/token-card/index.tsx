@@ -40,7 +40,6 @@ export default function TokenCard(props:TokenCardProps) {
         return info.available ? "Discover" : "Coming Soon";
     };
 
-    console.log(logo.default)
     const renderCard = () => {
         return (
         <Card
