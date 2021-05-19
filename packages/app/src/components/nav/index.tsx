@@ -1,4 +1,3 @@
-import React from "react";
 import  Connect  from "./Connect";
 import Account from "./Account";
 import { Link } from "react-router-dom";

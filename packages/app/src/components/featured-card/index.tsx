@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import { Row, Col } from "react-bootstrap";
 import TokenCard from "../token-card";
 import { Link } from "rimble-ui";

@@ -161,7 +161,7 @@ function Token() {
                       </Form.Text>
                     </Form.Group>
                     <Button
-                      disabled={depositInput == "0"}
+                      disabled={depositInput === "0"}
                       style={{ width: "100%" }}
                       type="submit"
                     >
@@ -186,7 +186,7 @@ function Token() {
                       </Form.Text>
                     </Form.Group>
                     <Button
-                      disabled={withdrawInput == "0"}
+                      disabled={withdrawInput === "0"}
                       style={{ width: "100%" }}
                       type="submit"
                     >

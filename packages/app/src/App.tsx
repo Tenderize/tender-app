@@ -1,9 +1,7 @@
-import React from 'react';
-import { Redirect, Route, Switch } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { BaseStyles, theme } from "rimble-ui";
 import { ThemeProvider } from "styled-components";
-import { Container } from "react-bootstrap";
 
 import Background from "./components/background"
 import TestnetBanner from "./components/testnet-banner"

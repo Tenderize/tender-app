@@ -1,5 +1,4 @@
 import "./hammersteak.scss"
-import { Row, Col } from "react-bootstrap";
 
 const hammer = require("../../images/hammer.svg");
 const meat = require("../../images/meat.svg");

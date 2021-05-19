@@ -1,4 +1,3 @@
-import React from "react";
 import "./background.scss";
 
 export default function Background() {

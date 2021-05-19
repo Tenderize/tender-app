@@ -1,7 +1,6 @@
-import React, { Component } from "react";
 import { Card, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Button, Heading, Text, Avatar } from "rimble-ui";
+import { Button, Avatar } from "rimble-ui";
 import classNames from "classnames";
 import "./tokenCard.scss";
 
@@ -24,16 +23,6 @@ type CardInfo = {
 };
 
 export default function TokenCard(props:TokenCardProps) {
-  const defaultProps = {
-    title: "Card Title",
-    description: "",
-    image: "https://airswap-token-images.s3.amazonaws.com/DAI.png",
-    stakerAddress: "",
-    url: "/",
-    apy: 0.0,
-    available: false,
-  };
-
     const { url, info } = props;
     const logo = require("../../images/" + info.logo);
     const ctaText = () => {
