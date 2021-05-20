@@ -8,6 +8,8 @@ import {
   useLocation
 } from "react-router-dom";
 
+import Faucet from "../../components/faucet"
+
 import stakers from "../../data/stakers";
 import "./token.scss";
 declare module "@rimble/icons";
@@ -113,7 +115,7 @@ function Token() {
                 <Text required="">{info.description}</Text>
               </Card>
             </Col>
-            <Col>
+            <Col lg={{span:6}}>
               <Card>
                 {tabButton("deposit")}
                 {tabButton("withdraw")}
@@ -182,6 +184,9 @@ function Token() {
                   </Form>
                 )}
               </Card>
+            </Col>
+            <Col className="mt-2" lg={{span:6, offset: 6}}>
+              <Faucet symbol={info.symbol}/>
             </Col>
           </Row>
         </Container>
