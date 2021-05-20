@@ -12,6 +12,10 @@ import Faucet from "../../components/faucet"
 
 import stakers from "../../data/stakers";
 import "./token.scss";
+
+import {useEtherBalance, useEthers, useTokenBalance} from "@usedapp/core"
+import {addresses} from "@tender/contracts"
+import {utils, BigNumber, constants } from "ethers"
 declare module "@rimble/icons";
 
 type CardInfo = {
@@ -26,9 +30,16 @@ type CardInfo = {
 
 function Token() {
 
+
+
   let location = useLocation();
   let info = stakers[location.pathname]
+  let name = location.pathname.split("/")[2]
 
+  let {account} = useEthers()
+  account = account ? account : constants.AddressZero
+  console.log(account)
+  const tokenBalance =  useTokenBalance(addresses[name].token, account)
   const logo = require("../../images/" + info.logo).default;
 
   const [activeTab, setActiveTab] = useState('deposit')
@@ -146,7 +157,7 @@ function Token() {
                         className="amount"
                       />
                       <Form.Text className="balance" onClick={maxDeposit}>
-                        Current Balance: {`${0} ${info.symbol}`}
+                        Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${info.symbol}`}
                       </Form.Text>
                     </Form.Group>
                     <Button
@@ -186,7 +197,7 @@ function Token() {
               </Card>
             </Col>
             <Col className="mt-2" lg={{span:6, offset: 6}}>
-              <Faucet symbol={info.symbol}/>
+              <Faucet name={name} symbol={info.symbol}/>
             </Col>
           </Row>
         </Container>

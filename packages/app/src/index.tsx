@@ -9,9 +9,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 const dappConfig: Config = {
-  readOnlyChainId: ChainId.Mainnet,
+  readOnlyChainId: ChainId.Rinkeby,
   readOnlyUrls: {
-    [ChainId.Mainnet]: process.env.JSON_RPC || "https://127.0.0.1:8545",
+    [ChainId.Rinkeby]: process.env.JSON_RPC || "https://rinkeby.infura.io/v3/42a353682886462f9f7b6b602f577a53",
   },
 }
 
