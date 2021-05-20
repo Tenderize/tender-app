@@ -1,5 +1,5 @@
 {
-  "name": "@project/contracts",
+  "name": "@tender/contracts",
   "version": "1.0.0",
   "main": "./src/index.js"
 }
