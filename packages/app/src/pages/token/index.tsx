@@ -13,9 +13,9 @@ import Faucet from "../../components/faucet"
 import stakers from "../../data/stakers";
 import "./token.scss";
 
-import {useEtherBalance, useEthers, useTokenBalance} from "@usedapp/core"
+import { useEthers, useTokenBalance} from "@usedapp/core"
 import {addresses} from "@tender/contracts"
-import {utils, BigNumber, constants } from "ethers"
+import {utils, constants } from "ethers"
 declare module "@rimble/icons";
 
 type CardInfo = {
@@ -38,7 +38,6 @@ function Token() {
 
   let {account} = useEthers()
   account = account ? account : constants.AddressZero
-  console.log(account)
   const tokenBalance =  useTokenBalance(addresses[name].token, account)
   const logo = require("../../images/" + info.logo).default;
 

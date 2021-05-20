@@ -6,11 +6,11 @@ import {useContractFunction} from "@usedapp/core"
 
 function Faucet({symbol, name}: any) {
 
-    console.log("name", contracts[name])
    const { state, send } = useContractFunction(contracts[name].faucet, 'request')
 
    const requestTokens = () => {
        send()
+       console.log(state.status)
    }
     return(
         <>
