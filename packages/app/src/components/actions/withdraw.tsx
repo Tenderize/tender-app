@@ -43,7 +43,7 @@ export default function Withdraw({name, symbol, tenderBalance, tenderAllowance}:
 
     const approveTokens = (e:any) => {
         e.preventDefault()
-        approve(addresses[name].swap, utils.parseEther(withdrawInput || "0").sub(tenderAllowance.toString()))
+        approve(addresses[name].swap, utils.parseEther(withdrawInput || "0"))
         console.log(approveTx)
     }
 

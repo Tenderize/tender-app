@@ -13,6 +13,8 @@ type DepositInputs = {
 }
 export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:DepositInputs) {
 
+    console.log(utils.formatEther(tokenAllowance.toString()))
+
     const [depositInput, setDepositInput] = useState("")
 
     const maxDeposit = () => {
@@ -37,7 +39,7 @@ export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:Dep
 
     const approveTokens = (e:any) => {
         e.preventDefault()
-        approve(addresses[name].controller, utils.parseEther(depositInput || "0").sub(tokenAllowance.toString()))
+        approve(addresses[name].controller, utils.parseEther(depositInput || "0"))
         console.log(approveTx)
     }
     return(
