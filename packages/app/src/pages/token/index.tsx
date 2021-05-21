@@ -1,6 +1,6 @@
 import { useState} from "react";
-import { Card, Button, Heading, Text, Avatar, Input } from "rimble-ui";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Card, Button, Heading, Text, Avatar } from "rimble-ui";
+import { Container, Row, Col} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ethers from "ethers";
 import classNames from "classnames";
@@ -9,13 +9,15 @@ import {
 } from "react-router-dom";
 
 import Faucet from "../../components/faucet"
+import {Deposit, Withdraw} from "../../components/actions"
 
 import stakers from "../../data/stakers";
 import "./token.scss";
 
-import { useEthers, useTokenBalance} from "@usedapp/core"
+import { useEthers, useTokenAllowance, useTokenBalance} from "@usedapp/core"
 import {addresses} from "@tender/contracts"
-import {utils, constants } from "ethers"
+import { constants } from "ethers"
+
 declare module "@rimble/icons";
 
 type CardInfo = {
@@ -29,55 +31,20 @@ type CardInfo = {
 };
 
 function Token() {
-
-
-
   let location = useLocation();
   let info = stakers[location.pathname]
   let name = location.pathname.split("/")[2]
 
   let {account} = useEthers()
   account = account ? account : constants.AddressZero
-  const tokenBalance =  useTokenBalance(addresses[name].token, account)
+  const tokenBalance =  useTokenBalance(addresses[name].token, account) || constants.Zero
+  const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero
+  const tokenAllowance = useTokenAllowance(addresses[name].token, account, addresses[name].controller) || constants.Zero
+  const tenderAllowance = useTokenAllowance(addresses[name].tenderToken, account, addresses[name].swap) || constants.Zero
+
   const logo = require("../../images/" + info.logo).default;
 
   const [activeTab, setActiveTab] = useState('deposit')
-
-  const [depositInput, setDepositInput] = useState("0")
-
-  const [withdrawInput, setWithdrawInput] = useState("0")
-
-  const depositText = () => {
-    // if (
-    //   parseInt(this.state.tokenAllowance, 10) >=
-    //   parseInt(this.state.depositAmount, 10)
-    // ) {
-    //   return `Deposit ${this.props.info.symbol}`;
-    // } else {
-    //   return `Approve ${this.props.info.symbol}`;
-    // }
-    return `Deposit ${info.symbol}`
-  };
-
-  const withdrawText = () => {
-    // if (
-    //   parseInt(this.state.tenderAllowance, 10) >=
-    //   parseInt(this.state.withdrawAmount, 10)
-    // ) {
-    //   return `Withdraw t${this.props.info.symbol}`;
-    // } else {
-    //   return `Approve t${this.props.info.symbol}`;
-    // }
-    return `Withdraw t${info.symbol}`
-  };
-
-  const maxDeposit = () => {
-    setDepositInput("0")
-  }
-
-  const maxWithdraw = () => {
-    setWithdrawInput("0")
-  } 
 
   let tabButton = (name: string) => {
     let active = name === activeTab;
@@ -144,55 +111,11 @@ function Token() {
                   /> */}
                 </div>
                 {activeTab === "deposit" && (
-                  <Form /*onSubmit={}*/>
-                    <Form.Group controlId="formDeposit">
-                      <Form.Label>Deposit Amount</Form.Label>
-                      <Input
-                        width={1}
-                        value={depositInput}
-                        onChange={setDepositInput}
-                        type="text"
-                        placeholder={"0 " + info.symbol}
-                        className="amount"
-                      />
-                      <Form.Text className="balance" onClick={maxDeposit}>
-                        Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${info.symbol}`}
-                      </Form.Text>
-                    </Form.Group>
-                    <Button
-                      disabled={depositInput === "0"}
-                      style={{ width: "100%" }}
-                      type="submit"
-                    >
-                      {depositText()}
-                    </Button>
-                  </Form>
+                  <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance}/>
                 )}
                 {activeTab === "withdraw" && (
-                  <Form /*onSubmit={this.handleWithdraw}*/>
-                    <Form.Group controlId="formWithdraw">
-                      <Form.Label>Withdraw Amount</Form.Label>
-                      <Input
-                        width={1}
-                        value={withdrawInput}
-                        onChange={setWithdrawInput}
-                        type="text"
-                        placeholder={`0 t${info.symbol}`}
-                        className="amount"
-                      />
-                      <Form.Text className="balance" onClick={maxWithdraw}>
-                        Current Balance: {`0 ${info.symbol}`}
-                      </Form.Text>
-                    </Form.Group>
-                    <Button
-                      disabled={withdrawInput === "0"}
-                      style={{ width: "100%" }}
-                      type="submit"
-                    >
-                      {withdrawText()}
-                    </Button>
-                  </Form>
-                )}
+                  <Withdraw name={name} symbol={info.symbol} tenderBalance={tenderBalance} tenderAllowance={tenderAllowance}/>
+                  )}
               </Card>
             </Col>
             <Col className="mt-2" lg={{span:6, offset: 6}}>
