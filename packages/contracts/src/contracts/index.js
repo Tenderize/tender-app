@@ -19,5 +19,6 @@ const graph = {
 }
 
 export default {
-    livepeer
+    livepeer,
+    graph
 }
