@@ -8,6 +8,13 @@ const addresses = {
     controller: "0xFdF9A8ce8A898Ae5e21855C665d8843c48FD55A6",
     tenderToken: "0x4F39d823fA1DfF3C2Ad87BC852030eFE4fF3c024",
     swap: "0x5eeccC30C735DBf5E55eAAb8ADb139E94B1Ae42e"
+  },
+  graph: {
+    faucet: "0x8e4f4befe13f33401c1725e898369b5c215d05e4",
+    token: "0xf382Be59b363c2cd9f9865E2c5E20160776e39CF",
+    controller: "0xe49B535059057Cc2007AD3B58485bb218bf4e380",
+    tenderToken: "0x574723708fEB43BA450F684d59F5Dd32884FD2aa",
+    swap: "0xB31D28d59A079aBcD91d52d353aa7B6A7b9E396C"
   }
 };
 
