@@ -12,6 +12,12 @@ const abis = {
     controller: Controller,
     tenderToken: TenderToken,
     swap: Swap
+  },
+  graph: {
+    faucet: Faucet,
+    controller: Controller,
+    tenderToken: TenderToken,
+    swap: Swap
   }
 };
 
