@@ -18,7 +18,16 @@ const graph = {
     swap: new Contract(addresses.graph.swap, new utils.Interface(abis.graph.swap))
 }
 
+const matic = {
+    faucet: new Contract(addresses.matic.faucet, new utils.Interface(abis.matic.faucet)),
+    token: new Contract(addresses.matic.token, new utils.Interface(abis.erc20)),
+    controller: new Contract(addresses.matic.controller, new utils.Interface(abis.matic.controller)),
+    tenderToken: new Contract(addresses.matic.tenderToken, new utils.Interface(abis.matic.tenderToken)),
+    swap: new Contract(addresses.matic.swap, new utils.Interface(abis.matic.swap))
+}
+
 export default {
     livepeer,
-    graph
+    graph,
+    matic
 }

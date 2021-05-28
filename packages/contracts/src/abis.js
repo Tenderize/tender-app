@@ -18,6 +18,12 @@ const abis = {
     controller: Controller,
     tenderToken: TenderToken,
     swap: Swap
+  },
+  matic: {
+    faucet: Faucet,
+    controller: Controller,
+    tenderToken: TenderToken,
+    swap: Swap
   }
 };
 
