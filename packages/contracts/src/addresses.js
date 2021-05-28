@@ -19,7 +19,7 @@ const addresses = {
   matic: {
     faucet: "0x5cd6e7925eab55dd690bd52a713966a0e1ad6497",
     token: "0xFA8B158E91F07084690F672B5881716A2Ada1E78",
-    controller: "0xFdF9A8ce8A898Ae5e21855C665d8843c48FD55A6",
+    controller: "0xcD3d81d56CE373B6e30006F801bf7e51C6006dF2",
     tenderToken: "0x05f91999EA53660B962AA3E4132feB6630797A77",
     swap: "0x5eeccC30C735DBf5E55eAAb8ADb139E94B1Ae42e",
   }
