@@ -3,7 +3,7 @@ import {useContractFunction} from "@usedapp/core"
 import {BigNumber, BigNumberish, utils} from "ethers"
 import { useState} from "react";
 import { Button, Input } from "rimble-ui";
-import { Form } from "react-bootstrap";
+import { Form, Spinner } from "react-bootstrap";
 
 type DepositInputs = {
     name: string,
@@ -12,8 +12,6 @@ type DepositInputs = {
     tokenAllowance: BigNumberish
 }
 export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:DepositInputs) {
-
-    console.log(utils.formatEther(tokenAllowance.toString()))
 
     const [depositInput, setDepositInput] = useState("")
 
@@ -36,6 +34,8 @@ export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:Dep
     }
     
     const {state: approveTx, send: approve } = useContractFunction(contracts[name].token, 'approve')
+
+    console.log(approveTx)
 
     const approveTokens = (e:any) => {
         e.preventDefault()
@@ -63,19 +63,29 @@ export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:Dep
                     {
                         !depositInput || BigNumber.from(tokenAllowance).gte(utils.parseEther(depositInput || "0")) ? 
                             <Button
-                            disabled={!depositInput || depositInput.toString() === "0"}
+                            disabled={!depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"}
                             style={{ width: "100%" }}
                             onClick={depositTokens}
                         >
-                            {"Deposit"}
+                            {
+                                depositTx.status === "Mining" ? 
+                                <><Spinner animation="border" variant="white" />Depositing...</>
+                                : "Deposit"
+
+                            }
                         </Button>
                         :
                         <Button
-                            disabled={!depositInput || depositInput.toString() === "0"}
+                            disabled={!depositInput || depositInput.toString() === "0" || approveTx.status === "Mining"}
                             style={{ width: "100%" }}
                             onClick={approveTokens}
                         >
-                            {"Approve"}
+                            {
+                                approveTx.status === "Mining" ? 
+                               <> <Spinner animation="border" variant="white" />Approving...</>
+                                : "Approve"
+
+                            }
                         </Button>
                     }
             </Form>

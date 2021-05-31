@@ -3,7 +3,7 @@ import {useContractFunction} from "@usedapp/core"
 import {BigNumber, BigNumberish, utils, constants} from "ethers"
 import { useState} from "react";
 import { Button, Input } from "rimble-ui";
-import { Form } from "react-bootstrap";
+import { Form, Spinner } from "react-bootstrap";
 
 type WithdrawInputs = {
     name: string,
@@ -68,19 +68,29 @@ export default function Withdraw({name, symbol, tenderBalance, tenderAllowance}:
                     {
                         !withdrawInput || BigNumber.from(tenderAllowance).gte(utils.parseEther(withdrawInput || "0")) ? 
                             <Button
-                            disabled={!withdrawInput || withdrawInput.toString() === "0"}
+                            disabled={!withdrawInput || withdrawInput.toString() === "0" || withdrawTx.status === "Mining"}
                             style={{ width: "100%" }}
                             onClick={withdrawTokens}
                         >
-                            {"Withdraw"}
+                            {
+                                withdrawTx.status === "Mining" ? 
+                                <><Spinner animation="border" variant="white" />Withdrawing...</>
+                                : "Withdraw"
+
+                            }
                         </Button>
                         :
                         <Button
-                            disabled={!withdrawInput || withdrawInput.toString() === "0"}
+                            disabled={!withdrawInput || withdrawInput.toString() === "0" || approveTx.status === "Mining"}
                             style={{ width: "100%" }}
                             onClick={approveTokens}
                         >
-                            {"Approve"}
+                            {
+                                approveTx.status === "Mining" ? 
+                                <><Spinner aria-hidden="true" as="span" animation="border" variant="white"></Spinner><span>Approving...</span></>
+                                : "Approve"
+
+                            }
                         </Button>
                     }
             </Form>

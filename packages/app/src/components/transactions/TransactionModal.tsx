@@ -1,7 +1,23 @@
 import { Modal, Card, Box, Flex, Icon, Text, Link, Loader, Tooltip, Heading, Button } from "rimble-ui";
+import { useState} from "react";
 
-export default function TransactionModal() {
+declare type TransactionState = {
+    title: string,
+    progress: number
+}
+
+export default function TransactionModal({
+    txHash,
+    isOpen
+}: any) {
+
+    const [tx, setTx]:[TransactionState, any] = useState({
+        title: "",
+        progress: 0
+    })
+
     return (
+        <Modal isOpen={isOpen}>
         <Card borderRadius={1} p={0}>
         <Flex
             justifyContent="space-between"
@@ -13,7 +29,7 @@ export default function TransactionModal() {
         >
             <Loader aria-label="Processing" size="24px" />
             <Heading textAlign="center" as="h1" fontSize={[2, 3]} px={[3, 0]}>
-            Your NFT is on its way
+                {tx.title}
             </Heading>
             <Link>
             <Icon
@@ -25,9 +41,6 @@ export default function TransactionModal() {
         </Flex>
         <Box p={[3, 4]}>
             <Flex justifyContent={"space-between"} flexDirection={"column"}>
-            <Text textAlign="center">
-                Nice one! It should be in your wallet shortly.
-            </Text>
             <Flex
                 alignItems={"stretch"}
                 flexDirection={"column"}
@@ -240,5 +253,7 @@ export default function TransactionModal() {
             </Flex>
         </Box>
         </Card>
-    )
+    
+        </Modal>
+)
 }
