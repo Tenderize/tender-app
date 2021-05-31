@@ -1,4 +1,18 @@
+# Tender-App
+
+## 0xHack 2021 
+
+Live demo available at https://tender-app.vercel.app/ 
+
+Video Demo: 
+[![Everything Is AWESOME](https://i9.ytimg.com/vi/R1Lw1p7RNaM/mq1.jpg?sqp=CNid0YUG&rs=AOn4CLDJiYWkYzH-UEsOnBpydDCqpNHs8w)](https://youtu.be/R1Lw1p7RNaM")
+
 This project was bootstrapped with [Create Eth App](https://github.com/paulrberg/create-eth-app).
+
+### Tech used: 
+
+- Matic 
+- Usedapp 
 
 ## Project Structure
 
