@@ -6,17 +6,17 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Registry
-    network: rinkeby
+    network: {{networkName}}
     source:
-      startBlock: 
-      address: 
+      startBlock: {{contracts.registry.startBlock}}
+      address: {{contracts.registry.address}}
       abi: Registry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.3
       abis:
         - name: Registry
-          file: ../contracts/src/abis/Faucet.json # TODO ADD ABI TO CONTRACTS PACKAGE
+          file: ../contracts/src/abis/Registry.json # TODO ADD ABI TO CONTRACTS PACKAGE
       entities:
         - TenderizerConfig
       eventHandlers:
@@ -27,7 +27,7 @@ dataSources:
 templates:
     - name: Tenderizer
       kind: ethereum/contract
-      network: rinkeby
+      network: {{networkName}}
       source:
         abi: Tenderizer
       mapping:

@@ -1,0 +1,1 @@
+import {abis} from "@tender/contracts"

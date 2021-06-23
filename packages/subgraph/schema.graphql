@@ -11,3 +11,25 @@ type Transfer @entity {
   to: String!
   value: BigInt!
 }
+
+type TenderizerConfig @entity {
+  id: ID!
+  steak: String!
+  Tenderizer: String!
+  Controller: String!
+  TenderToken: String!
+  ESP: String!
+  BPool: String!
+  TenderFarm: String!
+}
+
+type Tenderizer @entity {
+  id: ID!
+  config: TenderizerConfig
+}
+
+type Tender @entity {
+  id: ID!,
+  tenderizer: String!, # Tenderizer Proxy Address
+  deposit: BigDecimal,
+}

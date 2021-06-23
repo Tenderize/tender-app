@@ -7,9 +7,19 @@
   },
   "license": "MIT",
   "scripts": {
+    "prepare": "node ./templatify.js",
+    "prepare:rinkeby": "NETWORK_NAME=rinkeby node ./templatify.js",
+    "preparemainnet": "NETWORK_NAME=mainnet node ./templatify.js",
     "auth": "graph auth https://api.thegraph.com/ $GRAPH_ACCESS_TOKEN",
     "build": "graph build",
     "codegen": "graph codegen --output-dir src/types/",
     "deploy": "graph deploy paulrberg/create-eth-app --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+  },
+  "devDependencies": {
+    "fs-extra": "^10.0.0",
+    "handlebars": "^4.7.7",
+    "js-yaml": "^4.1.0",
+    "path": "^0.12.7",
+    "typy": "^3.3.0"
   }
 }

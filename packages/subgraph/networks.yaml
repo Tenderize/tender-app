@@ -1,0 +1,8 @@
+mainnet:
+  networkName: mainnet
+  contracts:
+    registry:
+      address: "0xc1c0472c0c80bccdc7f5d01a376bd97a734b8815"
+      startBlock: 500000
+rinkeby:
+  networkName: rinkeby
