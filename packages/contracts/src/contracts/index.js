@@ -7,7 +7,8 @@ const livepeer = {
     token: new Contract(addresses.livepeer.token, new utils.Interface(abis.erc20)),
     controller: new Contract(addresses.livepeer.controller, new utils.Interface(abis.livepeer.controller)),
     tenderToken: new Contract(addresses.livepeer.tenderToken, new utils.Interface(abis.livepeer.tenderToken)),
-    swap: new Contract(addresses.livepeer.swap, new utils.Interface(abis.livepeer.swap))
+    swap: new Contract(addresses.livepeer.swap, new utils.Interface(abis.livepeer.swap)),
+    farm: new Contract(addresses.livepeer.farm, new utils.Interface(abis.livepeer.farm))
 }
 
 const graph = {
@@ -15,7 +16,8 @@ const graph = {
     token: new Contract(addresses.graph.token, new utils.Interface(abis.erc20)),
     controller: new Contract(addresses.graph.controller, new utils.Interface(abis.graph.controller)),
     tenderToken: new Contract(addresses.graph.tenderToken, new utils.Interface(abis.graph.tenderToken)),
-    swap: new Contract(addresses.graph.swap, new utils.Interface(abis.graph.swap))
+    swap: new Contract(addresses.graph.swap, new utils.Interface(abis.graph.swap)),
+    farm: new Contract(addresses.livepeer.farm, new utils.Interface(abis.livepeer.farm))
 }
 
 const matic = {
@@ -23,7 +25,8 @@ const matic = {
     token: new Contract(addresses.matic.token, new utils.Interface(abis.erc20)),
     controller: new Contract(addresses.matic.controller, new utils.Interface(abis.matic.controller)),
     tenderToken: new Contract(addresses.matic.tenderToken, new utils.Interface(abis.matic.tenderToken)),
-    swap: new Contract(addresses.matic.swap, new utils.Interface(abis.matic.swap))
+    swap: new Contract(addresses.matic.swap, new utils.Interface(abis.matic.swap)),
+    farm: new Contract(addresses.livepeer.farm, new utils.Interface(abis.livepeer.farm))
 }
 
 export default {

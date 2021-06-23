@@ -4,6 +4,8 @@ import Faucet from "./abis/Faucet.json"
 import Controller from "./abis/Controller.json"
 import TenderToken from "./abis/TenderToken.json"
 import Swap from "./abis/Swap.json"
+import TenderFarm from "./abis/TenderFarm.json"
+
 const abis = {
   erc20: erc20Abi,
   ownable: ownableAbi,
@@ -11,19 +13,22 @@ const abis = {
     faucet: Faucet,
     controller: Controller,
     tenderToken: TenderToken,
-    swap: Swap
+    swap: Swap,
+    farm: TenderFarm,
   },
   graph: {
     faucet: Faucet,
     controller: Controller,
     tenderToken: TenderToken,
-    swap: Swap
+    swap: Swap,
+    farm: TenderFarm,
   },
   matic: {
     faucet: Faucet,
     controller: Controller,
     tenderToken: TenderToken,
-    swap: Swap
+    swap: Swap,
+    farm: TenderFarm,
   }
 };
 
