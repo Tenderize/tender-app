@@ -1,7 +1,7 @@
 import {contracts, addresses} from "@tender/contracts"
 import {useContractFunction} from "@usedapp/core"
 import {BigNumber, BigNumberish, utils} from "ethers"
-import { useState} from "react";
+import { useState, useContext, useEffect} from "react";
 import { Button, Input } from "rimble-ui";
 import { Form, Spinner } from "react-bootstrap";
 
@@ -25,7 +25,7 @@ export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:Dep
         setDepositInput(val)
     }
 
-    const { state: depositTx, send: deposit } = useContractFunction(contracts[name].controller, 'deposit')
+    const { state: depositTx, send: deposit } = useContractFunction(contracts[name].controller, 'deposit', {transactionName: `Deposit ${symbol}`})
 
     const depositTokens = (e:any) => {
         e.preventDefault()
@@ -33,7 +33,7 @@ export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:Dep
         console.log(depositTx)
     }
     
-    const {state: approveTx, send: approve } = useContractFunction(contracts[name].token, 'approve')
+    const {state: approveTx, send: approve } = useContractFunction(contracts[name].token, 'approve', {transactionName:  `Approve ${symbol}`})
 
     console.log(approveTx)
 
@@ -42,6 +42,7 @@ export default function Deposit({name, symbol, tokenBalance, tokenAllowance}:Dep
         approve(addresses[name].controller, utils.parseEther(depositInput || "0"))
         console.log(approveTx)
     }
+
     return(
         <>
             <Form>

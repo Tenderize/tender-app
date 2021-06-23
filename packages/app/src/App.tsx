@@ -3,11 +3,17 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { BaseStyles, theme } from "rimble-ui";
 import { ThemeProvider } from "styled-components";
 
-import Background from "./components/background"
-import TestnetBanner from "./components/testnet-banner"
+
+// PAGES
 import Home from './pages/home'
 import Token from './pages/token'
+
+// COMPONENTS
+import Background from "./components/background"
+import TestnetBanner from "./components/testnet-banner"
 import Nav from './components/nav'
+import {TransactionModal} from './components/transactions'
+
 import './App.scss';
 
  // a theme with custom spacing and font sizes
@@ -22,15 +28,23 @@ import './App.scss';
   },
 };
 
+const defaultTxSummary = {
+  title: '',
+  description: '',
+  status: 'None',
+  modal: false
+}
+
 function App() {
   return (
     <>
       <ThemeProvider theme={customTheme}>
       <BaseStyles>
         <Background />
+        <TransactionModal/>
         <TestnetBanner/>
           <Router>
-            <Nav />
+          <Nav />
             <Switch>
               <Route exact path="/" component={Home}/>
               <Route

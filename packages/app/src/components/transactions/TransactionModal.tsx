@@ -1,23 +1,26 @@
 import { Modal, Card, Box, Flex, Icon, Text, Link, Loader, Tooltip, Heading, Button } from "rimble-ui";
-import { useState} from "react";
-
-declare type TransactionState = {
-    title: string,
-    progress: number
-}
-
+import { useContext, useState, useEffect} from "react";
+import {useTransactions} from '@usedapp/core'
 export default function TransactionModal({
     txHash,
     isOpen
 }: any) {
 
-    const [tx, setTx]:[TransactionState, any] = useState({
-        title: "",
-        progress: 0
+    const [summary, setSummary] = useState({name: '', modal: false, hash: ''})
+    const {transactions } = useTransactions()
+
+    useEffect(() => {
+        const newSum = transactions.length > 0 ? {modal: true, hash: transactions[0].transaction.hash, name: transactions[0].transactionName || ''} : {name: '', modal: false, hash: ''}
+        if (newSum.hash == summary.hash) return;
+        setSummary(newSum)
     })
 
+    const closeModal = () => {
+      setSummary({...summary, modal: false})
+    } 
+
     return (
-        <Modal isOpen={isOpen}>
+        <Modal isOpen={summary.modal}>
         <Card borderRadius={1} p={0}>
         <Flex
             justifyContent="space-between"
@@ -29,7 +32,7 @@ export default function TransactionModal({
         >
             <Loader aria-label="Processing" size="24px" />
             <Heading textAlign="center" as="h1" fontSize={[2, 3]} px={[3, 0]}>
-                {tx.title}
+                {summary.name}
             </Heading>
             <Link>
             <Icon
@@ -249,7 +252,7 @@ export default function TransactionModal({
                 </Flex>
             </Flex>
 
-            <Button.Outline>Close</Button.Outline>
+            <Button.Outline onClick={closeModal}>Close</Button.Outline>
             </Flex>
         </Box>
         </Card>

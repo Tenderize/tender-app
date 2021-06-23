@@ -25,7 +25,7 @@ export default function Withdraw({name, symbol, tenderBalance, tenderAllowance}:
         setWithdrawInput(val)
     }
 
-    const { state: withdrawTx, send: swap } = useContractFunction(contracts[name].swap, 'swapExactAmountIn')
+    const { state: withdrawTx, send: swap } = useContractFunction(contracts[name].swap, 'swapExactAmountIn', {transactionName: `Swap tender${symbol} for ${symbol}`})
 
     const withdrawTokens = (e:any) => {
         e.preventDefault()    
@@ -39,7 +39,7 @@ export default function Withdraw({name, symbol, tenderBalance, tenderAllowance}:
         console.log(withdrawTx)
     }
     
-    const {state: approveTx, send: approve } = useContractFunction(contracts[name].tenderToken, 'approve')
+    const {state: approveTx, send: approve } = useContractFunction(contracts[name].tenderToken, 'approve', {transactionName: `Approve tender${symbol}`})
 
     const approveTokens = (e:any) => {
         e.preventDefault()
