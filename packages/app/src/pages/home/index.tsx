@@ -3,8 +3,9 @@ import HammerSteak from "../../components/hammersteak";
 import { Card, Heading, Text, Image, Icon } from "rimble-ui";
 import { Container, Row, Col } from "react-bootstrap";
 import "./home.scss";
+import { FC } from "react";
 
-export default function Home() {
+const Home: FC = () => {
   return (
     <>
       <Container>
@@ -88,4 +89,6 @@ export default function Home() {
       </Container>
     </>
   );
-}
+};
+
+export default Home;

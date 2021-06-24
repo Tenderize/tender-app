@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Card, Button, Heading, Text, Avatar } from "rimble-ui";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
@@ -26,7 +26,7 @@ type CardInfo = {
   symbol: string;
 };
 
-function Token() {
+const Token: FC = () => {
   const location = useLocation();
   const info = stakers[location.pathname];
   const name: string = location.pathname.split("/")[2];
@@ -124,7 +124,7 @@ function Token() {
       </Container>
     </>
   );
-}
+};
 
 export type TokenPageProps = {
   info: CardInfo;

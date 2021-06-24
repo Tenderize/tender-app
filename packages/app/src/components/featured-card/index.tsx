@@ -1,10 +1,12 @@
+import { FC } from "react";
 import { Row, Col } from "react-bootstrap";
-import TokenCard from "../token-card";
 import { Link } from "rimble-ui";
+
+import TokenCard from "../token-card";
 import "./featuredCard.scss";
 import stakers from "../../data/stakers";
 
-export default function FeaturedCard() {
+const FeaturedCard: FC = () => {
   const cards = [];
   let key: string;
   for (key in stakers) {
@@ -29,4 +31,6 @@ export default function FeaturedCard() {
       <Row>{cards}</Row>
     </>
   );
-}
+};
+
+export default FeaturedCard;

@@ -1,17 +1,17 @@
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Button, Input } from "rimble-ui";
 import { Form, Spinner } from "react-bootstrap";
 
-type WithdrawInputs = {
+type Props = {
   name: string;
   symbol: string;
   tenderBalance: BigNumberish;
   tenderAllowance: BigNumberish;
 };
-export default function Withdraw({ name, symbol, tenderBalance, tenderAllowance }: WithdrawInputs) {
+const Withdraw: FC<Props> = ({ name, symbol, tenderBalance, tenderAllowance }) => {
   const [withdrawInput, setWithdrawInput] = useState("");
 
   const maxWithdraw = () => {
@@ -98,4 +98,6 @@ export default function Withdraw({ name, symbol, tenderBalance, tenderAllowance 
       </Form>
     </>
   );
-}
+};
+
+export default Withdraw;

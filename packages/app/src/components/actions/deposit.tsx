@@ -1,17 +1,18 @@
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils } from "ethers";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Button, Input } from "rimble-ui";
 import { Form, Spinner } from "react-bootstrap";
 
-type DepositInputs = {
+type Props = {
   name: string;
   symbol: string;
   tokenBalance: BigNumberish;
   tokenAllowance: BigNumberish;
 };
-export default function Deposit({ name, symbol, tokenBalance, tokenAllowance }: DepositInputs) {
+
+const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
   const [depositInput, setDepositInput] = useState("");
 
   const maxDeposit = () => {
@@ -94,4 +95,6 @@ export default function Deposit({ name, symbol, tokenBalance, tokenAllowance }: 
       </Form>
     </>
   );
-}
+};
+
+export default Deposit;

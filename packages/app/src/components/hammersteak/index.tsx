@@ -1,9 +1,10 @@
+import { FC } from "react";
 import "./hammersteak.scss";
 
 const hammer = require("../../images/hammer.svg");
 const meat = require("../../images/meat.svg");
 
-export default function HammerSteak() {
+const HammerSteak: FC = () => {
   return (
     <div className="wrapper">
       <img id="meat" width="150" src={meat.default} alt="logo" />
@@ -11,4 +12,6 @@ export default function HammerSteak() {
       <img id="hammer" width="190" src={hammer.default} alt="logo" />
     </div>
   );
-}
+};
+
+export default HammerSteak;

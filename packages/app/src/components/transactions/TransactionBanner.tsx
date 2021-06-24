@@ -1,6 +1,7 @@
-import { Modal, Box, Flex, Icon, Text, Link } from "rimble-ui";
+import { FC } from "react";
+import { Box, Flex, Icon, Text, Link } from "rimble-ui";
 
-export default function TransactionBanner() {
+const TransactionBanner: FC = () => {
   return (
     <Flex flexDirection="column">
       <Box width="10%" height="8px" bg="success" />
@@ -34,4 +35,6 @@ export default function TransactionBanner() {
       </Box>
     </Flex>
   );
-}
+};
+
+export default TransactionBanner;

@@ -3,8 +3,9 @@ import Account from "./Account";
 import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import { useEthers } from "@usedapp/core";
+import { FC } from "react";
 
-function Nav() {
+const Nav: FC = () => {
   const logo = require("../../images/tenderizeLogo.svg").default;
 
   const { activateBrowserWallet, account } = useEthers();
@@ -23,6 +24,6 @@ function Nav() {
       </Row>
     </>
   );
-}
+};
 
 export default Nav;

@@ -1,13 +1,18 @@
 import { Modal, Card, Box, Flex, Icon, Text, Link, Loader, Tooltip, Heading, Button } from "rimble-ui";
-import { useState } from "react";
+import { FC, useState } from "react";
 
 declare type TransactionState = {
   title: string;
   progress: number;
 };
 
-export default function TransactionModal({ txHash, isOpen }: any) {
-  const [tx, setTx]: [TransactionState, any] = useState({
+type Props = {
+  txHash: string;
+  isOpen: boolean;
+};
+
+const TransactionModal: FC<Props> = ({ txHash: _txHash, isOpen }) => {
+  const [tx] = useState<TransactionState>({
     title: "",
     progress: 0,
   });
@@ -196,4 +201,6 @@ export default function TransactionModal({ txHash, isOpen }: any) {
       </Card>
     </Modal>
   );
-}
+};
+
+export default TransactionModal;

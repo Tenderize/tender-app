@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { Button, Avatar } from "rimble-ui";
 import classNames from "classnames";
 import "./tokenCard.scss";
+import { FC } from "react";
 
-type TokenCardProps = {
+type Props = {
   url: string;
   info: CardInfo;
   // provider: ethers.providers.Web3Provider | ethers.providers.JsonRpcProvider;
@@ -20,7 +21,7 @@ type CardInfo = {
   symbol: string;
 };
 
-export default function TokenCard(props: TokenCardProps) {
+const TokenCard: FC<Props> = props => {
   const { url, info } = props;
   const logo = require("../../images/" + info.logo);
   const ctaText = () => {
@@ -61,4 +62,6 @@ export default function TokenCard(props: TokenCardProps) {
       )}
     </Col>
   );
-}
+};
+
+export default TokenCard;

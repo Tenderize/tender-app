@@ -1,6 +1,11 @@
+import { FC } from "react";
 import { Button } from "rimble-ui";
 
-function Connect({ activateBrowserWallet }: any) {
+type Props = {
+  activateBrowserWallet: () => void;
+};
+
+const Connect: FC<Props> = ({ activateBrowserWallet }) => {
   return (
     <Button.Outline
       mt={1}
@@ -11,6 +16,6 @@ function Connect({ activateBrowserWallet }: any) {
       Connect Wallet
     </Button.Outline>
   );
-}
+};
 
 export default Connect;

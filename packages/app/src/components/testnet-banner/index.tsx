@@ -1,5 +1,7 @@
+import { FC } from "react";
 import "./banner.scss";
-function TestnetBanner() {
+
+const TestnetBanner: FC = () => {
   return (
     <>
       <div style={{ background: "#FFE8B9", height: "40px" }}>
@@ -7,6 +9,6 @@ function TestnetBanner() {
       </div>
     </>
   );
-}
+};
 
 export default TestnetBanner;
