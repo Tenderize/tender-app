@@ -1,4 +1,3 @@
-import React from "react";
 import FeaturedCards from "../../components/featured-card/";
 import HammerSteak from "../../components/hammersteak";
 import { Card, Heading, Text, Image, Icon } from "rimble-ui";
@@ -33,7 +32,7 @@ export default function Home() {
           </Col>
         </Row>
 
-        <FeaturedCards /*provider={this.props.provider}*/ />
+        <FeaturedCards /* provider={this.props.provider} */ />
 
         <Row style={{ marginTop: "6em" }}>
           <Col lg={{ span: 6 }} md={{ span: 6 }}>

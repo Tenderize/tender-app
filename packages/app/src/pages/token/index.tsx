@@ -1,20 +1,18 @@
 import { useState } from "react";
 import { Card, Button, Heading, Text, Avatar } from "rimble-ui";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import ethers from "ethers";
+import { Link, useLocation } from "react-router-dom";
+import ethers, { constants } from "ethers";
+import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
+import { addresses } from "@tender/contracts";
+
 import classNames from "classnames";
-import { useLocation } from "react-router-dom";
 
 import Faucet from "../../components/faucet";
 import { Deposit, Withdraw } from "../../components/actions";
 
 import stakers from "../../data/stakers";
 import "./token.scss";
-
-import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
-import { addresses } from "@tender/contracts";
-import { constants } from "ethers";
 
 declare module "@rimble/icons";
 
@@ -29,12 +27,12 @@ type CardInfo = {
 };
 
 function Token() {
-  let location = useLocation();
-  let info = stakers[location.pathname];
-  let name = location.pathname.split("/")[2];
+  const location = useLocation();
+  const info = stakers[location.pathname];
+  const name: string = location.pathname.split("/")[2];
 
   let { account } = useEthers();
-  account = account ? account : constants.AddressZero;
+  account = account ?? constants.AddressZero;
   const tokenBalance = useTokenBalance(addresses[name].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
   const tokenAllowance =
@@ -46,12 +44,12 @@ function Token() {
 
   const [activeTab, setActiveTab] = useState("deposit");
 
-  let tabButton = (name: string) => {
-    let active = name === activeTab;
+  const tabButton = (name: string) => {
+    const active = name === activeTab;
     if (active) {
       return (
         <Button
-          onClick={(e: any) => setActiveTab(name)}
+          onClick={() => setActiveTab(name)}
           className={classNames("tab", { active: active })}
           style={{
             width: "50%",
@@ -65,7 +63,7 @@ function Token() {
     } else {
       return (
         <Button.Outline
-          onClick={(e: any) => setActiveTab(name)}
+          onClick={() => setActiveTab(name)}
           className={classNames("tab", { active: active })}
           style={{
             width: "50%",
