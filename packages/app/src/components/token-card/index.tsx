@@ -20,51 +20,45 @@ type CardInfo = {
   symbol: string;
 };
 
-export default function TokenCard(props:TokenCardProps) {
-    const { url, info } = props;
-    const logo = require("../../images/" + info.logo);
-    const ctaText = () => {
-        return info.available ? "Discover" : "Coming Soon";
-    };
+export default function TokenCard(props: TokenCardProps) {
+  const { url, info } = props;
+  const logo = require("../../images/" + info.logo);
+  const ctaText = () => {
+    return info.available ? "Discover" : "Coming Soon";
+  };
 
-    const renderCard = () => {
-        return (
-        <Card
-            className={classNames({ disabled: !info.available })}
-            style={{ marginTop: "1em", zIndex: 1 }}
-        >
-            <Avatar size="large" src={logo.default} style={{ margin: "1em auto 0" }} />
-            <Card.Body
-            style={{ textTransform: "capitalize", textAlign: "center" }}
-            >
-            <Card.Title>
-                <h2>{info.title}</h2>
-            </Card.Title>
-
-        <div style={{ margin: "10 0" }}>
-          <h3>
-          <span className="percent">{info.apy}%</span>
-          </h3>  
-        </div>
-
-            <Button className="cta" disabled={!info.available}>
-                {ctaText()}
-            </Button>
-            </Card.Body>
-        </Card>
-        );
-    };
-
+  const renderCard = () => {
     return (
-        <Col xs={{ span: 12 }} sm={{ span: 6 }} md={{ span: 4 }} lg={{ span: 4 }}>
-        {info.available ? (
-            <Link to={url} className="card-link">
-            {renderCard()}
-            </Link>
-        ) : (
-            renderCard()
-        )}
-        </Col>
+      <Card className={classNames({ disabled: !info.available })} style={{ marginTop: "1em", zIndex: 1 }}>
+        <Avatar size="large" src={logo.default} style={{ margin: "1em auto 0" }} />
+        <Card.Body style={{ textTransform: "capitalize", textAlign: "center" }}>
+          <Card.Title>
+            <h2>{info.title}</h2>
+          </Card.Title>
+
+          <div style={{ margin: "10 0" }}>
+            <h3>
+              <span className="percent">{info.apy}%</span>
+            </h3>
+          </div>
+
+          <Button className="cta" disabled={!info.available}>
+            {ctaText()}
+          </Button>
+        </Card.Body>
+      </Card>
     );
-  
+  };
+
+  return (
+    <Col xs={{ span: 12 }} sm={{ span: 6 }} md={{ span: 4 }} lg={{ span: 4 }}>
+      {info.available ? (
+        <Link to={url} className="card-link">
+          {renderCard()}
+        </Link>
+      ) : (
+        renderCard()
+      )}
+    </Col>
+  );
 }
