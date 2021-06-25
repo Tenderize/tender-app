@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Route, Switch } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { BaseStyles, theme } from "rimble-ui";
@@ -24,12 +24,6 @@ const customTheme = {
 };
 
 const App: FC = () => {
-  const b = 4;
-
-  useEffect(() => {
-    console.log(b);
-  }, []);
-
   return (
     <>
       <ThemeProvider theme={customTheme}>
