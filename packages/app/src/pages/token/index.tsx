@@ -1,9 +1,7 @@
-import { useState} from "react";
-import { Card, Button, Heading, Text, Avatar } from "rimble-ui";
-import { Container, Row, Col} from "react-bootstrap";
+import { Card, Button, Heading, Avatar } from "rimble-ui";
+import { Container, Row, Col, Tabs, Tab} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ethers from "ethers";
-import classNames from "classnames";
 import {
   useLocation
 } from "react-router-dom";
@@ -44,78 +42,32 @@ function Token() {
 
   const logo = require("../../images/" + info.logo).default;
 
-  const [activeTab, setActiveTab] = useState('deposit')
-
-  let tabButton = (name: string) => {
-    let active = name === activeTab;
-    if (active) {
-      return (
-        <Button
-          onClick={(e: any) => setActiveTab(name)}
-          className={classNames("tab", { active: active })}
-          style={{
-            width: "50%",
-            textTransform: "capitalize",
-            borderRadius: "0",
-          }}
-        >
-          {name}
-        </Button>
-      );
-    } else {
-      return (
-        <Button.Outline
-          onClick={(e: any) => setActiveTab(name)}
-          className={classNames("tab", { active: active })}
-          style={{
-            width: "50%",
-            textTransform: "capitalize",
-            borderRadius: "0",
-          }}
-        >
-          {name}
-        </Button.Outline>
-      );
-    }
-  }
-
     return (
         <>
         <Container>
           <Link to="/">
             <Button.Text icon="KeyboardArrowLeft">Back</Button.Text>
           </Link>
-          <Heading as={"h2"}>About {info.title}</Heading>
           <Row>
-            <Col lg={{ span: 6 }}>
+            <Col lg={{span:12}}>
               <Card>
-                <Text required="">{info.description}</Text>
-              </Card>
-            </Col>
-            <Col lg={{span:6}}>
-              <Card>
-                {tabButton("deposit")}
-                {tabButton("withdraw")}
-                <Avatar
+              <Heading style={{ textAlign: "center" }}>{info.title}</Heading>
+              <Avatar
                   size="large"
                   src={logo}
                   style={{ margin: "1em auto 0" }}
                 />
-                <Heading style={{ textAlign: "center" }}>{info.title}</Heading>
-                <div style={{ textAlign: "center", justifyContent: "center" }}>
-                  {/* <SharePrice
-                    symbol={info.symbol}
-                    available={info.available}
-                    stakerAddress={info.stakerAddress}
-                    provider={this.props.provider}
-                  /> */}
-                </div>
-                {activeTab === "deposit" && (
+              <Tabs fill justify defaultActiveKey="stake" id="tokenpage-tabs">
+                <Tab eventKey="stake" title="Stake">
                   <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance}/>
-                )}
-                {activeTab === "withdraw" && (
+                </Tab>
+                <Tab eventKey="liquidity pool" title="Liquidity Pool">
                   <Withdraw name={name} symbol={info.symbol} tenderBalance={tenderBalance} tenderAllowance={tenderAllowance}/>
-                  )}
+                </Tab>
+                <Tab eventKey="farm" title="Farm">
+                  <div>hello yieldfarm</div>
+                </Tab>
+              </Tabs>
               </Card>
             </Col>
             <Col className="mt-2" lg={{span:6, offset: 6}}>
