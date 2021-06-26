@@ -1,14 +1,14 @@
-import "./banner.scss"
-function TestnetBanner() {
-    return(
-        <>
-        <div style={{ background: "#FFE8B9", height: "40px" }}>
-            <p className="announcement">
-            Tenderize.me is currently only live on Rinkeby testnet.
-            </p>
-        </div>
-        </>
-    )
-}
+import { FC } from "react";
+import "./banner.scss";
 
-export default TestnetBanner
+const TestnetBanner: FC = () => {
+  return (
+    <>
+      <div style={{ background: "#FFE8B9", height: "40px" }}>
+        <p className="announcement">Tenderize.me is currently only live on Rinkeby testnet.</p>
+      </div>
+    </>
+  );
+};
+
+export default TestnetBanner;

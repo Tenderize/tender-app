@@ -1,0 +1,10 @@
+{
+  "eslint.packageManager": "yarn",
+  "eslint.workingDirectories": [
+      {
+          "changeProcessCWD": true,
+          "directory": "./packages/app"
+      },
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

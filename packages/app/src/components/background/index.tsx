@@ -1,6 +1,7 @@
+import { FC } from "react";
 import "./background.scss";
 
-export default function Background() {
+const Background: FC = () => {
   return (
     <>
       <div className="background"></div>
@@ -9,4 +10,6 @@ export default function Background() {
       </div>
     </>
   );
-}
+};
+
+export default Background;
