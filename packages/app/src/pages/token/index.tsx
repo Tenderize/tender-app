@@ -12,6 +12,7 @@ import Farm from "../../components/farm"
 import LiquidityPool from '../../components/swap'
 import stakers from "../../data/stakers";
 import "./token.scss";
+import Swap from "../../components/actions/swap";
 
 declare module "@rimble/icons";
 
@@ -43,7 +44,7 @@ const Token: FC = () => {
 
   return (
     <>
-      <Container>
+      <Container className="mb-5">
         <Link to="/">
           <Button.Text icon="KeyboardArrowLeft">Back</Button.Text>
         </Link>
@@ -86,7 +87,12 @@ const Token: FC = () => {
               </Tabs>
             </Card>
           </Col>
-          <Col className="mt-2" lg={{ span: 6, offset: 6 }}>
+        </Row>
+        <Row>
+          <Col className="mt-2" lg={true}>
+            <Swap tokenSymbol={info.symbol} tokenBalance={tokenBalance} tenderBalance={tenderBalance} />
+          </Col>
+          <Col className="mt-2" lg={true}>
             <Faucet name={name} symbol={info.symbol} />
           </Col>
         </Row>
