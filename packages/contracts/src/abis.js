@@ -4,27 +4,18 @@ import Faucet from "./abis/Faucet.json"
 import Controller from "./abis/Controller.json"
 import TenderToken from "./abis/TenderToken.json"
 import Swap from "./abis/Swap.json"
+import TenderFarm from "./abis/TenderFarm.json"
+import Esp from "./abis/ESP.json"
+
 const abis = {
-  erc20: erc20Abi,
+  token: erc20Abi,
   ownable: ownableAbi,
-  livepeer: {
-    faucet: Faucet,
-    controller: Controller,
-    tenderToken: TenderToken,
-    swap: Swap
-  },
-  graph: {
-    faucet: Faucet,
-    controller: Controller,
-    tenderToken: TenderToken,
-    swap: Swap
-  },
-  matic: {
-    faucet: Faucet,
-    controller: Controller,
-    tenderToken: TenderToken,
-    swap: Swap
-  }
+  faucet: Faucet,
+  controller: Controller,
+  tenderToken: TenderToken,
+  swap: Swap,
+  liquidity: Esp,
+  farm: TenderFarm
 };
 
 export default abis;
