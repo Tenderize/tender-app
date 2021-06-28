@@ -26,7 +26,7 @@ const stakers: Stakers = {
     description:
       "Matic Network brings massive scale to Ethereum using an adapted version of Plasma with PoS based side chains. The Matic team a decentralized platform using an adapted version of Plasma framework that provides a solution for faster and extremely low-cost transactions with finality on the main chain. The system ensures liveliness using PoS checkpoints which are pushed to the Ethereum mainchain. This enables a single Matic sidechain to theoretically achieve 2 16 transactions per block, and possibly millions of transactions on multiple chains in the future.",
     stakerAddress: "",
-    available: true,
+    available: false,
     apy: 14.8,
     logo: "matic.svg",
     symbol: "MATIC",
@@ -36,7 +36,7 @@ const stakers: Stakers = {
     description:
       "The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible.",
     stakerAddress: "",
-    available: true,
+    available: false,
     apy: 6.5,
     logo: "graph.svg",
     symbol: "GRT",
