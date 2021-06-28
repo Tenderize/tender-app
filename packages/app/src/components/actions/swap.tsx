@@ -17,6 +17,8 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderBalance }) => {
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderBalance;
 
+  const [sendTokenAmount, setSendTokenAmount] = useState("0");
+
   return (
     <Card>
       <Card.Body>
@@ -25,7 +27,15 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderBalance }) => {
             <Form.Label>Send</Form.Label>
             <InputGroup className="mb-2">
               <InputGroup.Text>{tokenSendedSymbol}</InputGroup.Text>
-              <FormControl id="formSwapSend" placeholder="0" />
+              <FormControl id="formSwapSend" value={sendTokenAmount} />
+              <InputGroup.Append>
+                <Button
+                  variant="secondary"
+                  onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
+                >
+                  Max
+                </Button>
+              </InputGroup.Append>
             </InputGroup>
             <Form.Text id="fromSwapSendBalance" muted>
               {`Current Balance: ${utils.formatEther(tokenSendedBalance.toString() ?? "0")} ${tokenSendedSymbol}`}
