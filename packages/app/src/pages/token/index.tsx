@@ -8,6 +8,7 @@ import { addresses } from "@tender/contracts";
 
 import Faucet from "../../components/faucet";
 import { Deposit, Withdraw } from "../../components/actions";
+import Farm from "../../components/farm"
 import stakers from "../../data/stakers";
 import "./token.scss";
 
@@ -68,7 +69,11 @@ const Token: FC = () => {
                   />
                 </Tab>
                 <Tab eventKey="farm" title="Farm">
-                  <div>hello yieldfarm</div>
+                  <Farm 
+                    name={name}
+                    symbol={info.symbol}
+                    account={account}
+                  />
                 </Tab>
               </Tabs>
             </Card>
