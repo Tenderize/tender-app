@@ -90,7 +90,12 @@ const Token: FC = () => {
         </Row>
         <Row>
           <Col className="mt-2" lg={true}>
-            <Swap tokenSymbol={info.symbol} tokenBalance={tokenBalance} tenderBalance={tenderBalance} />
+            <Swap
+              protocolName={name}
+              tokenSymbol={info.symbol}
+              tokenBalance={tokenBalance}
+              tenderBalance={tenderBalance}
+            />
           </Col>
           <Col className="mt-2" lg={true}>
             <Faucet name={name} symbol={info.symbol} />

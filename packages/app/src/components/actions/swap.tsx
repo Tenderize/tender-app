@@ -1,41 +1,63 @@
-import { FC, useState } from "react";
+import { FC, MouseEventHandler, useState } from "react";
 import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
-import { BigNumber, utils } from "ethers";
+import { BigNumber, constants, utils } from "ethers";
+import { useContractFunction } from "@usedapp/core";
+import { contracts, addresses } from "@tender/contracts";
 
 type Props = {
+  protocolName: string;
   tokenSymbol: string;
   tokenBalance: BigNumber;
   tenderBalance: BigNumber;
 };
 
-const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderBalance }) => {
+const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderBalance, protocolName }) => {
   const [isSendingToken, setIsSendingToken] = useState(true);
-  const tenderTokenSymbol = `tender${tokenSymbol}`;
+  const [sendTokenAmount, setSendTokenAmount] = useState("0");
 
+  const tenderTokenSymbol = `tender${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderBalance;
+  const tokenSendedAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
+  const tokenReceivedAddress = isSendingToken ? addresses[protocolName].tenderToken : addresses[protocolName].token;
 
-  const [sendTokenAmount, setSendTokenAmount] = useState("0");
+  const { state: swapTx, send: swapExactAmountIn } = useContractFunction(
+    contracts[protocolName].swap,
+    "swapExactAmountIn"
+  );
 
-  console.log("tokenSendedBalance", tokenSendedBalance);
+  const isSendInputInvalid =
+    sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
+
+  const handlePressTrade: MouseEventHandler<HTMLElement> = (e) => {
+    e.preventDefault();
+    swapExactAmountIn(
+      tokenSendedAddress,
+      utils.parseEther(sendTokenAmount || "0"),
+      tokenReceivedAddress,
+      constants.One,
+      utils.parseEther("2")
+    );
+    console.log(swapTx);
+  };
+
   return (
     <Card>
       <Card.Body>
         <Form>
-          <Form.Group className="mb-3" controlId="formSwapSend">
+          <Form.Group className="mb-3">
             <Form.Label>Send</Form.Label>
             <InputGroup className="mb-2" hasValidation={true}>
               <InputGroup.Text>{tokenSendedSymbol}</InputGroup.Text>
               <Form.Control
                 id="formSwapSend"
+                type="number"
                 value={sendTokenAmount}
                 onChange={(e) => setSendTokenAmount(e.target.value)}
                 required={true}
-                isInvalid={
-                  sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance)
-                }
+                isInvalid={isSendInputInvalid}
               />
               <InputGroup.Append>
                 <Button
@@ -64,7 +86,9 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderBalance }) => {
             </InputGroup>
           </Form.Group>
 
-          <Button>Trade</Button>
+          <Button disabled={isSendInputInvalid} onClick={handlePressTrade}>
+            Trade
+          </Button>
         </Form>
       </Card.Body>
     </Card>
