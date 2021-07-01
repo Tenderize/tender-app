@@ -8,8 +8,8 @@ import { addresses } from "@tender/contracts";
 
 import Faucet from "../../components/faucet";
 import { Deposit, Withdraw } from "../../components/actions";
-import Farm from "../../components/farm"
-import LiquidityPool from '../../components/swap'
+import Farm from "../../components/farm";
+import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import "./token.scss";
 
@@ -43,7 +43,7 @@ const Token: FC = () => {
 
   return (
     <>
-      <Container>
+      <Container className="mb-5">
         <Link to="/">
           <Button.Text icon="KeyboardArrowLeft">Back</Button.Text>
         </Link>
@@ -71,22 +71,19 @@ const Token: FC = () => {
                   <LiquidityPool
                     name={name}
                     symbol={info.symbol}
-                    account={account}
                     tokenBalance={tokenBalance}
                     tenderTokenBalance={tenderBalance}
-                   />
+                  />
                 </Tab>
                 <Tab eventKey="farm" title="Farm">
-                  <Farm 
-                    name={name}
-                    symbol={info.symbol}
-                    account={account}
-                  />
+                  <Farm name={name} symbol={info.symbol} account={account} />
                 </Tab>
               </Tabs>
             </Card>
           </Col>
-          <Col className="mt-2" lg={{ span: 6, offset: 6 }}>
+        </Row>
+        <Row>
+          <Col className="mt-2" lg={true}>
             <Faucet name={name} symbol={info.symbol} />
           </Col>
         </Row>

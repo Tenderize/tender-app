@@ -2,7 +2,10 @@ import { Card, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Button, Avatar } from "rimble-ui";
 import classNames from "classnames";
+import styled from "styled-components";
+
 import "./tokenCard.scss";
+
 import { FC } from "react";
 
 type Props = {
@@ -21,7 +24,7 @@ type CardInfo = {
   symbol: string;
 };
 
-const TokenCard: FC<Props> = props => {
+const TokenCard: FC<Props> = (props) => {
   const { url, info } = props;
   const logo = require("../../images/" + info.logo);
   const ctaText = () => {
@@ -30,7 +33,7 @@ const TokenCard: FC<Props> = props => {
 
   const renderCard = () => {
     return (
-      <Card className={classNames({ disabled: !info.available })} style={{ marginTop: "1em", zIndex: 1 }}>
+      <TCard className={classNames({ disabled: !info.available })} style={{ marginTop: "1em", zIndex: 1 }}>
         <Avatar size="large" src={logo.default} style={{ margin: "1em auto 0" }} />
         <Card.Body style={{ textTransform: "capitalize", textAlign: "center" }}>
           <Card.Title>
@@ -47,7 +50,7 @@ const TokenCard: FC<Props> = props => {
             {ctaText()}
           </Button>
         </Card.Body>
-      </Card>
+      </TCard>
     );
   };
 
@@ -63,5 +66,33 @@ const TokenCard: FC<Props> = props => {
     </Col>
   );
 };
+
+const TCard = styled(Card)`
+  z-index: 10;
+  transform: scale(1);
+  transition-duration: 0.2s;
+  margin: 0 0 20px !important; // I don't feel like figuring out how to override it without this.
+  text-decoration: none;
+  &:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(78, 102, 222, 0.5);
+    transform: scale(1.05);
+    transition-duration: 0.2s;
+  }
+
+  &.disabled {
+    cursor: default;
+  }
+
+  &.disabled:hover {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transform: scale(1.01);
+    transition-duration: 0.1s;
+  }
+
+  .cta {
+    width: 80%;
+    margin-top: 10px;
+  }
+`;
 
 export default TokenCard;
