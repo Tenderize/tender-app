@@ -1,6 +1,6 @@
 // This address points to a dummy ERC20 contract deployed on Ethereum Mainnet,
 // Goerli, Kovan, Rinkeby and Ropsten. Replace it with your smart contracts.
-const addresses = {  
+const addresses = {
   livepeer: {
     faucet: "0x4868A5e950e386E3d99038B141FcfA53362E67Ba",
     token: "0xe80110C0a290c493C543148c5445a23D3403a096",

@@ -8,11 +8,10 @@ import { addresses } from "@tender/contracts";
 
 import Faucet from "../../components/faucet";
 import { Deposit, Withdraw } from "../../components/actions";
-import Farm from "../../components/farm"
-import LiquidityPool from '../../components/swap'
+import Farm from "../../components/farm";
+import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import "./token.scss";
-import Swap from "../../components/actions/swap";
 
 declare module "@rimble/icons";
 
@@ -75,28 +74,16 @@ const Token: FC = () => {
                     account={account}
                     tokenBalance={tokenBalance}
                     tenderTokenBalance={tenderBalance}
-                   />
+                  />
                 </Tab>
                 <Tab eventKey="farm" title="Farm">
-                  <Farm 
-                    name={name}
-                    symbol={info.symbol}
-                    account={account}
-                  />
+                  <Farm name={name} symbol={info.symbol} account={account} />
                 </Tab>
               </Tabs>
             </Card>
           </Col>
         </Row>
         <Row>
-          <Col className="mt-2" lg={true}>
-            <Swap
-              protocolName={name}
-              tokenSymbol={info.symbol}
-              tokenBalance={tokenBalance}
-              tenderBalance={tenderBalance}
-            />
-          </Col>
           <Col className="mt-2" lg={true}>
             <Faucet name={name} symbol={info.symbol} />
           </Col>
