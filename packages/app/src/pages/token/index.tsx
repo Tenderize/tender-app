@@ -71,7 +71,6 @@ const Token: FC = () => {
                   <LiquidityPool
                     name={name}
                     symbol={info.symbol}
-                    account={account}
                     tokenBalance={tokenBalance}
                     tenderTokenBalance={tenderBalance}
                   />

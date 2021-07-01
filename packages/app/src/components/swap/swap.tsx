@@ -30,7 +30,6 @@ const Swap: FC<Props> = ({
   tokenWeight,
   tenderLpBalance,
   tenderTokenWeight,
-  totalWeight,
   spotPrice,
 }) => {
   const hasValue = (val: any) => {
@@ -55,17 +54,17 @@ const Swap: FC<Props> = ({
   const tokenSpotPrice = (isSendingToken ? ONE.mul(ONE).div(spotPrice) : BigNumber.from(spotPrice.toString()))
     .mul(11)
     .div(10);
-  const { state: swapTx, send: swapExactAmountIn } = useContractFunction(
+  const { state: _swapTx, send: swapExactAmountIn } = useContractFunction(
     contracts[protocolName].swap,
     "swapExactAmountIn"
   );
 
-  const { state: approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
+  const { state: _approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
     contracts[protocolName].token,
     "approve"
   );
 
-  const { state: approveTenderTx, send: approveTenderTokens } = useContractFunction(
+  const { state: _approveTenderTx, send: approveTenderTokens } = useContractFunction(
     contracts[protocolName].tenderToken,
     "approve"
   );
@@ -109,12 +108,8 @@ const Swap: FC<Props> = ({
     } else {
       await approveTenderTokens(addresses[protocolName].swap, amount);
     }
-    console.log("tokenspotprice", tokenSpotPrice.toString());
     swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, calcOutGivenIn, tokenSpotPrice);
-    console.log(swapTx);
   };
-
-  console.log("XXX", approveTokenTx);
 
   return (
     <Card>
@@ -155,7 +150,7 @@ const Swap: FC<Props> = ({
             <Form.Label>Receive</Form.Label>
             <InputGroup className="mb-2">
               <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
-              <FormControl id="formSwapReceive" placeholder={utils.formatEther(calcOutGivenIn || "0")} />
+              <FormControl id="formSwapReceive" placeholder={utils.formatEther(receiveTokenAmount|| "0")} />
             </InputGroup>
           </Form.Group>
 

@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { BigNumber, BigNumberish, utils } from "ethers";
-import { useContractCall, useContractCalls } from "@usedapp/core";
+import { BigNumberish } from "ethers";
+import { useContractCalls } from "@usedapp/core";
 import { addresses, contracts } from "@tender/contracts";
 
 import Swap from "./swap";
@@ -9,12 +9,11 @@ import JoinPool from "./join";
 type Props = {
   name: string;
   symbol: string;
-  account: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
 };
 
-const LiquidityPool: FC<Props> = ({ name, symbol, account, tokenBalance, tenderTokenBalance }) => {
+const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
   // Swap fee
   // Total weight
   // Token Weight

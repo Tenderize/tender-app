@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 // import { useContractFunction } from "@usedapp/core";
-import { Form, Button, Spinner, Modal, Tabs, Tab, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
+import { Form, Button, Modal, Tabs, Tab, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
@@ -127,26 +127,19 @@ const JoinPool: FC<Props> = ({
 
   const singlePoolOut = useCalcSinglePoolOut() || "0";
 
-  const { state: approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
+  const { state: _approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
     contracts[name].token,
     "approve"
   );
-  const approveTokens = (e: any) => {
-    e.preventDefault();
-    approveUnderlyingTokens(addresses[name].liquidity, utils.parseEther(tokenInput || "0"));
-  };
 
-  const { state: approveTenderTx, send: approveTenderTokens } = useContractFunction(
+  const { state: _approveTenderTx, send: approveTenderTokens } = useContractFunction(
     contracts[name].tenderToken,
     "approve"
   );
-  const approveTenders = (e: any) => {
-    e.preventDefault();
-    approveTenderTokens(addresses[name].liquidity, utils.parseEther(tenderInput || "0"));
-  };
 
-  const { state: joinPoolTx, send: joinPool } = useContractFunction(contracts[name].liquidity, "joinPool");
-  const { state: joinSwapExternAmountInTx, send: joinSwapExternAmountIn } = useContractFunction(
+  const { state: _joinPoolTx, send: joinPool } = useContractFunction(contracts[name].liquidity, "joinPool");
+  
+  const { state: _joinSwapExternAmountInTx, send: joinSwapExternAmountIn } = useContractFunction(
     contracts[name].liquidity,
     "joinswapExternAmountIn"
   );
