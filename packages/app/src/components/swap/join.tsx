@@ -157,7 +157,7 @@ const JoinPool: FC<Props> = ({
     return tokenInBN.mul(lpShares).div(tokenLpBalance);
   };
 
-  const addLiquidity = (e: any) => {
+  const addLiquidity = async (e: any) => {
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
@@ -165,7 +165,7 @@ const JoinPool: FC<Props> = ({
       console.log(calcPoolOutFromRatio().toString());
       const poolTokensOut = calcPoolOutFromRatio();
       approveUnderlyingTokens(addresses[name].liquidity, tokenIn);
-      approveTenderTokens(addresses[name].liquidity, tenderIn);
+      await approveTenderTokens(addresses[name].liquidity, tenderIn);
       // NOTE: Pool is currently tenderToken/Token
       joinPool(poolTokensOut, [tenderIn, tokenIn]);
     } else {
@@ -175,11 +175,11 @@ const JoinPool: FC<Props> = ({
       if (selectToken === symbol) {
         token = addresses[name].token;
         amount = tokenIn;
-        approveUnderlyingTokens(addresses[name].liquidity, amount);
+        await approveUnderlyingTokens(addresses[name].liquidity, amount);
       } else if (selectToken === `t${symbol}`) {
         token = addresses[name].tenderToken;
         amount = tenderIn;
-        approveTenderTokens(addresses[name].liquidity, amount);
+        await approveTenderTokens(addresses[name].liquidity, amount);
       }
       joinSwapExternAmountIn(token, amount, poolTokensOut);
     }
