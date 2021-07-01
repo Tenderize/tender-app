@@ -2,7 +2,7 @@
 // Goerli, Kovan, Rinkeby and Ropsten. Replace it with your smart contracts.
 const addresses = {  
   livepeer: {
-    faucet: "0x99e3A045Fb28E44d23e1eDBa6ED0d49F4Db38d47",
+    faucet: "0x4868A5e950e386E3d99038B141FcfA53362E67Ba",
     token: "0xe80110C0a290c493C543148c5445a23D3403a096",
     controller: "0x3891FB6b6B145Ad104FE98aC6EFAFc7d8feDD63C",
     tenderToken: "0x6b903e6751e10d9F8AEa932891DED743F2F22616",
