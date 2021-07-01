@@ -29,6 +29,23 @@ type Tenderizer @entity { # TODO: Rename this to 'Protocol'/'Integration'? Just 
   farmHarvest: BigInt! # Total rewards collected from farm
 }
 
+type User @entity {
+  id: ID! # Wallet address of user
+  tenderizerData: [UserTenderizerData!]!
+}
+
+type UserTenderizerData @entity { # TODO: Better name? Since we have farm data here as well
+  id: ID! # <wallet-address>_<portocol> eg.'0xfA668FB97697200FA56ce98E246db61Cc7E14Bd5_livepeer'
+  protocol: String! # Name of the protocol eg. 'livepeer'
+
+  deposits: BigInt! # Total amount depositied in tenderizer by given user
+  withdrawals: BigInt! # Total amount depositied in tenderizer by given user
+
+  farmDeposits: BigInt! # Total amount depositied in farm by given user
+  farmWithdrawals: BigInt! # Total amount withdrawn from farm by given user
+  farmHarvest: BigInt! # Total amount harvest collected from farm by given user
+}
+
 
 # Entities for timeseries 
 type Day @entity{
@@ -48,7 +65,7 @@ type Day @entity{
   totalFarm: BigInt!
 }
 
-# Registry eevent entity
+# Registry event entity
 type TenderizerCreatedEvent @entity {
   id: ID!
   name: String!
