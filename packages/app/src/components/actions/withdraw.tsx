@@ -11,6 +11,7 @@ type Props = {
   tenderBalance: BigNumberish;
   tenderAllowance: BigNumberish;
 };
+
 const Withdraw: FC<Props> = ({ name, symbol, tenderBalance, tenderAllowance }) => {
   const [withdrawInput, setWithdrawInput] = useState("");
 
