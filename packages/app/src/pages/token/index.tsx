@@ -9,6 +9,7 @@ import { addresses } from "@tender/contracts";
 import Faucet from "../../components/faucet";
 import { Deposit, Withdraw } from "../../components/actions";
 import Farm from "../../components/farm"
+import LiquidityPool from '../../components/swap'
 import stakers from "../../data/stakers";
 import "./token.scss";
 
@@ -67,6 +68,13 @@ const Token: FC = () => {
                     tenderBalance={tenderBalance}
                     tenderAllowance={tenderAllowance}
                   />
+                  <LiquidityPool
+                    name={name}
+                    symbol={info.symbol}
+                    account={account}
+                    tokenBalance={tokenBalance}
+                    tenderTokenBalance={tenderBalance}
+                   />
                 </Tab>
                 <Tab eventKey="farm" title="Farm">
                   <Farm 
