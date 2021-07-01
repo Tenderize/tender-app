@@ -3,6 +3,7 @@ import { Farm } from "../types/templates/TenderFarm/TenderFarm"
 import { 
     loadOrCreateTenderizer,
     getTenderizerIdByTenderFarmAddress,
+    loadOrCreateUserTenderizerData,
    } from "./utils"
 
 export function handleFarmEvent(farmEvent: Farm): void {
@@ -19,6 +20,11 @@ export function handleFarmEvent(farmEvent: Farm): void {
     let tenderizer = loadOrCreateTenderizer(tenderizerId)
     tenderizer.farmDeposits = tenderizer.farmDeposits.plus(farmEvent.params.amount)
     tenderizer.save()
+
+    // Update User data
+    let userData = loadOrCreateUserTenderizerData(farmEvent.params.account.toHex(), tenderizerId)
+    userData.farmDeposits = userData.farmDeposits.plus(farmEvent.params.amount)
+    userData.save()
   
     // Save raw event
     let event = new FarmEvent(farmEvent.transaction.hash.toHex());
@@ -43,6 +49,11 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
     let tenderizer = loadOrCreateTenderizer(tenderizerId)
     tenderizer.farmWithdrawals = tenderizer.farmWithdrawals.plus(unfarmEvent.params.amount)
     tenderizer.save()
+
+    // Update User data
+    let userData = loadOrCreateUserTenderizerData(unfarmEvent.params.account.toHex(), tenderizerId)
+    userData.farmWithdrawals = userData.farmWithdrawals.plus(unfarmEvent.params.amount)
+    userData.save()
   
     // Save raw event
     let event = new UnfarmEvent(unfarmEvent.transaction.hash.toHex());
@@ -67,6 +78,11 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
   tenderizer.farmHarvest = tenderizer.farmHarvest.plus(harvestEvent.params.amount)
   tenderizer.save()
+
+  // Update User data
+  let userData = loadOrCreateUserTenderizerData(harvestEvent.params.account.toHex(), tenderizerId)
+  userData.farmHarvest = userData.farmHarvest.plus(harvestEvent.params.amount)
+  userData.save()
 
   // Save raw event
   let event = new HarvestEvent(harvestEvent.transaction.hash.toHex());

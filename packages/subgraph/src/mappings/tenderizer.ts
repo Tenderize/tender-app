@@ -15,6 +15,7 @@ import {
 import { 
   loadOrCreateTenderizer,
   getTenderizerIdByTenderizerAddress,
+  loadOrCreateUserTenderizerData,
  } from "./utils"
 
 export function handleDepositEvent(depositEvent: Deposit): void {
@@ -31,6 +32,11 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
   tenderizer.deposits = tenderizer.deposits.plus(depositEvent.params.amount)
   tenderizer.save()
+
+  // Update User data
+  let userData = loadOrCreateUserTenderizerData(depositEvent.params.from.toHex(), tenderizerId)
+  userData.deposits = userData.deposits.plus(depositEvent.params.amount)
+  userData.save()
 
   // Save raw event
   let event = new DepositEvent(depositEvent.transaction.hash.toHex());
@@ -55,6 +61,11 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
   tenderizer.withdrawals = tenderizer.withdrawals.plus(withdrawEvent.params.amount)
   tenderizer.save()
+
+  // Update User data
+  let userData = loadOrCreateUserTenderizerData(withdrawEvent.params.from.toHex(), tenderizerId)
+  userData.withdrawals = userData.withdrawals.plus(withdrawEvent.params.amount)
+  userData.save()
 
   // Save raw event
   let event = new WithdrawEvent(withdrawEvent.transaction.hash.toHex());
