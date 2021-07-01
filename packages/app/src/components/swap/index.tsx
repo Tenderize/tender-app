@@ -27,6 +27,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, account, tokenBalance, tenderT
     tokenLpBalance,
     tenderLpBalance,
     lpShares,
+    spotPrice,
   ] = useContractCalls([
     {
       abi: contracts[name].swap.interface,
@@ -70,6 +71,12 @@ const LiquidityPool: FC<Props> = ({ name, symbol, account, tokenBalance, tenderT
       method: "totalSupply",
       args: [],
     },
+    {
+        abi: contracts[name].swap.interface,
+        address: addresses[name].swap,
+        method: "getSpotPrice",
+        args: [addresses[name].tenderToken, addresses[name].token], 
+    }
   ]);
 
   return (
@@ -85,6 +92,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, account, tokenBalance, tenderT
         swapFee={swapFee ? swapFee[0] : "0"}
         tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
+        spotPrice={spotPrice ? spotPrice[0]:"0"}
       />
       <JoinPool
         name={name}
