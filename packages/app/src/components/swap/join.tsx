@@ -91,33 +91,41 @@ const JoinPool: FC<Props> = ({
     }
   };
 
-    // Contract Functions
-    const useCalcSinglePoolOut = () => {
-        const hasValue = (val:any) => {
-            return val && val !== "0"
-        }
-        let tokenIn: BigNumberish = 0
-        let tokenInBal: BigNumberish = 0
-        let weight: BigNumberish = 0
-        if (selectToken === symbol) {
-            tokenIn = utils.parseEther(tokenInput||"0")
-            tokenInBal = tokenLpBalance||"0"
-            weight = tokenWeight||"0"
-        } else {
-            tokenIn = utils.parseEther(tenderInput||"0")
-            tokenInBal = tenderLpBalance||"0"
-            weight = tenderTokenWeight||"0"
-        }
-        const [calced] = useContractCall(hasValue(tokenInBal) && hasValue(weight) && hasValue(lpShares) && hasValue(totalWeight) && hasValue(tokenIn) && hasValue(swapFee) && {
+  // Contract Functions
+  const useCalcSinglePoolOut = () => {
+    const hasValue = (val: any) => {
+      return val && val !== "0";
+    };
+    let tokenIn: BigNumberish = 0;
+    let tokenInBal: BigNumberish = 0;
+    let weight: BigNumberish = 0;
+    if (selectToken === symbol) {
+      tokenIn = utils.parseEther(tokenInput || "0");
+      tokenInBal = tokenLpBalance || "0";
+      weight = tokenWeight || "0";
+    } else {
+      tokenIn = utils.parseEther(tenderInput || "0");
+      tokenInBal = tenderLpBalance || "0";
+      weight = tenderTokenWeight || "0";
+    }
+    const [calced] =
+      useContractCall(
+        hasValue(tokenInBal) &&
+          hasValue(weight) &&
+          hasValue(lpShares) &&
+          hasValue(totalWeight) &&
+          hasValue(tokenIn) &&
+          hasValue(swapFee) && {
             abi: contracts[name].swap.interface,
             address: addresses[name].swap,
-            method: 'calcPoolOutGivenSingleIn',
-            args: [tokenInBal, weight, lpShares||"1", totalWeight||"1", tokenIn, swapFee||"0"]
-        }) ?? []
-        return calced || "0"
-    }
+            method: "calcPoolOutGivenSingleIn",
+            args: [tokenInBal, weight, lpShares || "1", totalWeight || "1", tokenIn, swapFee || "0"],
+          }
+      ) ?? [];
+    return calced || "0";
+  };
 
-    const singlePoolOut = useCalcSinglePoolOut()||"0"
+  const singlePoolOut = useCalcSinglePoolOut() || "0";
 
   const { state: approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
     contracts[name].token,

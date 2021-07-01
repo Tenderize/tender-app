@@ -17,7 +17,7 @@ type Props = {
   tenderLpBalance: BigNumberish;
   tenderTokenWeight: BigNumberish;
   totalWeight: BigNumberish;
-  spotPrice:BigNumberish;
+  spotPrice: BigNumberish;
 };
 
 const Swap: FC<Props> = ({
@@ -31,17 +31,16 @@ const Swap: FC<Props> = ({
   tenderLpBalance,
   tenderTokenWeight,
   totalWeight,
-  spotPrice
+  spotPrice,
 }) => {
+  const hasValue = (val: any) => {
+    return val && val !== "0";
+  };
 
-  const hasValue = (val:any) => {
-    return val && val !== "0"
-  }
-
-  const ONE = utils.parseEther("1")
+  const ONE = utils.parseEther("1");
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
-  const [receiveTokenAmount, setReceiveTokenAmount] = useState("0")
+  const [receiveTokenAmount, setReceiveTokenAmount] = useState("0");
 
   const tenderTokenSymbol = `tender${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -53,7 +52,9 @@ const Swap: FC<Props> = ({
   const tokenReceivedAddress = isSendingToken ? addresses[protocolName].tenderToken : addresses[protocolName].token;
   const tokenReceivedLpBalance = isSendingToken ? tenderLpBalance : tokenLpBalance;
   const tokenReceivedWeight = isSendingToken ? tenderTokenWeight : tokenWeight;
-  const tokenSpotPrice = (isSendingToken ? ONE.mul(ONE).div(spotPrice) : BigNumber.from(spotPrice.toString())).mul(11).div(10)
+  const tokenSpotPrice = (isSendingToken ? ONE.mul(ONE).div(spotPrice) : BigNumber.from(spotPrice.toString()))
+    .mul(11)
+    .div(10);
   const { state: swapTx, send: swapExactAmountIn } = useContractFunction(
     contracts[protocolName].swap,
     "swapExactAmountIn"
@@ -69,24 +70,32 @@ const Swap: FC<Props> = ({
     "approve"
   );
 
-  const [calcOutGivenIn] = useContractCall(hasValue(tokenSendedLpBalance)&&hasValue(tokenSendedWeight)&&hasValue(tokenReceivedLpBalance)&&hasValue(tokenReceivedWeight)&&hasValue(sendTokenAmount)&&hasValue(swapFee)&&{
-    abi: contracts[protocolName].swap.interface,
-    address: addresses[protocolName].swap,
-    method: "calcOutGivenIn",
-    args: [
-      tokenSendedLpBalance || "0",
-      tokenSendedWeight || "0",
-      tokenReceivedLpBalance || "0",
-      tokenReceivedWeight || utils.parseEther("1"),
-      utils.parseEther(sendTokenAmount || "0"),
-      swapFee || "0",
-    ],
-  }) ?? [];
+  const [calcOutGivenIn] =
+    useContractCall(
+      hasValue(tokenSendedLpBalance) &&
+        hasValue(tokenSendedWeight) &&
+        hasValue(tokenReceivedLpBalance) &&
+        hasValue(tokenReceivedWeight) &&
+        hasValue(sendTokenAmount) &&
+        hasValue(swapFee) && {
+          abi: contracts[protocolName].swap.interface,
+          address: addresses[protocolName].swap,
+          method: "calcOutGivenIn",
+          args: [
+            tokenSendedLpBalance || "0",
+            tokenSendedWeight || "0",
+            tokenReceivedLpBalance || "0",
+            tokenReceivedWeight || utils.parseEther("1"),
+            utils.parseEther(sendTokenAmount || "0"),
+            swapFee || "0",
+          ],
+        }
+    ) ?? [];
 
-  const handleSendTokenInput = (e:any) => {
-    setSendTokenAmount(e.target.value)
-    setReceiveTokenAmount(calcOutGivenIn)
-  } 
+  const handleSendTokenInput = (e: any) => {
+    setSendTokenAmount(e.target.value);
+    setReceiveTokenAmount(calcOutGivenIn);
+  };
 
   const isSendInputInvalid =
     sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
@@ -100,7 +109,7 @@ const Swap: FC<Props> = ({
     } else {
       await approveTenderTokens(addresses[protocolName].swap, amount);
     }
-    console.log("tokenspotprice", tokenSpotPrice.toString())
+    console.log("tokenspotprice", tokenSpotPrice.toString());
     swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, calcOutGivenIn, tokenSpotPrice);
     console.log(swapTx);
   };
@@ -146,7 +155,7 @@ const Swap: FC<Props> = ({
             <Form.Label>Receive</Form.Label>
             <InputGroup className="mb-2">
               <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
-              <FormControl id="formSwapReceive" placeholder={utils.formatEther(calcOutGivenIn||"0")} />
+              <FormControl id="formSwapReceive" placeholder={utils.formatEther(calcOutGivenIn || "0")} />
             </InputGroup>
           </Form.Group>
 
