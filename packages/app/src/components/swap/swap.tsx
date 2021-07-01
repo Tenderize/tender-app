@@ -51,9 +51,10 @@ const Swap: FC<Props> = ({
   const tokenReceivedAddress = isSendingToken ? addresses[protocolName].tenderToken : addresses[protocolName].token;
   const tokenReceivedLpBalance = isSendingToken ? tenderLpBalance : tokenLpBalance;
   const tokenReceivedWeight = isSendingToken ? tenderTokenWeight : tokenWeight;
-  const tokenSpotPrice = (isSendingToken ? ONE.mul(ONE).div(spotPrice) : BigNumber.from(spotPrice.toString()))
+  const tokenSpotPrice = (isSendingToken ? ONE.mul(ONE).div(hasValue(spotPrice) ? spotPrice: ONE) : BigNumber.from(spotPrice.toString()))
     .mul(11)
     .div(10);
+    
   const { state: _swapTx, send: swapExactAmountIn } = useContractFunction(
     contracts[protocolName].swap,
     "swapExactAmountIn"
