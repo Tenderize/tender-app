@@ -2,11 +2,11 @@ type TenderizeGlobal @entity { # Global Values/ TODO: better name?
   "Fixed ID of '1'"
   id: ID!
   "List of congifs for all integrations"
-  configs: [TenderizerConfig!]! @derivedFrom(field: "id")
+  configs: [ProtocolConfig!]!
   # TODO: Add global totals 
 }
 
-type TenderizerConfig @entity {
+type ProtocolConfig @entity {
   "ID: Name of the protocol eg. 'livepeer'"
   id: ID!
   "Address of the ERC20 token for integration"
@@ -23,14 +23,14 @@ type TenderizerConfig @entity {
   tenderFarm: String!
 }
 
-type Tenderizer @entity { # TODO: Rename this to 'Protocol'/'Integration'? Just going with this for now
+type Protocol @entity {
   "Name of the protocol eg. 'livepeer'"
   id: ID!
 
   "Total amount depositied in tenderizer"
-  deposits: BigDecimal!
+  tenderizerDeposits: BigDecimal!
   "Total amount withdrawn from tenderizer"
-  withdrawals: BigDecimal!
+  tenderizerWithdrawals: BigDecimal!
   "Total rewards collected from protocol"
   rewards: BigDecimal!
 
@@ -51,19 +51,19 @@ type User @entity {
   "Wallet address of user"
   id: ID!
   "Data for each integration per user"
-  tenderizerData: [UserTenderizerData!]! @derivedFrom(field: "protocol")
+  tenderizerData: [UserProtocolData!]!
 }
 
-type UserTenderizerData @entity { # TODO: Better name? Since we have farm data here as well
+type UserProtocolData @entity { 
   "<wallet-address>_<portocol> eg.'0xfA668FB97697200FA56ce98E246db61Cc7E14Bd5_livepeer'"
   id: ID!
   "Name of the protocol eg. 'livepeer'"
   protocol: String!
 
   "Total amount depositied in tenderizer by given user"
-  deposits: BigDecimal!
+  tenderizerDeposits: BigDecimal!
   "Total amount depositied in tenderizer by given user"
-  withdrawals: BigDecimal!
+  tenderizerWithdrawals: BigDecimal!
 
   "Total amount depositied in farm by given user"
   farmDeposits: BigDecimal!

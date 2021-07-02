@@ -1,9 +1,8 @@
 Testing
-- Test day data/initialization for totals
+- Test day data/initialization for totals and negative values
 - Test withdraw event
 
 - Use @derivedFrom
 - Add data for bpool
 - DRY saving event data and whatever else possible
 - Handel stake/unstake
-- Add comments in docs properly, ref Livepeer
