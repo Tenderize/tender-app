@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, useState } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
 import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber } from "ethers";
@@ -20,6 +20,12 @@ type Props = {
   spotPrice: BigNumberish;
 };
 
+const hasValue = (val: any) => {
+  return val && val !== "0";
+};
+
+const ONE = utils.parseEther("1");
+
 const Swap: FC<Props> = ({
   tokenSymbol,
   tokenBalance,
@@ -32,14 +38,9 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
-  const hasValue = (val: any) => {
-    return val && val !== "0";
-  };
-
-  const ONE = utils.parseEther("1");
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
-  const [receiveTokenAmount, setReceiveTokenAmount] = useState("0");
+  const [receiveTokenAmount, setReceiveTokenAmount] = useState<BigNumber | "0">("0");
 
   const tenderTokenSymbol = `tender${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -51,10 +52,12 @@ const Swap: FC<Props> = ({
   const tokenReceivedAddress = isSendingToken ? addresses[protocolName].tenderToken : addresses[protocolName].token;
   const tokenReceivedLpBalance = isSendingToken ? tenderLpBalance : tokenLpBalance;
   const tokenReceivedWeight = isSendingToken ? tenderTokenWeight : tokenWeight;
-  const tokenSpotPrice = (isSendingToken ? ONE.mul(ONE).div(hasValue(spotPrice) ? spotPrice: ONE) : BigNumber.from(spotPrice.toString()))
+  const tokenSpotPrice = (
+    isSendingToken ? ONE.mul(ONE).div(hasValue(spotPrice) ? spotPrice : ONE) : BigNumber.from(spotPrice.toString())
+  )
     .mul(11)
     .div(10);
-    
+
   const { state: _swapTx, send: swapExactAmountIn } = useContractFunction(
     contracts[protocolName].swap,
     "swapExactAmountIn"
@@ -92,10 +95,17 @@ const Swap: FC<Props> = ({
         }
     ) ?? [];
 
-  const handleSendTokenInput = (e: any) => {
+  const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setSendTokenAmount(e.target.value);
-    setReceiveTokenAmount(calcOutGivenIn);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (calcOutGivenIn != null && !calcOutGivenIn.eq(receiveTokenAmount)) {
+      setReceiveTokenAmount(calcOutGivenIn);
+    } else if (calcOutGivenIn == null) {
+      setReceiveTokenAmount("0");
+    }
+  }, [calcOutGivenIn, receiveTokenAmount]);
 
   const isSendInputInvalid =
     sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
@@ -147,11 +157,15 @@ const Swap: FC<Props> = ({
             <Icon name="SwapVert" color="white" aria-label="Switch" />
           </Button>
 
-          <Form.Group className="mb-3" controlId="formSwapReceive">
+          <Form.Group className="mb-3">
             <Form.Label>Receive</Form.Label>
             <InputGroup className="mb-2">
               <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
-              <FormControl id="formSwapReceive" placeholder={utils.formatEther(receiveTokenAmount|| "0")} />
+              <FormControl
+                id="formSwapReceive"
+                placeholder={"0"}
+                value={utils.formatEther(receiveTokenAmount || "0")}
+              />
             </InputGroup>
           </Form.Group>
 
