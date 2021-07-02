@@ -2,14 +2,14 @@ import { FarmEvent, HarvestEvent, UnfarmEvent } from "../types/schema"
 import { Farm } from "../types/templates/TenderFarm/TenderFarm"
 import { 
     loadOrCreateTenderizer,
-    getTenderizerIdByTenderFarmAddress,
+    getProtocolIdByTenderFarmAddress,
     loadOrCreateUserTenderizerData,
     loadOrCreateDay,
    } from "./utils"
 
 export function handleFarmEvent(farmEvent: Farm): void {
     let tenderFarmAddress = farmEvent.address.toHex()
-    let tenderizerId  = getTenderizerIdByTenderFarmAddress(tenderFarmAddress)
+    let tenderizerId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = farmEvent.params.amount.toBigDecimal()
 
     // Sanity check, tenderizers would generally always be registered
@@ -45,7 +45,7 @@ export function handleFarmEvent(farmEvent: Farm): void {
 
 export function handleUnfarmEvent(unfarmEvent: Farm): void {
     let tenderFarmAddress = unfarmEvent.address.toHex()
-    let tenderizerId  = getTenderizerIdByTenderFarmAddress(tenderFarmAddress)
+    let tenderizerId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = unfarmEvent.params.amount.toBigDecimal()
 
     // Sanity check, tenderizers would generally always be registered
@@ -81,7 +81,7 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
 
 export function handleHarvestEvent(harvestEvent: Farm): void {
   let tenderFarmAddress = harvestEvent.address.toHex()
-  let tenderizerId  = getTenderizerIdByTenderFarmAddress(tenderFarmAddress)
+  let tenderizerId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
   let amount = harvestEvent.params.amount.toBigDecimal()
 
   // Sanity check, tenderizers would generally always be registered

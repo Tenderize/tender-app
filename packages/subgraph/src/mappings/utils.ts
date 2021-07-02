@@ -1,17 +1,17 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-import { Tenderizer, TenderizerConfig, TenderizeGlobal, User, UserTenderizerData, Day } from "../types/schema";
+import { Protocol, ProtocolConfig, TenderizeGlobal, User, UserProtocolData, Day } from "../types/schema";
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ZERO_BD = BigDecimal.fromString('0')
 
-export function loadOrCreateTenderizer(id: string): Tenderizer {
-  let tenderizer = Tenderizer.load(id)
+export function loadOrCreateTenderizer(id: string): Protocol {
+  let tenderizer = Protocol.load(id)
 
   if(tenderizer == null){
-    tenderizer = new Tenderizer(id)
+    tenderizer = new Protocol(id)
     
-    tenderizer.deposits = ZERO_BD
-    tenderizer.withdrawals = ZERO_BD
+    tenderizer.tenderizerDeposits = ZERO_BD
+    tenderizer.tenderizerWithdrawals = ZERO_BD
     tenderizer.rewards = ZERO_BD
     tenderizer.protocolFees = ZERO_BD
     tenderizer.liquidityFees = ZERO_BD
@@ -20,7 +20,7 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
     tenderizer.farmHarvest = ZERO_BD
   }
 
-  return tenderizer as Tenderizer
+  return tenderizer as Protocol
 }
 
 export function loadOrCreateTenderizeGlobal(): TenderizeGlobal {
@@ -32,14 +32,14 @@ export function loadOrCreateTenderizeGlobal(): TenderizeGlobal {
   return tenderizeGlobal as TenderizeGlobal
 }
 
-export function loadOrCreateUserTenderizerData(address: string, tenderizer: string): UserTenderizerData{
+export function loadOrCreateUserTenderizerData(address: string, tenderizer: string): UserProtocolData{
   let user = loadOrCreateUser(address)
-  let userTenderizerData = UserTenderizerData.load(address + '_' + tenderizer)
+  let userTenderizerData = UserProtocolData.load(address + '_' + tenderizer)
   if (userTenderizerData == null){
-    userTenderizerData = new UserTenderizerData(address + '_' + tenderizer)
+    userTenderizerData = new UserProtocolData(address + '_' + tenderizer)
     userTenderizerData.protocol = tenderizer
-    userTenderizerData.deposits = ZERO_BD
-    userTenderizerData.withdrawals = ZERO_BD
+    userTenderizerData.tenderizerDeposits = ZERO_BD
+    userTenderizerData.tenderizerWithdrawals = ZERO_BD
     userTenderizerData.farmDeposits = ZERO_BD
     userTenderizerData.farmWithdrawals = ZERO_BD
     userTenderizerData.farmHarvest = ZERO_BD
@@ -49,7 +49,7 @@ export function loadOrCreateUserTenderizerData(address: string, tenderizer: stri
     user.tenderizerData = userDataList
     user.save()
   }
-  return userTenderizerData as UserTenderizerData
+  return userTenderizerData as UserProtocolData
 }
 
 export function loadOrCreateUser(adress: string): User {
@@ -61,13 +61,13 @@ export function loadOrCreateUser(adress: string): User {
   return user as User
 }
 
-export function getTenderizerIdByTenderizerAddress(address: string): string {
+export function getProtocolIdByTenderizerAddress(address: string): string {
   // TODO: Is there a better way to do this?
   let globals = TenderizeGlobal.load('1')
   let globalConfigs = globals.configs
   // TODO: use map/filter
   for (let i = 0; i < globalConfigs.length; i++) { 
-    let c = TenderizerConfig.load(globalConfigs[i]) as TenderizerConfig
+    let c = ProtocolConfig.load(globalConfigs[i]) as ProtocolConfig
     if(c.tenderizer == address){
       return c.id
     }
@@ -75,13 +75,13 @@ export function getTenderizerIdByTenderizerAddress(address: string): string {
   return ''
 }
 
-export function getTenderizerIdByTenderFarmAddress(address: string): string {
+export function getProtocolIdByTenderFarmAddress(address: string): string {
   // TODO: Is there a better way to do this?
   let globals = TenderizeGlobal.load('1')
   let globalConfigs = globals.configs
   // TODO: use map/filter
   for (let i = 0; i < globalConfigs.length; i++) { 
-    let c = TenderizerConfig.load(globalConfigs[i]) as TenderizerConfig
+    let c = ProtocolConfig.load(globalConfigs[i]) as ProtocolConfig
     if(c.tenderFarm == address){
       return c.id
     }
@@ -101,7 +101,7 @@ export function loadOrCreateDay(timestamp: i32, protocol: string): Day {
     day.date = dayStartTimestamp
     day.protocol = protocol
     day.tenderizerDepositVolume = ZERO_BD
-    day.totalTenderizerDeposit = latestData.deposits.minus(latestData.withdrawals)
+    day.totalTenderizerDeposit = latestData.tenderizerDeposits.minus(latestData.tenderizerWithdrawals)
     day.rewardsVolume = ZERO_BD
     day.totalRewards = latestData.rewards
     day.farmVolume = ZERO_BD
