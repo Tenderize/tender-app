@@ -1,7 +1,9 @@
-- change to BigDecimal
-
+Testing
 - Test day data/initialization for totals
 - Test withdraw event
-- Check what @derivedfrom is
+
+- Use @derivedFrom
+- Add data for bpool
 - DRY saving event data and whatever else possible
 - Handel stake/unstake
+- Add comments in docs properly, ref Livepeer

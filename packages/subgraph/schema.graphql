@@ -1,69 +1,107 @@
 type TenderizeGlobal @entity { # Global Values/ TODO: better name?
-  id: ID! # Fixed ID of '1'
-  configs: [TenderizerConfig!]!
+  "Fixed ID of '1'"
+  id: ID!
+  "List of congifs for all integrations"
+  configs: [TenderizerConfig!]! @derivedFrom(field: "id")
   # TODO: Add global totals 
 }
 
 type TenderizerConfig @entity {
-  id: ID! # Name of the protocol eg. 'livepeer'
+  "ID: Name of the protocol eg. 'livepeer'"
+  id: ID!
+  "Address of the ERC20 token for integration"
   steak: String!
+  "Address of Tenderizer"
   tenderizer: String!
+  "Address of ERC20 Tender Token"
   tenderToken: String!
+  "Address of Elastic Supply Pool"
   esp: String!
+  "Address of liquidity pool for pair"
   bpool: String!
+  "Address of TenderFarm contract"
   tenderFarm: String!
 }
 
 type Tenderizer @entity { # TODO: Rename this to 'Protocol'/'Integration'? Just going with this for now
-  id: ID! # name of the protocol eg. 'livepeer'
+  "Name of the protocol eg. 'livepeer'"
+  id: ID!
 
-  deposits: BigDecimal! # Total amount depositied in tenderizer by users
-  withdrawals: BigDecimal! # Total amount withdrawn from tenderizer by users
-  rewards: BigDecimal! # Total rewards collected from protocol
+  "Total amount depositied in tenderizer"
+  deposits: BigDecimal!
+  "Total amount withdrawn from tenderizer"
+  withdrawals: BigDecimal!
+  "Total rewards collected from protocol"
+  rewards: BigDecimal!
 
-  protocolFees: BigDecimal! # Total amount of protocol fees collected from tenderizer
-  liquidityFees: BigDecimal! # Total amount of liquidity fees collected from tenderizer
+  "Total amount of protocol fees collected from tenderizer"
+  protocolFees: BigDecimal!
+  "Total amount of liquidity fees collected from tenderizer"
+  liquidityFees: BigDecimal!
 
-  farmDeposits: BigDecimal! # Total deposits made into farm
-  farmWithdrawals: BigDecimal! # Total withrawals made from farm
-  farmHarvest: BigDecimal! # Total rewards collected from farm
+  "Total deposits made into farm"
+  farmDeposits: BigDecimal!
+  "Total withrawals made from farm"
+  farmWithdrawals: BigDecimal!
+  "Total rewards collected from farm"
+  farmHarvest: BigDecimal!
 }
 
 type User @entity {
-  id: ID! # Wallet address of user
-  tenderizerData: [UserTenderizerData!]!
+  "Wallet address of user"
+  id: ID!
+  "Data for each integration per user"
+  tenderizerData: [UserTenderizerData!]! @derivedFrom(field: "protocol")
 }
 
 type UserTenderizerData @entity { # TODO: Better name? Since we have farm data here as well
-  id: ID! # <wallet-address>_<portocol> eg.'0xfA668FB97697200FA56ce98E246db61Cc7E14Bd5_livepeer'
-  protocol: String! # Name of the protocol eg. 'livepeer'
+  "<wallet-address>_<portocol> eg.'0xfA668FB97697200FA56ce98E246db61Cc7E14Bd5_livepeer'"
+  id: ID!
+  "Name of the protocol eg. 'livepeer'"
+  protocol: String!
 
-  deposits: BigDecimal! # Total amount depositied in tenderizer by given user
-  withdrawals: BigDecimal! # Total amount depositied in tenderizer by given user
+  "Total amount depositied in tenderizer by given user"
+  deposits: BigDecimal!
+  "Total amount depositied in tenderizer by given user"
+  withdrawals: BigDecimal!
 
-  farmDeposits: BigDecimal! # Total amount depositied in farm by given user
-  farmWithdrawals: BigDecimal! # Total amount withdrawn from farm by given user
-  farmHarvest: BigDecimal! # Total amount harvest collected from farm by given user
+  "Total amount depositied in farm by given user"
+  farmDeposits: BigDecimal!
+  "Total amount withdrawn from farm by given user"
+  farmWithdrawals: BigDecimal!
+  "Total amount harvest collected from farm by given user"
+  farmHarvest: BigDecimal!
 }
 
 
 # Entities for timeseries 
 type Day @entity{
-  id: ID! # <Timestamp rounded to current day by dividing by 86400>_<protocol>
-  date: Int! # The date beginning at 12:00am UTC
-  protocol: String! # Name of protocol eg. 'livepeer'
+  "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
+  id: ID!
+  "The date beginning at 12:00am UTC"
+  date: Int!
+  "Name of protocol eg. 'livepeer'"
+  protocol: String!
 
-  tenderizerDepositVolume: BigDecimal! # total deposits/withdrawals in tenderizer for the day
-  totalTenderizerDeposit: BigDecimal! # cumulative deposit on that day
+  "total deposits/withdrawals in tenderizer for the day"
+  tenderizerDepositVolume: BigDecimal!
+  "cumulative deposit on that day"
+  totalTenderizerDeposit: BigDecimal!
 
-  rewardsVolume: BigDecimal! # staking rewards collected from protocol for the day
-  totalRewards: BigDecimal! # cumulative staking rewards collected
+  "staking rewards collected from protocol for the day"
+  rewardsVolume: BigDecimal!
+  "cumulative staking rewards collected"
+  totalRewards: BigDecimal!
 
-  farmVolume: BigDecimal! # farm/unfarm volume for the day
-  totalFarm: BigDecimal! # cumulative farm on that day
+  "farm/unfarm volume for the day"
+  farmVolume: BigDecimal!
+  "cumulative farm on that day"
+  totalFarm: BigDecimal! 
 
-  farmtHarvestVolume: BigDecimal! # harvest volume for the day
-  totalFarmHarvest: BigDecimal! # cumulative harvest on that day
+  "harvest volume for the day"
+  farmtHarvestVolume: BigDecimal!
+  "cumulative harvest on that day"
+  totalFarmHarvest: BigDecimal!
 }
 
 # Registry event entity
