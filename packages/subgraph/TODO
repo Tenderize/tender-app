@@ -3,5 +3,5 @@
 - Test day data/initialization for totals
 - Test withdraw event
 - Check what @derivedfrom is
-- DRY saving event data
+- DRY saving event data and whatever else possible
 - Handel stake/unstake
