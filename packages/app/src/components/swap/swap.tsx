@@ -1,9 +1,10 @@
 import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
-import { Alert, Button, Card, Form, FormControl, InputGroup, Tooltip, OverlayTrigger } from "react-bootstrap";
+import { Alert, Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
-import { useContractFunction, useContractCall } from "@usedapp/core";
+import { useContractFunction, useContractCall, useTokenAllowance, useEthers } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
+
 import AuthorizeToken from "../AuthorizeToken";
 
 type Props = {
@@ -69,6 +70,10 @@ const Swap: FC<Props> = ({
     "swapExactAmountIn"
   );
 
+  const { account } = useEthers();
+
+  const allowance = useTokenAllowance(tokenSendedAddress, account, addresses[protocolName].swap);
+  const isTokenAuthorized = allowance != null && constants.MaxUint256.div(2).lt(allowance);
   const [calcOutGivenIn] =
     useContractCall(
       hasValue(tokenSendedLpBalance) &&
@@ -158,7 +163,12 @@ const Swap: FC<Props> = ({
               />
             </InputGroup>
           </Form.Group>
-          <AuthorizeToken tokenSymbol={tokenSendedSymbol} protocolName={protocolName} approveToken={approveToken} />
+          <AuthorizeToken
+            tokenSymbol={tokenSendedSymbol}
+            protocolName={protocolName}
+            approveToken={approveToken}
+            isTokenAuthorized={isTokenAuthorized}
+          />
           <Button disabled={isSendInputInvalid} onClick={handlePressTrade}>
             Trade
           </Button>

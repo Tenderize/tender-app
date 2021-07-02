@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, useState } from "react";
+import { FC, MouseEventHandler } from "react";
 import { Alert, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { constants } from "ethers";
 import { addresses } from "@tender/contracts";
@@ -7,18 +7,17 @@ import { BigNumber } from "@ethersproject/bignumber";
 type Props = {
   protocolName: string;
   tokenSymbol: string;
+  isTokenAuthorized: boolean;
   approveToken: (contract: string, amount: BigNumber) => Promise<void>;
 };
 
-const AuthorizeToken: FC<Props> = ({ tokenSymbol, protocolName, approveToken }) => {
-  const [isTokenAuthorized, setIsTokenAuthorized] = useState(false);
-
+const AuthorizeToken: FC<Props> = ({ tokenSymbol, protocolName, approveToken, isTokenAuthorized }) => {
   const handlePressTrade: MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
 
     if (!isTokenAuthorized) {
       await approveToken(addresses[protocolName].swap, constants.MaxUint256);
-      setIsTokenAuthorized(true);
+      //  setIsTokenAuthorized(true);
     }
   };
 
