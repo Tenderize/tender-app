@@ -17,16 +17,16 @@ type TenderizerConfig @entity {
 type Tenderizer @entity { # TODO: Rename this to 'Protocol'/'Integration'? Just going with this for now
   id: ID! # name of the protocol eg. 'livepeer'
 
-  deposits: BigInt! # Total amount depositied in tenderizer by users
-  withdrawals: BigInt! # Total amount withdrawn from tenderizer by users
-  rewards: BigInt! # Total rewards collected from protocol
+  deposits: BigDecimal! # Total amount depositied in tenderizer by users
+  withdrawals: BigDecimal! # Total amount withdrawn from tenderizer by users
+  rewards: BigDecimal! # Total rewards collected from protocol
 
-  protocolFees: BigInt! # Total amount of protocol fees collected from tenderizer
-  liquidityFees: BigInt! # Total amount of liquidity fees collected from tenderizer
+  protocolFees: BigDecimal! # Total amount of protocol fees collected from tenderizer
+  liquidityFees: BigDecimal! # Total amount of liquidity fees collected from tenderizer
 
-  farmDeposits: BigInt! # Total deposits made into farm
-  farmWithdrawals: BigInt! # Total withrawals made from farm
-  farmHarvest: BigInt! # Total rewards collected from farm
+  farmDeposits: BigDecimal! # Total deposits made into farm
+  farmWithdrawals: BigDecimal! # Total withrawals made from farm
+  farmHarvest: BigDecimal! # Total rewards collected from farm
 }
 
 type User @entity {
@@ -38,12 +38,12 @@ type UserTenderizerData @entity { # TODO: Better name? Since we have farm data h
   id: ID! # <wallet-address>_<portocol> eg.'0xfA668FB97697200FA56ce98E246db61Cc7E14Bd5_livepeer'
   protocol: String! # Name of the protocol eg. 'livepeer'
 
-  deposits: BigInt! # Total amount depositied in tenderizer by given user
-  withdrawals: BigInt! # Total amount depositied in tenderizer by given user
+  deposits: BigDecimal! # Total amount depositied in tenderizer by given user
+  withdrawals: BigDecimal! # Total amount depositied in tenderizer by given user
 
-  farmDeposits: BigInt! # Total amount depositied in farm by given user
-  farmWithdrawals: BigInt! # Total amount withdrawn from farm by given user
-  farmHarvest: BigInt! # Total amount harvest collected from farm by given user
+  farmDeposits: BigDecimal! # Total amount depositied in farm by given user
+  farmWithdrawals: BigDecimal! # Total amount withdrawn from farm by given user
+  farmHarvest: BigDecimal! # Total amount harvest collected from farm by given user
 }
 
 

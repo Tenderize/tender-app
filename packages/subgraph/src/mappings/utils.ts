@@ -10,14 +10,14 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
   if(tenderizer == null){
     tenderizer = new Tenderizer(id)
     
-    tenderizer.deposits = ZERO_BI
-    tenderizer.withdrawals = ZERO_BI
-    tenderizer.rewards = ZERO_BI
-    tenderizer.protocolFees = ZERO_BI
-    tenderizer.liquidityFees = ZERO_BI
-    tenderizer.farmDeposits = ZERO_BI
-    tenderizer.farmWithdrawals = ZERO_BI
-    tenderizer.farmHarvest = ZERO_BI
+    tenderizer.deposits = ZERO_BD
+    tenderizer.withdrawals = ZERO_BD
+    tenderizer.rewards = ZERO_BD
+    tenderizer.protocolFees = ZERO_BD
+    tenderizer.liquidityFees = ZERO_BD
+    tenderizer.farmDeposits = ZERO_BD
+    tenderizer.farmWithdrawals = ZERO_BD
+    tenderizer.farmHarvest = ZERO_BD
   }
 
   return tenderizer as Tenderizer
@@ -38,11 +38,11 @@ export function loadOrCreateUserTenderizerData(address: string, tenderizer: stri
   if (userTenderizerData == null){
     userTenderizerData = new UserTenderizerData(address + '_' + tenderizer)
     userTenderizerData.protocol = tenderizer
-    userTenderizerData.deposits = ZERO_BI
-    userTenderizerData.withdrawals = ZERO_BI
-    userTenderizerData.farmDeposits = ZERO_BI
-    userTenderizerData.farmWithdrawals = ZERO_BI
-    userTenderizerData.farmHarvest = ZERO_BI
+    userTenderizerData.deposits = ZERO_BD
+    userTenderizerData.withdrawals = ZERO_BD
+    userTenderizerData.farmDeposits = ZERO_BD
+    userTenderizerData.farmWithdrawals = ZERO_BD
+    userTenderizerData.farmHarvest = ZERO_BD
 
     let userDataList = user.tenderizerData
     userDataList.push(userTenderizerData.id)
@@ -101,13 +101,13 @@ export function loadOrCreateDay(timestamp: i32, protocol: string): Day {
     day.date = dayStartTimestamp
     day.protocol = protocol
     day.tenderizerDepositVolume = ZERO_BD
-    day.totalTenderizerDeposit = latestData.deposits.minus(latestData.withdrawals).toBigDecimal()
+    day.totalTenderizerDeposit = latestData.deposits.minus(latestData.withdrawals)
     day.rewardsVolume = ZERO_BD
-    day.totalRewards = latestData.rewards.toBigDecimal()
+    day.totalRewards = latestData.rewards
     day.farmVolume = ZERO_BD
-    day.totalFarm = latestData.farmDeposits.minus(latestData.farmWithdrawals).toBigDecimal()
+    day.totalFarm = latestData.farmDeposits.minus(latestData.farmWithdrawals)
     day.farmtHarvestVolume = ZERO_BD
-    day.totalFarmHarvest = latestData.farmHarvest.toBigDecimal()
+    day.totalFarmHarvest = latestData.farmHarvest
     day.save();
   }
   return day as Day;

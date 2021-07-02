@@ -10,7 +10,8 @@ import {
 export function handleFarmEvent(farmEvent: Farm): void {
     let tenderFarmAddress = farmEvent.address.toHex()
     let tenderizerId  = getTenderizerIdByTenderFarmAddress(tenderFarmAddress)
-  
+    let amount = farmEvent.params.amount.toBigDecimal()
+
     // Sanity check, tenderizers would generally always be registered
     if(tenderizerId ==  ''){
       // TODO: add log
@@ -19,18 +20,18 @@ export function handleFarmEvent(farmEvent: Farm): void {
 
     // Update day data
     let day = loadOrCreateDay(farmEvent.block.timestamp.toI32(), tenderizerId)
-    day.farmVolume = day.farmVolume.plus(farmEvent.params.amount.toBigDecimal())
-    day.totalFarm = day.totalFarm.plus(farmEvent.params.amount.toBigDecimal())
+    day.farmVolume = day.farmVolume.plus(amount)
+    day.totalFarm = day.totalFarm.plus(amount)
     day.save()
   
     // Update Tenderizer deposit total
     let tenderizer = loadOrCreateTenderizer(tenderizerId)
-    tenderizer.farmDeposits = tenderizer.farmDeposits.plus(farmEvent.params.amount)
+    tenderizer.farmDeposits = tenderizer.farmDeposits.plus(amount)
     tenderizer.save()
 
     // Update User data
     let userData = loadOrCreateUserTenderizerData(farmEvent.params.account.toHex(), tenderizerId)
-    userData.farmDeposits = userData.farmDeposits.plus(farmEvent.params.amount)
+    userData.farmDeposits = userData.farmDeposits.plus(amount)
     userData.save()
   
     // Save raw event
@@ -45,7 +46,8 @@ export function handleFarmEvent(farmEvent: Farm): void {
 export function handleUnfarmEvent(unfarmEvent: Farm): void {
     let tenderFarmAddress = unfarmEvent.address.toHex()
     let tenderizerId  = getTenderizerIdByTenderFarmAddress(tenderFarmAddress)
-  
+    let amount = unfarmEvent.params.amount.toBigDecimal()
+
     // Sanity check, tenderizers would generally always be registered
     if(tenderizerId ==  ''){
       // TODO: add log
@@ -54,18 +56,18 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
 
     // Update day data
     let day = loadOrCreateDay(unfarmEvent.block.timestamp.toI32(), tenderizerId)
-    day.farmVolume = day.farmVolume.minus(unfarmEvent.params.amount.toBigDecimal())
-    day.totalFarm = day.totalFarm.minus(unfarmEvent.params.amount.toBigDecimal())
+    day.farmVolume = day.farmVolume.minus(amount)
+    day.totalFarm = day.totalFarm.minus(amount)
     day.save()
   
     // Update Tenderizer deposit total
     let tenderizer = loadOrCreateTenderizer(tenderizerId)
-    tenderizer.farmWithdrawals = tenderizer.farmWithdrawals.plus(unfarmEvent.params.amount)
+    tenderizer.farmWithdrawals = tenderizer.farmWithdrawals.plus(amount)
     tenderizer.save()
 
     // Update User data
     let userData = loadOrCreateUserTenderizerData(unfarmEvent.params.account.toHex(), tenderizerId)
-    userData.farmWithdrawals = userData.farmWithdrawals.plus(unfarmEvent.params.amount)
+    userData.farmWithdrawals = userData.farmWithdrawals.plus(amount)
     userData.save()
   
     // Save raw event
@@ -80,6 +82,7 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
 export function handleHarvestEvent(harvestEvent: Farm): void {
   let tenderFarmAddress = harvestEvent.address.toHex()
   let tenderizerId  = getTenderizerIdByTenderFarmAddress(tenderFarmAddress)
+  let amount = harvestEvent.params.amount.toBigDecimal()
 
   // Sanity check, tenderizers would generally always be registered
   if(tenderizerId ==  ''){
@@ -89,18 +92,18 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
 
   // Update day data
   let day = loadOrCreateDay(harvestEvent.block.timestamp.toI32(), tenderizerId)
-  day.farmtHarvestVolume = day.farmtHarvestVolume.plus(harvestEvent.params.amount.toBigDecimal())
-  day.totalFarmHarvest = day.totalFarmHarvest.plus(harvestEvent.params.amount.toBigDecimal())
+  day.farmtHarvestVolume = day.farmtHarvestVolume.plus(amount)
+  day.totalFarmHarvest = day.totalFarmHarvest.plus(amount)
   day.save()
 
   // Update Tenderizer deposit total
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
-  tenderizer.farmHarvest = tenderizer.farmHarvest.plus(harvestEvent.params.amount)
+  tenderizer.farmHarvest = tenderizer.farmHarvest.plus(amount)
   tenderizer.save()
 
   // Update User data
   let userData = loadOrCreateUserTenderizerData(harvestEvent.params.account.toHex(), tenderizerId)
-  userData.farmHarvest = userData.farmHarvest.plus(harvestEvent.params.amount)
+  userData.farmHarvest = userData.farmHarvest.plus(amount)
   userData.save()
 
   // Save raw event
