@@ -4,6 +4,7 @@ import {
     loadOrCreateTenderizer,
     getTenderizerIdByTenderFarmAddress,
     loadOrCreateUserTenderizerData,
+    loadOrCreateDay,
    } from "./utils"
 
 export function handleFarmEvent(farmEvent: Farm): void {
@@ -15,6 +16,12 @@ export function handleFarmEvent(farmEvent: Farm): void {
       // TODO: add log
       return
     }
+
+    // Update day data
+    let day = loadOrCreateDay(farmEvent.block.timestamp.toI32(), tenderizerId)
+    day.farmVolume = day.farmVolume.plus(farmEvent.params.amount.toBigDecimal())
+    day.totalFarm = day.totalFarm.plus(farmEvent.params.amount.toBigDecimal())
+    day.save()
   
     // Update Tenderizer deposit total
     let tenderizer = loadOrCreateTenderizer(tenderizerId)
@@ -44,6 +51,12 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
       // TODO: add log
       return
     }
+
+    // Update day data
+    let day = loadOrCreateDay(unfarmEvent.block.timestamp.toI32(), tenderizerId)
+    day.farmVolume = day.farmVolume.minus(unfarmEvent.params.amount.toBigDecimal())
+    day.totalFarm = day.totalFarm.minus(unfarmEvent.params.amount.toBigDecimal())
+    day.save()
   
     // Update Tenderizer deposit total
     let tenderizer = loadOrCreateTenderizer(tenderizerId)
@@ -73,6 +86,12 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
     // TODO: add log
     return
   }
+
+  // Update day data
+  let day = loadOrCreateDay(harvestEvent.block.timestamp.toI32(), tenderizerId)
+  day.farmtHarvestVolume = day.farmtHarvestVolume.plus(harvestEvent.params.amount.toBigDecimal())
+  day.totalFarmHarvest = day.totalFarmHarvest.plus(harvestEvent.params.amount.toBigDecimal())
+  day.save()
 
   // Update Tenderizer deposit total
   let tenderizer = loadOrCreateTenderizer(tenderizerId)

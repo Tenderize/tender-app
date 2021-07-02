@@ -1,7 +1,8 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import { Tenderizer, TenderizerConfig, TenderizeGlobal, User, UserTenderizerData } from "../types/schema";
+import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Tenderizer, TenderizerConfig, TenderizeGlobal, User, UserTenderizerData, Day } from "../types/schema";
 
 export let ZERO_BI = BigInt.fromI32(0);
+export let ZERO_BD = BigDecimal.fromString('0')
 
 export function loadOrCreateTenderizer(id: string): Tenderizer {
   let tenderizer = Tenderizer.load(id)
@@ -86,4 +87,28 @@ export function getTenderizerIdByTenderFarmAddress(address: string): string {
     }
   }
   return ''
+}
+
+export function loadOrCreateDay(timestamp: i32, protocol: string): Day {
+  let dayTimestamp = timestamp / 86400
+  let dayID = dayTimestamp.toString() + '_' + protocol
+  let dayStartTimestamp = dayTimestamp * 86400
+  let day = Day.load(dayID)
+
+  if (day == null) {
+    day = new Day(dayID)
+    let latestData = loadOrCreateTenderizer(protocol)
+    day.date = dayStartTimestamp
+    day.protocol = protocol
+    day.tenderizerDepositVolume = ZERO_BD
+    day.totalTenderizerDeposit = latestData.deposits.minus(latestData.withdrawals).toBigDecimal()
+    day.rewardsVolume = ZERO_BD
+    day.totalRewards = latestData.rewards.toBigDecimal()
+    day.farmVolume = ZERO_BD
+    day.totalFarm = latestData.farmDeposits.minus(latestData.farmWithdrawals).toBigDecimal()
+    day.farmtHarvestVolume = ZERO_BD
+    day.totalFarmHarvest = latestData.farmHarvest.toBigDecimal()
+    day.save();
+  }
+  return day as Day;
 }

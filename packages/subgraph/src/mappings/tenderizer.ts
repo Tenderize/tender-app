@@ -16,6 +16,7 @@ import {
   loadOrCreateTenderizer,
   getTenderizerIdByTenderizerAddress,
   loadOrCreateUserTenderizerData,
+  loadOrCreateDay,
  } from "./utils"
 
 export function handleDepositEvent(depositEvent: Deposit): void {
@@ -27,6 +28,12 @@ export function handleDepositEvent(depositEvent: Deposit): void {
     // TODO: add log
     return
   }
+
+  // Update day data
+  let day = loadOrCreateDay(depositEvent.block.timestamp.toI32(), tenderizerId)
+  day.tenderizerDepositVolume = day.tenderizerDepositVolume.plus(depositEvent.params.amount.toBigDecimal())
+  day.totalTenderizerDeposit = day.totalTenderizerDeposit.plus(depositEvent.params.amount.toBigDecimal())
+  day.save()
 
   // Update Tenderizer deposit total
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
@@ -57,6 +64,12 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
     return
   }
 
+  // Update day data
+  let day = loadOrCreateDay(withdrawEvent.block.timestamp.toI32(), tenderizerId)
+  day.tenderizerDepositVolume = day.tenderizerDepositVolume.minus(withdrawEvent.params.amount.toBigDecimal())
+  day.totalTenderizerDeposit = day.totalTenderizerDeposit.minus(withdrawEvent.params.amount.toBigDecimal())
+  day.save()
+
   // Update Tenderizer deposit total
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
   tenderizer.withdrawals = tenderizer.withdrawals.plus(withdrawEvent.params.amount)
@@ -86,6 +99,12 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
     return
   }
 
+  // Update day data
+  let day = loadOrCreateDay(rewardsClaimedEvent.block.timestamp.toI32(), tenderizerId)
+  day.rewardsVolume = day.rewardsVolume.plus(rewardsClaimedEvent.params.rewards.toBigDecimal())
+  day.totalRewards = day.totalRewards.plus(rewardsClaimedEvent.params.rewards.toBigDecimal())
+  day.save()
+  
   // Update Tenderizer deposit total
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
   tenderizer.rewards = tenderizer.rewards.plus(rewardsClaimedEvent.params.rewards)

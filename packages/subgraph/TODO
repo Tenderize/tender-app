@@ -1,0 +1,7 @@
+- change to BigDecimal
+
+- Test day data/initialization for totals
+- Test withdraw event
+- Check what @derivedfrom is
+- DRY saving event data
+- Handel stake/unstake
