@@ -49,20 +49,21 @@ type UserTenderizerData @entity { # TODO: Better name? Since we have farm data h
 
 # Entities for timeseries 
 type Day @entity{
-  # Timestamp rounded to current day by dividing by 86400
-  id: ID!
-  # The date beginning at 12:00am UTC
-  date: Int!
-  tenderizer: String! # Tenderizer address (or just name?)
+  id: ID! # <Timestamp rounded to current day by dividing by 86400>_<protocol>
+  date: Int! # The date beginning at 12:00am UTC
+  protocol: String! # Name of protocol eg. 'livepeer'
 
-  depositVolume: BigInt!
-  totalDeposit: BigInt!
+  tenderizerDepositVolume: BigDecimal! # total deposits/withdrawals in tenderizer for the day
+  totalTenderizerDeposit: BigDecimal! # cumulative deposit on that day
 
-  feeVolume: BigInt! # staking fees collected from protocol
-  totalFees: BigInt!
+  rewardsVolume: BigDecimal! # staking rewards collected from protocol for the day
+  totalRewards: BigDecimal! # cumulative staking rewards collected
 
-  farmVolume: BigInt!
-  totalFarm: BigInt!
+  farmVolume: BigDecimal! # farm/unfarm volume for the day
+  totalFarm: BigDecimal! # cumulative farm on that day
+
+  farmtHarvestVolume: BigDecimal! # harvest volume for the day
+  totalFarmHarvest: BigDecimal! # cumulative harvest on that day
 }
 
 # Registry event entity
