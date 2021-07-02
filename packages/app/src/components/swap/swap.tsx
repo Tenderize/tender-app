@@ -1,7 +1,7 @@
 import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
-import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
+import { Alert, Button, Card, Form, FormControl, InputGroup, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { Icon } from "rimble-ui";
-import { BigNumberish, utils, BigNumber } from "ethers";
+import { BigNumberish, utils, BigNumber, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 
@@ -38,6 +38,7 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
+  const [showAlert, setShowAlert] = useState(true);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState<BigNumber | "0">("0");
@@ -168,7 +169,29 @@ const Swap: FC<Props> = ({
               />
             </InputGroup>
           </Form.Group>
-
+          <Alert
+            style={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}
+            onClick={() => setShowAlert(!showAlert)}
+            show={showAlert}
+            variant={"primary"}
+          >
+            Allow the Tenderize Protocol to use your {tokenSendedSymbol}
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="button-tooltip-2">
+                  You must give the Tenderize smart contracts permission to use your {tokenSendedSymbol}. You only have
+                  to do this once per token.
+                </Tooltip>
+              }
+            >
+              {({ ref, ...triggerHandler }) => (
+                <Alert.Link ref={ref} {...triggerHandler} className="d-inline-flex align-items-center">
+                  <span className="ms-1"> &#8505;</span>
+                </Alert.Link>
+              )}
+            </OverlayTrigger>
+          </Alert>
           <Button disabled={isSendInputInvalid} onClick={handlePressTrade}>
             Trade
           </Button>
