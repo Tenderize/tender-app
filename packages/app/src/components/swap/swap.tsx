@@ -38,7 +38,7 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
-  const [showAlert, setShowAlert] = useState(true);
+  const [isTokenAuthorized, setIsTokenAuthorized] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState<BigNumber | "0">("0");
@@ -115,10 +115,12 @@ const Swap: FC<Props> = ({
     e.preventDefault();
 
     const amount = utils.parseEther(sendTokenAmount || "0");
-    if (isSendingToken) {
-      await approveUnderlyingTokens(addresses[protocolName].swap, amount);
-    } else {
-      await approveTenderTokens(addresses[protocolName].swap, amount);
+    if (!isTokenAuthorized) {
+      if (isSendingToken) {
+        await approveUnderlyingTokens(addresses[protocolName].swap, constants.MaxUint256);
+      } else {
+        await approveTenderTokens(addresses[protocolName].swap, constants.MaxUint256);
+      }
     }
     swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, calcOutGivenIn, tokenSpotPrice);
   };
@@ -171,8 +173,8 @@ const Swap: FC<Props> = ({
           </Form.Group>
           <Alert
             style={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}
-            onClick={() => setShowAlert(!showAlert)}
-            show={showAlert}
+            onClick={() => setIsTokenAuthorized(!isTokenAuthorized)}
+            show={!isTokenAuthorized}
             variant={"primary"}
           >
             Allow the Tenderize Protocol to use your {tokenSendedSymbol}
