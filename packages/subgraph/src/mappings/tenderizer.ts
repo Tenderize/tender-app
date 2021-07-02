@@ -14,14 +14,14 @@ import {
 } from "../types/templates/Tenderizer/Tenderizer"
 import { 
   loadOrCreateTenderizer,
-  getTenderizerIdByTenderizerAddress,
+  getProtocolIdByTenderizerAddress,
   loadOrCreateUserTenderizerData,
   loadOrCreateDay,
  } from "./utils"
 
 export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizerAddress = depositEvent.address.toHex()
-  let tenderizerId  = getTenderizerIdByTenderizerAddress(tenderizerAddress)
+  let tenderizerId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = depositEvent.params.amount.toBigDecimal()
 
   // Sanity check, tenderizers would generally always be registered
@@ -38,12 +38,12 @@ export function handleDepositEvent(depositEvent: Deposit): void {
 
   // Update Tenderizer deposit total
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
-  tenderizer.deposits = tenderizer.deposits.plus(amount)
+  tenderizer.tenderizerDeposits = tenderizer.tenderizerDeposits.plus(amount)
   tenderizer.save()
 
   // Update User data
   let userData = loadOrCreateUserTenderizerData(depositEvent.params.from.toHex(), tenderizerId)
-  userData.deposits = userData.deposits.plus(amount)
+  userData.tenderizerDeposits = userData.tenderizerDeposits.plus(amount)
   userData.save()
 
   // Save raw event
@@ -57,7 +57,7 @@ export function handleDepositEvent(depositEvent: Deposit): void {
 
 export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizerAddress = withdrawEvent.address.toHex()
-  let tenderizerId  = getTenderizerIdByTenderizerAddress(tenderizerAddress)
+  let tenderizerId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = withdrawEvent.params.amount.toBigDecimal()
 
   // Sanity check, tenderizers would generally always be registered
@@ -74,12 +74,12 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
 
   // Update Tenderizer deposit total
   let tenderizer = loadOrCreateTenderizer(tenderizerId)
-  tenderizer.withdrawals = tenderizer.withdrawals.plus(amount)
+  tenderizer.tenderizerWithdrawals = tenderizer.tenderizerWithdrawals.plus(amount)
   tenderizer.save()
 
   // Update User data
   let userData = loadOrCreateUserTenderizerData(withdrawEvent.params.from.toHex(), tenderizerId)
-  userData.withdrawals = userData.withdrawals.plus(amount)
+  userData.tenderizerWithdrawals = userData.tenderizerWithdrawals.plus(amount)
   userData.save()
 
   // Save raw event
@@ -93,7 +93,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
 
 export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): void {
   let tenderizerAddress = rewardsClaimedEvent.address.toHex()
-  let tenderizerId  = getTenderizerIdByTenderizerAddress(tenderizerAddress)
+  let tenderizerId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = rewardsClaimedEvent.params.rewards.toBigDecimal()
 
   // Sanity check, tenderizers would generally always be registered
@@ -124,7 +124,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
 
 export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: ProtocolFeeCollected): void {
   let tenderizerAddress = protocolFeeCollectedEvent.address.toHex()
-  let tenderizerId  = getTenderizerIdByTenderizerAddress(tenderizerAddress)
+  let tenderizerId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
 
   // Sanity check, tenderizers would generally always be registered
   if(tenderizerId ==  ''){
@@ -147,7 +147,7 @@ export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: Proto
 
 export function handleLiquidityFeeCollectedEvent(liquidityFeeCollectedEvent: LiquidityFeeCollected): void {
   let tenderizerAddress = liquidityFeeCollectedEvent.address.toHex()
-  let tenderizerId  = getTenderizerIdByTenderizerAddress(tenderizerAddress)
+  let tenderizerId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
 
   // Sanity check, tenderizers would generally always be registered
   if(tenderizerId ==  ''){
