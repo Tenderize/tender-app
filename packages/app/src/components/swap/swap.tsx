@@ -4,6 +4,7 @@ import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
+import AuthorizeToken from "../AuthorizeToken";
 
 type Props = {
   protocolName: string;
@@ -38,7 +39,6 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
-  const [isTokenAuthorized, setIsTokenAuthorized] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState<BigNumber | "0">("0");
@@ -59,19 +59,14 @@ const Swap: FC<Props> = ({
     .mul(11)
     .div(10);
 
+  const { state: approveTx, send: approveToken } = useContractFunction(
+    isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken,
+    "approve"
+  );
+
   const { state: _swapTx, send: swapExactAmountIn } = useContractFunction(
     contracts[protocolName].swap,
     "swapExactAmountIn"
-  );
-
-  const { state: _approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
-    contracts[protocolName].token,
-    "approve"
-  );
-
-  const { state: _approveTenderTx, send: approveTenderTokens } = useContractFunction(
-    contracts[protocolName].tenderToken,
-    "approve"
   );
 
   const [calcOutGivenIn] =
@@ -113,15 +108,7 @@ const Swap: FC<Props> = ({
 
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
-
     const amount = utils.parseEther(sendTokenAmount || "0");
-    if (!isTokenAuthorized) {
-      if (isSendingToken) {
-        await approveUnderlyingTokens(addresses[protocolName].swap, constants.MaxUint256);
-      } else {
-        await approveTenderTokens(addresses[protocolName].swap, constants.MaxUint256);
-      }
-    }
     swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, calcOutGivenIn, tokenSpotPrice);
   };
 
@@ -171,29 +158,7 @@ const Swap: FC<Props> = ({
               />
             </InputGroup>
           </Form.Group>
-          <Alert
-            style={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}
-            onClick={() => setIsTokenAuthorized(!isTokenAuthorized)}
-            show={!isTokenAuthorized}
-            variant={"primary"}
-          >
-            Allow the Tenderize Protocol to use your {tokenSendedSymbol}
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="button-tooltip-2">
-                  You must give the Tenderize smart contracts permission to use your {tokenSendedSymbol}. You only have
-                  to do this once per token.
-                </Tooltip>
-              }
-            >
-              {({ ref, ...triggerHandler }) => (
-                <Alert.Link ref={ref} {...triggerHandler} className="d-inline-flex align-items-center">
-                  <span className="ms-1"> &#8505;</span>
-                </Alert.Link>
-              )}
-            </OverlayTrigger>
-          </Alert>
+          <AuthorizeToken tokenSymbol={tokenSendedSymbol} protocolName={protocolName} approveToken={approveToken} />
           <Button disabled={isSendInputInvalid} onClick={handlePressTrade}>
             Trade
           </Button>
