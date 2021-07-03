@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useState } from "react";
 import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
@@ -43,7 +43,6 @@ const Swap: FC<Props> = ({
 }) => {
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
-  const [receiveTokenAmount, setReceiveTokenAmount] = useState<BigNumber | "0">("0");
   const { setApprovalState } = useStore((state) => state);
 
   const tenderTokenSymbol = `tender${tokenSymbol}`;
@@ -98,15 +97,6 @@ const Swap: FC<Props> = ({
           ],
         }
     ) ?? [];
-
-  // update receiveTokenAmount when calcOutGivenIn changes
-  useEffect(() => {
-    if (calcOutGivenIn != null && !calcOutGivenIn.eq(receiveTokenAmount)) {
-      setReceiveTokenAmount(calcOutGivenIn);
-    } else if (calcOutGivenIn == null) {
-      setReceiveTokenAmount("0");
-    }
-  }, [calcOutGivenIn, receiveTokenAmount]);
 
   // display progress during approval
   useEffect(() => {
@@ -166,11 +156,7 @@ const Swap: FC<Props> = ({
             <Form.Label>Receive</Form.Label>
             <InputGroup className="mb-2">
               <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
-              <FormControl
-                id="formSwapReceive"
-                placeholder={"0"}
-                value={utils.formatEther(receiveTokenAmount || "0")}
-              />
+              <FormControl id="formSwapReceive" placeholder={"0"} value={utils.formatEther(calcOutGivenIn || "0")} />
             </InputGroup>
           </Form.Group>
           <AuthorizeToken
