@@ -1,11 +1,11 @@
-import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useState } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
 import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
 import { useContractFunction, useContractCall, useTokenAllowance, useEthers, TransactionState } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 
-import AuthorizeToken from "../authorize/AuthorizeToken";
+import ApproveToken from "../approve/ApproveToken";
 import useStore from "../../store";
 
 type Props = {
@@ -74,7 +74,7 @@ const Swap: FC<Props> = ({
   const { account } = useEthers();
 
   const allowance = useTokenAllowance(tokenSendedAddress, account, addresses[protocolName].swap);
-  const isTokenAuthorized = allowance != null && constants.MaxUint256.div(2).lt(allowance);
+  const isTokenApproved = allowance != null && constants.MaxUint256.div(2).lt(allowance);
 
   const [calcOutGivenIn] =
     useContractCall(
@@ -100,7 +100,6 @@ const Swap: FC<Props> = ({
 
   // display progress during approval
   useEffect(() => {
-    console.log("approveTx", approveTx.status);
     setApprovalState(approveTx.status);
   }, [approveTx, setApprovalState]);
 
@@ -159,18 +158,22 @@ const Swap: FC<Props> = ({
               <FormControl id="formSwapReceive" placeholder={"0"} value={utils.formatEther(calcOutGivenIn || "0")} />
             </InputGroup>
           </Form.Group>
-          <AuthorizeToken
-            tokenSymbol={tokenSendedSymbol}
-            protocolName={protocolName}
-            approveToken={approveToken}
-            isTokenAuthorized={isTokenAuthorized}
-          />
-          <Button
-            disabled={isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
-            onClick={handlePressTrade}
-          >
-            Trade
-          </Button>
+          <div className="d-grid gap-2">
+            <ApproveToken
+              tokenSymbol={tokenSendedSymbol}
+              protocolName={protocolName}
+              approveToken={approveToken}
+              isTokenApproved={isTokenApproved}
+            />
+            <Button
+              disabled={
+                !isTokenApproved && (isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero))
+              }
+              onClick={handlePressTrade}
+            >
+              Trade
+            </Button>
+          </div>
         </Form>
       </Card.Body>
     </Card>

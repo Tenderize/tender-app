@@ -45,7 +45,7 @@ const Token: FC = () => {
     <>
       <Container className="mb-5">
         <Row className="justify-content-md-center">
-          <Col md={8}>
+          <Col md={6}>
             <Link to="/">
               <Button.Text icon="KeyboardArrowLeft">Back</Button.Text>
             </Link>

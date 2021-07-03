@@ -5,7 +5,7 @@ import { FC, useEffect, useRef, useState } from "react";
 
 import Connect from "./Connect";
 import Account from "./Account";
-import ApprovalStateBadge from "../authorize/ApprovalStateBadge";
+import ApprovalStateBadge from "../approve/ApprovalStateBadge";
 
 const Nav: FC = () => {
   const logo = require("../../images/tenderizeLogo.svg").default;
