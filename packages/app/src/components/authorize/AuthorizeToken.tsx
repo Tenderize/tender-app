@@ -17,7 +17,6 @@ const AuthorizeToken: FC<Props> = ({ tokenSymbol, protocolName, approveToken, is
 
     if (!isTokenAuthorized) {
       await approveToken(addresses[protocolName].swap, constants.MaxUint256);
-      //  setIsTokenAuthorized(true);
     }
   };
 

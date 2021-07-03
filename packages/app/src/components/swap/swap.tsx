@@ -1,11 +1,12 @@
 import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
-import { Alert, Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
+import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
-import { useContractFunction, useContractCall, useTokenAllowance, useEthers } from "@usedapp/core";
+import { useContractFunction, useContractCall, useTokenAllowance, useEthers, TransactionState } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 
-import AuthorizeToken from "../AuthorizeToken";
+import AuthorizeToken from "../authorize/AuthorizeToken";
+import useStore from "../../store";
 
 type Props = {
   protocolName: string;
@@ -43,6 +44,7 @@ const Swap: FC<Props> = ({
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState<BigNumber | "0">("0");
+  const { setApprovalState } = useStore((state) => state);
 
   const tenderTokenSymbol = `tender${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -74,6 +76,7 @@ const Swap: FC<Props> = ({
 
   const allowance = useTokenAllowance(tokenSendedAddress, account, addresses[protocolName].swap);
   const isTokenAuthorized = allowance != null && constants.MaxUint256.div(2).lt(allowance);
+
   const [calcOutGivenIn] =
     useContractCall(
       hasValue(tokenSendedLpBalance) &&
@@ -96,10 +99,7 @@ const Swap: FC<Props> = ({
         }
     ) ?? [];
 
-  const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    setSendTokenAmount(e.target.value);
-  }, []);
-
+  // update receiveTokenAmount when calcOutGivenIn changes
   useEffect(() => {
     if (calcOutGivenIn != null && !calcOutGivenIn.eq(receiveTokenAmount)) {
       setReceiveTokenAmount(calcOutGivenIn);
@@ -107,6 +107,16 @@ const Swap: FC<Props> = ({
       setReceiveTokenAmount("0");
     }
   }, [calcOutGivenIn, receiveTokenAmount]);
+
+  // display progress during approval
+  useEffect(() => {
+    console.log("approveTx", approveTx.status);
+    setApprovalState(approveTx.status);
+  }, [approveTx, setApprovalState]);
+
+  const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    setSendTokenAmount(e.target.value);
+  }, []);
 
   const isSendInputInvalid =
     sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);

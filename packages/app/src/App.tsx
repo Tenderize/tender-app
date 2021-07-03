@@ -25,21 +25,19 @@ const customTheme = {
 
 const App: FC = () => {
   return (
-    <>
-      <ThemeProvider theme={customTheme}>
-        <BaseStyles>
-          <Background />
-          <TestnetBanner />
-          <Router>
-            <Nav />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/stakers/:id" component={Token} />
-            </Switch>
-          </Router>
-        </BaseStyles>
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={customTheme}>
+      <BaseStyles>
+        <Background />
+        <TestnetBanner />
+        <Router>
+          <Nav />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/stakers/:id" component={Token} />
+          </Switch>
+        </Router>
+      </BaseStyles>
+    </ThemeProvider>
   );
 };
 
