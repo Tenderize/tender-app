@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useState } from "react";
 import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber } from "ethers";
@@ -40,7 +40,6 @@ const Swap: FC<Props> = ({
 }) => {
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
-  const [receiveTokenAmount, setReceiveTokenAmount] = useState<BigNumber | "0">("0");
 
   const tenderTokenSymbol = `tender${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -99,14 +98,6 @@ const Swap: FC<Props> = ({
     setSendTokenAmount(e.target.value);
   }, []);
 
-  useEffect(() => {
-    if (calcOutGivenIn != null && !calcOutGivenIn.eq(receiveTokenAmount)) {
-      setReceiveTokenAmount(calcOutGivenIn);
-    } else if (calcOutGivenIn == null) {
-      setReceiveTokenAmount("0");
-    }
-  }, [calcOutGivenIn, receiveTokenAmount]);
-
   const isSendInputInvalid =
     sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
 
@@ -161,11 +152,7 @@ const Swap: FC<Props> = ({
             <Form.Label>Receive</Form.Label>
             <InputGroup className="mb-2">
               <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
-              <FormControl
-                id="formSwapReceive"
-                placeholder={"0"}
-                value={utils.formatEther(receiveTokenAmount || "0")}
-              />
+              <FormControl id="formSwapReceive" placeholder={"0"} value={utils.formatEther(calcOutGivenIn || "0")} />
             </InputGroup>
           </Form.Group>
 
