@@ -132,7 +132,7 @@ const Swap: FC<Props> = ({
       <Card.Body>
         <Form>
           <Form.Group className="mb-3">
-            <Form.Label>Send</Form.Label>
+            <Form.Label>Swap</Form.Label>
             <InputGroup className="mb-2" hasValidation={true}>
               <InputGroup.Text>{tokenSendedSymbol}</InputGroup.Text>
               <Form.Control
@@ -179,7 +179,10 @@ const Swap: FC<Props> = ({
             approveToken={approveToken}
             isTokenAuthorized={isTokenAuthorized}
           />
-          <Button disabled={isSendInputInvalid} onClick={handlePressTrade}>
+          <Button
+            disabled={isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
+            onClick={handlePressTrade}
+          >
             Trade
           </Button>
         </Form>
