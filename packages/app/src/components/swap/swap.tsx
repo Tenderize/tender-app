@@ -1,12 +1,12 @@
-import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, FC, useCallback, useState } from "react";
 import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
-import { useContractFunction, useContractCall, useTokenAllowance, useEthers, TransactionState } from "@usedapp/core";
+import { useContractCall, useTokenAllowance, useEthers } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 
 import ApproveToken from "../approve/ApproveToken";
-import useStore from "../../store";
+import ConfirmSwapModal from "./ConfirmSwapModal";
 
 type Props = {
   protocolName: string;
@@ -41,9 +41,9 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
+  const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
-  const { setApprovalState } = useStore((state) => state);
 
   const tenderTokenSymbol = `tender${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -60,16 +60,6 @@ const Swap: FC<Props> = ({
   )
     .mul(11)
     .div(10);
-
-  const { state: approveTx, send: approveToken } = useContractFunction(
-    isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken,
-    "approve"
-  );
-
-  const { state: _swapTx, send: swapExactAmountIn } = useContractFunction(
-    contracts[protocolName].swap,
-    "swapExactAmountIn"
-  );
 
   const { account } = useEthers();
 
@@ -98,23 +88,12 @@ const Swap: FC<Props> = ({
         }
     ) ?? [];
 
-  // display progress during approval
-  useEffect(() => {
-    setApprovalState(approveTx.status);
-  }, [approveTx, setApprovalState]);
-
   const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setSendTokenAmount(e.target.value);
   }, []);
 
   const isSendInputInvalid =
     sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
-
-  const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
-    e.preventDefault();
-    const amount = utils.parseEther(sendTokenAmount || "0");
-    swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, calcOutGivenIn, tokenSpotPrice);
-  };
 
   return (
     <Card>
@@ -162,20 +141,32 @@ const Swap: FC<Props> = ({
             <ApproveToken
               tokenSymbol={tokenSendedSymbol}
               protocolName={protocolName}
-              approveToken={approveToken}
+              tokenAddress={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
               isTokenApproved={isTokenApproved}
             />
             <Button
               disabled={
                 !isTokenApproved && (isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero))
               }
-              onClick={handlePressTrade}
+              onClick={() => setShowConfirm(true)}
             >
               Trade
             </Button>
           </div>
         </Form>
       </Card.Body>
+      <ConfirmSwapModal
+        show={showConfirm}
+        onDismiss={() => setShowConfirm(false)}
+        tokenSendedSymbol={tokenSendedSymbol}
+        sendTokenAmount={sendTokenAmount}
+        tokenReceivedSymbol={tokenReceivedSymbol}
+        receiveTokenAmount={calcOutGivenIn}
+        tokenSpotPrice={tokenSpotPrice}
+        tokenSendedAddress={tokenSendedAddress}
+        tokenReceivedAddress={tokenReceivedAddress}
+        protocolName={protocolName}
+      />
     </Card>
   );
 };

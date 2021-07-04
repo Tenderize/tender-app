@@ -5,7 +5,6 @@ import { FC, useEffect, useRef, useState } from "react";
 
 import Connect from "./Connect";
 import Account from "./Account";
-import ApprovalStateBadge from "../approve/ApprovalStateBadge";
 
 const Nav: FC = () => {
   const logo = require("../../images/tenderizeLogo.svg").default;
@@ -39,12 +38,7 @@ const Nav: FC = () => {
           <img src={logo} alt="logo" style={{ marginTop: "1em" }} />
         </Link>
       </Col>
-      <Col md={{ span: 1, offset: 3 }}>
-        <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: 10 }}>
-          <ApprovalStateBadge />
-        </div>
-      </Col>
-      <Col md={{ span: 3 }}>
+      <Col md={{ span: 3, offset: 4 }}>
         {account ? <Account account={account} /> : <Connect activateBrowserWallet={activateBrowserWallet} />}
       </Col>
     </Navbar>
