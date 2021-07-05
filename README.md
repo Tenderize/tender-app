@@ -1,18 +1,45 @@
 # Tender-App
 
-## 0xHack 2021 
+This project was bootstrapped with [Create Eth App](https://github.com/paulrberg/create-eth-app).
+
+## HackMoney 2020
+
+### Demo
 
 Live demo available at https://tender-app.vercel.app/ 
 
-Video Demo: 
-[![Everything Is AWESOME](https://i9.ytimg.com/vi/R1Lw1p7RNaM/mq1.jpg?sqp=CNid0YUG&rs=AOn4CLDJiYWkYzH-UEsOnBpydDCqpNHs8w)](https://youtu.be/R1Lw1p7RNaM")
+[video demo](https://www.youtube.com/watch?v=q8YEaLYKCP4)
 
-This project was bootstrapped with [Create Eth App](https://github.com/paulrberg/create-eth-app).
+### Subgraph
 
-### Tech used: 
+[subgraph](https://thegraph.com/explorer/subgraph/reubenr0d/tenderizersamplegraph?selected=logs)
 
-- Matic 
-- Usedapp 
+### Figma
+
+[Figma doc](https://www.figma.com/file/cjn6txX55cEOII83BvzC2M/tenderize?node-id=0%3A1)
+
+### Contracts
+
+#### Rinkeby
+
+##### Registry
+
+0xef9Edb94bF7Ee9071999089b768db580033A6aAB
+
+###### Livepeer
+
+BondingManager: 0x1Ea74442e6Da97DB604Cfd147BA142b7f5FC3Cc3
+RoundsManager: 0x3F7476F93F3D07DB2931b90e7ad7cEa433394296
+LivepeerToken: 0xe80110C0a290c493C543148c5445a23D3403a096
+LivepeerTokenFaucet: 0x4868A5e950e386E3d99038B141FcfA53362E67Ba
+
+TenderFarm: 0xEf078e54495cBa7A7932f1753D4A6A3b806A010D
+TenderToken: 0x6b903e6751e10d9F8AEa932891DED743F2F22616
+Tenderizer: 0x21AbB50cf89Ab2Ccf685b5671C06b5577279CC15
+ESP: 0xfb852b5F27B29394d2b51062BF677C6539279807
+BPOOL: 0x132101F2F131B93cB5AaDe8b6568e431F32F64D7
+Controller: 0x3891FB6b6B145Ad104FE98aC6EFAFc7d8feDD63C
+TokenFaucet: 0x99e3A045Fb28E44d23e1eDBa6ED0d49F4Db38d47
 
 ## Project Structure
 
