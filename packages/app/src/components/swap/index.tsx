@@ -5,6 +5,7 @@ import { addresses, contracts } from "@tender/contracts";
 
 import Swap from "./swap";
 import JoinPool from "./join";
+import ExitPool from './exit';
 
 type Props = {
   name: string;
@@ -79,7 +80,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
   ]);
 
   return (
-    <>
+    <div className="d-grid gap-2">
       <Swap
         protocolName={name}
         tokenSymbol={symbol}
@@ -106,7 +107,8 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
         lpShares={lpShares ? lpShares[0] : "0"}
       />
-    </>
+      <ExitPool />
+    </div>
   );
 };
 

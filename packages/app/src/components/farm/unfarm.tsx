@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
-import { Button, Input } from "rimble-ui";
+import { Input } from "rimble-ui";
 // import { useContractFunction } from "@usedapp/core";
-import { Form, Spinner, Modal } from "react-bootstrap";
+import { Form, Spinner, Modal, Button } from "react-bootstrap";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
@@ -35,9 +35,10 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
   // Contract Functions
 
   const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].farm, "unfarm");
-  const unfarmLpTokens = (e: any) => {
+  const unfarmLpTokens = async (e: any) => {
     e.preventDefault();
-    unfarm(utils.parseEther(unfarmInput || "0"));
+    await unfarm(utils.parseEther(unfarmInput || "0"));
+    setUnfarmInput("")
   };
 
   return (

@@ -1,9 +1,11 @@
 import { FC, useState } from "react";
-// import { useContractFunction } from "@usedapp/core";
-import { Form, Button, Modal, Tabs, Tab, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
+import { Form, Button, Modal, Tabs, Tab, InputGroup, Dropdown, DropdownButton, Spinner } from "react-bootstrap";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
+
+import ApproveToken from "../approve/ApproveToken";
+import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
 type Props = {
   name: string;
@@ -32,8 +34,8 @@ const JoinPool: FC<Props> = ({
   tenderLpBalance,
   lpShares,
 }) => {
-  // Component state & helpers
 
+  // Component state & helpers
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -43,6 +45,8 @@ const JoinPool: FC<Props> = ({
   const handleMulti = (v: string | null) => {
     if (v === "single") setIsMulti(false);
     if (v === "multi") setIsMulti(true);
+    setTokenInput("")
+    setTenderInput("")
   };
 
   const [tokenInput, setTokenInput] = useState("");
@@ -54,10 +58,11 @@ const JoinPool: FC<Props> = ({
       setTenderInput(val);
       return;
     }
-    const valBN = utils.parseEther(val);
-    console.log(tenderTokenWeight, tokenWeight);
-    const otherVal = utils.formatEther(valBN.mul(tenderTokenWeight).div(tokenWeight));
-    setTenderInput(otherVal.toString());
+    if (isMulti) {
+      const valBN = utils.parseEther(val);
+      const otherVal = utils.formatEther(valBN.mul(tenderTokenWeight).div(tokenWeight));
+      setTenderInput(otherVal.toString());
+    }
   };
 
   const [tenderInput, setTenderInput] = useState("");
@@ -69,14 +74,18 @@ const JoinPool: FC<Props> = ({
       setTokenInput(val);
       return;
     }
-    const valBN = utils.parseEther(val);
-    const otherVal = utils.formatEther(valBN.mul(tokenWeight).div(tenderTokenWeight));
-    setTokenInput(otherVal.toString());
+    if (isMulti) {
+      const valBN = utils.parseEther(val);
+      const otherVal = utils.formatEther(valBN.mul(tokenWeight).div(tenderTokenWeight));
+      setTokenInput(otherVal.toString());
+    }
   };
 
   const [selectToken, setSelectToken] = useState(symbol);
   const handleSelectToken = (symbol: string) => {
     setSelectToken(symbol);
+    setTokenInput("")
+    setTenderInput("")
   };
 
   const maxDeposit = (tenderToken: boolean) => {
@@ -90,6 +99,25 @@ const JoinPool: FC<Props> = ({
       setTenderInput(utils.formatEther(balBN.mul(tenderTokenWeight).div(tokenWeight)));
     }
   };
+
+  const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].liquidity, tokenInput);
+  const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput);
+
+  const hasValue = (val: any) => {
+    return val && val !== "0";
+  };
+
+  const useButtonDisabled = () => {
+    if (isMulti) {
+      return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved)
+    } else {
+      if (selectToken === symbol) {
+        return !hasValue(tokenInput) && !isTokenApproved
+      } else {
+        return !hasValue(tenderInput) && !isTenderApproved
+      }
+    }
+  }
 
   // Contract Functions
   const useCalcSinglePoolOut = () => {
@@ -127,19 +155,9 @@ const JoinPool: FC<Props> = ({
 
   const singlePoolOut = useCalcSinglePoolOut() || "0";
 
-  const { state: _approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
-    contracts[name].token,
-    "approve"
-  );
-
-  const { state: _approveTenderTx, send: approveTenderTokens } = useContractFunction(
-    contracts[name].tenderToken,
-    "approve"
-  );
-
-  const { state: _joinPoolTx, send: joinPool } = useContractFunction(contracts[name].liquidity, "joinPool");
+  const { state: joinPoolTx, send: joinPool } = useContractFunction(contracts[name].liquidity, "joinPool");
   
-  const { state: _joinSwapExternAmountInTx, send: joinSwapExternAmountIn } = useContractFunction(
+  const { state: joinSwapExternAmountInTx, send: joinSwapExternAmountIn } = useContractFunction(
     contracts[name].liquidity,
     "joinswapExternAmountIn"
   );
@@ -163,10 +181,7 @@ const JoinPool: FC<Props> = ({
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
     if (isMulti) {
-      console.log(calcPoolOutFromRatio().toString());
       const poolTokensOut = calcPoolOutFromRatio();
-      approveUnderlyingTokens(addresses[name].liquidity, tokenIn);
-      await approveTenderTokens(addresses[name].liquidity, tenderIn);
       // NOTE: Pool is currently tenderToken/Token
       joinPool(poolTokensOut, [tenderIn, tokenIn]);
     } else {
@@ -176,11 +191,9 @@ const JoinPool: FC<Props> = ({
       if (selectToken === symbol) {
         token = addresses[name].token;
         amount = tokenIn;
-        await approveUnderlyingTokens(addresses[name].liquidity, amount);
       } else if (selectToken === `t${symbol}`) {
         token = addresses[name].tenderToken;
         amount = tenderIn;
-        await approveTenderTokens(addresses[name].liquidity, amount);
       }
       joinSwapExternAmountIn(token, amount, poolTokensOut);
     }
@@ -188,7 +201,7 @@ const JoinPool: FC<Props> = ({
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="success" onClick={handleShow}>
         Join Pool
       </Button>
 
@@ -246,6 +259,7 @@ const JoinPool: FC<Props> = ({
               <Form>
                 <Form.Group controlId="singleinput">
                   <InputGroup className="mb-3">
+                  <InputGroup.Prepend>
                     <DropdownButton
                       as={InputGroup.Prepend}
                       variant="outline-secondary"
@@ -260,6 +274,7 @@ const JoinPool: FC<Props> = ({
                         t{symbol}
                       </Dropdown.Item>
                     </DropdownButton>
+                    </InputGroup.Prepend>
                     {selectToken === symbol ? (
                       <>
                         <Form.Control
@@ -294,50 +309,31 @@ const JoinPool: FC<Props> = ({
               </Form>
             </Tab>
           </Tabs>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-
-          <Button variant="primary" onClick={addLiquidity}>
-            Add Liquidity
-          </Button>
-
-          {/* Show Farm or Approve depending on allowance
-          {!farmInput || BigNumber.from(tokenAllowance).gte(utils.parseEther(farmInput || "0")) ? (
-          <Button
-            variant="primary"
-            disabled={!farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
-            onClick={farmLpTokens}
-            >
-            {farmTx.status === "Mining" ? (
-                <>
-                <Spinner animation="border" variant="white" />
-                Farming...
-                </>
-            ) : (
-                "Farm"
-            )}
-            </Button>
-          ) : (
-            <Button
-            variant="primary"
-            disabled={!farmInput || farmInput.toString() === "0" || approveTx.status === "Mining"}
-            onClick={approveLpTokens}
-          >
-            {approveTx.status === "Mining" ? (
+          <div className="d-grid gap-2">
+            <ApproveToken
+              symbol={symbol}
+              spender={addresses[name].liquidity}
+              token={contracts[name].token}
+              hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
+            />
+            <ApproveToken 
+              symbol={`t${symbol}`}
+              spender={addresses[name].liquidity}
+              token={contracts[name].tenderToken}
+              hasAllowance={!hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)}
+            />
+            <Button block variant="primary" onClick={addLiquidity} disabled={useButtonDisabled()}>
+            {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
               <>
-                {" "}
                 <Spinner animation="border" variant="white" />
-                Approving...
+                Adding Liquidity...
               </>
             ) : (
-              "Approve"
+              "Add Liquidity"
             )}
-          </Button>
-          )} */}
-        </Modal.Footer>
+            </Button>
+          </div>
+        </Modal.Body>
       </Modal>
     </>
   );

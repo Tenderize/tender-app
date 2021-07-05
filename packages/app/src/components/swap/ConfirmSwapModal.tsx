@@ -47,7 +47,8 @@ const ConfirmSwapModal: FC<Props> = ({
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
     const amount = utils.parseEther(sendTokenAmount || "0");
-    swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, receiveTokenAmount, tokenSpotPrice);
+    await swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, receiveTokenAmount, tokenSpotPrice);
+    onDismiss()
   };
 
   useEffect(() => {
