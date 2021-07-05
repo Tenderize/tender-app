@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create Eth App](https://github.com/paulrberg/create-eth-app).
 
-## HackMoney 2020
+## HackMoney 2021
 
 ### Demo
 
