@@ -161,7 +161,6 @@ const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title })
           {transaction && `${shortenTransactionHash(transaction?.hash)} #${transaction.nonce}`}
         </TransactionDetails>
       </NotificationDetailsWrapper>
-      {transaction && <div style={{ marginLeft: "auto" }}>- {formatBalance(transaction.value)} ETH</div>}
     </NotificationWrapper>
   );
 };
@@ -177,7 +176,7 @@ export const NotificationsList: FC = () => {
               <NotificationElement
                 key={notification.id}
                 icon={notificationContent[notification.type].icon}
-                title={`${notificationContent[notification.type].title}:${notification.transactionName}`}
+                title={`${notificationContent[notification.type].title}: ${notification.transactionName}`}
                 transaction={notification.transaction}
                 date={Date.now()}
               />
