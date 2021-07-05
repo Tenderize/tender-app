@@ -64,7 +64,7 @@ const Swap: FC<Props> = ({
   const { account } = useEthers();
 
   const allowance = useTokenAllowance(tokenSendedAddress, account, addresses[protocolName].swap);
-  const isTokenApproved = allowance != null && constants.MaxUint256.div(2).lt(allowance);
+  const isTokenApproved = allowance != null && allowance.gte(sendTokenAmount === "" ? "0" : sendTokenAmount);
 
   const [calcOutGivenIn] =
     useContractCall(
@@ -139,15 +139,13 @@ const Swap: FC<Props> = ({
           </Form.Group>
           <div className="d-grid gap-2">
             <ApproveToken
-              tokenSymbol={tokenSendedSymbol}
-              protocolName={protocolName}
+              symbol={tokenSendedSymbol}
+              spender={addresses[protocolName].swap}
               tokenAddress={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-              isTokenApproved={isTokenApproved}
+              hasAllowance={isTokenApproved}
             />
             <Button
-              disabled={
-                !isTokenApproved && (isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero))
-              }
+              disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
               onClick={() => setShowConfirm(true)}
             >
               Trade

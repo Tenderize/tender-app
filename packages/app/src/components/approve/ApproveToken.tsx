@@ -1,30 +1,30 @@
 import { FC, MouseEventHandler } from "react";
 import { Button, Container, Tooltip, OverlayTrigger, Spinner } from "react-bootstrap";
-import { constants, Contract } from "ethers";
-import { addresses } from "@tender/contracts";
+import { BigNumberish, constants, Contract } from "ethers";
 import { useContractFunction } from "@usedapp/core";
 
 type Props = {
-  protocolName: string;
-  tokenSymbol: string;
-  isTokenApproved: boolean;
+  symbol: string;
+  hasAllowance: boolean;
+  spender: string;
   tokenAddress: Contract;
+  amount?: BigNumberish;
 };
 
-const ApproveToken: FC<Props> = ({ tokenSymbol, protocolName, isTokenApproved, tokenAddress }) => {
+const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, tokenAddress, amount }) => {
   const { state: approveTx, send: approveToken } = useContractFunction(tokenAddress, "approve");
 
   const handleApproval: MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
 
-    if (!isTokenApproved) {
-      await approveToken(addresses[protocolName].swap, constants.MaxUint256);
+    if (!hasAllowance) {
+      await approveToken(spender, amount ?? constants.MaxUint256);
     }
   };
 
   return (
     <>
-      {!isTokenApproved && (
+      {!hasAllowance && (
         <Button
           style={{ display: "flex", justifyContent: "space-between" }}
           onClick={handleApproval}
@@ -37,13 +37,13 @@ const ApproveToken: FC<Props> = ({ tokenSymbol, protocolName, isTokenApproved, t
             </Container>
           ) : (
             <>
-              Allow the Tenderize Protocol to use your {tokenSymbol}
+              Allow the Tenderize Protocol to use your {symbol}
               <OverlayTrigger
                 placement="bottom"
                 overlay={
                   <Tooltip id="button-tooltip-2">
-                    You must give the Tenderize smart contracts permission to use your {tokenSymbol}. You only have to
-                    do this once per token.
+                    You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do
+                    this once per token.
                   </Tooltip>
                 }
               >
