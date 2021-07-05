@@ -5,6 +5,9 @@ import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 
+import ApproveToken from "../approve/ApproveToken";
+import { useIsTokenApproved } from "../approve/useIsTokenApproved";
+
 type Props = {
   name: string;
   symbol: string;
@@ -32,8 +35,8 @@ const JoinPool: FC<Props> = ({
   tenderLpBalance,
   lpShares,
 }) => {
-  // Component state & helpers
 
+  // Component state & helpers
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -91,6 +94,9 @@ const JoinPool: FC<Props> = ({
     }
   };
 
+  const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].liquidty, tokenInput);
+  const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput)
+  
   // Contract Functions
   const useCalcSinglePoolOut = () => {
     const hasValue = (val: any) => {
