@@ -64,7 +64,8 @@ const Swap: FC<Props> = ({
   const { account } = useEthers();
 
   const allowance = useTokenAllowance(tokenSendedAddress, account, addresses[protocolName].swap);
-  const isTokenApproved = allowance != null && allowance.gte(sendTokenAmount === "" ? "0" : sendTokenAmount);
+  const isTokenApproved =
+    allowance != null && allowance.gte(sendTokenAmount === "" ? "0" : utils.parseEther(sendTokenAmount));
 
   const [calcOutGivenIn] =
     useContractCall(
