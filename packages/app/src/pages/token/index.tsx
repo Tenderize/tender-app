@@ -44,47 +44,51 @@ const Token: FC = () => {
   return (
     <>
       <Container className="mb-5">
-        <Link to="/">
-          <Button.Text icon="KeyboardArrowLeft">Back</Button.Text>
-        </Link>
-        <Row>
-          <Col lg={{ span: 12 }}>
-            <Card>
-              <Heading style={{ textAlign: "center" }}>{info.title}</Heading>
-              <Avatar size="large" src={logo} style={{ margin: "1em auto 0" }} />
-              <Tabs fill justify defaultActiveKey="stake" id="tokenpage-tabs">
-                <Tab eventKey="stake" title="Stake">
-                  <Deposit
-                    name={name}
-                    symbol={info.symbol}
-                    tokenBalance={tokenBalance}
-                    tokenAllowance={tokenAllowance}
-                  />
-                </Tab>
-                <Tab eventKey="liquidity pool" title="Liquidity Pool">
-                  <Withdraw
-                    name={name}
-                    symbol={info.symbol}
-                    tenderBalance={tenderBalance}
-                    tenderAllowance={tenderAllowance}
-                  />
-                  <LiquidityPool
-                    name={name}
-                    symbol={info.symbol}
-                    tokenBalance={tokenBalance}
-                    tenderTokenBalance={tenderBalance}
-                  />
-                </Tab>
-                <Tab eventKey="farm" title="Farm">
-                  <Farm name={name} symbol={info.symbol} account={account} />
-                </Tab>
-              </Tabs>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col className="mt-2" lg={true}>
-            <Faucet name={name} symbol={info.symbol} />
+        <Row className="justify-content-md-center">
+          <Col md={6}>
+            <Link to="/">
+              <Button.Text icon="KeyboardArrowLeft">Back</Button.Text>
+            </Link>
+            <Row>
+              <Col lg={{ span: 12 }}>
+                <Card>
+                  <Heading style={{ textAlign: "center" }}>{info.title}</Heading>
+                  <Avatar size="large" src={logo} style={{ margin: "1em auto 0" }} />
+                  <Tabs fill justify defaultActiveKey="stake" id="tokenpage-tabs">
+                    <Tab eventKey="stake" title="Stake">
+                      <Deposit
+                        name={name}
+                        symbol={info.symbol}
+                        tokenBalance={tokenBalance}
+                        tokenAllowance={tokenAllowance}
+                      />
+                    </Tab>
+                    <Tab eventKey="liquidity pool" title="Liquidity Pool">
+                      <Withdraw
+                        name={name}
+                        symbol={info.symbol}
+                        tenderBalance={tenderBalance}
+                        tenderAllowance={tenderAllowance}
+                      />
+                      <LiquidityPool
+                        name={name}
+                        symbol={info.symbol}
+                        tokenBalance={tokenBalance}
+                        tenderTokenBalance={tenderBalance}
+                      />
+                    </Tab>
+                    <Tab eventKey="farm" title="Farm">
+                      <Farm name={name} symbol={info.symbol} account={account} />
+                    </Tab>
+                  </Tabs>
+                </Card>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="mt-2" lg={true}>
+                <Faucet name={name} symbol={info.symbol} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Container>

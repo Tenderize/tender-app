@@ -1,9 +1,12 @@
-import { ChangeEventHandler, FC, MouseEventHandler, useCallback, useState } from "react";
+import { ChangeEventHandler, FC, useCallback, useState } from "react";
 import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Icon } from "rimble-ui";
-import { BigNumberish, utils, BigNumber } from "ethers";
-import { useContractFunction, useContractCall } from "@usedapp/core";
+import { BigNumberish, utils, BigNumber, constants } from "ethers";
+import { useContractCall, useTokenAllowance, useEthers } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
+
+import ApproveToken from "../approve/ApproveToken";
+import ConfirmSwapModal from "./ConfirmSwapModal";
 
 type Props = {
   protocolName: string;
@@ -38,6 +41,7 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
+  const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
 
@@ -57,20 +61,11 @@ const Swap: FC<Props> = ({
     .mul(11)
     .div(10);
 
-  const { state: _swapTx, send: swapExactAmountIn } = useContractFunction(
-    contracts[protocolName].swap,
-    "swapExactAmountIn"
-  );
+  const { account } = useEthers();
 
-  const { state: _approveTokenTx, send: approveUnderlyingTokens } = useContractFunction(
-    contracts[protocolName].token,
-    "approve"
-  );
-
-  const { state: _approveTenderTx, send: approveTenderTokens } = useContractFunction(
-    contracts[protocolName].tenderToken,
-    "approve"
-  );
+  const allowance = useTokenAllowance(tokenSendedAddress, account, addresses[protocolName].swap);
+  const isTokenApproved =
+    allowance != null && allowance.gte(sendTokenAmount === "" ? "0" : utils.parseEther(sendTokenAmount));
 
   const [calcOutGivenIn] =
     useContractCall(
@@ -101,24 +96,12 @@ const Swap: FC<Props> = ({
   const isSendInputInvalid =
     sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
 
-  const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
-    e.preventDefault();
-
-    const amount = utils.parseEther(sendTokenAmount || "0");
-    if (isSendingToken) {
-      await approveUnderlyingTokens(addresses[protocolName].swap, amount);
-    } else {
-      await approveTenderTokens(addresses[protocolName].swap, amount);
-    }
-    swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, calcOutGivenIn, tokenSpotPrice);
-  };
-
   return (
     <Card>
       <Card.Body>
         <Form>
           <Form.Group className="mb-3">
-            <Form.Label>Send</Form.Label>
+            <Form.Label>Swap</Form.Label>
             <InputGroup className="mb-2" hasValidation={true}>
               <InputGroup.Text>{tokenSendedSymbol}</InputGroup.Text>
               <Form.Control
@@ -155,12 +138,34 @@ const Swap: FC<Props> = ({
               <FormControl id="formSwapReceive" placeholder={"0"} value={utils.formatEther(calcOutGivenIn || "0")} />
             </InputGroup>
           </Form.Group>
-
-          <Button disabled={isSendInputInvalid} onClick={handlePressTrade}>
-            Trade
-          </Button>
+          <div className="d-grid gap-2">
+            <ApproveToken
+              symbol={tokenSendedSymbol}
+              spender={addresses[protocolName].swap}
+              tokenAddress={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
+              hasAllowance={isTokenApproved}
+            />
+            <Button
+              disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
+              onClick={() => setShowConfirm(true)}
+            >
+              Trade
+            </Button>
+          </div>
         </Form>
       </Card.Body>
+      <ConfirmSwapModal
+        show={showConfirm}
+        onDismiss={() => setShowConfirm(false)}
+        tokenSendedSymbol={tokenSendedSymbol}
+        sendTokenAmount={sendTokenAmount}
+        tokenReceivedSymbol={tokenReceivedSymbol}
+        receiveTokenAmount={calcOutGivenIn}
+        tokenSpotPrice={tokenSpotPrice}
+        tokenSendedAddress={tokenSendedAddress}
+        tokenReceivedAddress={tokenReceivedAddress}
+        protocolName={protocolName}
+      />
     </Card>
   );
 };
