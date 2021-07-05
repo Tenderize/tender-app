@@ -222,6 +222,7 @@ const NotificationsWrapper = styled.div`
   position: fixed;
   right: 24px;
   bottom: 24px;
+  z-index: 100;
 `;
 
 const NotificationIconContainer = styled.div`
