@@ -7,6 +7,7 @@ import { contracts, addresses } from "@tender/contracts";
 
 import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
+import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
 type Props = {
   protocolName: string;
@@ -61,11 +62,7 @@ const Swap: FC<Props> = ({
     .mul(11)
     .div(10);
 
-  const { account } = useEthers();
-
-  const allowance = useTokenAllowance(tokenSendedAddress, account, addresses[protocolName].swap);
-  const isTokenApproved =
-    allowance != null && allowance.gte(sendTokenAmount === "" ? "0" : utils.parseEther(sendTokenAmount));
+  const isTokenApproved = useIsTokenApproved(tokenSendedAddress, addresses[protocolName].swap, sendTokenAmount);
 
   const [calcOutGivenIn] =
     useContractCall(

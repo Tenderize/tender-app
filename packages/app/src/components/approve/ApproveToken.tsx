@@ -22,42 +22,42 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, tokenAddress, 
     }
   };
 
+  if (hasAllowance) {
+    return null;
+  }
+
   return (
-    <>
-      {!hasAllowance && (
-        <Button
-          style={{ display: "flex", justifyContent: "space-between" }}
-          onClick={handleApproval}
-          disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
-          variant={"primary"}
-        >
-          {approveTx.status !== "None" && approveTx.status !== "Success" ? (
-            <Container className="align-items-center">
-              <Spinner size="sm" animation="border" variant="light" />
-            </Container>
-          ) : (
-            <>
-              Allow the Tenderize Protocol to use your {symbol}
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="button-tooltip-2">
-                    You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do
-                    this once per token.
-                  </Tooltip>
-                }
-              >
-                {({ ref, ...triggerHandler }) => (
-                  <span ref={ref} {...triggerHandler} className="ms-1">
-                    &#8505;
-                  </span>
-                )}
-              </OverlayTrigger>
-            </>
-          )}
-        </Button>
+    <Button
+      style={{ display: "flex", justifyContent: "space-between" }}
+      onClick={handleApproval}
+      disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
+      variant={"primary"}
+    >
+      {approveTx.status !== "None" && approveTx.status !== "Success" ? (
+        <Container className="align-items-center">
+          <Spinner size="sm" animation="border" variant="light" />
+        </Container>
+      ) : (
+        <>
+          Allow the Tenderize Protocol to use your {symbol}
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id="button-tooltip-2">
+                You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do this
+                once per token.
+              </Tooltip>
+            }
+          >
+            {({ ref, ...triggerHandler }) => (
+              <span ref={ref} {...triggerHandler} className="ms-1">
+                &#8505;
+              </span>
+            )}
+          </OverlayTrigger>
+        </>
       )}
-    </>
+    </Button>
   );
 };
 
