@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount }) => {
-  const { state: approveTx, send: approveToken } = useContractFunction(token, "approve");
+  const { state: approveTx, send: approveToken } = useContractFunction(token, "approve", {transactionName: `Approve ${symbol}`});
 
   const handleApproval: MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();

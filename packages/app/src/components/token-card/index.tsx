@@ -68,7 +68,7 @@ const TokenCard: FC<Props> = (props) => {
 };
 
 const TCard = styled(Card)`
-  z-index: 10;
+  z-index: 0;
   transform: scale(1);
   transition-duration: 0.2s;
   margin: 0 0 20px !important; // I don't feel like figuring out how to override it without this.

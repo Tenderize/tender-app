@@ -38,8 +38,10 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
   const isTokenapproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput)
 
   // Contract Functions
+  const { state: farmTx, send: farm } = useContractFunction(contracts[name].farm, "farm", {
+    transactionName: `Farm ${symbol}`,
+  });
 
-  const { state: farmTx, send: farm } = useContractFunction(contracts[name].farm, "farm");
   const farmLpTokens = async (e: any) => {
     e.preventDefault();
     await farm(utils.parseEther(farmInput || "0"));

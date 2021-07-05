@@ -155,11 +155,14 @@ const JoinPool: FC<Props> = ({
 
   const singlePoolOut = useCalcSinglePoolOut() || "0";
 
-  const { state: joinPoolTx, send: joinPool } = useContractFunction(contracts[name].liquidity, "joinPool");
+  const { state: joinPoolTx, send: joinPool } = useContractFunction(contracts[name].liquidity, "joinPool", {
+    transactionName: `Join t${symbol}/${symbol} Liquidity Pool`,
+  });
   
   const { state: joinSwapExternAmountInTx, send: joinSwapExternAmountIn } = useContractFunction(
     contracts[name].liquidity,
-    "joinswapExternAmountIn"
+    "joinswapExternAmountIn",
+    { transactionName: `Join t${symbol}/${symbol} Liquidity Pool` }
   );
 
   const calcWeight = (weight: BigNumberish): BigNumberish => {

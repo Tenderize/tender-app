@@ -1,10 +1,8 @@
+import { AccountButton } from "../account";
 import { Link } from "react-router-dom";
-import { Row, Col, Navbar } from "react-bootstrap";
+import { Col, Navbar } from "react-bootstrap";
 import { useEthers } from "@usedapp/core";
 import { FC, useEffect, useRef, useState } from "react";
-
-import Connect from "./Connect";
-import Account from "./Account";
 
 const Nav: FC = () => {
   const logo = require("../../images/tenderizeLogo.svg").default;
@@ -39,7 +37,7 @@ const Nav: FC = () => {
         </Link>
       </Col>
       <Col md={{ span: 3, offset: 4 }}>
-        {account ? <Account account={account} /> : <Connect activateBrowserWallet={activateBrowserWallet} />}
+        <AccountButton />
       </Col>
     </Navbar>
   );

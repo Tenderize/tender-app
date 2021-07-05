@@ -46,7 +46,7 @@ const Swap: FC<Props> = ({
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("0");
 
-  const tenderTokenSymbol = `tender${tokenSymbol}`;
+  const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;

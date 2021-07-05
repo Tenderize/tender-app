@@ -41,7 +41,8 @@ const ConfirmSwapModal: FC<Props> = ({
 
   const { state: swapTx, send: swapExactAmountIn } = useContractFunction(
     contracts[protocolName].swap,
-    "swapExactAmountIn"
+    "swapExactAmountIn",
+    { transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}` }
   );
 
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
