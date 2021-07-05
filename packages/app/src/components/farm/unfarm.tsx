@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
-import { Button, Input } from "rimble-ui";
+import { Input } from "rimble-ui";
 // import { useContractFunction } from "@usedapp/core";
-import { Form, Spinner, Modal } from "react-bootstrap";
+import { Form, Spinner, Modal, Button } from "react-bootstrap";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";

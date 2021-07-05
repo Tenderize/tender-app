@@ -64,12 +64,6 @@ const Token: FC = () => {
                       />
                     </Tab>
                     <Tab eventKey="liquidity pool" title="Liquidity Pool">
-                      <Withdraw
-                        name={name}
-                        symbol={info.symbol}
-                        tenderBalance={tenderBalance}
-                        tenderAllowance={tenderAllowance}
-                      />
                       <LiquidityPool
                         name={name}
                         symbol={info.symbol}

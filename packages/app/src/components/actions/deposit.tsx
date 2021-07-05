@@ -3,7 +3,7 @@ import { useContractFunction } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
 import { FC, useState } from "react";
 import { Input } from "rimble-ui";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
@@ -29,10 +29,10 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
 
   const { state: depositTx, send: deposit } = useContractFunction(contracts[name].controller, "deposit");
 
-  const depositTokens = (e: any) => {
+  const depositTokens = async (e: any) => {
     e.preventDefault();
-    deposit(utils.parseEther(depositInput || "0"));
-    console.log(depositTx);
+    await deposit(utils.parseEther(depositInput || "0"));
+    setDepositInput("")
   };
 
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
@@ -58,7 +58,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
           <ApproveToken
             symbol={symbol}
             spender={addresses[name].controller}
-            tokenAddress={contracts[name].token}
+            token={contracts[name].token}
             hasAllowance={isTokenApproved}
           />
           <Button
@@ -67,7 +67,14 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
             }
             onClick={depositTokens}
           >
-            Deposit
+             {depositTx.status === "Mining" ? (
+              <>
+                <Spinner animation="border" variant="white" />
+                Depositing...
+              </>
+            ) : (
+              "Deposit"
+            )}
           </Button>
         </div>
       </Form>

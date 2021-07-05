@@ -1,10 +1,13 @@
 import { FC, useState } from "react";
-import { Button, Input } from "rimble-ui";
+import { Input } from "rimble-ui";
 // import { useContractFunction } from "@usedapp/core";
-import { Form, Spinner, Modal } from "react-bootstrap";
+import { Form, Spinner, Modal, Button } from "react-bootstrap";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
+
+import ApproveToken from "../approve/ApproveToken"
+import {useIsTokenApproved} from "../approve/useIsTokenApproved"
 
 type Props = {
   name: string;
@@ -32,8 +35,9 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  // Contract Functions
+  const isTokenapproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput)
 
+  // Contract Functions
   const { state: approveTx, send: approve } = useContractFunction(contracts[name].liquidity, "approve");
   const approveLpTokens = (e: any) => {
     e.preventDefault();
@@ -73,17 +77,17 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
               </Form.Text>
             </Form.Group>
           </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-
-          {/* Show Farm or Approve depending on allowance */}
-          {!farmInput || BigNumber.from(tokenAllowance).gte(utils.parseEther(farmInput || "0")) ? (
+          <div className="d-grid gap-2">
+            <ApproveToken 
+              symbol={symbol}
+              spender={addresses[name].farm}
+              token={contracts[name].liquidity}
+              hasAllowance={isTokenapproved}
+            />
             <Button
+              block
               variant="primary"
-              disabled={!farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
+              disabled={!isTokenapproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
               onClick={farmLpTokens}
             >
               {farmTx.status === "Mining" ? (
@@ -95,24 +99,8 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                 "Farm"
               )}
             </Button>
-          ) : (
-            <Button
-              variant="primary"
-              disabled={!farmInput || farmInput.toString() === "0" || approveTx.status === "Mining"}
-              onClick={approveLpTokens}
-            >
-              {approveTx.status === "Mining" ? (
-                <>
-                  {" "}
-                  <Spinner animation="border" variant="white" />
-                  Approving...
-                </>
-              ) : (
-                "Approve"
-              )}
-            </Button>
-          )}
-        </Modal.Footer>
+            </div>
+        </Modal.Body>
       </Modal>
     </>
   );

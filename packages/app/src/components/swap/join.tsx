@@ -46,6 +46,8 @@ const JoinPool: FC<Props> = ({
   const handleMulti = (v: string | null) => {
     if (v === "single") setIsMulti(false);
     if (v === "multi") setIsMulti(true);
+    setTokenInput("")
+    setTenderInput("")
   };
 
   const [tokenInput, setTokenInput] = useState("");
@@ -57,10 +59,11 @@ const JoinPool: FC<Props> = ({
       setTenderInput(val);
       return;
     }
-    const valBN = utils.parseEther(val);
-    console.log(tenderTokenWeight, tokenWeight);
-    const otherVal = utils.formatEther(valBN.mul(tenderTokenWeight).div(tokenWeight));
-    setTenderInput(otherVal.toString());
+    if (isMulti) {
+      const valBN = utils.parseEther(val);
+      const otherVal = utils.formatEther(valBN.mul(tenderTokenWeight).div(tokenWeight));
+      setTenderInput(otherVal.toString());
+    }
   };
 
   const [tenderInput, setTenderInput] = useState("");
@@ -72,14 +75,18 @@ const JoinPool: FC<Props> = ({
       setTokenInput(val);
       return;
     }
-    const valBN = utils.parseEther(val);
-    const otherVal = utils.formatEther(valBN.mul(tokenWeight).div(tenderTokenWeight));
-    setTokenInput(otherVal.toString());
+    if (isMulti) {
+      const valBN = utils.parseEther(val);
+      const otherVal = utils.formatEther(valBN.mul(tokenWeight).div(tenderTokenWeight));
+      setTokenInput(otherVal.toString());
+    }
   };
 
   const [selectToken, setSelectToken] = useState(symbol);
   const handleSelectToken = (symbol: string) => {
     setSelectToken(symbol);
+    setTokenInput("")
+    setTenderInput("")
   };
 
   const maxDeposit = (tenderToken: boolean) => {
@@ -95,8 +102,24 @@ const JoinPool: FC<Props> = ({
   };
 
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].liquidty, tokenInput);
-  const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput)
-  
+  const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput);
+
+  const hasValue = (val: any) => {
+    return val && val !== "0";
+  };
+
+  const useButtonDisabled = () => {
+    if (isMulti) {
+      return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved)
+    } else {
+      if (selectToken === symbol) {
+        return !(hasValue(tokenInput) && isTokenApproved)
+      } else {
+        return !(hasValue(tenderInput) && isTenderApproved)
+      }
+    }
+  }
+
   // Contract Functions
   const useCalcSinglePoolOut = () => {
     const hasValue = (val: any) => {
@@ -194,7 +217,7 @@ const JoinPool: FC<Props> = ({
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="success" onClick={handleShow}>
         Join Pool
       </Button>
 
@@ -302,47 +325,23 @@ const JoinPool: FC<Props> = ({
           </Tabs>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-
-          <Button variant="primary" onClick={addLiquidity}>
-            Add Liquidity
-          </Button>
-
-          {/* Show Farm or Approve depending on allowance
-          {!farmInput || BigNumber.from(tokenAllowance).gte(utils.parseEther(farmInput || "0")) ? (
-          <Button
-            variant="primary"
-            disabled={!farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
-            onClick={farmLpTokens}
-            >
-            {farmTx.status === "Mining" ? (
-                <>
-                <Spinner animation="border" variant="white" />
-                Farming...
-                </>
-            ) : (
-                "Farm"
-            )}
+          <div className="d-grid gap-2">
+            <ApproveToken
+              symbol={symbol}
+              spender={addresses[name].liquidity}
+              token={contracts[name].token}
+              hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
+            />
+            <ApproveToken 
+              symbol={`t${symbol}`}
+              spender={addresses[name].liquidity}
+              token={contracts[name].tenderToken}
+              hasAllowance={!hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)}
+            />
+            <Button variant="primary" onClick={addLiquidity} disabled={useButtonDisabled()}>
+              Add Liquidity
             </Button>
-          ) : (
-            <Button
-            variant="primary"
-            disabled={!farmInput || farmInput.toString() === "0" || approveTx.status === "Mining"}
-            onClick={approveLpTokens}
-          >
-            {approveTx.status === "Mining" ? (
-              <>
-                {" "}
-                <Spinner animation="border" variant="white" />
-                Approving...
-              </>
-            ) : (
-              "Approve"
-            )}
-          </Button>
-          )} */}
+          </div>
         </Modal.Footer>
       </Modal>
     </>

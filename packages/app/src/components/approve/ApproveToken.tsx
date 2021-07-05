@@ -7,12 +7,12 @@ type Props = {
   symbol: string;
   hasAllowance: boolean;
   spender: string;
-  tokenAddress: Contract;
+  token: Contract;
   amount?: BigNumberish;
 };
 
-const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, tokenAddress, amount }) => {
-  const { state: approveTx, send: approveToken } = useContractFunction(tokenAddress, "approve");
+const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount }) => {
+  const { state: approveTx, send: approveToken } = useContractFunction(token, "approve");
 
   const handleApproval: MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, tokenAddress, 
   };
 
   if (hasAllowance) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -50,7 +50,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, tokenAddress, 
             }
           >
             {({ ref, ...triggerHandler }) => (
-              <span ref={ref} {...triggerHandler} className="ms-1">
+              <span style={{border: '1px solid white', borderRadius: '50%', paddingLeft: '5px', paddingRight: '5px'}} ref={ref} {...triggerHandler} className="ms-1">
                 &#8505;
               </span>
             )}
