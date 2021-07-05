@@ -27,7 +27,9 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
     setDepositInput(val);
   };
 
-  const { state: depositTx, send: deposit } = useContractFunction(contracts[name].controller, "deposit");
+  const { state: depositTx, send: deposit } = useContractFunction(contracts[name].controller, "deposit", {
+    transactionName: `Deposit ${symbol}`,
+  });
 
   const depositTokens = async (e: any) => {
     e.preventDefault();

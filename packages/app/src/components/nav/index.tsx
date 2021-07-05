@@ -1,3 +1,4 @@
+import { AccountButton } from "../account";
 import { Link } from "react-router-dom";
 import { Row, Col, Navbar } from "react-bootstrap";
 import { useEthers } from "@usedapp/core";
@@ -39,7 +40,7 @@ const Nav: FC = () => {
         </Link>
       </Col>
       <Col md={{ span: 3, offset: 4 }}>
-        {account ? <Account account={account} /> : <Connect activateBrowserWallet={activateBrowserWallet} />}
+        <AccountButton />
       </Col>
     </Navbar>
   );

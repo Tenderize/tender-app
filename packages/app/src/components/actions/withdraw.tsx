@@ -25,7 +25,9 @@ const Withdraw: FC<Props> = ({ name, symbol, tenderBalance, tenderAllowance }) =
     setWithdrawInput(val);
   };
 
-  const { state: withdrawTx, send: swap } = useContractFunction(contracts[name].swap, "swapExactAmountIn");
+  const { state: withdrawTx, send: swap } = useContractFunction(contracts[name].swap, "swapExactAmountIn", {
+    transactionName: `Swap t${symbol} for ${symbol}`,
+  });
 
   const withdrawTokens = (e: any) => {
     e.preventDefault();
@@ -39,7 +41,9 @@ const Withdraw: FC<Props> = ({ name, symbol, tenderBalance, tenderAllowance }) =
     console.log(withdrawTx);
   };
 
-  const { state: approveTx, send: approve } = useContractFunction(contracts[name].tenderToken, "approve");
+  const { state: approveTx, send: approve } = useContractFunction(contracts[name].tenderToken, "approve", {
+    transactionName: `Approve t${symbol}`,
+  });
 
   const approveTokens = (e: any) => {
     e.preventDefault();

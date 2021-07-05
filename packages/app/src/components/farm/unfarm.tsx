@@ -34,7 +34,9 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
 
   // Contract Functions
 
-  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].farm, "unfarm");
+  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].farm, "unfarm", {
+    transactionName: `Unfarm ${symbol}`,
+  });
   const unfarmLpTokens = async (e: any) => {
     e.preventDefault();
     await unfarm(utils.parseEther(unfarmInput || "0"));

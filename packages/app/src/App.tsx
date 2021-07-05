@@ -9,6 +9,7 @@ import TestnetBanner from "./components/testnet-banner";
 import Home from "./pages/home";
 import Token from "./pages/token";
 import Nav from "./components/nav";
+import { NotificationsList } from "./components/transactions";
 import "./App.scss";
 
 // a theme with custom spacing and font sizes
@@ -25,19 +26,20 @@ const customTheme = {
 
 const App: FC = () => {
   return (
-    <ThemeProvider theme={customTheme}>
-      <BaseStyles>
-        <Background />
-        <TestnetBanner />
-        <Router>
-          <Nav />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/stakers/:id" component={Token} />
-          </Switch>
-        </Router>
-      </BaseStyles>
-    </ThemeProvider>
+      <ThemeProvider theme={customTheme}>
+        <BaseStyles>
+          <Background />
+          <TestnetBanner />
+          <NotificationsList />
+          <Router>
+            <Nav />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/stakers/:id" component={Token} />
+            </Switch>
+          </Router>
+        </BaseStyles>
+      </ThemeProvider>
   );
 };
 
