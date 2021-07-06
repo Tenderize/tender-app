@@ -1,27 +1,9 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-import { Protocol, ProtocolConfig, TenderizeGlobal, User, UserProtocolData, Day } from "../types/schema";
+import { Protocol, ProtocolConfig, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserTenderizer, UserProtocol, UserTenderFarm, TenderFarmDay, TenderFarm } from "../types/schema";
 
 export let ZERO_BI = BigInt.fromI32(0);
+export let ONE_BI = BigInt.fromI32(1);
 export let ZERO_BD = BigDecimal.fromString('0')
-
-export function loadOrCreateTenderizer(id: string): Protocol {
-  let tenderizer = Protocol.load(id)
-
-  if(tenderizer == null){
-    tenderizer = new Protocol(id)
-    
-    tenderizer.tenderizerDeposits = ZERO_BD
-    tenderizer.tenderizerWithdrawals = ZERO_BD
-    tenderizer.rewards = ZERO_BD
-    tenderizer.protocolFees = ZERO_BD
-    tenderizer.liquidityFees = ZERO_BD
-    tenderizer.farmDeposits = ZERO_BD
-    tenderizer.farmWithdrawals = ZERO_BD
-    tenderizer.farmHarvest = ZERO_BD
-  }
-
-  return tenderizer as Protocol
-}
 
 export function loadOrCreateTenderizeGlobal(): TenderizeGlobal {
   let tenderizeGlobal = TenderizeGlobal.load('1')
@@ -32,33 +14,109 @@ export function loadOrCreateTenderizeGlobal(): TenderizeGlobal {
   return tenderizeGlobal as TenderizeGlobal
 }
 
-export function loadOrCreateUserTenderizerData(address: string, tenderizer: string): UserProtocolData{
-  let user = loadOrCreateUser(address)
-  let userTenderizerData = UserProtocolData.load(address + '_' + tenderizer)
-  if (userTenderizerData == null){
-    userTenderizerData = new UserProtocolData(address + '_' + tenderizer)
-    userTenderizerData.protocol = tenderizer
-    userTenderizerData.tenderizerDeposits = ZERO_BD
-    userTenderizerData.tenderizerWithdrawals = ZERO_BD
-    userTenderizerData.farmDeposits = ZERO_BD
-    userTenderizerData.farmWithdrawals = ZERO_BD
-    userTenderizerData.farmHarvest = ZERO_BD
-
-    let userDataList = user.tenderizerData
-    userDataList.push(userTenderizerData.id)
-    user.tenderizerData = userDataList
-    user.save()
+export function loadOrCreateProtocol(id: string): Protocol {
+  let protocol = Protocol.load(id)
+  if(protocol == null){
+    protocol = new Protocol(id)
+    protocol.userCount = ZERO_BI
   }
-  return userTenderizerData as UserProtocolData
+  return protocol as Protocol
+}
+
+export function loadOrCreateTenderizer(id: string): Tenderizer {
+  let tenderizer = Tenderizer.load(id)
+
+  if(tenderizer == null){
+    tenderizer = new Tenderizer(id)
+    tenderizer.protocol = id
+    tenderizer.deposits = ZERO_BD
+    tenderizer.depositCount = ZERO_BI
+    tenderizer.withdrawals = ZERO_BD
+    tenderizer.withdrawalCount = ZERO_BI
+    tenderizer.rewards = ZERO_BD
+    tenderizer.rewardCount = ZERO_BI
+    tenderizer.protocolFees = ZERO_BD
+    tenderizer.liquidityFees = ZERO_BD
+  }
+
+  return tenderizer as Tenderizer
+}
+
+export function loadOrCreateTenderFarm(id: string): TenderFarm {
+  let tenderFarm = TenderFarm.load(id)
+
+  if(tenderFarm == null){
+    tenderFarm = new TenderFarm(id)
+    tenderFarm.protocol = id
+    tenderFarm.deposits = ZERO_BD
+    tenderFarm.depositCount = ZERO_BI
+    tenderFarm.withdrawals = ZERO_BD
+    tenderFarm.withdrawalCount = ZERO_BI
+    tenderFarm.harvest = ZERO_BD
+    tenderFarm.harvestCount = ZERO_BI
+  }
+
+  return tenderFarm as TenderFarm
 }
 
 export function loadOrCreateUser(adress: string): User {
   let user = User.load(adress)
   if(user == null){
     user = new User(adress)
-    user.tenderizerData = []
   }
   return user as User
+}
+
+export function loadOrCreateUserProtocol(address: string, protocolName: string): UserProtocol {
+  let id = address + '_' + protocolName
+  let userProtocol = UserProtocol.load(id)
+  if(userProtocol == null){
+    userProtocol = new UserProtocol(id)
+    userProtocol.protocolName = protocolName
+    userProtocol.protocol = id
+    userProtocol.user = address
+
+    // Save derived field
+    let user = loadOrCreateUser(address)
+    user.save()
+    
+    let protocol = loadOrCreateProtocol(protocolName)
+    protocol.userCount = protocol.userCount.plus(ONE_BI)
+    protocol.save()
+  }
+  return userProtocol as UserProtocol
+}
+
+export function loadOrCreateUserTenderizer(address: string, protocolName: string): UserTenderizer{
+  let userProtocol = loadOrCreateUserProtocol(address, protocolName)
+
+  let userTenderizer = UserTenderizer.load(address + '_' + protocolName)
+  if (userTenderizer == null){
+    userTenderizer = new UserTenderizer(address + '_' + protocolName)
+    userTenderizer.userProtocol = userProtocol.id
+    userTenderizer.deposits = ZERO_BD
+    userTenderizer.withdrawals = ZERO_BD
+
+    userProtocol.save()
+  }
+  return userTenderizer as UserTenderizer
+}
+
+
+export function loadOrCreateUserTenderFarm(address: string, protocolName: string): UserTenderFarm{
+  let userProtocol = loadOrCreateUserProtocol(address, protocolName)
+
+  let userTenderFarm = UserTenderFarm.load(address + '_' + protocolName)
+  if (userTenderFarm == null){
+    userTenderFarm = new UserTenderFarm(address + '_' + protocolName)
+    userTenderFarm.userProtocol = userProtocol.id
+    userTenderFarm.deposits = ZERO_BD
+    userTenderFarm.withdrawals = ZERO_BD
+    userTenderFarm.harvest = ZERO_BD
+
+    userProtocol.save()
+  }
+  return userTenderFarm as UserTenderFarm
 }
 
 export function getProtocolIdByTenderizerAddress(address: string): string {
@@ -89,26 +147,46 @@ export function getProtocolIdByTenderFarmAddress(address: string): string {
   return ''
 }
 
-export function loadOrCreateDay(timestamp: i32, protocol: string): Day {
+export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): TenderizerDay {
   let dayTimestamp = timestamp / 86400
   let dayID = dayTimestamp.toString() + '_' + protocol
   let dayStartTimestamp = dayTimestamp * 86400
-  let day = Day.load(dayID)
+  let day = TenderizerDay.load(dayID)
 
   if (day == null) {
-    day = new Day(dayID)
-    let latestData = loadOrCreateTenderizer(protocol)
+    day = new TenderizerDay(dayID)
+    let tenderizer = loadOrCreateTenderizer(protocol)
     day.date = dayStartTimestamp
-    day.protocol = protocol
-    day.tenderizerDepositVolume = ZERO_BD
-    day.totalTenderizerDeposit = latestData.tenderizerDeposits.minus(latestData.tenderizerWithdrawals)
-    day.rewardsVolume = ZERO_BD
-    day.totalRewards = latestData.rewards
-    day.farmVolume = ZERO_BD
-    day.totalFarm = latestData.farmDeposits.minus(latestData.farmWithdrawals)
-    day.farmtHarvestVolume = ZERO_BD
-    day.totalFarmHarvest = latestData.farmHarvest
-    day.save();
+    day.protocolName = protocol
+    day.tenderizer = tenderizer.id
+    day.deposits = ZERO_BD
+    day.withdrawals = ZERO_BD
+    day.volume = ZERO_BD
+    day.cumulativeVolume = tenderizer.deposits.minus(tenderizer.withdrawals)
+    day.rewards = ZERO_BD
+    day.cumulativeRewards = tenderizer.rewards
   }
-  return day as Day;
+  return day as TenderizerDay;
+}
+
+export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): TenderFarmDay {
+  let dayTimestamp = timestamp / 86400
+  let dayID = dayTimestamp.toString() + '_' + protocol
+  let dayStartTimestamp = dayTimestamp * 86400
+  let day = TenderFarmDay.load(dayID)
+
+  if (day == null) {
+    day = new TenderFarmDay(dayID)
+    let tenderFarm = loadOrCreateTenderFarm(protocol)
+    day.date = dayStartTimestamp
+    day.protocolName = protocol
+    day.tenderFarm = tenderFarm.id
+    day.deposits = ZERO_BD
+    day.withdrawals = ZERO_BD
+    day.volume = ZERO_BD
+    day.cumulativeVolume = tenderFarm.deposits.minus(tenderFarm.withdrawals)
+    day.harvest = ZERO_BD
+    day.cumulatinveHarvest = tenderFarm.harvest
+  }
+  return day as TenderFarmDay;
 }

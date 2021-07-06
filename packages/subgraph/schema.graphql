@@ -26,82 +26,161 @@ type ProtocolConfig @entity {
 type Protocol @entity {
   "Name of the protocol eg. 'livepeer'"
   id: ID!
+  "Tenderizer Data"
+  tenderizer: Tenderizer @derivedFrom(field: "protocol")
+  "TenderFarm Data"
+  tenderFarm: TenderFarm @derivedFrom(field: "protocol")
+  "Paritcipating user list"
+  users: [UserProtocol!] @derivedFrom(field: "protocol")
+  "Count of users participated in Protocol"
+  userCount: BigInt!
+}
+
+type Tenderizer @entity {
+  "Name of the protocol eg. 'livepeer'"
+  id: ID!
+  "Protocol entity"
+  protocol: Protocol!
 
   "Total amount depositied in tenderizer"
-  tenderizerDeposits: BigDecimal!
+  deposits: BigDecimal!
+  "Total number of tenderizer depostis"
+  depositCount: BigInt!
   "Total amount withdrawn from tenderizer"
-  tenderizerWithdrawals: BigDecimal!
+  withdrawals: BigDecimal!
+  "Total number of tenderizer withdrawals"
+  withdrawalCount: BigInt!
   "Total rewards collected from protocol"
   rewards: BigDecimal!
+  "Total number of times rewards were collected"
+  rewardCount: BigInt!
 
   "Total amount of protocol fees collected from tenderizer"
   protocolFees: BigDecimal!
   "Total amount of liquidity fees collected from tenderizer"
   liquidityFees: BigDecimal!
 
+  "Day data for tenderizer"
+  dayData: [TenderizerDay!]! @derivedFrom(field: "tenderizer")
+}
+
+type TenderFarm @entity {
+  "Name of the protocol eg. 'livepeer'"
+  id: ID!
+  "Protocol"
+  protocol: Protocol!
+
   "Total deposits made into farm"
-  farmDeposits: BigDecimal!
+  deposits: BigDecimal!
+  "Total number of depostits made"
+  depositCount: BigInt!
   "Total withrawals made from farm"
-  farmWithdrawals: BigDecimal!
+  withdrawals: BigDecimal!
+  "Total number of withdrawals made"
+  withdrawalCount: BigInt!
   "Total rewards collected from farm"
-  farmHarvest: BigDecimal!
+  harvest: BigDecimal!
+  "Total number of harvests made"
+  harvestCount: BigInt!
+
+  "Day data for tenderFarm"
+  dayData: [TenderFarmDay!]! @derivedFrom(field: "tenderFarm")
+}
+
+type TenderizerDay @entity {
+  "<Timestamp rounded to current day by dividing by 86400>_<portocol>"
+  id: ID!
+  "Name of the protocol eg. 'livepeer'"
+  protocolName: String!
+  "Tenderizer"
+  tenderizer: Tenderizer!
+  "The date beginning at 12:00am UTC"
+  date: Int!
+
+  "deposits volume in tenderizer for the day"
+  deposits: BigDecimal!
+  "withdraw volume in tenderizer for the day"
+  withdrawals: BigDecimal!
+  "Total volume for the day: deposits - withdrawals"
+  volume: BigDecimal!
+  "cumulative deposit on that day"
+  cumulativeVolume: BigDecimal!
+
+  "staking rewards collected from protocol for the day"
+  rewards: BigDecimal!
+  "cumulative staking rewards collected"
+  cumulativeRewards: BigDecimal!
+}
+
+type TenderFarmDay @entity {
+  "<Timestamp rounded to current day by dividing by 86400>_<portocol>"
+  id: ID!
+  "Name of the protocol eg. 'livepeer'"
+  protocolName: String!
+  "TenderFarm"
+  tenderFarm: TenderFarm!
+  "The date beginning at 12:00am UTC"
+  date: Int!
+
+  "farm volume for the day"
+  deposits: BigDecimal!
+  "unfarm volume for the day"
+  withdrawals: BigDecimal!
+  "Total volume for the day: farm - unfarm"
+  volume: BigDecimal!
+  "cumulative farm on that day"
+  cumulativeVolume: BigDecimal! 
+
+  "harvest volume for the day"
+  harvest: BigDecimal!
+  "cumulative harvest on that day"
+  cumulatinveHarvest: BigDecimal!
 }
 
 type User @entity {
   "Wallet address of user"
   id: ID!
   "Data for each integration per user"
-  tenderizerData: [UserProtocolData!]!
+  protocols: [UserProtocol!]! @derivedFrom(field: "user")
 }
 
-type UserProtocolData @entity { 
-  "<wallet-address>_<portocol> eg.'0xfA668FB97697200FA56ce98E246db61Cc7E14Bd5_livepeer'"
+type UserProtocol @entity { 
+  "<wallet-address>_<portocol>"
   id: ID!
   "Name of the protocol eg. 'livepeer'"
-  protocol: String!
-
-  "Total amount depositied in tenderizer by given user"
-  tenderizerDeposits: BigDecimal!
-  "Total amount depositied in tenderizer by given user"
-  tenderizerWithdrawals: BigDecimal!
-
-  "Total amount depositied in farm by given user"
-  farmDeposits: BigDecimal!
-  "Total amount withdrawn from farm by given user"
-  farmWithdrawals: BigDecimal!
-  "Total amount harvest collected from farm by given user"
-  farmHarvest: BigDecimal!
+  protocolName: String!
+  "Protocol"
+  protocol: Protocol!
+  "User"
+  user: User!
+  "Tenderizer data for user"
+  tenderizer: UserTenderizer @derivedFrom(field: "userProtocol")
+  "TenderFarm data for user"
+  tenderFarm: UserTenderFarm @derivedFrom(field: "userProtocol")
 }
 
-
-# Entities for timeseries 
-type Day @entity{
-  "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
+type UserTenderizer @entity {
+  "ID: <wallet-address>_<portocol>"
   id: ID!
-  "The date beginning at 12:00am UTC"
-  date: Int!
-  "Name of protocol eg. 'livepeer'"
-  protocol: String!
+  "User-Protocol"
+  userProtocol: UserProtocol!
+  "Total amount depositied in tenderizer by given user"
+  deposits: BigDecimal!
+  "Total amount depositied in tenderizer by given user"
+  withdrawals: BigDecimal!
+}
 
-  "total deposits/withdrawals in tenderizer for the day"
-  tenderizerDepositVolume: BigDecimal!
-  "cumulative deposit on that day"
-  totalTenderizerDeposit: BigDecimal!
-
-  "staking rewards collected from protocol for the day"
-  rewardsVolume: BigDecimal!
-  "cumulative staking rewards collected"
-  totalRewards: BigDecimal!
-
-  "farm/unfarm volume for the day"
-  farmVolume: BigDecimal!
-  "cumulative farm on that day"
-  totalFarm: BigDecimal! 
-
-  "harvest volume for the day"
-  farmtHarvestVolume: BigDecimal!
-  "cumulative harvest on that day"
-  totalFarmHarvest: BigDecimal!
+type UserTenderFarm @entity {
+  "ID: <wallet-address>_<portocol>"
+  id: ID!
+  "User-Protocol"
+  userProtocol: UserProtocol!
+  "Total amount depositied in farm by given user"
+  deposits: BigDecimal!
+  "Total amount withdrawn from farm by given user"
+  withdrawals: BigDecimal!
+  "Total amount harvest collected from farm by given user"
+  harvest: BigDecimal!
 }
 
 # Registry event entity

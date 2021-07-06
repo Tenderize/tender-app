@@ -2,7 +2,7 @@ Testing
 - Test day data/initialization for totals and negative values
 - Test withdraw event
 
-- Use @derivedFrom
+- Debug adding users to list in Protocol(derivedField)
 - Add data for bpool
 - DRY saving event data and whatever else possible
 - Handel stake/unstake
