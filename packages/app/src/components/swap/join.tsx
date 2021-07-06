@@ -208,7 +208,7 @@ const JoinPool: FC<Props> = ({
         Join Pool
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal size='lg' show={show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>{`Join tender${symbol}/${symbol}`}</Modal.Title>
         </Modal.Header>

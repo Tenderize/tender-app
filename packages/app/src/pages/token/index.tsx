@@ -34,6 +34,8 @@ const Token: FC = () => {
   account = account ?? constants.AddressZero;
   const tokenBalance = useTokenBalance(addresses[name].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
+  const lpTokenBal = useTokenBalance(addresses[name].liquidity, account) || constants.Zero;
+
   const tokenAllowance =
     useTokenAllowance(addresses[name].token, account, addresses[name].controller) || constants.Zero;
   const tenderAllowance =
@@ -43,7 +45,7 @@ const Token: FC = () => {
 
   return (
     <>
-      <Container className="mb-5">
+      <Container className="mb-6">
         <Row className="justify-content-md-center">
           <Col md={6}>
             <Link to="/">
@@ -69,10 +71,11 @@ const Token: FC = () => {
                         symbol={info.symbol}
                         tokenBalance={tokenBalance}
                         tenderTokenBalance={tenderBalance}
+                        lpTokenBalance={lpTokenBal}
                       />
                     </Tab>
                     <Tab eventKey="farm" title="Farm">
-                      <Farm name={name} symbol={info.symbol} account={account} />
+                      <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
                     </Tab>
                   </Tabs>
                 </Card>

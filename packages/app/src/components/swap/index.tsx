@@ -12,9 +12,10 @@ type Props = {
   symbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
+  lpTokenBalance: BigNumberish;
 };
 
-const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
+const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance, lpTokenBalance }) => {
   // Swap fee
   // Total weight
   // Token Weight
@@ -76,7 +77,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
       address: addresses[name].swap,
       method: "getSpotPrice",
       args: [addresses[name].tenderToken, addresses[name].token],
-    },
+    }
   ]);
 
   return (
@@ -107,7 +108,18 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
         lpShares={lpShares ? lpShares[0] : "0"}
       />
-      <ExitPool />
+      <ExitPool 
+        name={name}
+        symbol={symbol}
+        tokenWeight={tokenDenormWeight ? tokenDenormWeight[0] : "0"}
+        tenderTokenWeight={tenderTokenDenormWeight ? tenderTokenDenormWeight[0] : "0"}
+        totalWeight={totalDenormWeight ? totalDenormWeight[0] : "0"}
+        swapFee={swapFee ? swapFee[0] : "0"}
+        tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
+        tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
+        lpShares={lpShares ? lpShares[0] : "0"}
+        lpTokenBalance={lpTokenBalance}
+      />
     </div>
   );
 };
