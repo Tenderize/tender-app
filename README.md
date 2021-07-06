@@ -20,7 +20,7 @@ Live demo available at https://tender-app.vercel.app/
 
 ### Contracts
 
-### Whitepaper
+#### Whitepaper
 
 [Whitepaper](https://github.com/Tenderize/Whitepaper/blob/main/README.md)
 
