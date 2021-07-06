@@ -1,39 +1,42 @@
 import { FarmEvent, HarvestEvent, UnfarmEvent } from "../types/schema"
 import { Farm } from "../types/templates/TenderFarm/TenderFarm"
-import { 
-    loadOrCreateTenderizer,
+import {
     getProtocolIdByTenderFarmAddress,
-    loadOrCreateUserTenderizerData,
-    loadOrCreateDay,
+    loadOrCreateTenderFarmDay,
+    loadOrCreateTenderFarm,
+    loadOrCreateUserTenderFarm,
+    ONE_BI,
    } from "./utils"
 
 export function handleFarmEvent(farmEvent: Farm): void {
     let tenderFarmAddress = farmEvent.address.toHex()
-    let tenderizerId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
+    let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = farmEvent.params.amount.toBigDecimal()
 
     // Sanity check, tenderizers would generally always be registered
-    if(tenderizerId ==  ''){
+    if(protocolId ==  ''){
       // TODO: add log
       return
     }
+    
+    // Update User data
+    let userData = loadOrCreateUserTenderFarm(farmEvent.params.account.toHex(), protocolId)
+    userData.deposits = userData.deposits.plus(amount)
+    userData.save()
 
     // Update day data
-    let day = loadOrCreateDay(farmEvent.block.timestamp.toI32(), tenderizerId)
-    day.farmVolume = day.farmVolume.plus(amount)
-    day.totalFarm = day.totalFarm.plus(amount)
+    let day = loadOrCreateTenderFarmDay(farmEvent.block.timestamp.toI32(), protocolId)
+    day.deposits = day.deposits.plus(amount)
+    day.volume = day.volume.plus(amount)
+    day.cumulativeVolume = day.cumulativeVolume.plus(amount)
     day.save()
   
-    // Update Tenderizer deposit total
-    let tenderizer = loadOrCreateTenderizer(tenderizerId)
-    tenderizer.farmDeposits = tenderizer.farmDeposits.plus(amount)
-    tenderizer.save()
+    // Update Tenderfarm data
+    let tenderFarm = loadOrCreateTenderFarm(protocolId)
+    tenderFarm.deposits = tenderFarm.deposits.plus(amount)
+    tenderFarm.depositCount = tenderFarm.depositCount.plus(ONE_BI)
+    tenderFarm.save()
 
-    // Update User data
-    let userData = loadOrCreateUserTenderizerData(farmEvent.params.account.toHex(), tenderizerId)
-    userData.farmDeposits = userData.farmDeposits.plus(amount)
-    userData.save()
-  
     // Save raw event
     let event = new FarmEvent(farmEvent.transaction.hash.toHex());
     event.tenderFarm = tenderFarmAddress
@@ -45,31 +48,33 @@ export function handleFarmEvent(farmEvent: Farm): void {
 
 export function handleUnfarmEvent(unfarmEvent: Farm): void {
     let tenderFarmAddress = unfarmEvent.address.toHex()
-    let tenderizerId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
+    let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = unfarmEvent.params.amount.toBigDecimal()
 
     // Sanity check, tenderizers would generally always be registered
-    if(tenderizerId ==  ''){
+    if(protocolId ==  ''){
       // TODO: add log
       return
     }
 
+    // Update User data
+    let userData = loadOrCreateUserTenderFarm(unfarmEvent.params.account.toHex(), protocolId)
+    userData.withdrawals = userData.withdrawals.plus(amount)
+    userData.save()
+
     // Update day data
-    let day = loadOrCreateDay(unfarmEvent.block.timestamp.toI32(), tenderizerId)
-    day.farmVolume = day.farmVolume.minus(amount)
-    day.totalFarm = day.totalFarm.minus(amount)
+    let day = loadOrCreateTenderFarmDay(unfarmEvent.block.timestamp.toI32(), protocolId)
+    day.withdrawals = day.withdrawals.plus(amount)
+    day.volume = day.volume.minus(amount)
+    day.cumulativeVolume = day.cumulativeVolume.minus(amount)
     day.save()
   
-    // Update Tenderizer deposit total
-    let tenderizer = loadOrCreateTenderizer(tenderizerId)
-    tenderizer.farmWithdrawals = tenderizer.farmWithdrawals.plus(amount)
-    tenderizer.save()
+    // Update TenderFarm data
+    let tenderFarm = loadOrCreateTenderFarm(protocolId)
+    tenderFarm.withdrawals = tenderFarm.withdrawals.plus(amount)
+    tenderFarm.withdrawalCount = tenderFarm.withdrawalCount.plus(ONE_BI)
+    tenderFarm.save()
 
-    // Update User data
-    let userData = loadOrCreateUserTenderizerData(unfarmEvent.params.account.toHex(), tenderizerId)
-    userData.farmWithdrawals = userData.farmWithdrawals.plus(amount)
-    userData.save()
-  
     // Save raw event
     let event = new UnfarmEvent(unfarmEvent.transaction.hash.toHex());
     event.tenderFarm = tenderFarmAddress
@@ -81,30 +86,31 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
 
 export function handleHarvestEvent(harvestEvent: Farm): void {
   let tenderFarmAddress = harvestEvent.address.toHex()
-  let tenderizerId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
+  let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
   let amount = harvestEvent.params.amount.toBigDecimal()
 
   // Sanity check, tenderizers would generally always be registered
-  if(tenderizerId ==  ''){
+  if(protocolId ==  ''){
     // TODO: add log
     return
   }
+  
+  // Update User data
+  let userData = loadOrCreateUserTenderFarm(harvestEvent.params.account.toHex(), protocolId)
+  userData.harvest = userData.harvest.plus(amount)
+  userData.save()
 
   // Update day data
-  let day = loadOrCreateDay(harvestEvent.block.timestamp.toI32(), tenderizerId)
-  day.farmtHarvestVolume = day.farmtHarvestVolume.plus(amount)
-  day.totalFarmHarvest = day.totalFarmHarvest.plus(amount)
+  let day = loadOrCreateTenderFarmDay(harvestEvent.block.timestamp.toI32(), protocolId)
+  day.harvest = day.harvest.plus(amount)
+  day.cumulatinveHarvest = day.cumulatinveHarvest.plus(amount)
   day.save()
 
   // Update Tenderizer deposit total
-  let tenderizer = loadOrCreateTenderizer(tenderizerId)
-  tenderizer.farmHarvest = tenderizer.farmHarvest.plus(amount)
-  tenderizer.save()
-
-  // Update User data
-  let userData = loadOrCreateUserTenderizerData(harvestEvent.params.account.toHex(), tenderizerId)
-  userData.farmHarvest = userData.farmHarvest.plus(amount)
-  userData.save()
+  let tenderFarm = loadOrCreateTenderFarm(protocolId)
+  tenderFarm.harvest = tenderFarm.harvest.plus(amount)
+  tenderFarm.harvestCount = tenderFarm.harvestCount.plus(ONE_BI)
+  tenderFarm.save()
 
   // Save raw event
   let event = new HarvestEvent(harvestEvent.transaction.hash.toHex());
