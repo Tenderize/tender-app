@@ -47,6 +47,7 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.deposits = tenderizer.deposits.plus(amount)
   tenderizer.depositCount = tenderizer.depositCount.plus(ONE_BI)
+  tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
   tenderizer.save()
 
   // Save raw event
@@ -85,6 +86,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.withdrawals = tenderizer.withdrawals.plus(amount)
   tenderizer.withdrawalCount = tenderizer.withdrawalCount.plus(ONE_BI)
+  tenderizer.currentPrincipal = tenderizer.currentPrincipal.minus(amount)
   tenderizer.save()
 
   // Save raw event
@@ -117,6 +119,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.rewards = tenderizer.rewards.plus(amount)
   tenderizer.rewardCount = tenderizer.rewardCount.plus(ONE_BI)
+  tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
   tenderizer.save()
 
   // Save raw event

@@ -54,6 +54,8 @@ type Tenderizer @entity {
   rewards: BigDecimal!
   "Total number of times rewards were collected"
   rewardCount: BigInt!
+  "Total depsotis + total rewards - total withdrawals"
+  currentPrincipal: BigDecimal!
 
   "Total amount of protocol fees collected from tenderizer"
   protocolFees: BigDecimal!
@@ -82,6 +84,8 @@ type TenderFarm @entity {
   harvest: BigDecimal!
   "Total number of harvests made"
   harvestCount: BigInt!
+  "Total depsotis - total withdrawals"
+  currentPrincipal: BigDecimal!
 
   "Day data for tenderFarm"
   dayData: [TenderFarmDay!]! @derivedFrom(field: "tenderFarm")
