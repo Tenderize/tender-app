@@ -2,9 +2,10 @@ import { TenderizeGlobal, ProtocolConfig, TenderizerCreatedEvent } from "../type
 import { TenderizerCreated } from "../types/Registry/Registry"
 import { 
   Tenderizer as TenderizerContract, 
-  TenderFarm as TenderFarmContract 
+  TenderFarm as TenderFarmContract,
+  Pool as PoolContract 
 } from "../types/templates"
-import { loadOrCreateTenderizeGlobal } from "./utils"
+import { loadOrCreateTenderizeGlobal, createPool } from "./utils"
 
 export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Create Config entity and save raw event
@@ -34,5 +35,7 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Create new sources
   TenderizerContract.create(params.tenderizer)
   TenderFarmContract.create(params.tenderFarm)
+  createPool(params.bpool, params.esp)
+  PoolContract.create(params.bpool)
 }
 

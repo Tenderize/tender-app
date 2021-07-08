@@ -1,5 +1,6 @@
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-import { Protocol, ProtocolConfig, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserTenderizer, UserProtocol, UserTenderFarm, TenderFarmDay, TenderFarm } from "../types/schema";
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Protocol, ProtocolConfig, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserTenderizer, UserProtocol, UserTenderFarm, TenderFarmDay, TenderFarm, Pool } from "../types/schema";
+import { ConfigurableRightsPool } from '../types/templates/Pool/ConfigurableRightsPool';
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
@@ -192,3 +193,92 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
   }
   return day as TenderFarmDay;
 }
+
+export function createPool(bPoolAddress: Address, crpAdress: Address): void {
+  let pool = new Pool(bPoolAddress.toHexString())
+  // pool.crp = isCrp(crpAdress)
+  pool.crp = true
+  pool.rights = []
+  // if (pool.crp) {
+    // factory.crpCount += 1
+    let crp = ConfigurableRightsPool.bind(crpAdress)
+    pool.symbol = getCrpSymbol(crp)
+    pool.name = getCrpName(crp)
+    pool.crpController = Address.fromString(getCrpController(crp))
+    pool.rights = getCrpRights(crp)
+    pool.cap = getCrpCap(crp)
+
+    // Listen for any future crpController changes.
+    // CrpControllerContract.create(event.params.caller)
+  // }
+  // pool.controller = event.params.caller
+  pool.publicSwap = false
+  pool.finalized = false
+  pool.active = true
+  pool.swapFee = BigDecimal.fromString('0.000001')
+  pool.totalWeight = ZERO_BD
+  pool.totalShares = ZERO_BD
+  pool.totalSwapVolume = ZERO_BD
+  pool.totalSwapFee = ZERO_BD
+  pool.liquidity = ZERO_BD
+  // pool.createTime = event.block.timestamp.toI32()
+  pool.tokensCount = BigInt.fromI32(0)
+  pool.holdersCount = BigInt.fromI32(0)
+  pool.joinsCount = BigInt.fromI32(0)
+  pool.exitsCount = BigInt.fromI32(0)
+  pool.swapsCount = BigInt.fromI32(0)
+  // pool.factoryID = event.address.toHexString()
+  pool.tokensList = []
+  // pool.tx = event.transaction.hash
+  pool.save()
+}
+
+// export function isCrp(address: Address): boolean {
+//     let crpFactory = CRPFactory.bind(Address.fromString(CRP_FACTORY))
+//     let isCrp = crpFactory.try_isCrp(address)
+//     if (isCrp.reverted) return false
+//     return isCrp.value
+//   }
+  
+  export function getCrpUnderlyingPool(crp: ConfigurableRightsPool): string | null {
+    let bPool = crp.try_bPool()
+    if (bPool.reverted) return null;
+    return bPool.value.toHexString()
+  }
+  
+  export function getCrpController(crp: ConfigurableRightsPool): string | null {
+    let controller = crp.try_getController()
+    if (controller.reverted) return null;
+    return controller.value.toHexString()
+  }
+  
+  export function getCrpSymbol(crp: ConfigurableRightsPool): string {
+    let symbol = crp.try_symbol()
+    if (symbol.reverted) return ''
+    return symbol.value
+  }
+  
+  export function getCrpName(crp: ConfigurableRightsPool): string {
+    let name = crp.try_name()
+    if (name.reverted) return ''
+    return name.value
+  }
+  
+  export function getCrpCap(crp: ConfigurableRightsPool): BigInt {
+    let cap = crp.try_getCap()
+    if (cap.reverted) return BigInt.fromI32(0)
+    return cap.value
+  }
+  
+  export function getCrpRights(crp: ConfigurableRightsPool): string[] {
+    let rights = crp.try_rights()
+    if (rights.reverted) return []
+    let rightsArr: string[] = []
+    if (rights.value.value0) rightsArr.push('canPauseSwapping')
+    if (rights.value.value1) rightsArr.push('canChangeSwapFee')
+    if (rights.value.value2) rightsArr.push('canChangeWeights')
+    if (rights.value.value3) rightsArr.push('canAddRemoveTokens')
+    if (rights.value.value4) rightsArr.push('canWhitelistLPs')
+    if (rights.value.value5) rightsArr.push('canChangeCap')
+    return rightsArr
+  }
