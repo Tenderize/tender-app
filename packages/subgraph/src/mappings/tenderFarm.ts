@@ -35,6 +35,7 @@ export function handleFarmEvent(farmEvent: Farm): void {
     let tenderFarm = loadOrCreateTenderFarm(protocolId)
     tenderFarm.deposits = tenderFarm.deposits.plus(amount)
     tenderFarm.depositCount = tenderFarm.depositCount.plus(ONE_BI)
+    tenderFarm.currentPrincipal = tenderFarm.currentPrincipal.plus(amount)
     tenderFarm.save()
 
     // Save raw event
@@ -73,6 +74,7 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
     let tenderFarm = loadOrCreateTenderFarm(protocolId)
     tenderFarm.withdrawals = tenderFarm.withdrawals.plus(amount)
     tenderFarm.withdrawalCount = tenderFarm.withdrawalCount.plus(ONE_BI)
+    tenderFarm.currentPrincipal = tenderFarm.currentPrincipal.minus(amount)
     tenderFarm.save()
 
     // Save raw event

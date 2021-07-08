@@ -35,6 +35,7 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
     tenderizer.withdrawalCount = ZERO_BI
     tenderizer.rewards = ZERO_BD
     tenderizer.rewardCount = ZERO_BI
+    tenderizer.currentPrincipal = ZERO_BD
     tenderizer.protocolFees = ZERO_BD
     tenderizer.liquidityFees = ZERO_BD
   }
@@ -54,6 +55,7 @@ export function loadOrCreateTenderFarm(id: string): TenderFarm {
     tenderFarm.withdrawalCount = ZERO_BI
     tenderFarm.harvest = ZERO_BD
     tenderFarm.harvestCount = ZERO_BI
+    tenderFarm.currentPrincipal = ZERO_BD
   }
 
   return tenderFarm as TenderFarm
