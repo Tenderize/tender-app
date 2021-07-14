@@ -1,12 +1,10 @@
+import { FC } from "react";
 import { Card, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Button, Avatar } from "rimble-ui";
 import classNames from "classnames";
 import styled from "styled-components";
 
-import "./tokenCard.scss";
-
-import { FC } from "react";
 
 type Props = {
   url: string;

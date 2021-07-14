@@ -5,7 +5,6 @@ import reportWebVitals from "./reportWebVitals";
 import { ChainId, DAppProvider, Config } from "@usedapp/core";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.css";
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
   ? process.env.ETHERSCAN_API_KEY

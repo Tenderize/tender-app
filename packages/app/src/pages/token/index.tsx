@@ -11,7 +11,6 @@ import { Deposit, Withdraw } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
-import "./token.scss";
 
 declare module "@rimble/icons";
 
