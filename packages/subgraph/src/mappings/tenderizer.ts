@@ -21,6 +21,7 @@ import {
   BI_18,
   exponentToBigDecimal,
   getUSDPrice,
+  BD_100
  } from "./utils"
 
 export function handleDepositEvent(depositEvent: Deposit): void {
@@ -103,6 +104,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
   day.cumulativeRewards = day.cumulativeRewards.plus(amount)
+  day.APY = day.rewards.div(day.startPrinciple).times(BD_100)
   day.save()
   
   // Update Tenderizer data

@@ -1,12 +1,13 @@
 Testing
 - Test day data/initialization for totals and negative values
 - Test withdraw event
+- Test APY
+- Verify LPToken to Token calculations
+- Verify Decimal count for USD conversions
+- Check day.startPrinciple calculation and use
 
 - Add controller to registry after that is deployed
-- Verify LPToken to Token calculations
 - Debug adding users to list in Protocol(derivedField)
-- Verify Decimal count for USD conversions
-- Large size of ESP ABI?
 - Get price data only once every x hours
 - Add data for bpool
 - DRY saving event data and whatever else possible

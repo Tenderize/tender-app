@@ -96,6 +96,10 @@ type TenderFarm @entity {
   harvestCount: BigInt!
   "Total depsotis - total withdrawals"
   currentPrincipal: BigDecimal!
+  "Total rewards added"
+  rewards: BigDecimal!
+  "Total number of rewards added"
+  rewardCount: BigInt!
   "CurrentPrincipal in USD"
   TVL: BigDecimal!
 
@@ -124,6 +128,11 @@ type TenderizerDay @entity {
   rewards: BigDecimal!
   "cumulative staking rewards collected"
   cumulativeRewards: BigDecimal!
+
+  "Principle on the first event of the day"
+  startPrinciple: BigDecimal!
+  "Day APY - rewards/principle %"
+  APY: BigDecimal!
 }
 
 type TenderFarmDay @entity {
@@ -142,11 +151,20 @@ type TenderFarmDay @entity {
   volume: BigDecimal!
   "cumulative farm on that day"
   cumulativeVolume: BigDecimal! 
+  "rewards added for the day"
+  rewards: BigDecimal!
+  "cumulative rewards on that day"
+  cumulativeRewards: BigDecimal!
 
   "harvest volume for the day"
   harvest: BigDecimal!
   "cumulative harvest on that day"
   cumulatinveHarvest: BigDecimal!
+
+  "principle in Token (not BPT) value at the start of the day"
+  startPrinciple: BigDecimal!
+  "Day APY - total rewards / total volume %"
+  APY: BigDecimal!
 }
 
 type User @entity {
@@ -267,6 +285,13 @@ type HarvestEvent @entity {
   id: ID!
   tenderFarm: String!
   from: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type RewardsAddedEvent @entity {
+  id: ID!
+  tenderFarm: String!
   amount: BigInt!
   timestamp: BigInt!
 }

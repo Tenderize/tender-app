@@ -9,6 +9,7 @@ export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
 export let ZERO_BD = BigDecimal.fromString('0')
 export let BI_18 = BigInt.fromI32(18)
+export let BD_100 = BigDecimal.fromString('100')
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
   let bd = BigDecimal.fromString("1");
@@ -74,7 +75,8 @@ export function loadOrCreateTenderFarm(id: string): TenderFarm {
     tenderFarm.harvestCount = ZERO_BI
     tenderFarm.harvestUSD = ZERO_BD
     tenderFarm.currentPrincipal = ZERO_BD
-    tenderFarm.TVL = ZERO_BD
+    tenderFarm.rewards = ZERO_BD
+    tenderFarm.rewardCount = ZERO_BI
   }
 
   return tenderFarm as TenderFarm
@@ -155,6 +157,8 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
     day.cumulativeVolume = tenderizer.deposits.minus(tenderizer.withdrawals)
     day.rewards = ZERO_BD
     day.cumulativeRewards = tenderizer.rewards
+    day.startPrinciple = tenderizer.currentPrincipal
+    day.APY = ZERO_BD
   }
   return day as TenderizerDay;
 }
@@ -173,9 +177,13 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     day.deposits = ZERO_BD
     day.withdrawals = ZERO_BD
     day.volume = ZERO_BD
-    day.cumulativeVolume = tenderFarm.deposits.minus(tenderFarm.withdrawals)
+    day.cumulativeVolume = tenderFarm.currentPrincipal
     day.harvest = ZERO_BD
     day.cumulatinveHarvest = tenderFarm.harvest
+    day.rewards = ZERO_BD
+    day.cumulativeRewards = tenderFarm.rewards
+    day.APY = ZERO_BD
+    day.startPrinciple = LPTokenToToken(tenderFarm.currentPrincipal, protocol)
   }
   return day as TenderFarmDay;
 }

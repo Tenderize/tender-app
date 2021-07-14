@@ -1,5 +1,5 @@
-import { FarmEvent, HarvestEvent, UnfarmEvent } from "../types/schema"
-import { Farm } from "../types/templates/TenderFarm/TenderFarm"
+import { FarmEvent, HarvestEvent, RewardsAddedEvent, UnfarmEvent } from "../types/schema"
+import { Farm, Harvest, RewardsAdded, Unfarm } from "../types/templates/TenderFarm/TenderFarm"
 import {
     getProtocolIdByTenderFarmAddress,
     loadOrCreateTenderFarmDay,
@@ -10,6 +10,8 @@ import {
     BI_18,
     exponentToBigDecimal,
     LPTokenToToken,
+    BD_100,
+    ZERO_BD,
    } from "./utils"
 
 export function handleFarmEvent(farmEvent: Farm): void {
@@ -48,7 +50,7 @@ export function handleFarmEvent(farmEvent: Farm): void {
     event.save()
 }
 
-export function handleUnfarmEvent(unfarmEvent: Farm): void {
+export function handleUnfarmEvent(unfarmEvent: Unfarm): void {
     let tenderFarmAddress = unfarmEvent.address.toHex()
     let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = unfarmEvent.params.amount.toBigDecimal()
@@ -84,7 +86,7 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
     event.save()
 }
 
-export function handleHarvestEvent(harvestEvent: Farm): void {
+export function handleHarvestEvent(harvestEvent: Harvest): void {
   let tenderFarmAddress = harvestEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
   let amount = harvestEvent.params.amount.toBigDecimal()
@@ -101,7 +103,7 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
   day.cumulatinveHarvest = day.cumulatinveHarvest.plus(amount)
   day.save()
 
-  // Update Tenderizer totals
+  // Update TenderFarm totals
   let tenderFarm = loadOrCreateTenderFarm(protocolId)
   tenderFarm.harvest = tenderFarm.harvest.plus(amount)
   tenderFarm.harvestCount = tenderFarm.harvestCount.plus(ONE_BI)
@@ -114,5 +116,39 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
   event.from = harvestEvent.params.account.toHex()
   event.amount = harvestEvent.params.amount
   event.timestamp = harvestEvent.block.timestamp
+  event.save()
+}
+
+export function handleRewardsAddedEvent(rewardsAddedEvent: RewardsAdded): void {
+  let tenderFarmAddress = rewardsAddedEvent.address.toHex()
+  let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
+  let amount = rewardsAddedEvent.params.amount.toBigDecimal()
+
+  // Sanity check, tenderizers would generally always be registered
+  if(protocolId ==  ''){
+    // TODO: add log
+    return
+  }
+
+  // Update day data
+  let day = loadOrCreateTenderFarmDay(rewardsAddedEvent.block.timestamp.toI32(), protocolId)
+  day.rewards = day.rewards.plus(amount)
+  day.cumulativeRewards = day.cumulativeRewards.plus(amount)
+  if(day.startPrinciple.gt(ZERO_BD)){
+    day.APY = day.rewards.div(day.startPrinciple).times(BD_100)
+  }
+  day.save()
+
+  // Update TenderFarm totals
+  let tenderFarm = loadOrCreateTenderFarm(protocolId)
+  tenderFarm.rewards = tenderFarm.rewards.plus(amount)
+  tenderFarm.rewardCount = tenderFarm.rewardCount.plus(ONE_BI)
+  tenderFarm.save()
+
+  // Save raw event
+  let event = new RewardsAddedEvent(rewardsAddedEvent.transaction.hash.toHex());
+  event.tenderFarm = tenderFarmAddress
+  event.amount = rewardsAddedEvent.params.amount
+  event.timestamp = rewardsAddedEvent.block.timestamp
   event.save()
 }

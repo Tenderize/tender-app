@@ -83,3 +83,5 @@ templates:
             handler: handleUnfarmEvent
           - event: Harvest(indexed address,uint256)
             handler: handleHarvestEvent
+          - event: RewardsAdded(uint256)
+            handler: handleRewardsAddedEvent
