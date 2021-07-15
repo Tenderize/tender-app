@@ -1,5 +1,4 @@
 import { FC } from "react";
-import "./hammersteak.scss";
 
 const hammer = require("../../images/hammer.svg");
 const meat = require("../../images/meat.svg");

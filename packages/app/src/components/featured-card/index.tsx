@@ -3,7 +3,6 @@ import { Row, Col } from "react-bootstrap";
 import { Link } from "rimble-ui";
 
 import TokenCard from "../token-card";
-import "./featuredCard.scss";
 import stakers from "../../data/stakers";
 
 const FeaturedCard: FC = () => {

@@ -1,12 +1,9 @@
+import { FC } from "react";
 import { Card, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Button, Avatar } from "rimble-ui";
 import classNames from "classnames";
 import styled from "styled-components";
-
-import "./tokenCard.scss";
-
-import { FC } from "react";
 
 type Props = {
   url: string;
@@ -57,7 +54,7 @@ const TokenCard: FC<Props> = (props) => {
   return (
     <Col xs={{ span: 12 }} sm={{ span: 6 }} md={{ span: 4 }} lg={{ span: 4 }}>
       {info.available ? (
-        <Link to={url} className="card-link">
+        <Link to={url} style={{ textDecoration: "none" }} className="card-link">
           {renderCard()}
         </Link>
       ) : (

@@ -1,11 +1,11 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
+import { grommet, Grommet } from "grommet";
+import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChainId, DAppProvider, Config } from "@usedapp/core";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.css";
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
   ? process.env.ETHERSCAN_API_KEY
@@ -23,7 +23,9 @@ const dappConfig: Config = {
 ReactDOM.render(
   <StrictMode>
     <DAppProvider config={dappConfig}>
-      <App />
+      <Grommet theme={grommet}>
+        <App />
+      </Grommet>
     </DAppProvider>
   </StrictMode>,
   document.getElementById("root")

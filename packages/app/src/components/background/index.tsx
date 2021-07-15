@@ -1,5 +1,4 @@
 import { FC } from "react";
-import "./background.scss";
 
 const Background: FC = () => {
   return (

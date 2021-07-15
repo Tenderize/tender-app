@@ -1,9 +1,8 @@
+import { FC } from "react";
 import FeaturedCards from "../../components/featured-card/";
 import HammerSteak from "../../components/hammersteak";
 import { Card, Heading, Text, Image, Icon } from "rimble-ui";
 import { Container, Row, Col } from "react-bootstrap";
-import "./home.scss";
-import { FC } from "react";
 
 const Home: FC = () => {
   return (
