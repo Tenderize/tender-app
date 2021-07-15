@@ -1,8 +1,9 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
+import { grommet, Grommet } from "grommet";
+import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChainId, DAppProvider, Config } from "@usedapp/core";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -22,7 +23,9 @@ const dappConfig: Config = {
 ReactDOM.render(
   <StrictMode>
     <DAppProvider config={dappConfig}>
-      <App />
+      <Grommet theme={grommet}>
+        <App />
+      </Grommet>
     </DAppProvider>
   </StrictMode>,
   document.getElementById("root")
