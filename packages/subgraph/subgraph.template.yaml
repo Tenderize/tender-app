@@ -17,6 +17,8 @@ dataSources:
       abis:
         - name: Registry
           file: ../contracts/src/abis/Registry.json
+        - name: Tenderizer
+          file: ../contracts/src/abis/Tenderizer.json
       entities:
         - TenderizerConfig
       eventHandlers:
