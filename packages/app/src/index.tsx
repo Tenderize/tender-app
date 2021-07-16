@@ -21,6 +21,7 @@ const dappConfig: Config = {
     [ChainId.Rinkeby]: process.env.JSON_RPC || "https://rinkeby.infura.io/v3/42a353682886462f9f7b6b602f577a53",
   },
 };
+
 ReactDOM.render(
   <StrictMode>
     <DAppProvider config={dappConfig}>
