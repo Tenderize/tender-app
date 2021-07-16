@@ -9,13 +9,13 @@ const Home: FC = () => {
       <HammerSteak/>
       <Grid
         fill
-        rows={['small', 'medium']}
-        columns={["1/4", "3/4"]}
+        rows={["small", "medium"]}
+        columns={["1/5", "4/5"]}
         gap="small"
         areas={[
-          { name: 'main', start: [0, 0], end: [1, 0]},
-          { name: 'fill', start: [0, 1], end: [0, 1] },
-          { name: 'feature', start: [1, 1], end: [1, 1] },
+          { name: "main", start: [0, 0], end: [1, 0] },
+          { name: "fill", start: [0, 1], end: [0, 1] },
+          { name: "feature", start: [1, 1], end: [1, 1] },
         ]}
       >
         <Main gridArea="main"flex justify="center" align="center">
@@ -32,7 +32,7 @@ const Home: FC = () => {
         <Box gridArea="feature" className="blur-box">
         <FeaturedCards /* provider={this.props.provider} */ />
         </Box>
-    </Grid>
+      </Grid>
     </Box>
   );
 };

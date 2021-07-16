@@ -1,13 +1,14 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import { grommet, Grommet } from "grommet";
+import { Grommet, grommet } from "grommet";
 import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { deepMerge } from "grommet/utils";
 
 import './index.css'
 import "bootstrap/dist/css/bootstrap.min.css";
+import { theme } from "./theme";
+import {deepMerge} from 'grommet/utils'
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
   ? process.env.ETHERSCAN_API_KEY
@@ -35,7 +36,7 @@ const customTheme = deepMerge(grommet, {
 ReactDOM.render(
   <StrictMode>
     <DAppProvider config={dappConfig}>
-      <Grommet full={true} style={{background: "url('background.svg')", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundAttachment: "fixed"}} theme={customTheme}>
+      <Grommet themeMode="dark" full={true} style={{background: "url('/background.svg')", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundAttachment: "fixed"}} theme={customTheme}>
         <App />
       </Grommet>
     </DAppProvider>

@@ -5,7 +5,8 @@ import { addresses, contracts } from "@tender/contracts";
 
 import Swap from "./swap";
 import JoinPool from "./join";
-import ExitPool from './exit';
+import ExitPool from "./exit";
+import { Box } from "grommet";
 
 type Props = {
   name: string;
@@ -77,11 +78,11 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
       address: addresses[name].swap,
       method: "getSpotPrice",
       args: [addresses[name].tenderToken, addresses[name].token],
-    }
+    },
   ]);
 
   return (
-    <div className="d-grid gap-2">
+    <Box>
       <Swap
         protocolName={name}
         tokenSymbol={symbol}
@@ -108,7 +109,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
         lpShares={lpShares ? lpShares[0] : "0"}
       />
-      <ExitPool 
+      <ExitPool
         name={name}
         symbol={symbol}
         tokenWeight={tokenDenormWeight ? tokenDenormWeight[0] : "0"}
@@ -120,7 +121,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         lpShares={lpShares ? lpShares[0] : "0"}
         lpTokenBalance={lpTokenBalance}
       />
-    </div>
+    </Box>
   );
 };
 

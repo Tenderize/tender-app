@@ -1,11 +1,10 @@
 import { FC } from "react";
-import { Row, Col } from "react-bootstrap";
-import { Link } from "rimble-ui";
+import { Box, Text } from "grommet";
 
 import TokenCard from "../token-card";
 import stakers from "../../data/stakers";
 
-const FeaturedCard: FC = () => {
+const FeaturedCards: FC = () => {
   const cards = [];
   let key: string;
   for (key in stakers) {
@@ -19,17 +18,13 @@ const FeaturedCard: FC = () => {
     );
   }
   return (
-    <>
-      <Row>
-        <Col className="explore" md={{ span: 2, offset: 10 }}>
-          <Link color="#a8b7f0" className="coming-soon">
-            More coming soon
-          </Link>
-        </Col>
-      </Row>
-      <Row>{cards}</Row>
-    </>
+    <Box flex={true} align="end">
+      <Text>More coming soon</Text>
+      <Box flex={true} width="100%" direction="row" gap="small">
+        {cards}
+      </Box>
+    </Box>
   );
 };
 
-export default FeaturedCard;
+export default FeaturedCards;
