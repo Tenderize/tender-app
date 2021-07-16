@@ -20,8 +20,8 @@ const App: FC = () => {
             <Route path="/stakers/:id" component={Token} />
           </Switch>
         </Router>
-        <Foot />
       </Grid>
+      <Foot />
       <NotificationsList />
     </>
   );
