@@ -1,10 +1,17 @@
-import { TenderizeGlobal, ProtocolConfig, TenderizerCreatedEvent } from "../types/schema";
+import { ProtocolConfig, TenderizerCreatedEvent } from "../types/schema";
 import { TenderizerCreated } from "../types/Registry/Registry"
 import { 
   Tenderizer as TenderizerContract, 
   TenderFarm as TenderFarmContract 
 } from "../types/templates"
-import { loadOrCreateTenderizeGlobal } from "./utils"
+import { Tenderizer } from "../types/templates/Tenderizer/Tenderizer"
+import {
+  loadOrCreateTenderizeGlobal,
+  loadOrCreateTenderizer,
+  loadOrCreateTernderizerDay,
+  ONE_BI 
+} from "./utils"
+import { Address } from "@graphprotocol/graph-ts";
 
 export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Create Config entity and save raw event
@@ -34,5 +41,23 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Create new sources
   TenderizerContract.create(params.tenderizer)
   TenderFarmContract.create(params.tenderFarm)
-}
 
+  // Accomodate initial deposit
+  // The registry event is fired after bootstrap deposit 
+  let tenderizerContract = Tenderizer.bind(Address.fromString(prtocolConfig.tenderizer))
+  let amount = tenderizerContract.currentPrincipal().toBigDecimal()
+
+  // Update day data
+  let day = loadOrCreateTernderizerDay(config.block.timestamp.toI32(), params.name)
+  day.deposits = day.deposits.plus(amount)
+  day.volume = day.volume.plus(amount)
+  day.cumulativeVolume = day.cumulativeVolume.plus(amount)
+  day.save()
+
+  // Update tenderizer data
+  let tenderizer = loadOrCreateTenderizer(params.name)
+  tenderizer.deposits = tenderizer.deposits.plus(amount)
+  tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
+  tenderizer.depositCount = tenderizer.depositCount.plus(ONE_BI)
+  tenderizer.save()
+}
