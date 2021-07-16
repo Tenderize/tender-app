@@ -5,10 +5,9 @@ import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import './index.css'
+import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { theme } from "./theme";
-import {deepMerge} from 'grommet/utils'
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
   ? process.env.ETHERSCAN_API_KEY
@@ -23,20 +22,20 @@ const dappConfig: Config = {
   },
 };
 
-const customTheme = deepMerge(grommet, {
-  global: {
-    font: {
-      color: "white",
-      family: "IBM Plex Mono"
-    }
-  }
-});
-
-
 ReactDOM.render(
   <StrictMode>
     <DAppProvider config={dappConfig}>
-      <Grommet themeMode="dark" full={true} style={{background: "url('/background.svg')", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundAttachment: "fixed"}} theme={customTheme}>
+      <Grommet
+        themeMode="dark"
+        full={true}
+        style={{
+          background: "url('/background.svg')",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+        }}
+        theme={theme}
+      >
         <App />
       </Grommet>
     </DAppProvider>
