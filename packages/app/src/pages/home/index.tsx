@@ -26,7 +26,7 @@ const Home: FC = () => {
               Don't just stake,
               <span style={{ color: "#F8F8F8", fontWeight: 900 }}>{" Tenderize first "}</span>
             </Text>
-            <Button label="Open App"></Button>
+            <Button primary label="Open App"></Button>
         </Main>
         <Box gridArea="fill"  />
         <Box gridArea="feature" className="blur-box">
