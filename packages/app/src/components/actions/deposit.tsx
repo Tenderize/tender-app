@@ -3,7 +3,7 @@ import { useContractFunction } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
 import { FC, useState } from "react";
 import { Input } from "rimble-ui";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { Button, Form, Spinner, Card } from "react-bootstrap";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
@@ -34,53 +34,51 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
   const depositTokens = async (e: any) => {
     e.preventDefault();
     await deposit(utils.parseEther(depositInput || "0"));
-    setDepositInput("")
+    setDepositInput("");
   };
 
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
-    <>
-      <Form>
-        <Form.Group controlId="formDeposit">
-          <Form.Label>Deposit Amount</Form.Label>
-          <Input
-            width={1}
-            value={depositInput}
-            onChange={handleInputChange}
-            type="text"
-            placeholder={"0 " + symbol}
-            className="amount"
-          />
-          <Form.Text className="balance" onClick={maxDeposit}>
-            Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-          </Form.Text>
-        </Form.Group>
-        <div className="d-grid gap-2">
-          <ApproveToken
-            symbol={symbol}
-            spender={addresses[name].controller}
-            token={contracts[name].token}
-            hasAllowance={isTokenApproved}
-          />
-          <Button
-            disabled={
-              !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
-            }
-            onClick={depositTokens}
-          >
-             {depositTx.status === "Mining" ? (
-              <>
-                <Spinner animation="border" variant="white" />
-                Depositing...
-              </>
-            ) : (
-              "Deposit"
-            )}
-          </Button>
-        </div>
-      </Form>
-    </>
+    <Form>
+      <Form.Group controlId="formDeposit">
+        <Form.Label>Deposit Amount</Form.Label>
+        <Input
+          width={1}
+          value={depositInput}
+          onChange={handleInputChange}
+          type="text"
+          placeholder={"0 " + symbol}
+          className="amount"
+        />
+        <Form.Text className="balance" onClick={maxDeposit}>
+          Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+        </Form.Text>
+      </Form.Group>
+      <div className="d-grid gap-2">
+        <ApproveToken
+          symbol={symbol}
+          spender={addresses[name].controller}
+          token={contracts[name].token}
+          hasAllowance={isTokenApproved}
+        />
+        <Button
+          disabled={
+            !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
+          }
+          onClick={depositTokens}
+        >
+          {depositTx.status === "Mining" ? (
+            <>
+              <Spinner animation="border" variant="white" />
+              Depositing...
+            </>
+          ) : (
+            "Deposit"
+          )}
+        </Button>
+      </div>
+    </Form>
   );
 };
 

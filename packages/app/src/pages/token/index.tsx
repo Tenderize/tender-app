@@ -87,7 +87,14 @@ const Token: FC = () => {
                   </Box>
                 }
               >
-                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
+                <Box pad="small">
+                  <Deposit
+                    name={name}
+                    symbol={info.symbol}
+                    tokenBalance={tokenBalance}
+                    tokenAllowance={tokenAllowance}
+                  />
+                </Box>
               </Tab>
               <Tab
                 title={
@@ -97,13 +104,15 @@ const Token: FC = () => {
                   </Box>
                 }
               >
-                <LiquidityPool
-                  name={name}
-                  symbol={info.symbol}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                  lpTokenBalance={lpTokenBal}
-                />
+                <Box pad="small">
+                  <LiquidityPool
+                    name={name}
+                    symbol={info.symbol}
+                    tokenBalance={tokenBalance}
+                    tenderTokenBalance={tenderBalance}
+                    lpTokenBalance={lpTokenBal}
+                  />
+                </Box>
               </Tab>
               <Tab
                 title={
@@ -113,7 +122,9 @@ const Token: FC = () => {
                   </Box>
                 }
               >
-                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+                <Box pad="small">
+                  <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+                </Box>
               </Tab>
             </Tabs>
           </Card>
