@@ -65,6 +65,7 @@ const TokenCard: FC<Props> = (props) => {
 };
 
 const TCard = styled(Card)`
+  background: none;
   z-index: 0;
   transform: scale(1);
   transition-duration: 0.2s;

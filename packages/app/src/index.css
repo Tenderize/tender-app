@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+
+.blur-box {
+    background: rgba(38, 37, 40, 0.2);
+border: 0.5px solid rgba(255, 255, 255, 0.1);
+box-shadow: inset 0px 64px 100px rgba(0, 0, 0, 0.05);
+backdrop-filter: blur(100px);
+/* Note: backdrop-filter has minimal browser support */
+
+border-radius: 20px;
+}

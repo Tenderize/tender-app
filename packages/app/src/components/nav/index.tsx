@@ -32,9 +32,6 @@ const Nav: FC = () => {
       style={{ transition: "0.3s ease", backgroundColor: navBackground ? "#F0F1F5" : "transparent" }}
     >
       <Col md={{ span: 3, offset: 1 }} lg={{ span: 3, offset: 1 }}>
-        <Link to="/">
-          <img src={logo} alt="logo" style={{ marginTop: "1em" }} />
-        </Link>
       </Col>
       <Col md={{ span: 3, offset: 4 }}>
         <AccountButton />
