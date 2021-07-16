@@ -6,27 +6,22 @@ import TestnetBanner from "./components/testnet-banner";
 import Home from "./pages/home";
 import Token from "./pages/token";
 import { NotificationsList } from "./components/transactions";
-
-// a theme with custom spacing and font sizes
-const customTheme = {
-  colors: {
-    // text: "", // sets color for text
-    primary: "#4E66DE", // sets primary color
-    white: "#fff",
-  },
-};
-
+import Foot from './components/footer'
+import {Grid, Box} from 'grommet'
 const App: FC = () => {
   return (
     <>
+      <Grid fill rows={["xxsmall", "flex", "xxsmall"]}>
         <TestnetBanner />
-        <NotificationsList />
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/stakers/:id" component={Token} />
           </Switch>
         </Router>
+        <Foot />
+      </Grid>
+      <NotificationsList />
     </>
   );
 };
