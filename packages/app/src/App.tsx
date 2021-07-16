@@ -12,7 +12,7 @@ import Foot from "./components/footer";
 const App: FC = () => {
   return (
     <>
-      <Grid fill rows={["xxsmall", "flex", "xxsmall"]}>
+      <Grid rows={["xxsmall", "flex", "xxsmall"]}>
         <TestnetBanner />
         <Router>
           <Switch>
