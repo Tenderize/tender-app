@@ -1,18 +1,17 @@
-import { FC } from "react";
-import { Card, Button, Heading, Avatar } from "rimble-ui";
-import { Container, Row, Col, Tabs, Tab } from "react-bootstrap";
+import { FC, useCallback, useState } from "react";
+import { Box, Card, Button, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
+import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
+import { Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import ethers, { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 
 import Faucet from "../../components/faucet";
-import { Deposit, Withdraw } from "../../components/actions";
+import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
-
-declare module "@rimble/icons";
 
 type CardInfo = {
   description: string;
@@ -28,6 +27,7 @@ const Token: FC = () => {
   const location = useLocation();
   const info = stakers[location.pathname];
   const name = location.pathname.split("/")[2];
+  const [tabIndex, setTabIndex] = useState(1);
 
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
@@ -42,53 +42,89 @@ const Token: FC = () => {
 
   const logo = require("../../images/" + info.logo).default;
 
+  const onActive = useCallback((nextIndex: number) => {
+    if (nextIndex === 0) {
+      setTabIndex(1);
+    } else {
+      setTabIndex(nextIndex);
+    }
+  }, []);
+
   return (
-    <>
-      <Container className="mb-6">
-        <Row className="justify-content-md-center">
-          <Col md={6}>
-            <Link to="/">
-              <Button.Text icon="KeyboardArrowLeft">Back</Button.Text>
-            </Link>
-            <Row>
-              <Col lg={{ span: 12 }}>
-                <Card>
-                  <Heading style={{ textAlign: "center" }}>{info.title}</Heading>
-                  <Avatar size="large" src={logo} style={{ margin: "1em auto 0" }} />
-                  <Tabs fill justify defaultActiveKey="stake" id="tokenpage-tabs">
-                    <Tab eventKey="stake" title="Stake">
-                      <Deposit
-                        name={name}
-                        symbol={info.symbol}
-                        tokenBalance={tokenBalance}
-                        tokenAllowance={tokenAllowance}
-                      />
-                    </Tab>
-                    <Tab eventKey="liquidity pool" title="Liquidity Pool">
-                      <LiquidityPool
-                        name={name}
-                        symbol={info.symbol}
-                        tokenBalance={tokenBalance}
-                        tenderTokenBalance={tenderBalance}
-                        lpTokenBalance={lpTokenBal}
-                      />
-                    </Tab>
-                    <Tab eventKey="farm" title="Farm">
-                      <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
-                    </Tab>
-                  </Tabs>
-                </Card>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="mt-2" lg={true}>
-                <Faucet name={name} symbol={info.symbol} />
-              </Col>
-            </Row>
+    <Box align="center">
+      <Box margin={{ bottom: "small" }} width="large">
+        <Link to="/">
+          <Button hoverIndicator="light-1">
+            <Box pad="small" direction="row" align="center" gap="small">
+              <Previous />
+              <Text>Back</Text>
+            </Box>
+          </Button>
+        </Link>
+        <Row>
+          <Card>
+            <Tabs id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+              <Tab
+                plain
+                icon={
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <Box pad="small" direction="column" align="center" gap="small">
+                      <Avatar size="medium" src={logo} style={{ margin: "1em auto 0" }} />
+                      <Text>{info.title}</Text>
+                    </Box>
+                  </Button>
+                }
+              />
+              <Tab
+                title={
+                  <Box align="center" gap="small">
+                    <Currency />
+                    <Paragraph>Stake</Paragraph>
+                  </Box>
+                }
+              >
+                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
+              </Tab>
+              <Tab
+                title={
+                  <Box align="center" gap="small">
+                    <PhoneHorizontal />
+                    <Paragraph>Liquidity Pool</Paragraph>
+                  </Box>
+                }
+              >
+                <LiquidityPool
+                  name={name}
+                  symbol={info.symbol}
+                  tokenBalance={tokenBalance}
+                  tenderTokenBalance={tenderBalance}
+                  lpTokenBalance={lpTokenBal}
+                />
+              </Tab>
+              <Tab
+                title={
+                  <Box align="center" gap="small">
+                    <Grow />
+                    <Paragraph>Farm</Paragraph>
+                  </Box>
+                }
+              >
+                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+              </Tab>
+            </Tabs>
+          </Card>
+        </Row>
+        <Row>
+          <Col className="mt-2" lg={true}>
+            <Faucet name={name} symbol={info.symbol} />
           </Col>
         </Row>
-      </Container>
-    </>
+      </Box>
+    </Box>
   );
 };
 
