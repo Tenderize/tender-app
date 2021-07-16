@@ -11,6 +11,7 @@ import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
+import { RoundType } from "grommet/utils";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -50,13 +51,12 @@ const Token: FC = () => {
             </Box>
           </Button>
         </Link>
-        <Card className="blur-box" margin={{ bottom: "small" }}>
+        <Box round={true} className="blur-box" margin={{ bottom: "small" }}>
           <Tabs flex id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
             <Tab
               plain
               title={
                 <Box
-                  flex={{ grow: 1, shrink: 1 }}
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
@@ -70,25 +70,25 @@ const Token: FC = () => {
             />
             <Tab
               title={
-                <Box flex={{ grow: 1, shrink: 1 }} pad={{ top: "medium" }} align="center" gap="small">
+                <Box pad={{ top: "medium" }} align="center" gap="small">
                   <Currency />
                   <Paragraph>Stake</Paragraph>
                 </Box>
               }
             >
-              <Box border="top" className="blur-box" pad="small">
+              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
                 <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
               </Box>
             </Tab>
             <Tab
               title={
-                <Box flex={{ grow: 1, shrink: 1 }} pad={{ top: "medium" }} align="center" gap="small">
+                <Box pad={{ top: "medium" }} align="center" gap="small">
                   <PhoneHorizontal />
                   <Paragraph>Liquidity Pool</Paragraph>
                 </Box>
               }
             >
-              <Box className="blur-box" pad="small">
+              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
                 <LiquidityPool
                   name={name}
                   symbol={info.symbol}
@@ -100,18 +100,18 @@ const Token: FC = () => {
             </Tab>
             <Tab
               title={
-                <Box flex={{ grow: 1, shrink: 1 }} pad={{ top: "medium" }} align="center" gap="small">
+                <Box pad={{ top: "medium" }} align="center" gap="small">
                   <Grow />
                   <Paragraph>Farm</Paragraph>
                 </Box>
               }
             >
-              <Box border="top" className="blur-box" pad="small">
+              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
                 <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
               </Box>
             </Tab>
           </Tabs>
-        </Card>
+        </Box>
         <Faucet name={name} symbol={info.symbol} />
       </Box>
     </Box>
