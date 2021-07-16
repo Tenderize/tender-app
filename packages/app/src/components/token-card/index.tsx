@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { Card, Col } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Button, Avatar } from "rimble-ui";
 import classNames from "classnames";
 import styled from "styled-components";
+import { Avatar, Button, Box } from "grommet";
 
 type Props = {
   url: string;
@@ -24,9 +24,6 @@ type CardInfo = {
 const TokenCard: FC<Props> = (props) => {
   const { url, info } = props;
   const logo = require("../../images/" + info.logo);
-  const ctaText = () => {
-    return info.available ? "Discover" : "Coming Soon";
-  };
 
   const renderCard = () => {
     return (
@@ -43,28 +40,27 @@ const TokenCard: FC<Props> = (props) => {
             </h3>
           </div>
 
-          <Button className="cta" disabled={!info.available}>
-            {ctaText()}
-          </Button>
+          <Button disabled={!info.available}>{info.available ? "Discover" : "Coming Soon"}</Button>
         </Card.Body>
       </TCard>
     );
   };
 
   return (
-    <Col xs={{ span: 12 }} sm={{ span: 6 }} md={{ span: 4 }} lg={{ span: 4 }}>
+    <>
       {info.available ? (
-        <Link to={url} style={{ textDecoration: "none" }} className="card-link">
+        <Link to={url} style={{ textDecoration: "none", display: "flex", flex: 1 }}>
           {renderCard()}
         </Link>
       ) : (
         renderCard()
       )}
-    </Col>
+    </>
   );
 };
 
 const TCard = styled(Card)`
+  flex: 1;
   background: none;
   z-index: 0;
   transform: scale(1);
@@ -85,11 +81,6 @@ const TCard = styled(Card)`
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
     transform: scale(1.01);
     transition-duration: 0.1s;
-  }
-
-  .cta {
-    width: 80%;
-    margin-top: 10px;
   }
 `;
 
