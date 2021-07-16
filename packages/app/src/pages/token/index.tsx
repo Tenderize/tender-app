@@ -2,7 +2,7 @@ import { FC, useCallback, useState } from "react";
 import { Box, Card, Button, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
 import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
 import { Link, useLocation } from "react-router-dom";
-import ethers, { constants } from "ethers";
+import { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 
@@ -11,16 +11,6 @@ import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
-
-type CardInfo = {
-  description: string;
-  stakerAddress: string;
-  title: string;
-  available: boolean;
-  apy: number;
-  logo: string;
-  symbol: string;
-};
 
 const Token: FC = () => {
   const location = useLocation();
@@ -61,43 +51,44 @@ const Token: FC = () => {
           </Button>
         </Link>
         <Card className="blur-box" margin={{ bottom: "small" }}>
-          <Tabs id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+          <Tabs flex id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
             <Tab
               plain
-              icon={
-                <Button
+              title={
+                <Box
+                  flex={{ grow: 1, shrink: 1 }}
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
                 >
-                  <Box pad="small" direction="column" align="center" gap="small">
-                    <Avatar size="medium" src={logo} style={{ margin: "1em auto 0" }} />
+                  <Box direction="column" align="center" margin={{ bottom: "small" }}>
+                    <Avatar size="medium" src={logo} />
                     <Text>{info.title}</Text>
                   </Box>
-                </Button>
+                </Box>
               }
             />
             <Tab
               title={
-                <Box align="center" gap="small">
+                <Box flex={{ grow: 1, shrink: 1 }} pad={{ top: "medium" }} align="center" gap="small">
                   <Currency />
                   <Paragraph>Stake</Paragraph>
                 </Box>
               }
             >
-              <Box round="bottom" className="blur-box" pad="small">
+              <Box border="top" className="blur-box" pad="small">
                 <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
               </Box>
             </Tab>
             <Tab
               title={
-                <Box align="center" gap="small">
+                <Box flex={{ grow: 1, shrink: 1 }} pad={{ top: "medium" }} align="center" gap="small">
                   <PhoneHorizontal />
                   <Paragraph>Liquidity Pool</Paragraph>
                 </Box>
               }
             >
-              <Box round="bottom" className="blur-box" pad="small">
+              <Box className="blur-box" pad="small">
                 <LiquidityPool
                   name={name}
                   symbol={info.symbol}
@@ -109,13 +100,13 @@ const Token: FC = () => {
             </Tab>
             <Tab
               title={
-                <Box align="center" gap="small">
+                <Box flex={{ grow: 1, shrink: 1 }} pad={{ top: "medium" }} align="center" gap="small">
                   <Grow />
                   <Paragraph>Farm</Paragraph>
                 </Box>
               }
             >
-              <Box round="bottom" className="blur-box" pad="small">
+              <Box border="top" className="blur-box" pad="small">
                 <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
               </Box>
             </Tab>
@@ -125,11 +116,6 @@ const Token: FC = () => {
       </Box>
     </Box>
   );
-};
-
-export type TokenPageProps = {
-  info: CardInfo;
-  provider: ethers.providers.Web3Provider | ethers.providers.JsonRpcProvider;
 };
 
 export default Token;
