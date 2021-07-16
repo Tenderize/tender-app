@@ -1,7 +1,6 @@
 import { FC, useCallback, useState } from "react";
 import { Box, Card, Button, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
 import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
-import { Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import ethers, { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
@@ -61,79 +60,68 @@ const Token: FC = () => {
             </Box>
           </Button>
         </Link>
-        <Row>
-          <Card>
-            <Tabs id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-              <Tab
-                plain
-                icon={
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <Box pad="small" direction="column" align="center" gap="small">
-                      <Avatar size="medium" src={logo} style={{ margin: "1em auto 0" }} />
-                      <Text>{info.title}</Text>
-                    </Box>
-                  </Button>
-                }
-              />
-              <Tab
-                title={
-                  <Box align="center" gap="small">
-                    <Currency />
-                    <Paragraph>Stake</Paragraph>
+        <Card className="blur-box" margin={{ bottom: "small" }}>
+          <Tabs id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+            <Tab
+              plain
+              icon={
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <Box pad="small" direction="column" align="center" gap="small">
+                    <Avatar size="medium" src={logo} style={{ margin: "1em auto 0" }} />
+                    <Text>{info.title}</Text>
                   </Box>
-                }
-              >
-                <Box pad="small">
-                  <Deposit
-                    name={name}
-                    symbol={info.symbol}
-                    tokenBalance={tokenBalance}
-                    tokenAllowance={tokenAllowance}
-                  />
+                </Button>
+              }
+            />
+            <Tab
+              title={
+                <Box align="center" gap="small">
+                  <Currency />
+                  <Paragraph>Stake</Paragraph>
                 </Box>
-              </Tab>
-              <Tab
-                title={
-                  <Box align="center" gap="small">
-                    <PhoneHorizontal />
-                    <Paragraph>Liquidity Pool</Paragraph>
-                  </Box>
-                }
-              >
-                <Box pad="small">
-                  <LiquidityPool
-                    name={name}
-                    symbol={info.symbol}
-                    tokenBalance={tokenBalance}
-                    tenderTokenBalance={tenderBalance}
-                    lpTokenBalance={lpTokenBal}
-                  />
+              }
+            >
+              <Box round="bottom" className="blur-box" pad="small">
+                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
+              </Box>
+            </Tab>
+            <Tab
+              title={
+                <Box align="center" gap="small">
+                  <PhoneHorizontal />
+                  <Paragraph>Liquidity Pool</Paragraph>
                 </Box>
-              </Tab>
-              <Tab
-                title={
-                  <Box align="center" gap="small">
-                    <Grow />
-                    <Paragraph>Farm</Paragraph>
-                  </Box>
-                }
-              >
-                <Box pad="small">
-                  <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+              }
+            >
+              <Box round="bottom" className="blur-box" pad="small">
+                <LiquidityPool
+                  name={name}
+                  symbol={info.symbol}
+                  tokenBalance={tokenBalance}
+                  tenderTokenBalance={tenderBalance}
+                  lpTokenBalance={lpTokenBal}
+                />
+              </Box>
+            </Tab>
+            <Tab
+              title={
+                <Box align="center" gap="small">
+                  <Grow />
+                  <Paragraph>Farm</Paragraph>
                 </Box>
-              </Tab>
-            </Tabs>
-          </Card>
-        </Row>
-        <Row>
-          <Col className="mt-2" lg={true}>
-            <Faucet name={name} symbol={info.symbol} />
-          </Col>
-        </Row>
+              }
+            >
+              <Box round="bottom" className="blur-box" pad="small">
+                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+              </Box>
+            </Tab>
+          </Tabs>
+        </Card>
+        <Faucet name={name} symbol={info.symbol} />
       </Box>
     </Box>
   );

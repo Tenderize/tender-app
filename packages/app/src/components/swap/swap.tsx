@@ -1,13 +1,14 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import { Button, Card, Form, FormControl, InputGroup } from "react-bootstrap";
-import { Icon } from "rimble-ui";
+import { Form, FormControl, InputGroup } from "react-bootstrap";
+import { Box, Button } from "grommet";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
-import { useContractCall, useTokenAllowance, useEthers } from "@usedapp/core";
+import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 
 import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
+import { Transaction } from "grommet-icons";
 
 type Props = {
   protocolName: string;
@@ -94,63 +95,59 @@ const Swap: FC<Props> = ({
     sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
 
   return (
-    <Card>
-      <Card.Body>
-        <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>Swap</Form.Label>
-            <InputGroup className="mb-2" hasValidation={true}>
-              <InputGroup.Text>{tokenSendedSymbol}</InputGroup.Text>
-              <Form.Control
-                id="formSwapSend"
-                type="number"
-                value={sendTokenAmount}
-                onChange={handleSendTokenInput}
-                required={true}
-                isInvalid={isSendInputInvalid}
-              />
-              <InputGroup.Append>
-                <Button
-                  variant="secondary"
-                  onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
-                >
-                  Max
-                </Button>
-              </InputGroup.Append>
-              <Form.Control.Feedback type="invalid">Please provide an available amount.</Form.Control.Feedback>
-            </InputGroup>
-            <Form.Text id="fromSwapSendBalance" muted>
-              {`Current Balance: ${utils.formatEther(tokenSendedBalance.toString() ?? "0")} ${tokenSendedSymbol}`}
-            </Form.Text>
-          </Form.Group>
-
-          <Button onClick={() => setIsSendingToken(!isSendingToken)}>
-            <Icon name="SwapVert" color="white" aria-label="Switch" />
-          </Button>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Receive</Form.Label>
-            <InputGroup className="mb-2">
-              <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
-              <FormControl id="formSwapReceive" placeholder={"0"} value={utils.formatEther(calcOutGivenIn || "0")} />
-            </InputGroup>
-          </Form.Group>
-          <div className="d-grid gap-2">
-            <ApproveToken
-              symbol={tokenSendedSymbol}
-              spender={addresses[protocolName].swap}
-              token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-              hasAllowance={isTokenApproved}
+    <Box>
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Swap</Form.Label>
+          <InputGroup className="mb-2" hasValidation={true}>
+            <InputGroup.Text>{tokenSendedSymbol}</InputGroup.Text>
+            <Form.Control
+              id="formSwapSend"
+              type="number"
+              value={sendTokenAmount}
+              onChange={handleSendTokenInput}
+              required={true}
+              isInvalid={isSendInputInvalid}
             />
-            <Button
-              disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
-              onClick={() => setShowConfirm(true)}
-            >
-              Trade
-            </Button>
-          </div>
-        </Form>
-      </Card.Body>
+            <InputGroup.Append>
+              <Button
+                secondary
+                onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
+              >
+                Max
+              </Button>
+            </InputGroup.Append>
+            <Form.Control.Feedback type="invalid">Please provide an available amount.</Form.Control.Feedback>
+          </InputGroup>
+          <Form.Text id="fromSwapSendBalance" muted>
+            {`Current Balance: ${utils.formatEther(tokenSendedBalance.toString() ?? "0")} ${tokenSendedSymbol}`}
+          </Form.Text>
+        </Form.Group>
+
+        <Button color="blue" icon={<Transaction color="white" />} onClick={() => setIsSendingToken(!isSendingToken)} />
+
+        <Form.Group className="mb-3">
+          <Form.Label>Receive</Form.Label>
+          <InputGroup className="mb-2">
+            <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
+            <FormControl id="formSwapReceive" placeholder={"0"} value={utils.formatEther(calcOutGivenIn || "0")} />
+          </InputGroup>
+        </Form.Group>
+        <div className="d-grid gap-2">
+          <ApproveToken
+            symbol={tokenSendedSymbol}
+            spender={addresses[protocolName].swap}
+            token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
+            hasAllowance={isTokenApproved}
+          />
+          <Button
+            disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
+            onClick={() => setShowConfirm(true)}
+          >
+            Trade
+          </Button>
+        </div>
+      </Form>
       <ConfirmSwapModal
         show={showConfirm}
         onDismiss={() => setShowConfirm(false)}
@@ -163,7 +160,7 @@ const Swap: FC<Props> = ({
         tokenReceivedAddress={tokenReceivedAddress}
         protocolName={protocolName}
       />
-    </Card>
+    </Box>
   );
 };
 
