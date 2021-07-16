@@ -6,7 +6,7 @@ import { Box, Grid, Main, Heading, Text, Button } from "grommet";
 const Home: FC = () => {
   return (
     <Box flex fill overflow="hidden">
-      <HammerSteak/>
+      <HammerSteak />
       <Grid
         fill
         rows={["small", "medium"]}
@@ -18,19 +18,19 @@ const Home: FC = () => {
           { name: "feature", start: [1, 1], end: [1, 1] },
         ]}
       >
-        <Main gridArea="main"flex justify="center" align="center">
-            <Heading  color={"white"} style={{ marginTop: "1em" }}>
-              Tenderize
-            </Heading>
-            <Text color={"light-3"}>
-              Don't just stake,
-              <span style={{ color: "#F8F8F8", fontWeight: 900 }}>{" Tenderize first "}</span>
-            </Text>
-            <Button primary label="Open App"></Button>
+        <Main gridArea="main" flex justify="center" align="center">
+          <Heading color={"white"} style={{ marginTop: "1em" }}>
+            Tenderize
+          </Heading>
+          <Text color={"light-3"}>
+            Don't just stake,
+            <span style={{ color: "#F8F8F8", fontWeight: 900 }}>{" Tenderize first "}</span>
+          </Text>
+          <Button primary label="Open App"></Button>
         </Main>
-        <Box gridArea="fill"  />
+        <Box gridArea="fill" />
         <Box gridArea="feature" className="blur-box">
-        <FeaturedCards /* provider={this.props.provider} */ />
+          <FeaturedCards /* provider={this.props.provider} */ />
         </Box>
       </Grid>
     </Box>

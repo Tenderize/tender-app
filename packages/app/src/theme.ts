@@ -3,8 +3,53 @@ import { deepMerge } from "grommet/utils";
 
 const overrideDefaultTheme: ThemeType = {
   global: {
+    colors: {
+      brand: "#4E66DE",
+    },
     font: {
       family: "IBM Plex Mono",
+    },
+  },
+  button: {
+    primary: {
+      background: "light-1",
+      color: "brand",
+      border: undefined,
+      font: {
+        weight: 700,
+      },
+      padding: {
+        horizontal: "12px",
+        vertical: "6px",
+      },
+    },
+    hover: {
+      primary: {
+        background: {
+          color: "light-2",
+        },
+        color: "brand",
+      },
+      secondary: {
+        border: {
+          width: "3px",
+        },
+        padding: {
+          horizontal: "9px",
+          vertical: "3px",
+        },
+      },
+    },
+    active: {
+      background: {
+        color: "aliceblue",
+      },
+      color: "teal",
+      secondary: {
+        border: {
+          color: "transparent",
+        },
+      },
     },
   },
   tabs: {
