@@ -11,7 +11,7 @@ import {Grid, Box} from 'grommet'
 const App: FC = () => {
   return (
     <>
-      <Grid fill rows={["xxsmall", "flex", "xxsmall"]}>
+      <Grid fill rows={["xxsmall", "flex", "xsmall"]}>
         <TestnetBanner />
         <Router>
           <Switch>
