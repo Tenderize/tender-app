@@ -5,10 +5,9 @@ import { Box, Grid, Main, Heading, Text, Button } from "grommet";
 
 const Home: FC = () => {
   return (
-    <Box flex fill overflow="hidden">
+    <Box overflow="auto">
       <HammerSteak />
       <Grid
-        fill
         rows={["small", "medium"]}
         columns={["1/5", "4/5"]}
         gap="small"

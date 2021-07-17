@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from "react";
-import { Box, Card, Button, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
+import { Box, Card, Button, Tabs, Tab, Text, Paragraph, Avatar, Grid } from "grommet";
 import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
 import { Link, useLocation } from "react-router-dom";
 import { constants } from "ethers";
@@ -41,79 +41,86 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box align="center">
-      <Box margin={{ bottom: "small" }} width="large">
-        <Link to="/">
-          <Button hoverIndicator="light-1">
-            <Box pad="small" direction="row" align="center" gap="small">
-              <Previous />
-              <Text>Back</Text>
-            </Box>
-          </Button>
-        </Link>
-        <Box round={true} className="blur-box" margin={{ bottom: "small" }}>
-          <Tabs flex id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-            <Tab
-              plain
-              title={
-                <Box
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <Box direction="column" align="center" margin={{ bottom: "small" }}>
-                    <Avatar size="medium" src={logo} />
-                    <Text>{info.title}</Text>
+    <Box align="center" overflow="auto">
+      <Grid>
+        <Box margin={{ bottom: "small" }} width="large">
+          <Link to="/">
+            <Button hoverIndicator="light-1">
+              <Box pad="small" direction="row" align="center" gap="small">
+                <Previous />
+                <Text>Back</Text>
+              </Box>
+            </Button>
+          </Link>
+          <Box round={true} className="blur-box" margin={{ bottom: "small" }}>
+            <Tabs flex id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+              <Tab
+                plain
+                title={
+                  <Box
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <Box direction="column" align="center" margin={{ bottom: "small" }}>
+                      <Avatar size="medium" src={logo} />
+                      <Text>{info.title}</Text>
+                    </Box>
                   </Box>
+                }
+              />
+              <Tab
+                title={
+                  <Box pad={{ top: "medium" }} align="center" gap="small">
+                    <Currency />
+                    <Paragraph>Stake</Paragraph>
+                  </Box>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
+                  <Deposit
+                    name={name}
+                    symbol={info.symbol}
+                    tokenBalance={tokenBalance}
+                    tokenAllowance={tokenAllowance}
+                  />
                 </Box>
-              }
-            />
-            <Tab
-              title={
-                <Box pad={{ top: "medium" }} align="center" gap="small">
-                  <Currency />
-                  <Paragraph>Stake</Paragraph>
+              </Tab>
+              <Tab
+                title={
+                  <Box pad={{ top: "medium" }} align="center" gap="small">
+                    <PhoneHorizontal />
+                    <Paragraph>Liquidity Pool</Paragraph>
+                  </Box>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
+                  <LiquidityPool
+                    name={name}
+                    symbol={info.symbol}
+                    tokenBalance={tokenBalance}
+                    tenderTokenBalance={tenderBalance}
+                    lpTokenBalance={lpTokenBal}
+                  />
                 </Box>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
-                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Box pad={{ top: "medium" }} align="center" gap="small">
-                  <PhoneHorizontal />
-                  <Paragraph>Liquidity Pool</Paragraph>
+              </Tab>
+              <Tab
+                title={
+                  <Box pad={{ top: "medium" }} align="center" gap="small">
+                    <Grow />
+                    <Paragraph>Farm</Paragraph>
+                  </Box>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
+                  <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
                 </Box>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
-                <LiquidityPool
-                  name={name}
-                  symbol={info.symbol}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                  lpTokenBalance={lpTokenBal}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Box pad={{ top: "medium" }} align="center" gap="small">
-                  <Grow />
-                  <Paragraph>Farm</Paragraph>
-                </Box>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
-                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
-              </Box>
-            </Tab>
-          </Tabs>
+              </Tab>
+            </Tabs>
+          </Box>
+          <Faucet name={name} symbol={info.symbol} />
         </Box>
-        <Faucet name={name} symbol={info.symbol} />
-      </Box>
+      </Grid>
     </Box>
   );
 };
