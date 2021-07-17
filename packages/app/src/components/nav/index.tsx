@@ -26,10 +26,10 @@ const Navbar: FC = () => {
       <Link to="/">
         <Image width="150px" src={logo} />
       </Link>
-    <Nav direction="row">
-      <AccountButton />
-    </Nav>
-  </Header>
+      <Nav direction="row">
+        <AccountButton />
+      </Nav>
+    </Header>
   );
 };
 

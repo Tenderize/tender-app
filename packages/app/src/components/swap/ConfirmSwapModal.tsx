@@ -49,7 +49,7 @@ const ConfirmSwapModal: FC<Props> = ({
     e.preventDefault();
     const amount = utils.parseEther(sendTokenAmount || "0");
     await swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, receiveTokenAmount, tokenSpotPrice);
-    onDismiss()
+    onDismiss();
   };
 
   useEffect(() => {

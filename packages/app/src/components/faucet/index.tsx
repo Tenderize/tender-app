@@ -19,11 +19,11 @@ const Faucet: FC<Props> = ({ symbol, name }) => {
     <Card>
       <Card.Body className="d-grid gap-2">
         <h3>Faucet</h3>
-      {`Get some testnet ${symbol} and ETH (you need ETH to get LPT)`}
-      <Button variant="info" onClick={requestTokens}>{`Get ${symbol}`}</Button>
-      <a className="btn btn-info" href="https://faucet.metamask.io/" target="_blank" rel="noreferrer">
-        Get ETH
-      </a>
+        {`Get some testnet ${symbol} and ETH (you need ETH to get LPT)`}
+        <Button variant="info" onClick={requestTokens}>{`Get ${symbol}`}</Button>
+        <a className="btn btn-info" href="https://faucet.metamask.io/" target="_blank" rel="noreferrer">
+          Get ETH
+        </a>
       </Card.Body>
     </Card>
   );

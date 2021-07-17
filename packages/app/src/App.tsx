@@ -6,8 +6,9 @@ import TestnetBanner from "./components/testnet-banner";
 import Home from "./pages/home";
 import Token from "./pages/token";
 import { NotificationsList } from "./components/transactions";
-import Foot from './components/footer'
-import {Grid, Box} from 'grommet'
+import Foot from "./components/footer";
+import { Grid } from "grommet";
+
 const App: FC = () => {
   return (
     <>

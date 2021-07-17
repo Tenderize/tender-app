@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from "react";
-import { Box, Tabs, Tab, Text, Paragraph, Avatar} from "grommet";
+import { Box, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
 import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
 import { useLocation } from "react-router-dom";
 import { constants } from "ethers";
@@ -11,8 +11,8 @@ import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
-import TenderBox from "../../components/tenderbox"
-import Navbar from "../../components/nav"
+import TenderBox from "../../components/tenderbox";
+import Navbar from "../../components/nav";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -43,14 +43,18 @@ const Token: FC = () => {
 
   return (
     <Box fill>
-    <Navbar />
-    <Box align="center" justify="center">
-      <TenderBox margin={{
-        top: "xlarge"
-      }} width="xlarge" height="large">
+      <Navbar />
+      <Box align="center" justify="center">
+        <TenderBox
+          margin={{
+            top: "xlarge",
+          }}
+          width="xlarge"
+          height="large"
+        >
           <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
             <Tab
-            style={{flex: "1"}}
+              style={{ flex: "1" }}
               plain
               title={
                 <Box
@@ -58,7 +62,7 @@ const Token: FC = () => {
                     e.stopPropagation();
                   }}
                 >
-                  <Box direction="column"  justify="center" align="center" margin={{ bottom: "small" }}>
+                  <Box direction="column" justify="center" align="center" margin={{ bottom: "small" }}>
                     <Avatar size="medium" src={logo} />
                     <Text>{info.title}</Text>
                   </Box>
@@ -66,8 +70,7 @@ const Token: FC = () => {
               }
             />
             <Tab
-                        style={{flex: "1"}}
-
+              style={{ flex: "1" }}
               title={
                 <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
                   <Currency />
@@ -75,14 +78,18 @@ const Token: FC = () => {
                 </Box>
               }
             >
-              <Box round={{ corner: "bottom" }} border="top" pad={{
-                horizontal: "large"
-              }}>
+              <Box
+                round={{ corner: "bottom" }}
+                border="top"
+                pad={{
+                  horizontal: "large",
+                }}
+              >
                 <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
               </Box>
             </Tab>
             <Tab
-                        style={{flex: "1"}}
+              style={{ flex: "1" }}
               title={
                 <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
                   <PhoneHorizontal />
@@ -101,8 +108,7 @@ const Token: FC = () => {
               </Box>
             </Tab>
             <Tab
-                        style={{flex: "1"}}
-
+              style={{ flex: "1" }}
               title={
                 <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
                   <Grow />
@@ -115,9 +121,9 @@ const Token: FC = () => {
               </Box>
             </Tab>
           </Tabs>
-        {/* <Faucet name={name} symbol={info.symbol} /> */}
-      </TenderBox>
-    </Box>
+          {/* <Faucet name={name} symbol={info.symbol} /> */}
+        </TenderBox>
+      </Box>
     </Box>
   );
 };

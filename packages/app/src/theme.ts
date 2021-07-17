@@ -5,11 +5,11 @@ const overrideDefaultTheme: ThemeType = {
   global: {
     colors: {
       brand: "#4E66DE",
-      "light-1": "#FFFFFF"
+      "light-1": "#FFFFFF",
     },
     font: {
-      family: "IBM Plex Mono"
-    }
+      family: "IBM Plex Mono",
+    },
   },
   tabs: {
     header: {
@@ -32,8 +32,8 @@ const overrideDefaultTheme: ThemeType = {
         color: white;
         border: 1px solid white;
       }
-      `
-    }
+      `,
+    },
   },
   tab: {
     margin: undefined,
@@ -41,10 +41,10 @@ const overrideDefaultTheme: ThemeType = {
       horizontal: "medium",
     },
     active: {
-      background: "rgba(0, 0, 0, 0.2)"
+      background: "rgba(0, 0, 0, 0.2)",
     },
     hover: {
-      background: "rgba(0, 0, 0, 0.1)"
+      background: "rgba(0, 0, 0, 0.1)",
     },
     background: {
       color: "rgba(0, 0, 0, 0.0)",

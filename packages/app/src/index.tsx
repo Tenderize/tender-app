@@ -25,7 +25,17 @@ const dappConfig: Config = {
 ReactDOM.render(
   <StrictMode>
     <DAppProvider config={dappConfig}>
-      <Grommet themeMode="dark" full={true} style={{background: "url('/background.svg')", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundAttachment: "fixed"}} theme={theme}>
+      <Grommet
+        themeMode="dark"
+        full={true}
+        style={{
+          background: "url('/background.svg')",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+        }}
+        theme={theme}
+      >
         <App />
       </Grommet>
     </DAppProvider>

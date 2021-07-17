@@ -15,7 +15,7 @@ type Props = {
   lpTokenBalance: BigNumberish;
 };
 
-const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance}) => {
+const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
   const symbolFull = `t${symbol}-${symbol} Pool Token`;
 
   // Contract state
