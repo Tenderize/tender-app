@@ -6,13 +6,11 @@ import { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 
-import Faucet from "../../components/faucet";
 import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
-import Navbar from "../../components/nav";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -42,88 +40,81 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box fill>
-      <Navbar />
-      <Box align="center" justify="center">
-        <TenderBox
-          margin={{
-            top: "xlarge",
-          }}
-          width="xlarge"
-          height="large"
-        >
-          <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-            <Tab
-              style={{ flex: "1" }}
-              plain
-              title={
-                <Box
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <Box direction="column" justify="center" align="center" margin={{ bottom: "small" }}>
-                    <Avatar size="medium" src={logo} />
-                    <Text>{info.title}</Text>
-                  </Box>
-                </Box>
-              }
-            />
-            <Tab
-              style={{ flex: "1" }}
-              title={
-                <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
-                  <Currency />
-                  <Paragraph>Stake</Paragraph>
-                </Box>
-              }
-            >
+    <Box align="center" justify="center">
+      <TenderBox
+        margin={{
+          top: "xlarge",
+        }}
+        pad={{ bottom: "xlarge" }}
+        width="large"
+      >
+        <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+          <Tab
+            plain
+            title={
               <Box
-                round={{ corner: "bottom" }}
-                border="top"
-                pad={{
-                  horizontal: "large",
+                onClick={(e) => {
+                  e.stopPropagation();
                 }}
               >
-                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
-              </Box>
-            </Tab>
-            <Tab
-              style={{ flex: "1" }}
-              title={
-                <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
-                  <PhoneHorizontal />
-                  <Paragraph>Swap</Paragraph>
+                <Box direction="column" justify="center" align="center" margin={{ bottom: "small" }}>
+                  <Avatar size="medium" src={logo} />
+                  <Text>{info.title}</Text>
                 </Box>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="small">
-                <LiquidityPool
-                  name={name}
-                  symbol={info.symbol}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                  lpTokenBalance={lpTokenBal}
-                />
               </Box>
-            </Tab>
-            <Tab
-              style={{ flex: "1" }}
-              title={
-                <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
-                  <Grow />
-                  <Paragraph>Farm</Paragraph>
-                </Box>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="small">
-                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+            }
+          />
+          <Tab
+            title={
+              <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
+                <Currency />
+                <Paragraph>Stake</Paragraph>
               </Box>
-            </Tab>
-          </Tabs>
-          {/* <Faucet name={name} symbol={info.symbol} /> */}
-        </TenderBox>
-      </Box>
+            }
+          >
+            <Box
+              round={{ corner: "bottom" }}
+              border="top"
+              pad={{
+                horizontal: "large",
+              }}
+            >
+              <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
+            </Box>
+          </Tab>
+          <Tab
+            title={
+              <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
+                <PhoneHorizontal />
+                <Paragraph>Swap</Paragraph>
+              </Box>
+            }
+          >
+            <Box round={{ corner: "bottom" }} border="top" pad="small">
+              <LiquidityPool
+                name={name}
+                symbol={info.symbol}
+                tokenBalance={tokenBalance}
+                tenderTokenBalance={tenderBalance}
+                lpTokenBalance={lpTokenBal}
+              />
+            </Box>
+          </Tab>
+          <Tab
+            title={
+              <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
+                <Grow />
+                <Paragraph>Farm</Paragraph>
+              </Box>
+            }
+          >
+            <Box round={{ corner: "bottom" }} border="top" pad="small">
+              <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+            </Box>
+          </Tab>
+        </Tabs>
+        {/* <Faucet name={name} symbol={info.symbol} /> */}
+      </TenderBox>
     </Box>
   );
 };
