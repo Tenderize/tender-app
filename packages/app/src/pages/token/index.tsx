@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from "react";
-import { Box, Card, Button, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
+import { Box, Tabs, Tab, Text, Paragraph, Avatar} from "grommet";
 import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
@@ -11,7 +11,8 @@ import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
-import { RoundType } from "grommet/utils";
+import TenderBox from "../../components/tenderbox"
+import Navbar from "../../components/nav"
 
 const Token: FC = () => {
   const location = useLocation();
@@ -41,19 +42,15 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box align="center">
-      <Box margin={{ bottom: "small" }} width="large">
-        <Link to="/">
-          <Button hoverIndicator="light-1">
-            <Box pad="small" direction="row" align="center" gap="small">
-              <Previous />
-              <Text>Back</Text>
-            </Box>
-          </Button>
-        </Link>
-        <Box round={true} className="blur-box" margin={{ bottom: "small" }}>
-          <Tabs flex id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+    <Box fill>
+    <Navbar />
+    <Box align="center" justify="center">
+      <TenderBox margin={{
+        top: "xlarge"
+      }} width="xlarge" height="large">
+          <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
             <Tab
+            style={{flex: "1"}}
               plain
               title={
                 <Box
@@ -61,7 +58,7 @@ const Token: FC = () => {
                     e.stopPropagation();
                   }}
                 >
-                  <Box direction="column" align="center" margin={{ bottom: "small" }}>
+                  <Box direction="column"  justify="center" align="center" margin={{ bottom: "small" }}>
                     <Avatar size="medium" src={logo} />
                     <Text>{info.title}</Text>
                   </Box>
@@ -69,26 +66,31 @@ const Token: FC = () => {
               }
             />
             <Tab
+                        style={{flex: "1"}}
+
               title={
-                <Box pad={{ top: "medium" }} align="center" gap="small">
+                <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
                   <Currency />
                   <Paragraph>Stake</Paragraph>
                 </Box>
               }
             >
-              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
+              <Box round={{ corner: "bottom" }} border="top" pad={{
+                horizontal: "large"
+              }}>
                 <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
               </Box>
             </Tab>
             <Tab
+                        style={{flex: "1"}}
               title={
-                <Box pad={{ top: "medium" }} align="center" gap="small">
+                <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
                   <PhoneHorizontal />
-                  <Paragraph>Liquidity Pool</Paragraph>
+                  <Paragraph>Swap</Paragraph>
                 </Box>
               }
             >
-              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
+              <Box round={{ corner: "bottom" }} border="top" pad="small">
                 <LiquidityPool
                   name={name}
                   symbol={info.symbol}
@@ -99,21 +101,23 @@ const Token: FC = () => {
               </Box>
             </Tab>
             <Tab
+                        style={{flex: "1"}}
+
               title={
-                <Box pad={{ top: "medium" }} align="center" gap="small">
+                <Box pad={{ top: "medium" }} justify="center" align="center" gap="small">
                   <Grow />
                   <Paragraph>Farm</Paragraph>
                 </Box>
               }
             >
-              <Box round={{ corner: "bottom" }} border="top" className="blur-box" pad="small">
+              <Box round={{ corner: "bottom" }} border="top" pad="small">
                 <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
               </Box>
             </Tab>
           </Tabs>
-        </Box>
-        <Faucet name={name} symbol={info.symbol} />
-      </Box>
+        {/* <Faucet name={name} symbol={info.symbol} /> */}
+      </TenderBox>
+    </Box>
     </Box>
   );
 };

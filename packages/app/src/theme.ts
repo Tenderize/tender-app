@@ -3,9 +3,13 @@ import { deepMerge } from "grommet/utils";
 
 const overrideDefaultTheme: ThemeType = {
   global: {
-    font: {
-      family: "IBM Plex Mono",
+    colors: {
+      brand: "#4E66DE",
+      "light-1": "#FFFFFF"
     },
+    font: {
+      family: "IBM Plex Mono"
+    }
   },
   tabs: {
     header: {

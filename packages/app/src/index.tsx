@@ -1,14 +1,13 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import { Grommet, grommet } from "grommet";
+import { Grommet } from "grommet";
 import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import './index.css'
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
 import { theme } from "./theme";
-import {deepMerge} from 'grommet/utils'
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
   ? process.env.ETHERSCAN_API_KEY
@@ -23,65 +22,10 @@ const dappConfig: Config = {
   },
 };
 
-const customTheme = deepMerge(grommet, {
-  global: {
-    color: {
-      brand: "#4E66DE"
-    },
-    font: {
-      color: "white",
-      family: "IBM Plex Mono"
-    }
-  },
-  button: {
-    primary: {
-      background: "light-1",
-      color: "brand",
-      border: undefined,
-      font: {
-        weight: 700
-      },
-      padding: {
-        horizontal: "12px",
-        vertical: "6px"
-      }
-    },
-    hover: {
-      primary: {
-        background: {
-          color: "light-2"
-        },
-        color: "brand"
-      },
-      secondary: {
-        border: {
-          width: "3px"
-        },
-        padding: {
-          horizontal: "9px",
-          vertical: "3px"
-        }
-      }
-    },
-    active: {
-      background: {
-        color: "aliceblue"
-      },
-      color: "teal",
-      secondary: {
-        border: {
-          color: "transparent"
-        }
-      }
-    }
-  }
-});
-
-
 ReactDOM.render(
   <StrictMode>
     <DAppProvider config={dappConfig}>
-      <Grommet themeMode="dark" full={true} style={{background: "url('/background.svg')", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundAttachment: "fixed"}} theme={customTheme}>
+      <Grommet themeMode="dark" full={true} style={{background: "url('/background.svg')", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundAttachment: "fixed"}} theme={theme}>
         <App />
       </Grommet>
     </DAppProvider>

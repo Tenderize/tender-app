@@ -1,7 +1,7 @@
 import { FC } from "react";
 import FeaturedCards from "../../components/featured-card/";
-import HammerSteak from "../../components/hammersteak";
 import { Box, Grid, Main, Heading, Text, Button } from "grommet";
+import TenderBox from '../../components/tenderbox'
 import styled from 'styled-components'
 const MyStyledButton = styled(Button)`
   font-weight: bold;
@@ -17,16 +17,15 @@ const MyStyledButton = styled(Button)`
 const Home: FC = () => {
   return (
     <>
-    <HammerSteak/>
-    <Box flex>
+    <Box>
       <Grid
         fill
         rows={["medium", "flex"]}
-        columns={["1/5", "4/5"]}
+        columns={["5/5"]}
         gap="small"
         areas={[
           { name: "main", start: [0, 0], end: [1, 0] },
-          { name: "feature", start: [1, 1], end: [1, 1] },
+          { name: "feature", start: [0, 1], end: [1, 1] },
         ]}
       >
         <Main gridArea="main" justify="center" align="center" gap="medium">
@@ -39,8 +38,10 @@ const Home: FC = () => {
             </Text>
             <MyStyledButton label="Open App" />
         </Main>
-        <Box gridArea="feature" className="blur-box">
-        <FeaturedCards /* provider={this.props.provider} */ />
+        <Box gridArea="feature" flex fill justify="center" align="center">
+        <TenderBox flex width="large">
+          <FeaturedCards /* provider={this.props.provider} */ />
+        </TenderBox>
         </Box>
       </Grid>
     </Box>
