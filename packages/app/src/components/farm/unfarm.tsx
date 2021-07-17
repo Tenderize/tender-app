@@ -40,7 +40,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
   const unfarmLpTokens = async (e: any) => {
     e.preventDefault();
     await unfarm(utils.parseEther(unfarmInput || "0"));
-    setUnfarmInput("")
+    setUnfarmInput("");
   };
 
   return (

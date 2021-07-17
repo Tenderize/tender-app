@@ -34,7 +34,6 @@ const JoinPool: FC<Props> = ({
   tenderLpBalance,
   lpShares,
 }) => {
-
   // Component state & helpers
   const [show, setShow] = useState(false);
 
@@ -45,8 +44,8 @@ const JoinPool: FC<Props> = ({
   const handleMulti = (v: string | null) => {
     if (v === "single") setIsMulti(false);
     if (v === "multi") setIsMulti(true);
-    setTokenInput("")
-    setTenderInput("")
+    setTokenInput("");
+    setTenderInput("");
   };
 
   const [tokenInput, setTokenInput] = useState("");
@@ -84,8 +83,8 @@ const JoinPool: FC<Props> = ({
   const [selectToken, setSelectToken] = useState(symbol);
   const handleSelectToken = (symbol: string) => {
     setSelectToken(symbol);
-    setTokenInput("")
-    setTenderInput("")
+    setTokenInput("");
+    setTenderInput("");
   };
 
   const maxDeposit = (tenderToken: boolean) => {
@@ -109,15 +108,15 @@ const JoinPool: FC<Props> = ({
 
   const useButtonDisabled = () => {
     if (isMulti) {
-      return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved)
+      return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved);
     } else {
       if (selectToken === symbol) {
-        return !hasValue(tokenInput) && !isTokenApproved
+        return !hasValue(tokenInput) && !isTokenApproved;
       } else {
-        return !hasValue(tenderInput) && !isTenderApproved
+        return !hasValue(tenderInput) && !isTenderApproved;
       }
     }
-  }
+  };
 
   // Contract Functions
   const useCalcSinglePoolOut = () => {
@@ -158,7 +157,7 @@ const JoinPool: FC<Props> = ({
   const { state: joinPoolTx, send: joinPool } = useContractFunction(contracts[name].liquidity, "joinPool", {
     transactionName: `Join t${symbol}/${symbol} Liquidity Pool`,
   });
-  
+
   const { state: joinSwapExternAmountInTx, send: joinSwapExternAmountIn } = useContractFunction(
     contracts[name].liquidity,
     "joinswapExternAmountIn",
@@ -208,7 +207,7 @@ const JoinPool: FC<Props> = ({
         Join Pool
       </Button>
 
-      <Modal size='lg' show={show} onHide={handleClose}>
+      <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>{`Join tender${symbol}/${symbol}`}</Modal.Title>
         </Modal.Header>
@@ -262,21 +261,21 @@ const JoinPool: FC<Props> = ({
               <Form>
                 <Form.Group controlId="singleinput">
                   <InputGroup className="mb-3">
-                  <InputGroup.Prepend>
-                    <DropdownButton
-                      as={InputGroup.Prepend}
-                      variant="outline-secondary"
-                      title={selectToken}
-                      id="tokenselector"
-                      value={selectToken}
-                    >
-                      <Dropdown.Item eventKey={symbol} onSelect={() => handleSelectToken(symbol)}>
-                        {symbol}
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey={`t${symbol}`} onSelect={() => handleSelectToken(`t${symbol}`)}>
-                        t{symbol}
-                      </Dropdown.Item>
-                    </DropdownButton>
+                    <InputGroup.Prepend>
+                      <DropdownButton
+                        as={InputGroup.Prepend}
+                        variant="outline-secondary"
+                        title={selectToken}
+                        id="tokenselector"
+                        value={selectToken}
+                      >
+                        <Dropdown.Item eventKey={symbol} onSelect={() => handleSelectToken(symbol)}>
+                          {symbol}
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey={`t${symbol}`} onSelect={() => handleSelectToken(`t${symbol}`)}>
+                          t{symbol}
+                        </Dropdown.Item>
+                      </DropdownButton>
                     </InputGroup.Prepend>
                     {selectToken === symbol ? (
                       <>
@@ -319,21 +318,21 @@ const JoinPool: FC<Props> = ({
               token={contracts[name].token}
               hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
             />
-            <ApproveToken 
+            <ApproveToken
               symbol={`t${symbol}`}
               spender={addresses[name].liquidity}
               token={contracts[name].tenderToken}
               hasAllowance={!hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)}
             />
             <Button block variant="primary" onClick={addLiquidity} disabled={useButtonDisabled()}>
-            {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
-              <>
-                <Spinner animation="border" variant="white" />
-                Adding Liquidity...
-              </>
-            ) : (
-              "Add Liquidity"
-            )}
+              {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
+                <>
+                  <Spinner animation="border" variant="white" />
+                  Adding Liquidity...
+                </>
+              ) : (
+                "Add Liquidity"
+              )}
             </Button>
           </div>
         </Modal.Body>

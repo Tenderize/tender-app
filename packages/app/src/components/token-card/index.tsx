@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import styled from "styled-components";
-import { Avatar, Button, Box, Card, CardBody, CardHeader} from "grommet";
+import { Avatar, Button, Box, Card, CardBody, CardHeader } from "grommet";
 
 type Props = {
   url: string;
@@ -26,10 +26,10 @@ const TokenCard: FC<Props> = (props) => {
 
   const renderCard = () => {
     return (
-      <TCard  style={{zIndex: 1 }}>
+      <TCard style={{ zIndex: 1 }}>
         <CardHeader flex direction="column">
-        <Avatar size="medium" src={logo.default} style={{ margin: "1em auto 0" }} />
-        <h3>{info.title}</h3>
+          <Avatar size="medium" src={logo.default} style={{ margin: "1em auto 0" }} />
+          <h3>{info.title}</h3>
         </CardHeader>
         <CardBody style={{ textTransform: "capitalize", textAlign: "center" }}>
           <div style={{ margin: "5 0" }}>
@@ -60,7 +60,7 @@ const TCard = styled(Card)`
   background: none;
   margin: 0 0 20px !important; // I don't feel like figuring out how to override it without this.
   text-decoration: none;
-  box-shadow:none;
+  box-shadow: none;
   color: white;
   &.disabled {
     cursor: default;

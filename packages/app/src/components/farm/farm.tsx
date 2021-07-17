@@ -6,8 +6,8 @@ import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
 
-import ApproveToken from "../approve/ApproveToken"
-import {useIsTokenApproved} from "../approve/useIsTokenApproved"
+import ApproveToken from "../approve/ApproveToken";
+import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
 type Props = {
   name: string;
@@ -35,7 +35,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenapproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput)
+  const isTokenapproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput);
 
   // Contract Functions
   const { state: farmTx, send: farm } = useContractFunction(contracts[name].farm, "farm", {
@@ -45,7 +45,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
   const farmLpTokens = async (e: any) => {
     e.preventDefault();
     await farm(utils.parseEther(farmInput || "0"));
-    setFarmInput("")
+    setFarmInput("");
   };
 
   return (
@@ -76,7 +76,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
             </Form.Group>
           </Form>
           <div className="d-grid gap-2">
-            <ApproveToken 
+            <ApproveToken
               symbol={symbol}
               spender={addresses[name].farm}
               token={contracts[name].liquidity}
@@ -97,7 +97,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                 "Farm"
               )}
             </Button>
-            </div>
+          </div>
         </Modal.Body>
       </Modal>
     </>

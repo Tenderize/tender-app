@@ -17,7 +17,7 @@ type Props = {
   tokenLpBalance: BigNumberish;
   tenderLpBalance: BigNumberish;
   lpShares: BigNumberish;
-  lpTokenBalance: BigNumberish
+  lpTokenBalance: BigNumberish;
 };
 
 const ExitPool: FC<Props> = ({
@@ -30,9 +30,8 @@ const ExitPool: FC<Props> = ({
   tokenLpBalance,
   tenderLpBalance,
   lpShares,
-  lpTokenBalance
+  lpTokenBalance,
 }) => {
-
   // Component state & helpers
   const [show, setShow] = useState(false);
 
@@ -49,7 +48,7 @@ const ExitPool: FC<Props> = ({
   const handleLpSharesInputChange = (e: any) => {
     const val = e.target.value;
     if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
-    setLpSharesInput(val)
+    setLpSharesInput(val);
   };
 
   const [selectToken, setSelectToken] = useState(symbol);
@@ -58,7 +57,7 @@ const ExitPool: FC<Props> = ({
   };
 
   const maxDeposit = () => {
-    setLpSharesInput(utils.formatEther(lpTokenBalance || "0"))
+    setLpSharesInput(utils.formatEther(lpTokenBalance || "0"));
   };
 
   const isLpSharesApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].liquidity, lpSharesInput);
@@ -68,46 +67,51 @@ const ExitPool: FC<Props> = ({
   };
 
   const useButtonDisabled = () => {
-      return !hasValue(lpSharesInput) || !isLpSharesApproved
-  }
+    return !hasValue(lpSharesInput) || !isLpSharesApproved;
+  };
 
   const useCalcSingleOutGivenPoolIn = () => {
-      let tokenBalOut: BigNumberish = 0
-      let tokenWeightOut: BigNumberish = 0
+    let tokenBalOut: BigNumberish = 0;
+    let tokenWeightOut: BigNumberish = 0;
 
-      if (selectToken === symbol) {
-          tokenBalOut = tokenLpBalance
-          tokenWeightOut = tokenWeight
-      } else {
-          tokenBalOut = tenderLpBalance
-          tokenWeightOut = tenderTokenWeight
-      }
+    if (selectToken === symbol) {
+      tokenBalOut = tokenLpBalance;
+      tokenWeightOut = tokenWeight;
+    } else {
+      tokenBalOut = tenderLpBalance;
+      tokenWeightOut = tenderTokenWeight;
+    }
 
-      const [calced] = useContractCall(
-          hasValue(tokenBalOut) &&
+    const [calced] =
+      useContractCall(
+        hasValue(tokenBalOut) &&
           hasValue(tokenWeightOut) &&
           hasValue(lpShares) &&
           hasValue(totalWeight) &&
           hasValue(lpSharesInput) &&
           hasValue(swapFee) && {
-              abi: contracts[name].swap.interface,
-              address: addresses[name].swap,
-              method: "calcSingleOutGivenPoolIn",
-              args: [tokenBalOut, tokenWeightOut, lpShares, totalWeight, utils.parseEther(lpSharesInput), swapFee]
+            abi: contracts[name].swap.interface,
+            address: addresses[name].swap,
+            method: "calcSingleOutGivenPoolIn",
+            args: [tokenBalOut, tokenWeightOut, lpShares, totalWeight, utils.parseEther(lpSharesInput), swapFee],
           }
       ) ?? [];
-      return calced || "0"
-    }
+    return calced || "0";
+  };
 
   const singleOutPoolIn = useCalcSingleOutGivenPoolIn();
 
-  const {state: exitPoolTx, send: exitPool } = useContractFunction(contracts[name].liquidity, "exitPool", {
-      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`
-  })
+  const { state: exitPoolTx, send: exitPool } = useContractFunction(contracts[name].liquidity, "exitPool", {
+    transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+  });
 
-  const {state: exitSwapPoolAmountInTx, send: exitSwapPoolAmountIn } = useContractFunction(contracts[name].liquidity, "exitswapPoolAmountIn", {
-    transactionName: `exit t${symbol}/${symbol} Liquidity Pool`
-  })
+  const { state: exitSwapPoolAmountInTx, send: exitSwapPoolAmountIn } = useContractFunction(
+    contracts[name].liquidity,
+    "exitswapPoolAmountIn",
+    {
+      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+    }
+  );
 
   const calcWeight = (weight: BigNumberish): BigNumberish => {
     if (totalWeight.toString() === "0") {
@@ -120,7 +124,7 @@ const ExitPool: FC<Props> = ({
   const calcPoolOutFromRatio = (balance: BigNumberish) => {
     const tokenInBN = utils.parseEther(lpSharesInput || "0");
     // return tokenInBN.mul(utils.parseEther("1")).div(tokenLpBalance).mul(lpShares).div(utils.parseEther("1"))
-    const total = hasValue(lpShares) ? lpShares : "1"
+    const total = hasValue(lpShares) ? lpShares : "1";
     return tokenInBN.mul(balance).div(total);
   };
 
@@ -128,11 +132,10 @@ const ExitPool: FC<Props> = ({
     e.preventDefault();
     const poolIn = utils.parseEther(lpSharesInput || "0");
     if (isMulti) {
-        
-        const minTokenOut = calcPoolOutFromRatio(tokenLpBalance)
-        const minTenderOut = calcPoolOutFromRatio(tenderLpBalance)
+      const minTokenOut = calcPoolOutFromRatio(tokenLpBalance);
+      const minTenderOut = calcPoolOutFromRatio(tenderLpBalance);
       // NOTE: Pool is currently tenderToken/Token
-        await exitPool(poolIn, [minTenderOut, minTokenOut])
+      await exitPool(poolIn, [minTenderOut, minTokenOut]);
     } else {
       let token;
       if (selectToken === symbol) {
@@ -140,12 +143,11 @@ const ExitPool: FC<Props> = ({
       } else if (selectToken === `t${symbol}`) {
         token = addresses[name].tenderToken;
       }
-      exitSwapPoolAmountIn(token, poolIn, singleOutPoolIn)
+      exitSwapPoolAmountIn(token, poolIn, singleOutPoolIn);
     }
   };
 
   const symbolFull = `t${symbol}-${symbol} Pool Token`;
-
 
   return (
     <>
@@ -153,7 +155,7 @@ const ExitPool: FC<Props> = ({
         Exit Pool
       </Button>
 
-      <Modal size='lg' show={show} onHide={handleClose}>
+      <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>{`Exit tender${symbol}/${symbol} pool`}</Modal.Title>
         </Modal.Header>
@@ -162,15 +164,16 @@ const ExitPool: FC<Props> = ({
             <Tab eventKey="multi" title="Multi-Asset">
               <Form>
                 <Form.Group className="d-grid gap-2" controlId="tokenInput">
-                    <Form.Label>LP Tokens to remove</Form.Label>
+                  <Form.Label>LP Tokens to remove</Form.Label>
                   <InputGroup>
-                  <Form.Control
+                    <Form.Control
                       value={lpSharesInput}
                       onChange={handleLpSharesInputChange}
                       type="text"
                       placeholder={"0 " + symbolFull}
                       className="amount"
-                    /></InputGroup>
+                    />
+                  </InputGroup>
                   <InputGroup>
                     <InputGroup.Text className="balance" onClick={() => maxDeposit()}>
                       Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
@@ -178,36 +181,46 @@ const ExitPool: FC<Props> = ({
                   </InputGroup>
                 </Form.Group>
                 <Form.Group className="d-grid gap-2">
-                    <Form.Label>You Will Receive</Form.Label>
-                    <InputGroup>
+                  <Form.Label>You Will Receive</Form.Label>
+                  <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text>{symbol}</InputGroup.Text>
+                      <InputGroup.Text>{symbol}</InputGroup.Text>
                     </InputGroup.Prepend>
-                        <Form.Control disabled id="exitMultiReceive" placeholder={"0"} value={utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")} />
-                    </InputGroup>
-                    <InputGroup>
+                    <Form.Control
+                      disabled
+                      id="exitMultiReceive"
+                      placeholder={"0"}
+                      value={utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")}
+                    />
+                  </InputGroup>
+                  <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text>{`t${symbol}`}</InputGroup.Text>
+                      <InputGroup.Text>{`t${symbol}`}</InputGroup.Text>
                     </InputGroup.Prepend>
-                        <Form.Control disabled id="exitMultiReceive" placeholder={"0"} value={utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")} />
-                    </InputGroup>
+                    <Form.Control
+                      disabled
+                      id="exitMultiReceive"
+                      placeholder={"0"}
+                      value={utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")}
+                    />
+                  </InputGroup>
                 </Form.Group>
               </Form>
             </Tab>
             <Tab eventKey="single" title="Single-Asset">
               <Form className="d-grid gap-2">
                 <Form.Group className="gap-2" controlId="singleinput">
-                <Form.Label>
-                        I want to receive:
-                 </Form.Label>
-                      <select onChange={handleSelectToken} className="form-control">
-                            <option value={symbol} selected>{symbol}</option>
-                            <option value={`t${symbol}`}>t{symbol}</option>
-                     </select>
+                  <Form.Label>I want to receive:</Form.Label>
+                  <select onChange={handleSelectToken} className="form-control">
+                    <option value={symbol} selected>
+                      {symbol}
+                    </option>
+                    <option value={`t${symbol}`}>t{symbol}</option>
+                  </select>
                 </Form.Group>
-                <Form.Group  className="gap-2">
-                <Form.Label>LP Tokens to remove</Form.Label>
-                <InputGroup>
+                <Form.Group className="gap-2">
+                  <Form.Label>LP Tokens to remove</Form.Label>
+                  <InputGroup>
                     <Form.Control
                       value={lpSharesInput}
                       onChange={handleLpSharesInputChange}
@@ -220,14 +233,19 @@ const ExitPool: FC<Props> = ({
                     </InputGroup.Text>
                   </InputGroup>
                 </Form.Group>
-                <Form.Group  className="gap-2">
-                    <Form.Label>You Will Receive</Form.Label>
-                    <InputGroup>
+                <Form.Group className="gap-2">
+                  <Form.Label>You Will Receive</Form.Label>
+                  <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text>{selectToken}</InputGroup.Text>
+                      <InputGroup.Text>{selectToken}</InputGroup.Text>
                     </InputGroup.Prepend>
-                        <Form.Control disabled id="exitMultiReceive" placeholder={"0"} value={utils.formatEther(useCalcSingleOutGivenPoolIn() || "0")} />
-                    </InputGroup>
+                    <Form.Control
+                      disabled
+                      id="exitMultiReceive"
+                      placeholder={"0"}
+                      value={utils.formatEther(useCalcSingleOutGivenPoolIn() || "0")}
+                    />
+                  </InputGroup>
                 </Form.Group>
               </Form>
             </Tab>
@@ -240,14 +258,14 @@ const ExitPool: FC<Props> = ({
               hasAllowance={!hasValue(lpSharesInput) || isLpSharesApproved}
             />
             <Button block variant="primary" onClick={removeLiquidity} disabled={useButtonDisabled()}>
-            {exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
-              <>
-                <Spinner animation="border" variant="white" />
-                Removing Liquidity...
-              </>
-            ) : (
-              "Remove Liquidity"
-            )}
+              {exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
+                <>
+                  <Spinner animation="border" variant="white" />
+                  Removing Liquidity...
+                </>
+              ) : (
+                "Remove Liquidity"
+              )}
             </Button>
           </div>
         </Modal.Body>
