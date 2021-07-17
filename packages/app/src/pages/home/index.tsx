@@ -1,16 +1,12 @@
 import { FC } from "react";
+import {Link} from 'react-router-dom'
 import FeaturedCards from "../../components/featured-card/";
 import { Box, Grid, Main, Heading, Text, Button } from "grommet";
 import TenderBox from '../../components/tenderbox'
 import styled from 'styled-components'
-const MyStyledButton = styled(Button)`
-  font-weight: bold;
-  background-color: #FFFFFF;
-  color: #4E66DE;
-  border: none;
+const XLButton = styled(Button)`
   width: 270px;
   height: 70px;
-  border-radius: none;
 `;
 
 
@@ -33,10 +29,14 @@ const Home: FC = () => {
               Tenderize
             </Heading>
             <Text color={"light-3"}>
-              Don't just stake,
-              <span style={{ color: "#F8F8F8", fontWeight: 900 }}>{" Tenderize first "}</span>
+              Don't just stake, 
+              <span style={{ padding: "2px", background: "rgba(0, 0, 0, 0.3)",
+borderRadius: "4px", color: "#F8F8F8", fontWeight: 900 }}>{"Tenderize first "}</span>
             </Text>
-            <MyStyledButton label="Open App" />
+            <Link to="/stakers/livepeer">
+              
+            <XLButton size="large" primary label="Open App" />
+            </Link>
         </Main>
         <Box gridArea="feature" flex fill justify="center" align="center">
         <TenderBox flex width="large">
