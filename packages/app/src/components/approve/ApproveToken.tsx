@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler } from "react";
-import { Button, Container, Tooltip, OverlayTrigger, Spinner } from "react-bootstrap";
 import { BigNumberish, constants, Contract } from "ethers";
 import { useContractFunction } from "@usedapp/core";
+import {Box, Button, Tip, Spinner, Text} from 'grommet'
 
 type Props = {
   symbol: string;
@@ -16,7 +16,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
     transactionName: `Approve ${symbol}`,
   });
 
-  const handleApproval: MouseEventHandler<HTMLDivElement> = async (e) => {
+  const handleApproval: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
 
     if (!hasAllowance) {
@@ -33,35 +33,35 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
       style={{ display: "flex", justifyContent: "space-between" }}
       onClick={handleApproval}
       disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
-      variant={"primary"}
+      primary
     >
       {approveTx.status !== "None" && approveTx.status !== "Success" ? (
-        <Container className="align-items-center">
-          <Spinner size="sm" animation="border" variant="light" />
-        </Container>
+          <Spinner color="white" />
       ) : (
         <>
           Allow the Tenderize Protocol to use your {symbol}
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id="button-tooltip-2">
+          <Tip
+          plain
+          dropProps={{
+            background: "rgba(0,0,0,0.4)",
+            elevation: "none"
+          }}
+           content={
+             <Box width="medium" elevation="none" pad="medium">
+             <Text color="white">
                 You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do this
                 once per token.
-              </Tooltip>
-            }
+             </Text>
+             </Box>
+           }
           >
-            {({ ref, ...triggerHandler }) => (
               <span
                 style={{ border: "1px solid white", borderRadius: "50%", paddingLeft: "5px", paddingRight: "5px" }}
-                ref={ref}
-                {...triggerHandler}
                 className="ms-1"
               >
                 &#8505;
               </span>
-            )}
-          </OverlayTrigger>
+          </Tip>
         </>
       )}
     </Button>
