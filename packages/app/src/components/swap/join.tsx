@@ -1,9 +1,9 @@
-import { FC, useState } from "react";
-import { Form, Button, Modal, Tabs, Tab, InputGroup, Dropdown, DropdownButton, Spinner } from "react-bootstrap";
+import { FC, useState, useCallback } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Spinner, Text, Select, Tabs, Tab } from 'grommet'
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
@@ -36,6 +36,8 @@ const JoinPool: FC<Props> = ({
 }) => {
   // Component state & helpers
   const [show, setShow] = useState(false);
+
+  const [tabIndex, setTabIndex] = useState(0);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -201,117 +203,123 @@ const JoinPool: FC<Props> = ({
     }
   };
 
+  const onActive = useCallback((nextIndex: number) => {
+    setTabIndex(nextIndex)
+    if (nextIndex === 0) {
+      setIsMulti(true)
+    } else {
+      setIsMulti(false)
+    }
+  }, []);
+
   return (
     <>
-      <Button variant="success" onClick={handleShow}>
+      <Button primary onClick={handleShow}>
         Join Pool
       </Button>
 
-      <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>{`Join tender${symbol}/${symbol}`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Tabs onSelect={handleMulti} defaultActiveKey="multi" id="jointabs">
-            <Tab eventKey="multi" title="Multi-Asset">
-              <Form>
-                <Form.Group controlId="tokenInput">
-                  <Form.Label>{symbol}</Form.Label>
-                  <InputGroup>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="basic-addon1">{`${utils
-                        .formatEther(calcWeight(tokenWeight))
-                        .substr(0, 5)} %`}</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      value={tokenInput}
-                      onChange={handleTokenInputChange}
-                      type="text"
-                      placeholder={"0 " + symbol}
-                      className="amount"
-                    />
-                    <InputGroup.Text className="balance" onClick={() => maxDeposit(false)}>
-                      Current Balance {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-                <Form.Group controlId="tenderTokenInput">
-                  <Form.Label>{`tender${symbol}`}</Form.Label>
-                  <InputGroup>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="basic-addon1">{`${utils
-                        .formatEther(calcWeight(tenderTokenWeight))
-                        .substr(0, 5)} %`}</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      value={tenderInput}
-                      onChange={handleTenderInputChange}
-                      type="text"
-                      placeholder={"0 " + "t" + symbol}
-                      className="amount"
-                    />
-                    <InputGroup.Text className="balance" onClick={() => maxDeposit(true)}>
-                      Current Balance {`${utils.formatEther(tenderTokenBalance?.toString() || "0")} tender${symbol}`}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-              </Form>
-            </Tab>
-            <Tab eventKey="single" title="Single-Asset">
-              <Form>
-                <Form.Group controlId="singleinput">
-                  <InputGroup className="mb-3">
-                    <InputGroup.Prepend>
-                      <DropdownButton
-                        as={InputGroup.Prepend}
-                        variant="outline-secondary"
-                        title={selectToken}
-                        id="tokenselector"
-                        value={selectToken}
-                      >
-                        <Dropdown.Item eventKey={symbol} onSelect={() => handleSelectToken(symbol)}>
-                          {symbol}
-                        </Dropdown.Item>
-                        <Dropdown.Item eventKey={`t${symbol}`} onSelect={() => handleSelectToken(`t${symbol}`)}>
-                          t{symbol}
-                        </Dropdown.Item>
-                      </DropdownButton>
-                    </InputGroup.Prepend>
-                    {selectToken === symbol ? (
-                      <>
-                        <Form.Control
-                          value={tokenInput}
-                          onChange={handleTokenInputChange}
-                          type="text"
-                          placeholder={"0 " + symbol}
-                          className="amount"
+      {show && 
+        <Layer onEsc={() => setShow(false)}
+        onClickOutside={() => setShow(false)}>
+          <Card height="medium" width="large" background="light-1">
+            <CardHeader>
+            {`Join tender${symbol}/${symbol}`}
+            </CardHeader>
+            <CardBody>
+              <Tabs id="join-type" activeIndex={tabIndex} onActive={onActive}>
+                <Tab
+                plain
+                title={
+                  "Multi Asset"
+                }
+                >
+                  <Form>
+                  <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                    <Box direction="row" width="medium">
+                        <Text>
+                          {`${utils
+                            .formatEther(calcWeight(tokenWeight))
+                            .substr(0, 5)} %`}
+                        </Text>
+                        <TextInput
+                        value={tokenInput}
+                        onChange={handleTokenInputChange}
+                        type="text"
+                        placeholder={"0 " + symbol}
+                        className="amount"
+                      />
+                      <Button secondary onClick={() => maxDeposit(false)}>
+                          Max
+                      </Button>
+                    </Box>
+                    </FormField>
+                    <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                    <Box direction="row" width="medium">
+                        <Text>
+                          {`${utils
+                            .formatEther(calcWeight(tenderTokenWeight))
+                            .substr(0, 5)} %`}
+                        </Text>
+                        <TextInput
+                        value={tenderInput}
+                        onChange={handleTenderInputChange}
+                        type="text"
+                        placeholder={"0 " + "t" + symbol}
+                        className="amount"
+                      />
+                      <Button secondary onClick={() => maxDeposit(true)}>
+                          Max
+                      </Button>
+                    </Box>
+                    </FormField>
+                </Form>
+                </Tab>
+                <Tab
+                  plain
+                  title={"Single Asset"}
+                >
+                   <Form>
+                <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                    <Box direction="row" width="medium">
+                    <Select
+                          value={selectToken}
+                          options={[symbol, `t${symbol}`]}
+                          onChange={({option}) => handleSelectToken(option)}
                         />
-                        <InputGroup.Text className="balance" onClick={() => maxDeposit(false)}>
-                          Current Balance {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-                        </InputGroup.Text>
-                      </>
-                    ) : (
-                      <>
-                        <Form.Control
+                        {selectToken === symbol ? (
+                          <>
+                            <TextInput
+                            value={tokenInput}
+                            onChange={handleTokenInputChange}
+                            type="text"
+                            placeholder={"0 " + symbol}
+                            className="amount"
+                          />
+                          <Button secondary onClick={() => maxDeposit(false)}>
+                              Max
+                          </Button>
+                          </>
+                        ) : (
+                          <>
+                          <TextInput
                           value={tenderInput}
                           onChange={handleTenderInputChange}
                           type="text"
                           placeholder={"0 " + "t" + symbol}
                           className="amount"
                         />
-                        <InputGroup.Text className="balance" onClick={() => maxDeposit(true)}>
-                          Current Balance{" "}
-                          {`${utils.formatEther(tenderTokenBalance?.toString() || "0")} tender${symbol}`}
-                        </InputGroup.Text>
-                      </>
-                    )}
-                    <Form.Control aria-describedby="basic-addon1" />
-                  </InputGroup>
-                </Form.Group>
-              </Form>
-            </Tab>
-          </Tabs>
-          <div className="d-grid gap-2">
+                        <Button secondary onClick={() => maxDeposit(true)}>
+                            Max
+                        </Button>
+                          </>
+                        )}
+                    </Box>
+                    </FormField>
+                </Form>
+                </Tab>
+              </Tabs>
+            </CardBody>
+            <CardFooter>
             <ApproveToken
               symbol={symbol}
               spender={addresses[name].liquidity}
@@ -324,19 +332,20 @@ const JoinPool: FC<Props> = ({
               token={contracts[name].tenderToken}
               hasAllowance={!hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)}
             />
-            <Button block variant="primary" onClick={addLiquidity} disabled={useButtonDisabled()}>
+            <Button secondary onClick={addLiquidity} disabled={true}>
               {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
                 <>
-                  <Spinner animation="border" variant="white" />
+                  <Spinner color="white" />
                   Adding Liquidity...
                 </>
               ) : (
                 "Add Liquidity"
               )}
             </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
+            </CardFooter>
+          </Card>
+        </Layer>
+      }
     </>
   );
 };
