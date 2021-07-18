@@ -12,7 +12,7 @@ import Navbar from "./components/nav";
 const App: FC = () => {
   return (
     <Router>
-      <Grid height="100vh" rows={["xsmall", "1fr"]}>
+      <Grid height={{ min: "100vh" }} rows={["xsmall", "1fr"]}>
         <Navbar />
         <Grid rows={["1fr", "auto"]}>
           <Switch>
