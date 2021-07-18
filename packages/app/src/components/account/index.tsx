@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
-import { Button } from "../base";
-import { Colors } from "../../global/styles";
+import { Button } from "grommet";
 import styled from "styled-components";
 
 import { AccountModal } from "./AccountModal";
@@ -53,7 +52,6 @@ const Account = styled.div`
 `;
 
 const LoginButton = styled(Button)`
-  background-color: ${Colors.Yellow[100]};
 `;
 
 const AccountLabel = styled(Button)`
@@ -61,6 +59,5 @@ const AccountLabel = styled(Button)`
   margin-right: -40px;
   padding-right: 40px;
   padding-left: 8px;
-  background-color: ${Colors.Yellow[100]};
   font-size: 12px;
 `;

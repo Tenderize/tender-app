@@ -1,10 +1,9 @@
 import { FC, useState } from "react";
-import { Text } from "rimble-ui";
 // import { useContractFunction } from "@usedapp/core";
-import { Spinner, Modal, Button } from "react-bootstrap";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Spinner, Text } from 'grommet'
 
 type Props = {
   name: string;
@@ -31,40 +30,45 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button secondary onClick={handleShow}>
         Harvest
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>{`Harvest ${symbol}`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Text className="balance">
-            Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
-          </Text>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+      {show &&
+        <Layer onEsc={() => setShow(false)}
+        onClickOutside={() => setShow(false)}>
+          <Card>
+            <CardHeader>
+            {`Harvest ${symbol}`}
+            </CardHeader>
+            <CardBody>
+              <Text className="balance">
+              Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
+              </Text>
+            </CardBody>
+            <CardFooter>
+            <Button primary onClick={handleClose}>
             Cancel
           </Button>
 
           <Button
-            variant="primary"
+            secondary
             disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
             onClick={harvestRewards}
           >
             {harvestTx.status === "Mining" ? (
-              <>
-                <Spinner animation="border" variant="white" />
+              <Box direction="row">
+                <Spinner color="white" />
                 Harvesting...
-              </>
+              </Box>
             ) : (
               "Harvest"
             )}
           </Button>
-        </Modal.Footer>
-      </Modal>
+            </CardFooter>
+          </Card>
+        </Layer>
+      }
     </>
   );
 };

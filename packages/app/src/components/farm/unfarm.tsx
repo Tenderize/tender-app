@@ -1,10 +1,9 @@
 import { FC, useState } from "react";
-import { Input } from "rimble-ui";
 // import { useContractFunction } from "@usedapp/core";
-import { Form, Spinner, Modal, Button } from "react-bootstrap";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Spinner, Text } from 'grommet'
 
 type Props = {
   name: string;
@@ -45,19 +44,20 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button secondary onClick={handleShow}>
         Unfarm
       </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>{`Unfarm ${symbol}`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      { show && 
+      <Layer onEsc={() => setShow(false)}
+          onClickOutside={() => setShow(false)}>
+        <Card>
+          <CardHeader>
+          {`Unfarm ${symbol}`}
+          </CardHeader>
+          <CardBody>
           <Form>
-            <Form.Group controlId="unfarmLpTokens">
-              <Form.Label>Unarm amount</Form.Label>
-              <Input
+            <FormField label="Unfarm Amount" controlId="unfarmLpTokens">
+              <TextInput
                 width={1}
                 value={unfarmInput}
                 onChange={handleUnfarmInputChange}
@@ -65,33 +65,35 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
                 placeholder={"0 " + symbol}
                 className="amount"
               />
-              <Form.Text className="balance" onClick={maxUnfarm}>
+              <Text className="balance" onClick={maxUnfarm}>
                 Current Stake {`${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
-              </Form.Text>
-            </Form.Group>
+              </Text>
+            </FormField>
           </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          </CardBody>
+          <CardFooter>
+          <Button primary onClick={handleClose}>
             Cancel
           </Button>
 
           <Button
-            variant="primary"
+            secondary
             disabled={!unfarmInput || unfarmInput.toString() === "0" || unfarmTx.status === "Mining"}
             onClick={unfarmLpTokens}
           >
             {unfarmTx.status === "Mining" ? (
-              <>
-                <Spinner animation="border" variant="white" />
+              <Box direction="row">
+                <Spinner  color="white" />
                 Unfarming...
-              </>
+              </Box>
             ) : (
               "Unfarm"
             )}
           </Button>
-        </Modal.Footer>
-      </Modal>
+          </CardFooter>
+        </Card>
+      </Layer>
+    }
     </>
   );
 };

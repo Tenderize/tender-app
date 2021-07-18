@@ -11,6 +11,7 @@ import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
+import Faucet from "../../components/faucet"
 
 const Token: FC = () => {
   const location = useLocation();
@@ -113,7 +114,7 @@ const Token: FC = () => {
             </Box>
           </Tab>
         </Tabs>
-        {/* <Faucet name={name} symbol={info.symbol} /> */}
+        <Faucet name={name} symbol={info.symbol} />
       </TenderBox>
     </Box>
   );

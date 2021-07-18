@@ -96,7 +96,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
         spotPrice={spotPrice ? spotPrice[0] : "0"}
       />
-      <JoinPool
+      {/* <JoinPool
         name={name}
         symbol={symbol}
         tokenBalance={tokenBalance}
@@ -120,7 +120,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
         lpShares={lpShares ? lpShares[0] : "0"}
         lpTokenBalance={lpTokenBalance}
-      />
+      /> */}
     </Box>
   );
 };
