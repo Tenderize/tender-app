@@ -43,6 +43,9 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
           <Tip
           plain
           dropProps={{
+            round: {
+              size: "20px"
+            },
             background: "rgba(0,0,0,0.4)",
             elevation: "none"
           }}
