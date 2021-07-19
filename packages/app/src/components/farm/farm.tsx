@@ -71,7 +71,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                 placeholder={"0 " + symbol}
                 className="amount"
               /> 
-                xz<Text className="balance" onClick={maxDeposit}>
+                <Text className="balance" onClick={maxDeposit}>
                 Current Balance {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
               </Text>
                 </FormField>
