@@ -78,6 +78,8 @@ const overrideDefaultTheme: ThemeType = {
   },
   tab: {
     border: undefined,
+    pad: "none",
+    margin: "none",
     active: {
       background: "rgba(0, 0, 0, 0.2)",
     },
@@ -91,26 +93,20 @@ const overrideDefaultTheme: ThemeType = {
   tabs: {
     panel: {
       extend: `
-      height: 100%;
       &:active {
-        rgba(0, 0, 0, 0.2) !important;
+        rgba(0, 0, 0, 0.2);
       }
       `,
     },
     header: {
-      border: undefined,
       extend: `
-        border-radius: 50px;
-        line-height: 0px !important;
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: stretch !important;
-        min-width: 100% !important;
+        overflow: hidden;
+        border-top-right-radius: 50px;
+        min-width: 100%;
         flex: 1 1 auto;
         align-items: stretch;
         & > * {
-          border-radius:50px !important;
-          min-width: 25% !important;
+          min-width: 25%;
         }
       `,
     },

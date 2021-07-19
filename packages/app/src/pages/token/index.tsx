@@ -11,7 +11,7 @@ import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
-import Faucet from "../../components/faucet"
+import Faucet from "../../components/faucet";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -43,11 +43,11 @@ const Token: FC = () => {
   return (
     <Box align="center" justify="center">
       <TenderBox
-          margin={{
-            top: "xlarge",
-          }}
-          width="xlarge"
-          height="large"
+        margin={{
+          top: "xlarge",
+        }}
+        width="large"
+        height="large"
       >
         <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
           <Tab
