@@ -174,10 +174,8 @@ const ExitPool: FC<Props> = ({
   const symbolFull = `t${symbol}-${symbol} Pool Token`;
 
   return (
-    <>
-      <Button primary onClick={handleShow}>
-        Exit Pool
-      </Button>
+    <Box pad={{ horizontal: "large", top: "small" }}>
+      <Button primary onClick={handleShow} label="Exit Pool" />
 
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
@@ -295,7 +293,7 @@ const ExitPool: FC<Props> = ({
           </Card>
         </Layer>
       )}
-    </>
+    </Box>
   );
 };
 

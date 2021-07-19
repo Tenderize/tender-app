@@ -16,13 +16,11 @@ const Faucet: FC<Props> = ({ symbol, name }) => {
     console.log(state.status);
   };
   return (
-    <Box>
+    <Box pad={{ horizontal: "large" }} gap="small">
       <Heading>{symbol} Faucet</Heading>
       <Text>{`Get some testnet ${symbol} and ETH (you need ETH to get LPT)`}</Text>
-      <Button primary onClick={requestTokens}>{`Get ${symbol}`}</Button>
-      <Link url="https://faucet.metamask.io/" target="_blank" rel="noreferrer">
-        Get ETH
-      </Link>
+      <Button primary onClick={requestTokens} label={`Get ${symbol}`} />
+      <Button primary href="https://faucet.metamask.io/" target="_blank" label="Get ETH" />
     </Box>
   );
 };

@@ -30,44 +30,47 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
 
   return (
     <Button
-      style={{ display: "flex", justifyContent: "space-between" }}
+      primary
+      fill="horizontal"
       onClick={handleApproval}
       disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
-      primary
-    >
-      {approveTx.status !== "None" && approveTx.status !== "Success" ? (
-        <Spinner color="white" />
-      ) : (
+      label={
         <>
-          Allow the Tenderize Protocol to use your {symbol}
-          <Tip
-            plain
-            dropProps={{
-              round: {
-                size: "20px",
-              },
-              background: "rgba(0,0,0,0.4)",
-              elevation: "none",
-            }}
-            content={
-              <Box width="medium" elevation="none" pad="medium">
-                <Text color="white">
-                  You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do this
-                  once per token.
-                </Text>
-              </Box>
-            }
-          >
-            <span
-              style={{ border: "1px solid white", borderRadius: "50%", paddingLeft: "5px", paddingRight: "5px" }}
-              className="ms-1"
-            >
-              &#8505;
-            </span>
-          </Tip>
+          {approveTx.status !== "None" && approveTx.status !== "Success" ? (
+            <Spinner color="white" />
+          ) : (
+            <>
+              Allow the Tenderize Protocol to use your {symbol}
+              <Tip
+                plain
+                dropProps={{
+                  round: {
+                    size: "20px",
+                  },
+                  background: "rgba(0,0,0,0.4)",
+                  elevation: "none",
+                }}
+                content={
+                  <Box width="medium" elevation="none" pad="medium">
+                    <Text color="white">
+                      You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do
+                      this once per token.
+                    </Text>
+                  </Box>
+                }
+              >
+                <span
+                  style={{ border: "1px solid white", borderRadius: "50%", paddingLeft: "5px", paddingRight: "5px" }}
+                  className="ms-1"
+                >
+                  &#8505;
+                </span>
+              </Tip>
+            </>
+          )}
         </>
-      )}
-    </Button>
+      }
+    />
   );
 };
 

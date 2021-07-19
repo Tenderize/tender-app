@@ -155,7 +155,7 @@ const Swap: FC<Props> = ({
             </Box>
           </FormField>
         </Box>
-        <Box direction="column" width="medium">
+        <Box direction="column" pad={{ horizontal: "large" }} gap="small">
           <ApproveToken
             symbol={tokenSendedSymbol}
             spender={addresses[protocolName].swap}
@@ -163,11 +163,11 @@ const Swap: FC<Props> = ({
             hasAllowance={isTokenApproved}
           />
           <Button
+            primary
             disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
             onClick={() => setShowConfirm(true)}
-          >
-            Trade
-          </Button>
+            label="Trade"
+          />
         </Box>
       </Form>
       <ConfirmSwapModal

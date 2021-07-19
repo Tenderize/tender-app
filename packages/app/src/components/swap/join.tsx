@@ -229,11 +229,8 @@ const JoinPool: FC<Props> = ({
   }, []);
 
   return (
-    <>
-      <Button primary onClick={handleShow}>
-        Join Pool
-      </Button>
-
+    <Box pad={{ horizontal: "large", top: "small" }}>
+      <Button primary onClick={handleShow} label="Join Pool" />
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card height="medium" width="large" background="light-1">
@@ -347,7 +344,7 @@ const JoinPool: FC<Props> = ({
           </Card>
         </Layer>
       )}
-    </>
+    </Box>
   );
 };
 

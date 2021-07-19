@@ -46,8 +46,8 @@ const Token: FC = () => {
         margin={{
           top: "xlarge",
         }}
+        pad={{ bottom: "xlarge" }}
         width="large"
-        height="large"
       >
         <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
           <Tab
