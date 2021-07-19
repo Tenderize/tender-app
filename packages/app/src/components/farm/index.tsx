@@ -55,7 +55,7 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
           <InfoCard title={"APY"} text={`10 %`} />
         </Box>
         <Box gridArea="2 / 1 / 3 / 2" pad={{ horizontal: "small" }}>
-          <InfoCard title={`Pool Balance`} text={`${utils.formatEther(lpTokenBalance?.toString() || "0")}`} />
+          <InfoCard title={`Pool Balance`} text={`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`} />
         </Box>
         <Box gridArea="2 / 2 / 3 / 3" pad={{ horizontal: "small" }}>
           <InfoCard title={"My stake"} text={`${utils.formatEther(stakeOf?.toString() || "0")} ${symbolFull}`} />

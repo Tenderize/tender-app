@@ -41,7 +41,7 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box align="center" justify="center">
+    <Box align="center" justify="start">
       <TenderBox
         margin={{
           top: "xlarge",
