@@ -36,7 +36,14 @@ const TenderBox: FC<BoxExtendedProps> = (props) => {
           width: "220px",
         }}
       />
-      {props.children}
+      <Box
+        height={props.height}
+        width={props.width}
+        fill
+        style={{ overflow: "hidden !important", borderRadius: "50px" }}
+      >
+        {props.children}
+      </Box>
     </BlurryBox>
   );
 };

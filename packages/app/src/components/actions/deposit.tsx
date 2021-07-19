@@ -2,10 +2,10 @@ import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
 import { FC, useState } from "react";
-import { Input } from "rimble-ui";
-import { Button, Form, Spinner, Card } from "react-bootstrap";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
+import InfoCard from "../tenderizers/infocard";
+import { Button, Box, Grid, Form, FormField, TextInput, Spinner, Text } from "grommet";
 
 type Props = {
   name: string;
@@ -40,45 +40,59 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
-    <Form>
-      <Form.Group controlId="formDeposit">
-        <Form.Label>Deposit Amount</Form.Label>
-        <Input
-          width={1}
-          value={depositInput}
-          onChange={handleInputChange}
-          type="text"
-          placeholder={"0 " + symbol}
-          className="amount"
-        />
-        <Form.Text className="balance" onClick={maxDeposit}>
-          Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-        </Form.Text>
-      </Form.Group>
-      <div className="d-grid gap-2">
-        <ApproveToken
-          symbol={symbol}
-          spender={addresses[name].controller}
-          token={contracts[name].token}
-          hasAllowance={isTokenApproved}
-        />
-        <Button
-          disabled={
-            !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
-          }
-          onClick={depositTokens}
-        >
-          {depositTx.status === "Mining" ? (
-            <>
-              <Spinner animation="border" variant="white" />
-              Depositing...
-            </>
-          ) : (
-            "Deposit"
-          )}
-        </Button>
-      </div>
-    </Form>
+    <>
+      <Grid fill rows={["1/2", "1/2"]}>
+        <Box flex fill="horizontal" direction="row" justify="center" pad="medium">
+          <InfoCard
+            title={`${symbol} Balance`}
+            text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+          />
+          <InfoCard title={"My Stake"} text={`0.00 tender${symbol}`} />
+          <InfoCard title={"My Rewards"} text={`0.00 tender${symbol}`} />
+        </Box>
+
+        <Box fill="horizontal" direction="row" justify="center" align="center" pad={{ horizontal: "xlarge" }}>
+          <Form>
+            <FormField label="Deposit Amount" controlId="formDeposit">
+              <TextInput
+                width={1}
+                value={depositInput}
+                onChange={handleInputChange}
+                type="text"
+                placeholder={"0 " + symbol}
+                className="amount"
+              />
+              <Text className="balance" onClick={maxDeposit}>
+                Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+              </Text>
+            </FormField>
+            <div className="d-grid gap-2">
+              <ApproveToken
+                symbol={symbol}
+                spender={addresses[name].controller}
+                token={contracts[name].token}
+                hasAllowance={isTokenApproved}
+              />
+              <Button
+                disabled={
+                  !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
+                }
+                onClick={depositTokens}
+              >
+                {depositTx.status === "Mining" ? (
+                  <Box direction="row">
+                    <Spinner color="white" />
+                    Depositing...
+                  </Box>
+                ) : (
+                  "Deposit"
+                )}
+              </Button>
+            </div>
+          </Form>
+        </Box>
+      </Grid>
+    </>
   );
 };
 

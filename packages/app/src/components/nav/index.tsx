@@ -1,4 +1,4 @@
-import { Header, Nav, Image, Box } from "grommet";
+import { Header, Nav, Image, Box, Text } from "grommet";
 import { FC, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
@@ -31,13 +31,21 @@ const Navbar: FC = () => {
     <Box>
       <TestnetBanner />
       {location.pathname !== "/" && (
-        <Header pad="xxsmall" justify="around" height="xxsmall">
+        <Header justify="around" pad="xsmall">
           <Link to="/">
             <Image width="150px" src={logo} />
           </Link>
-          <Nav direction="row">
-            <AccountButton />
-          </Nav>
+          <Box direction="row" align="center" gap="medium">
+            <Link to="/stakers/livepeer" style={{ textDecoration: "none" }}>
+              <Text color="white">App</Text>
+            </Link>
+            <Link to="/faucet" style={{ textDecoration: "none" }}>
+              <Text color="white">Faucet</Text>
+            </Link>
+            <Nav direction="row">
+              <AccountButton />
+            </Nav>
+          </Box>
         </Header>
       )}
     </Box>

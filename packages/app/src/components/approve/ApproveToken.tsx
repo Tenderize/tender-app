@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler } from "react";
-import { Button, Container, Tooltip, OverlayTrigger, Spinner } from "react-bootstrap";
 import { BigNumberish, constants, Contract } from "ethers";
 import { useContractFunction } from "@usedapp/core";
+import { Box, Button, Tip, Spinner, Text } from "grommet";
 
 type Props = {
   symbol: string;
@@ -16,7 +16,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
     transactionName: `Approve ${symbol}`,
   });
 
-  const handleApproval: MouseEventHandler<HTMLDivElement> = async (e) => {
+  const handleApproval: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
 
     if (!hasAllowance) {
@@ -30,41 +30,47 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
 
   return (
     <Button
-      style={{ display: "flex", justifyContent: "space-between" }}
+      secondary
+      fill="horizontal"
       onClick={handleApproval}
       disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
-      variant={"primary"}
-    >
-      {approveTx.status !== "None" && approveTx.status !== "Success" ? (
-        <Container className="align-items-center">
-          <Spinner size="sm" animation="border" variant="light" />
-        </Container>
-      ) : (
+      label={
         <>
-          Allow the Tenderize Protocol to use your {symbol}
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id="button-tooltip-2">
-                You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do this
-                once per token.
-              </Tooltip>
-            }
-          >
-            {({ ref, ...triggerHandler }) => (
-              <span
-                style={{ border: "1px solid white", borderRadius: "50%", paddingLeft: "5px", paddingRight: "5px" }}
-                ref={ref}
-                {...triggerHandler}
-                className="ms-1"
+          {approveTx.status !== "None" && approveTx.status !== "Success" ? (
+            <Spinner color="white" />
+          ) : (
+            <>
+              Allow the Tenderize Protocol to use your {symbol}
+              <Tip
+                plain
+                dropProps={{
+                  round: {
+                    size: "20px",
+                  },
+                  background: "rgba(0,0,0,0.4)",
+                  elevation: "none",
+                }}
+                content={
+                  <Box width="medium" elevation="none" pad="medium">
+                    <Text color="white">
+                      You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do
+                      this once per token.
+                    </Text>
+                  </Box>
+                }
               >
-                &#8505;
-              </span>
-            )}
-          </OverlayTrigger>
+                <span
+                  style={{ border: "1px solid white", borderRadius: "50%", paddingLeft: "5px", paddingRight: "5px" }}
+                  className="ms-1"
+                >
+                  &#8505;
+                </span>
+              </Tip>
+            </>
+          )}
         </>
-      )}
-    </Button>
+      }
+    />
   );
 };
 

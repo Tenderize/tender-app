@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from "react";
 import { Box, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
-import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
+import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
 import { useLocation } from "react-router-dom";
 import { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
@@ -11,6 +11,7 @@ import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
+import Faucet from "../faucet";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -40,13 +41,13 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box align="center" justify="center">
+    <Box align="center" justify="start">
       <TenderBox
         margin={{
           top: "xlarge",
         }}
         pad={{ bottom: "xlarge" }}
-        width="large"
+        width="xlarge"
       >
         <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
           <Tab
@@ -113,7 +114,6 @@ const Token: FC = () => {
             </Box>
           </Tab>
         </Tabs>
-        {/* <Faucet name={name} symbol={info.symbol} /> */}
       </TenderBox>
     </Box>
   );

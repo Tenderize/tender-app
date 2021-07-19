@@ -1,9 +1,25 @@
-import { FC, useState } from "react";
-import { Form, Button, Modal, Tabs, Tab, InputGroup, Dropdown, DropdownButton, Spinner } from "react-bootstrap";
+import { FC, useState, useCallback } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Form,
+  FormField,
+  TextInput,
+  Spinner,
+  Text,
+  Select,
+  Tabs,
+  Tab,
+} from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
@@ -34,6 +50,7 @@ const ExitPool: FC<Props> = ({
 }) => {
   // Component state & helpers
   const [show, setShow] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -52,9 +69,6 @@ const ExitPool: FC<Props> = ({
   };
 
   const [selectToken, setSelectToken] = useState(symbol);
-  const handleSelectToken = (e: any) => {
-    setSelectToken(e.target.value);
-  };
 
   const maxDeposit = () => {
     setLpSharesInput(utils.formatEther(lpTokenBalance || "0"));
@@ -67,7 +81,8 @@ const ExitPool: FC<Props> = ({
   };
 
   const useButtonDisabled = () => {
-    return !hasValue(lpSharesInput) || !isLpSharesApproved;
+    if (!hasValue(lpSharesInput)) return true;
+    if (!isLpSharesApproved) return true;
   };
 
   const useCalcSingleOutGivenPoolIn = () => {
@@ -147,130 +162,138 @@ const ExitPool: FC<Props> = ({
     }
   };
 
+  const onActive = useCallback((nextIndex: number) => {
+    setTabIndex(nextIndex);
+    if (nextIndex === 0) {
+      setIsMulti(true);
+    } else {
+      setIsMulti(false);
+    }
+  }, []);
+
   const symbolFull = `t${symbol}-${symbol} Pool Token`;
 
   return (
-    <>
-      <Button variant="warning" onClick={handleShow}>
-        Exit Pool
-      </Button>
+    <Box pad={{ horizontal: "large", top: "small" }}>
+      <Button primary onClick={handleShow} label="Exit Pool" />
 
-      <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>{`Exit tender${symbol}/${symbol} pool`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Tabs onSelect={handleMulti} defaultActiveKey="multi" id="jointabs">
-            <Tab eventKey="multi" title="Multi-Asset">
-              <Form>
-                <Form.Group className="d-grid gap-2" controlId="tokenInput">
-                  <Form.Label>LP Tokens to remove</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      value={lpSharesInput}
-                      onChange={handleLpSharesInputChange}
-                      type="text"
-                      placeholder={"0 " + symbolFull}
-                      className="amount"
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputGroup.Text className="balance" onClick={() => maxDeposit()}>
-                      Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-                <Form.Group className="d-grid gap-2">
-                  <Form.Label>You Will Receive</Form.Label>
-                  <InputGroup>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>{symbol}</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      disabled
-                      id="exitMultiReceive"
-                      placeholder={"0"}
-                      value={utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>{`t${symbol}`}</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      disabled
-                      id="exitMultiReceive"
-                      placeholder={"0"}
-                      value={utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Form>
-            </Tab>
-            <Tab eventKey="single" title="Single-Asset">
-              <Form className="d-grid gap-2">
-                <Form.Group className="gap-2" controlId="singleinput">
-                  <Form.Label>I want to receive:</Form.Label>
-                  <select onChange={handleSelectToken} className="form-control">
-                    <option value={symbol} selected>
-                      {symbol}
-                    </option>
-                    <option value={`t${symbol}`}>t{symbol}</option>
-                  </select>
-                </Form.Group>
-                <Form.Group className="gap-2">
-                  <Form.Label>LP Tokens to remove</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      value={lpSharesInput}
-                      onChange={handleLpSharesInputChange}
-                      type="text"
-                      placeholder={"0 " + symbolFull}
-                      className="amount"
-                    />
-                    <InputGroup.Text className="balance" onClick={() => maxDeposit()}>
-                      Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-                <Form.Group className="gap-2">
-                  <Form.Label>You Will Receive</Form.Label>
-                  <InputGroup>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>{selectToken}</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      disabled
-                      id="exitMultiReceive"
-                      placeholder={"0"}
-                      value={utils.formatEther(useCalcSingleOutGivenPoolIn() || "0")}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Form>
-            </Tab>
-          </Tabs>
-          <div className="d-grid gap-2 mt-2">
-            <ApproveToken
-              symbol={symbolFull}
-              spender={addresses[name].liquidity}
-              token={contracts[name].liquidity}
-              hasAllowance={!hasValue(lpSharesInput) || isLpSharesApproved}
-            />
-            <Button block variant="primary" onClick={removeLiquidity} disabled={useButtonDisabled()}>
-              {exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
-                <>
-                  <Spinner animation="border" variant="white" />
-                  Removing Liquidity...
-                </>
-              ) : (
-                "Remove Liquidity"
-              )}
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
-    </>
+      {show && (
+        <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
+          <Card height="medium" width="large" background="light-1">
+            <CardHeader>{`Exit tender${symbol}/${symbol} pool`}</CardHeader>
+            <CardBody>
+              <Tabs id="exit-type" activeIndex={tabIndex} onActive={onActive}>
+                <Tab title={"Multi Asset"}>
+                  <Form>
+                    <FormField label="LP Tokens to remove">
+                      <Box direction="row" width="medium">
+                        <TextInput
+                          value={lpSharesInput}
+                          onChange={handleLpSharesInputChange}
+                          type="text"
+                          placeholder={"0 " + symbolFull}
+                          className="amount"
+                        />
+                        <Button secondary onClick={() => maxDeposit()}>
+                          Max
+                        </Button>
+                      </Box>
+                      <Text>
+                        Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
+                      </Text>
+                    </FormField>
+                    <FormField label="You will receive">
+                      <Box direction="row" width="medium">
+                        <Text>{symbol}</Text>
+                        <TextInput
+                          disabled
+                          readOnly
+                          id="exitMultiReceive"
+                          placeholder={"0"}
+                          value={utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")}
+                        />
+                      </Box>
+                      <Box direction="row" width="medium">
+                        <Text>{`t${symbol}`}</Text>
+                        <TextInput
+                          readOnly
+                          disabled
+                          id="exitMultiReceive"
+                          placeholder={"0"}
+                          value={utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")}
+                        />
+                      </Box>
+                    </FormField>
+                  </Form>
+                </Tab>
+                <Tab title={"Single Asset"}>
+                  <Form>
+                    <FormField label="LP Tokens to remove">
+                      <Box direction="row" width="medium">
+                        <TextInput
+                          value={lpSharesInput}
+                          onChange={handleLpSharesInputChange}
+                          type="text"
+                          placeholder={"0 " + symbolFull}
+                          className="amount"
+                        />
+                        <Button secondary onClick={() => maxDeposit()}>
+                          Max
+                        </Button>
+                      </Box>
+                      <Text>
+                        Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
+                      </Text>
+                    </FormField>
+                    <FormField label="Select Token To Receive" controlId="selectTokenReceive">
+                      <Box direction="row" width="medium">
+                        <Select
+                          value={selectToken}
+                          options={[symbol, `t${symbol}`]}
+                          onChange={({ option }) => setSelectToken(option)}
+                        />
+                      </Box>
+                    </FormField>
+                    <FormField label="You will receive">
+                      <Box direction="row" width="medium">
+                        <Text>{selectToken}</Text>
+                        <TextInput
+                          readOnly
+                          disabled
+                          id="exitMultiReceive"
+                          placeholder={"0"}
+                          value={utils.formatEther(singleOutPoolIn || "0")}
+                        />
+                      </Box>
+                    </FormField>
+                  </Form>
+                </Tab>
+              </Tabs>
+            </CardBody>
+            <CardFooter>
+              <Box direction="column" width="medium">
+                <ApproveToken
+                  symbol={symbolFull}
+                  spender={addresses[name].liquidity}
+                  token={contracts[name].liquidity}
+                  hasAllowance={!hasValue(lpSharesInput) || isLpSharesApproved}
+                />
+                <Button primary onClick={removeLiquidity} disabled={!hasValue(lpSharesInput) || !isLpSharesApproved}>
+                  {exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
+                    <Box direction="row" align="center">
+                      <Spinner color="white" />
+                      Removing Liquidity...
+                    </Box>
+                  ) : (
+                    "Remove Liquidity"
+                  )}
+                </Button>
+              </Box>
+            </CardFooter>
+          </Card>
+        </Layer>
+      )}
+    </Box>
   );
 };
 
