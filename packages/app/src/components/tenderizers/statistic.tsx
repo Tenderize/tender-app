@@ -8,7 +8,6 @@ const Symbol = styled(Text)`
   font-style: normal;
   font-weight: 300;
   font-size: 18px;
-  vertical-align: bottom;
   color: #ffffff;
 `;
 
@@ -17,7 +16,6 @@ const Stat = styled(Text)`
   font-style: normal;
   font-weight: bold;
   font-size: 56px;
-  vertical-align: bottom;
   color: #ffffff;
 `;
 
@@ -27,7 +25,6 @@ const Decimals = styled(Text)`
   font-weight: bold;
   font-size: 16px;
   color: #ffffff;
-  vertical-align: bottom;
 `;
 
 const Statistic: FC<TextExtendedProps> = (props) => {
@@ -37,11 +34,11 @@ const Statistic: FC<TextExtendedProps> = (props) => {
   const int = floatString[0];
   const dec = floatString.length > 1 ? `.${floatString[1].slice(0, 3)}` : "";
   return (
-    <Box flex direction="row" align="start" justify="start" gap="xxsmall">
+    <Text textAlign="end">
       <Stat>{int}</Stat>
       <Decimals>{dec}</Decimals>
-      <Symbol>{symbol}</Symbol>
-    </Box>
+      <Symbol>{` ${symbol}`}</Symbol>
+    </Text>
   );
 };
 

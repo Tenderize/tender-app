@@ -30,10 +30,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
 
   return (
     <>
-      <Button secondary onClick={handleShow}>
-        Harvest
-      </Button>
-
+      <Button fill="horizontal" secondary onClick={handleShow} label="Harvest" />
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
