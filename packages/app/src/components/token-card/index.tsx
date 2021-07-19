@@ -1,8 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import classNames from "classnames";
 import styled from "styled-components";
-import { Avatar, Button, Box, Card, CardBody, CardHeader } from "grommet";
+import { Avatar, Card, CardBody, CardHeader } from "grommet";
 
 type Props = {
   url: string;

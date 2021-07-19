@@ -43,11 +43,11 @@ const Token: FC = () => {
   return (
     <Box align="center" justify="center">
       <TenderBox
-        margin={{
-          top: "xlarge",
-        }}
-        pad={{ bottom: "xlarge" }}
-        width="large"
+          margin={{
+            top: "xlarge",
+          }}
+          width="xlarge"
+          height="large"
       >
         <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
           <Tab
