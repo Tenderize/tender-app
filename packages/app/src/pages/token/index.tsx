@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from "react";
 import { Box, Tabs, Tab, Text, Paragraph, Avatar } from "grommet";
-import { Currency, Grow, PhoneHorizontal, Previous } from "grommet-icons";
+import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
 import { useLocation } from "react-router-dom";
 import { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";

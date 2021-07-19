@@ -228,7 +228,6 @@ const JoinPool: FC<Props> = ({
             <CardBody>
               <Tabs id="join-type" activeIndex={tabIndex} onActive={onActive}>
                 <Tab
-                plain
                 title={
                   "Multi Asset"
                 }
@@ -253,7 +252,7 @@ const JoinPool: FC<Props> = ({
                       </Button>
                     </Box>
                     </FormField>
-                    <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                    <FormField label={`t${symbol} Amount`} controlId="tenderInput">
                     <Box direction="row" width="medium">
                         <Text>
                           {`${utils
@@ -275,7 +274,6 @@ const JoinPool: FC<Props> = ({
                 </Form>
                 </Tab>
                 <Tab
-                  plain
                   title={"Single Asset"}
                 >
                    <Form>
@@ -320,28 +318,30 @@ const JoinPool: FC<Props> = ({
               </Tabs>
             </CardBody>
             <CardFooter>
-            <ApproveToken
-              symbol={symbol}
-              spender={addresses[name].liquidity}
-              token={contracts[name].token}
-              hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
-            />
-            <ApproveToken
-              symbol={`t${symbol}`}
-              spender={addresses[name].liquidity}
-              token={contracts[name].tenderToken}
-              hasAllowance={!hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)}
-            />
-            <Button secondary onClick={addLiquidity} disabled={true}>
-              {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
-                <>
-                  <Spinner color="white" />
-                  Adding Liquidity...
-                </>
-              ) : (
-                "Add Liquidity"
-              )}
-            </Button>
+              <Box direction="column" width="medium">
+                <ApproveToken
+                symbol={symbol}
+                spender={addresses[name].liquidity}
+                token={contracts[name].token}
+                hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
+              />
+              <ApproveToken
+                symbol={`t${symbol}`}
+                spender={addresses[name].liquidity}
+                token={contracts[name].tenderToken}
+                hasAllowance={!hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)}
+              />
+              <Button secondary onClick={addLiquidity} disabled={true}>
+                {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
+                  <>
+                    <Spinner color="white" />
+                    Adding Liquidity...
+                  </>
+                ) : (
+                  "Add Liquidity"
+                )}
+              </Button>
+              </Box>
             </CardFooter>
           </Card>
         </Layer>
