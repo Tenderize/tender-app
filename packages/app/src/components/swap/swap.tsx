@@ -1,5 +1,21 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Spinner, Text, Select, Tabs, Tab } from 'grommet'
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Form,
+  FormField,
+  TextInput,
+  Spinner,
+  Text,
+  Select,
+  Tabs,
+  Tab,
+} from "grommet";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
@@ -97,7 +113,10 @@ const Swap: FC<Props> = ({
     <Box>
       <Form>
         <Box direction="row" align="center" justify="around">
-          <FormField label={`Send ${tokenSendedSymbol}`} validate={{function: () => isSendInputInvalid, message: "Please provide an available amount"}}>
+          <FormField
+            label={`Send ${tokenSendedSymbol}`}
+            validate={{ function: () => isSendInputInvalid, message: "Please provide an available amount" }}
+          >
             <Box direction="row" width="medium">
               <TextInput
                 id="formSwapSend"
@@ -114,11 +133,20 @@ const Swap: FC<Props> = ({
               </Button>
             </Box>
           </FormField>
-          <Button color="none" icon={<Transaction color="white" />} onClick={() => setIsSendingToken(!isSendingToken)} />
+          <Button
+            color="none"
+            icon={<Transaction color="white" />}
+            onClick={() => setIsSendingToken(!isSendingToken)}
+          />
           <FormField label={`Receive ${tokenReceivedSymbol}`} readOnly>
             <Box direction="row" width="medium">
-            <Text>{tokenReceivedSymbol}</Text>
-            <TextInput readOnly id="formSwapReceive" placeholder={"0"} value={utils.formatEther(calcOutGivenIn || "0")} />
+              <Text>{tokenReceivedSymbol}</Text>
+              <TextInput
+                readOnly
+                id="formSwapReceive"
+                placeholder={"0"}
+                value={utils.formatEther(calcOutGivenIn || "0")}
+              />
             </Box>
           </FormField>
         </Box>

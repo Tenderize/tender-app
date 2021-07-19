@@ -5,7 +5,20 @@ import { BigNumber, BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Spinner, Text } from 'grommet'
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Form,
+  FormField,
+  TextInput,
+  Spinner,
+  Text,
+} from "grommet";
 
 type Props = {
   name: string;
@@ -52,56 +65,52 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
         Farm
       </Button>
 
-      {
-        show &&
-        <Layer onEsc={() => setShow(false)}
-        onClickOutside={() => setShow(false)}>
+      {show && (
+        <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
-            <CardHeader>
-              {`Farm ${symbol}`}
-            </CardHeader>
+            <CardHeader>{`Farm ${symbol}`}</CardHeader>
             <CardBody>
               <Form>
                 <FormField>
-                <TextInput
-                width={1}
-                value={farmInput}
-                onChange={handleFarmInputChange}
-                type="text"
-                placeholder={"0 " + symbol}
-                className="amount"
-              /> 
-                <Text className="balance" onClick={maxDeposit}>
-                Current Balance {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-              </Text>
+                  <TextInput
+                    width={1}
+                    value={farmInput}
+                    onChange={handleFarmInputChange}
+                    type="text"
+                    placeholder={"0 " + symbol}
+                    className="amount"
+                  />
+                  <Text className="balance" onClick={maxDeposit}>
+                    Current Balance {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                  </Text>
                 </FormField>
               </Form>
             </CardBody>
             <CardFooter>
-            <ApproveToken
-              symbol={symbol}
-              spender={addresses[name].farm}
-              token={contracts[name].liquidity}
-              hasAllowance={isTokenapproved}
-            />
-            <Button
-              secondary
-              disabled={!isTokenapproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
-              onClick={farmLpTokens}
-            >
-              {farmTx.status === "Mining" ? (
-                <Box direction="row">
-                  <Spinner color="white" />
-                  Farming...
-                </Box>
-              ) : (
-                "Farm"
-              )}
-            </Button>
+              <ApproveToken
+                symbol={symbol}
+                spender={addresses[name].farm}
+                token={contracts[name].liquidity}
+                hasAllowance={isTokenapproved}
+              />
+              <Button
+                secondary
+                disabled={!isTokenapproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
+                onClick={farmLpTokens}
+              >
+                {farmTx.status === "Mining" ? (
+                  <Box direction="row">
+                    <Spinner color="white" />
+                    Farming...
+                  </Box>
+                ) : (
+                  "Farm"
+                )}
+              </Button>
             </CardFooter>
           </Card>
         </Layer>
-      }
+      )}
     </>
   );
 };

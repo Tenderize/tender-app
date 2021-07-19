@@ -5,7 +5,7 @@ import { FC, useState } from "react";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import InfoCard from "../tenderizers/infocard";
-import { Button, Box, Grid, Form, FormField, TextInput, Spinner, Text } from 'grommet'
+import { Button, Box, Grid, Form, FormField, TextInput, Spinner, Text } from "grommet";
 
 type Props = {
   name: string;
@@ -41,23 +41,20 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
 
   return (
     <>
-    <Grid
-        fill
-        rows={["1/2", "1/2"]}
-      >
-          <Box flex fill="horizontal" direction="row" justify="center" pad="medium">
-            <InfoCard
-              title={`${symbol} Balance`}
-              text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-            />
-            <InfoCard title={"My Stake"} text={`0.00 tender${symbol}`} />
-            <InfoCard title={"My Rewards"} text={`0.00 tender${symbol}`} />
-          </Box>
+      <Grid fill rows={["1/2", "1/2"]}>
+        <Box flex fill="horizontal" direction="row" justify="center" pad="medium">
+          <InfoCard
+            title={`${symbol} Balance`}
+            text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+          />
+          <InfoCard title={"My Stake"} text={`0.00 tender${symbol}`} />
+          <InfoCard title={"My Rewards"} text={`0.00 tender${symbol}`} />
+        </Box>
 
-          <Box fill="horizontal" direction="row"justify="center" align="center" pad={{horizontal: "xlarge"}}>
+        <Box fill="horizontal" direction="row" justify="center" align="center" pad={{ horizontal: "xlarge" }}>
           <Form>
             <FormField label="Deposit Amount" controlId="formDeposit">
-            <TextInput
+              <TextInput
                 width={1}
                 value={depositInput}
                 onChange={handleInputChange}
@@ -65,10 +62,10 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                 placeholder={"0 " + symbol}
                 className="amount"
               />
-                            <Text className="balance" onClick={maxDeposit}>
+              <Text className="balance" onClick={maxDeposit}>
                 Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
               </Text>
-              </FormField>
+            </FormField>
             <div className="d-grid gap-2">
               <ApproveToken
                 symbol={symbol}
@@ -93,11 +90,9 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
               </Button>
             </div>
           </Form>
-          </Box>
-
+        </Box>
       </Grid>
-  </>
-    
+    </>
   );
 };
 

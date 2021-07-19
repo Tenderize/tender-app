@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Spinner, Text } from 'grommet'
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Spinner, Text } from "grommet";
 
 type Props = {
   name: string;
@@ -34,41 +34,38 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         Harvest
       </Button>
 
-      {show &&
-        <Layer onEsc={() => setShow(false)}
-        onClickOutside={() => setShow(false)}>
+      {show && (
+        <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
-            <CardHeader>
-            {`Harvest ${symbol}`}
-            </CardHeader>
+            <CardHeader>{`Harvest ${symbol}`}</CardHeader>
             <CardBody>
               <Text className="balance">
-              Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
+                Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
               </Text>
             </CardBody>
             <CardFooter>
-            <Button primary onClick={handleClose}>
-            Cancel
-          </Button>
+              <Button primary onClick={handleClose}>
+                Cancel
+              </Button>
 
-          <Button
-            secondary
-            disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
-            onClick={harvestRewards}
-          >
-            {harvestTx.status === "Mining" ? (
-              <Box direction="row">
-                <Spinner color="white" />
-                Harvesting...
-              </Box>
-            ) : (
-              "Harvest"
-            )}
-          </Button>
+              <Button
+                secondary
+                disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
+                onClick={harvestRewards}
+              >
+                {harvestTx.status === "Mining" ? (
+                  <Box direction="row">
+                    <Spinner color="white" />
+                    Harvesting...
+                  </Box>
+                ) : (
+                  "Harvest"
+                )}
+              </Button>
             </CardFooter>
           </Card>
         </Layer>
-      }
+      )}
     </>
   );
 };

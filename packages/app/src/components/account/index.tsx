@@ -51,8 +51,7 @@ const Account = styled.div`
   align-items: center;
 `;
 
-const LoginButton = styled(Button)`
-`;
+const LoginButton = styled(Button)``;
 
 const AccountLabel = styled(Button)`
   height: 32px;

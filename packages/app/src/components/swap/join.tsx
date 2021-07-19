@@ -3,7 +3,23 @@ import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Spinner, Text, Select, Tabs, Tab } from 'grommet'
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Form,
+  FormField,
+  TextInput,
+  Spinner,
+  Text,
+  Select,
+  Tabs,
+  Tab,
+} from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
@@ -204,11 +220,11 @@ const JoinPool: FC<Props> = ({
   };
 
   const onActive = useCallback((nextIndex: number) => {
-    setTabIndex(nextIndex)
+    setTabIndex(nextIndex);
     if (nextIndex === 0) {
-      setIsMulti(true)
+      setIsMulti(true);
     } else {
-      setIsMulti(false)
+      setIsMulti(false);
     }
   }, []);
 
@@ -218,88 +234,33 @@ const JoinPool: FC<Props> = ({
         Join Pool
       </Button>
 
-      {show && 
-        <Layer onEsc={() => setShow(false)}
-        onClickOutside={() => setShow(false)}>
+      {show && (
+        <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card height="medium" width="large" background="light-1">
-            <CardHeader>
-            {`Join tender${symbol}/${symbol}`}
-            </CardHeader>
+            <CardHeader>{`Join tender${symbol}/${symbol}`}</CardHeader>
             <CardBody>
               <Tabs id="join-type" activeIndex={tabIndex} onActive={onActive}>
-                <Tab
-                title={
-                  "Multi Asset"
-                }
-                >
+                <Tab title={"Multi Asset"}>
                   <Form>
-                  <FormField label={`${symbol} Amount`} controlId="tokenInput">
-                    <Box direction="row" width="medium">
-                        <Text>
-                          {`${utils
-                            .formatEther(calcWeight(tokenWeight))
-                            .substr(0, 5)} %`}
-                        </Text>
+                    <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                      <Box direction="row" width="medium">
+                        <Text>{`${utils.formatEther(calcWeight(tokenWeight)).substr(0, 5)} %`}</Text>
                         <TextInput
-                        value={tokenInput}
-                        onChange={handleTokenInputChange}
-                        type="text"
-                        placeholder={"0 " + symbol}
-                        className="amount"
-                      />
-                      <Button secondary onClick={() => maxDeposit(false)}>
+                          value={tokenInput}
+                          onChange={handleTokenInputChange}
+                          type="text"
+                          placeholder={"0 " + symbol}
+                          className="amount"
+                        />
+                        <Button secondary onClick={() => maxDeposit(false)}>
                           Max
-                      </Button>
-                    </Box>
+                        </Button>
+                      </Box>
                     </FormField>
                     <FormField label={`t${symbol} Amount`} controlId="tenderInput">
-                    <Box direction="row" width="medium">
-                        <Text>
-                          {`${utils
-                            .formatEther(calcWeight(tenderTokenWeight))
-                            .substr(0, 5)} %`}
-                        </Text>
+                      <Box direction="row" width="medium">
+                        <Text>{`${utils.formatEther(calcWeight(tenderTokenWeight)).substr(0, 5)} %`}</Text>
                         <TextInput
-                        value={tenderInput}
-                        onChange={handleTenderInputChange}
-                        type="text"
-                        placeholder={"0 " + "t" + symbol}
-                        className="amount"
-                      />
-                      <Button secondary onClick={() => maxDeposit(true)}>
-                          Max
-                      </Button>
-                    </Box>
-                    </FormField>
-                </Form>
-                </Tab>
-                <Tab
-                  title={"Single Asset"}
-                >
-                   <Form>
-                <FormField label={`${symbol} Amount`} controlId="tokenInput">
-                    <Box direction="row" width="medium">
-                    <Select
-                          value={selectToken}
-                          options={[symbol, `t${symbol}`]}
-                          onChange={({option}) => handleSelectToken(option)}
-                        />
-                        {selectToken === symbol ? (
-                          <>
-                            <TextInput
-                            value={tokenInput}
-                            onChange={handleTokenInputChange}
-                            type="text"
-                            placeholder={"0 " + symbol}
-                            className="amount"
-                          />
-                          <Button secondary onClick={() => maxDeposit(false)}>
-                              Max
-                          </Button>
-                          </>
-                        ) : (
-                          <>
-                          <TextInput
                           value={tenderInput}
                           onChange={handleTenderInputChange}
                           type="text"
@@ -307,45 +268,85 @@ const JoinPool: FC<Props> = ({
                           className="amount"
                         />
                         <Button secondary onClick={() => maxDeposit(true)}>
-                            Max
+                          Max
                         </Button>
+                      </Box>
+                    </FormField>
+                  </Form>
+                </Tab>
+                <Tab title={"Single Asset"}>
+                  <Form>
+                    <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                      <Box direction="row" width="medium">
+                        <Select
+                          value={selectToken}
+                          options={[symbol, `t${symbol}`]}
+                          onChange={({ option }) => handleSelectToken(option)}
+                        />
+                        {selectToken === symbol ? (
+                          <>
+                            <TextInput
+                              value={tokenInput}
+                              onChange={handleTokenInputChange}
+                              type="text"
+                              placeholder={"0 " + symbol}
+                              className="amount"
+                            />
+                            <Button secondary onClick={() => maxDeposit(false)}>
+                              Max
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <TextInput
+                              value={tenderInput}
+                              onChange={handleTenderInputChange}
+                              type="text"
+                              placeholder={"0 " + "t" + symbol}
+                              className="amount"
+                            />
+                            <Button secondary onClick={() => maxDeposit(true)}>
+                              Max
+                            </Button>
                           </>
                         )}
-                    </Box>
+                      </Box>
                     </FormField>
-                </Form>
+                  </Form>
                 </Tab>
               </Tabs>
             </CardBody>
             <CardFooter>
               <Box direction="column" width="medium">
                 <ApproveToken
-                symbol={symbol}
-                spender={addresses[name].liquidity}
-                token={contracts[name].token}
-                hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
-              />
-              <ApproveToken
-                symbol={`t${symbol}`}
-                spender={addresses[name].liquidity}
-                token={contracts[name].tenderToken}
-                hasAllowance={!hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)}
-              />
-              <Button secondary onClick={addLiquidity} disabled={true}>
-                {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
-                  <>
-                    <Spinner color="white" />
-                    Adding Liquidity...
-                  </>
-                ) : (
-                  "Add Liquidity"
-                )}
-              </Button>
+                  symbol={symbol}
+                  spender={addresses[name].liquidity}
+                  token={contracts[name].token}
+                  hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
+                />
+                <ApproveToken
+                  symbol={`t${symbol}`}
+                  spender={addresses[name].liquidity}
+                  token={contracts[name].tenderToken}
+                  hasAllowance={
+                    !hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)
+                  }
+                />
+                <Button secondary onClick={addLiquidity} disabled={true}>
+                  {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
+                    <>
+                      <Spinner color="white" />
+                      Adding Liquidity...
+                    </>
+                  ) : (
+                    "Add Liquidity"
+                  )}
+                </Button>
               </Box>
             </CardFooter>
           </Card>
         </Layer>
-      }
+      )}
     </>
   );
 };

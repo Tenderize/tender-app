@@ -16,15 +16,15 @@ const overrideDefaultTheme: ThemeType = {
       color: "#FFFFFF",
       border: {
         color: "rgba(255,255,255,0)",
-        width: "1px"
-      }
+        width: "1px",
+      },
     },
     primary: {
       background: "white",
       color: "#4E66DE",
       border: {
         color: "rgba(255,255,255,0)",
-        width: "1px"
+        width: "1px",
       },
     },
     secondary: {
@@ -32,8 +32,8 @@ const overrideDefaultTheme: ThemeType = {
       color: "#FFFFFF",
       border: {
         color: "rgba(255,255,255,0)",
-        width: "1px"
-      }    
+        width: "1px",
+      },
     },
     hover: {
       default: {
@@ -41,25 +41,25 @@ const overrideDefaultTheme: ThemeType = {
         color: "#4E66DE",
         border: {
           color: "4E66DE",
-          width: "1px"
-        }
+          width: "1px",
+        },
       },
       primary: {
         background: "#4E66DE",
         color: "white",
         border: {
           width: "1px",
-          color: "white"
-        }
+          color: "white",
+        },
       },
       secondary: {
         background: "white",
         color: "#4E66DE",
         border: {
           color: "4E66DE",
-          width: "1px"
-        }
-      }
+          width: "1px",
+        },
+      },
     },
     // secondary: {
     //   extend: `
@@ -86,16 +86,16 @@ const overrideDefaultTheme: ThemeType = {
     },
     background: {
       color: "rgba(0, 0, 0, 0.0)",
-    }
+    },
   },
   tabs: {
     panel: {
-      extend:`
+      extend: `
       height: 100%;
       &:active {
         rgba(0, 0, 0, 0.2) !important;
       }
-      `
+      `,
     },
     header: {
       border: undefined,
@@ -112,8 +112,8 @@ const overrideDefaultTheme: ThemeType = {
           border-radius:50px !important;
           min-width: 25% !important;
         }
-      `
-    }
-  }
+      `,
+    },
+  },
 };
 export const theme = deepMerge(grommet, overrideDefaultTheme);

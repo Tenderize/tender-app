@@ -3,7 +3,20 @@ import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Spinner, Text } from 'grommet'
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Form,
+  FormField,
+  TextInput,
+  Spinner,
+  Text,
+} from "grommet";
 
 type Props = {
   name: string;
@@ -47,53 +60,50 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
       <Button secondary onClick={handleShow}>
         Unfarm
       </Button>
-      { show && 
-      <Layer onEsc={() => setShow(false)}
-          onClickOutside={() => setShow(false)}>
-        <Card>
-          <CardHeader>
-          {`Unfarm ${symbol}`}
-          </CardHeader>
-          <CardBody>
-          <Form>
-            <FormField label="Unfarm Amount" controlId="unfarmLpTokens">
-              <TextInput
-                width={1}
-                value={unfarmInput}
-                onChange={handleUnfarmInputChange}
-                type="text"
-                placeholder={"0 " + symbol}
-                className="amount"
-              />
-              <Text className="balance" onClick={maxUnfarm}>
-                Current Stake {`${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
-              </Text>
-            </FormField>
-          </Form>
-          </CardBody>
-          <CardFooter>
-          <Button primary onClick={handleClose}>
-            Cancel
-          </Button>
+      {show && (
+        <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
+          <Card>
+            <CardHeader>{`Unfarm ${symbol}`}</CardHeader>
+            <CardBody>
+              <Form>
+                <FormField label="Unfarm Amount" controlId="unfarmLpTokens">
+                  <TextInput
+                    width={1}
+                    value={unfarmInput}
+                    onChange={handleUnfarmInputChange}
+                    type="text"
+                    placeholder={"0 " + symbol}
+                    className="amount"
+                  />
+                  <Text className="balance" onClick={maxUnfarm}>
+                    Current Stake {`${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
+                  </Text>
+                </FormField>
+              </Form>
+            </CardBody>
+            <CardFooter>
+              <Button primary onClick={handleClose}>
+                Cancel
+              </Button>
 
-          <Button
-            secondary
-            disabled={!unfarmInput || unfarmInput.toString() === "0" || unfarmTx.status === "Mining"}
-            onClick={unfarmLpTokens}
-          >
-            {unfarmTx.status === "Mining" ? (
-              <Box direction="row">
-                <Spinner  color="white" />
-                Unfarming...
-              </Box>
-            ) : (
-              "Unfarm"
-            )}
-          </Button>
-          </CardFooter>
-        </Card>
-      </Layer>
-    }
+              <Button
+                secondary
+                disabled={!unfarmInput || unfarmInput.toString() === "0" || unfarmTx.status === "Mining"}
+                onClick={unfarmLpTokens}
+              >
+                {unfarmTx.status === "Mining" ? (
+                  <Box direction="row">
+                    <Spinner color="white" />
+                    Unfarming...
+                  </Box>
+                ) : (
+                  "Unfarm"
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </Layer>
+      )}
     </>
   );
 };
