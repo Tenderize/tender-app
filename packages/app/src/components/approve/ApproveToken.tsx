@@ -30,7 +30,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
 
   return (
     <Button
-      primary
+      secondary
       fill="horizontal"
       onClick={handleApproval}
       disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
