@@ -1,9 +1,10 @@
 import { FC, MouseEventHandler, useEffect, useState } from "react";
-import { Card, Container, Form, FormControl, Modal, Button, InputGroup, Spinner } from "react-bootstrap";
 import { utils, BigNumberish, BigNumber } from "ethers";
 import { contracts } from "@tender/contracts";
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Spinner, Text, Heading, Select, Tabs, Tab } from 'grommet'
 
 import { useContractFunction } from "@usedapp/core";
+import InfoCard from "../tenderizers/infocard";
 
 type Props = {
   show: boolean;
@@ -60,79 +61,55 @@ const ConfirmSwapModal: FC<Props> = ({
   }, [swapTx]);
 
   return (
-    <Modal show={show} onHide={confirmStatus !== "Submitted" && onDismiss}>
-      <Modal.Header>
-        <Modal.Title>{"Confirm Swap"}</Modal.Title>
-      </Modal.Header>
-      {confirmStatus === "None" && (
-        <>
-          <Modal.Body>
-            <Form>
-              <Form.Label>From</Form.Label>
-              <Form.Group className="mb-3">
-                <InputGroup className="mb-2" hasValidation={true}>
-                  <InputGroup.Text>{tokenSendedSymbol}</InputGroup.Text>
-                  <Form.Control id="formSwapSend" type="number" value={sendTokenAmount} required={true} />
-                </InputGroup>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>To</Form.Label>
-                <InputGroup className="mb-2">
-                  <InputGroup.Text>{tokenReceivedSymbol}</InputGroup.Text>
-                  <FormControl
-                    id="formSwapReceive"
-                    placeholder={"0"}
-                    value={utils.formatEther(receiveTokenAmount || "0")}
-                  />
-                </InputGroup>
-              </Form.Group>
-              <Form.Group>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <Form.Label>Price</Form.Label>
-                  <Form.Label>
-                    1 {tokenSendedSymbol} = {utils.formatEther(tokenSpotPrice)} {tokenReceivedSymbol}
-                  </Form.Label>
-                </div>
-              </Form.Group>
+    <>
+    {show && 
+      <Layer onEsc={() => {confirmStatus !== "Submitted" && onDismiss()}}
+      onClickOutside={() => confirmStatus !== "Submitted" && onDismiss()}>
+        <Card height="medium" width="large" background="light-1">
+          <CardHeader>
+          {`Confirm Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}
+          </CardHeader>
+          <CardBody justify="center" align="center">
+            {confirmStatus === "None" && (
+              <>
+              <Form>
+              <Box justify="around" align="center">
+              <FormField label={`Send ${tokenSendedSymbol}`}>
+                <TextInput readOnly id="formSwapSend" type="number" value={sendTokenAmount} required={true} />
+              </FormField>
+              <FormField label={`Receive ${tokenReceivedSymbol}`}>
+              <TextInput
+                readOnly
+                id="formSwapReceive"
+                placeholder={"0"}
+                value={utils.formatEther(receiveTokenAmount || "0")}
+              />
+              </FormField>
+              </Box>
             </Form>
-          </Modal.Body>
-          <div className="d-grid p-3">
-            <Button
-              variant="primary"
-              onClick={(e) => {
-                handlePressTrade(e);
-                setConfirmStatus("Waiting");
-              }}
-            >
-              Confirm Swap
-            </Button>
-          </div>
-        </>
-      )}
-      {confirmStatus === "Waiting" && (
-        <>
-          <Container className="text-center align-items-center pt-3">
-            <Spinner animation="border" variant="primary" />
-            <Card.Body>
-              <Card.Title>Waiting For Confirmation</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">
+            <Box>
+              <InfoCard title="Price" text={utils.formatEther(tokenSpotPrice)} />
+            </Box>
+              </>
+            )}
+            {confirmStatus === "Waiting" && (
+          <Box justify="center" align="center">
+            <Spinner color="brand" />
+              <Heading>Waiting For Confirmation...</Heading>
+              <Text>
                 Swapping {sendTokenAmount} {tokenSendedSymbol} for {utils.formatEther(receiveTokenAmount || "0")}{" "}
                 {tokenReceivedSymbol}
-              </Card.Subtitle>
-              <Card.Text>Confirm this transaction in your wallet.</Card.Text>
-            </Card.Body>
-          </Container>
-        </>
+              </Text>
+              <Text>Confirm this transaction in your wallet.</Text>
+          </Box>
       )}
       {confirmStatus === "Submitted" && (
         <>
-          <Container className="text-center align-items-center pt-3">
-            <Card.Body>
-              <Card.Title>Transaction is being processed...</Card.Title>
-            </Card.Body>
+          <Box justify="center" align="center">
+              <Heading>Transaction is being processed...</Heading>
             <div className="d-grid p-3">
               <Button
-                variant="primary"
+                color="success"
                 disabled={swapTx.status !== "Success"}
                 onClick={() => {
                   if (swapTx.status === "Success") {
@@ -140,13 +117,28 @@ const ConfirmSwapModal: FC<Props> = ({
                   }
                 }}
               >
-                {swapTx.status === "Success" ? "Close" : <Spinner animation="border" />}
+                {swapTx.status === "Success" ? "Close" : <Spinner color="brand" />}
               </Button>
             </div>
-          </Container>
+          </Box>
         </>
       )}
-    </Modal>
+          </CardBody>
+          <CardFooter>
+          <Button
+              primary
+              onClick={(e) => {
+                handlePressTrade(e);
+                setConfirmStatus("Waiting");
+              }}
+            >
+              Confirm Swap
+            </Button>
+          </CardFooter>
+        </Card>
+      </Layer>
+    }
+    </>
   );
 };
 
