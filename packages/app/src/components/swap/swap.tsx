@@ -24,6 +24,7 @@ import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
+import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
   protocolName: string;
@@ -66,6 +67,7 @@ const Swap: FC<Props> = ({
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
+  const tokenReceivedBalance = isSendingToken ? tenderTokenBalance : tokenBalance;
   const tokenSendedLpBalance = isSendingToken ? tokenLpBalance : tenderLpBalance;
   const tokenSendedWeight = isSendingToken ? tokenWeight : tenderTokenWeight;
   const tokenSendedAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
@@ -112,12 +114,12 @@ const Swap: FC<Props> = ({
   return (
     <Box>
       <Form>
-        <Box direction="row" align="center" justify="around">
+        <Box align="center" justify="around">
           <FormField
             label={`Send ${tokenSendedSymbol}`}
             validate={{ function: () => isSendInputInvalid, message: "Please provide an available amount" }}
           >
-            <Box direction="row" width="medium">
+            <Box width="medium">
               <TextInput
                 id="formSwapSend"
                 type="number"
@@ -125,12 +127,15 @@ const Swap: FC<Props> = ({
                 onChange={handleSendTokenInput}
                 required={true}
               />
-              <Button
-                secondary
-                onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
-              >
-                Max
-              </Button>
+              <Box direction="row" gap="small">
+                <Text>{`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}</Text>
+                <Button
+                  plain
+                  onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
+                >
+                  <Text color="brand">(Max)</Text>
+                </Button>
+              </Box>
             </Box>
           </FormField>
           <Button
@@ -139,14 +144,14 @@ const Swap: FC<Props> = ({
             onClick={() => setIsSendingToken(!isSendingToken)}
           />
           <FormField label={`Receive ${tokenReceivedSymbol}`} readOnly>
-            <Box direction="row" width="medium">
-              <Text>{tokenReceivedSymbol}</Text>
+            <Box width="medium">
               <TextInput
                 readOnly
                 id="formSwapReceive"
                 placeholder={"0"}
                 value={utils.formatEther(calcOutGivenIn || "0")}
               />
+              <Text>{`Balance: ${weiToEthWithDecimals(tokenReceivedBalance, 4)} ${tokenReceivedSymbol}`}</Text>
             </Box>
           </FormField>
         </Box>

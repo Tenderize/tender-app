@@ -76,6 +76,9 @@ const overrideDefaultTheme: ThemeType = {
     //   }`
     // }
   },
+  formField: {
+    border: false,
+  },
   tab: {
     border: undefined,
     pad: "none",
