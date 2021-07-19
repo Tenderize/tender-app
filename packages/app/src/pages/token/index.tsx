@@ -11,7 +11,7 @@ import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
-import Faucet from "../../components/faucet";
+import Faucet from "../faucet";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -47,7 +47,7 @@ const Token: FC = () => {
           top: "xlarge",
         }}
         pad={{ bottom: "xlarge" }}
-        width="large"
+        width="xlarge"
       >
         <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
           <Tab
@@ -114,7 +114,6 @@ const Token: FC = () => {
             </Box>
           </Tab>
         </Tabs>
-        <Faucet name={name} symbol={info.symbol} />
       </TenderBox>
     </Box>
   );

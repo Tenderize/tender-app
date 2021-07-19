@@ -8,6 +8,7 @@ import Token from "./pages/token";
 import { NotificationsList } from "./components/transactions";
 import Foot from "./components/footer";
 import Navbar from "./components/nav";
+import Faucet from "./pages/faucet";
 
 const App: FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: FC = () => {
         <Grid rows={["1fr", "auto"]}>
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route path="/faucet" component={Faucet} />
             <Route path="/stakers/:id" component={Token} />
           </Switch>
           <Foot />
