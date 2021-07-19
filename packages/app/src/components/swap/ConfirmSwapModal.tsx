@@ -15,9 +15,6 @@ import {
   Spinner,
   Text,
   Heading,
-  Select,
-  Tabs,
-  Tab,
 } from "grommet";
 
 import { useContractFunction } from "@usedapp/core";
@@ -81,13 +78,17 @@ const ConfirmSwapModal: FC<Props> = ({
     <>
       {show && (
         <Layer
+          background="transparent"
           onEsc={() => {
             confirmStatus !== "Submitted" && onDismiss();
           }}
           onClickOutside={() => confirmStatus !== "Submitted" && onDismiss()}
         >
-          <Card height="medium" width="large" background="light-1">
-            <CardHeader>{`Confirm Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}</CardHeader>
+          <Card pad="medium" background="#262528">
+            <CardHeader
+              justify="center"
+              pad={{ bottom: "small" }}
+            >{`Confirm Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}</CardHeader>
             <CardBody justify="center" align="center">
               {confirmStatus === "None" && (
                 <>
@@ -114,7 +115,7 @@ const ConfirmSwapModal: FC<Props> = ({
               {confirmStatus === "Waiting" && (
                 <Box justify="center" align="center">
                   <Spinner color="brand" />
-                  <Heading>Waiting For Confirmation...</Heading>
+                  <Heading textAlign="center">Waiting For Confirmation...</Heading>
                   <Text>
                     Swapping {sendTokenAmount} {tokenSendedSymbol} for {utils.formatEther(receiveTokenAmount || "0")}{" "}
                     {tokenReceivedSymbol}
@@ -123,37 +124,36 @@ const ConfirmSwapModal: FC<Props> = ({
                 </Box>
               )}
               {confirmStatus === "Submitted" && (
-                <>
-                  <Box justify="center" align="center">
-                    <Heading>Transaction is being processed...</Heading>
-                    <div className="d-grid p-3">
-                      <Button
-                        color="success"
-                        disabled={swapTx.status !== "Success"}
-                        onClick={() => {
-                          if (swapTx.status === "Success") {
-                            onDismiss();
-                          }
-                        }}
-                      >
-                        {swapTx.status === "Success" ? "Close" : <Spinner color="brand" />}
-                      </Button>
-                    </div>
-                  </Box>
-                </>
+                <Box justify="center" align="center">
+                  <Heading textAlign="center">Transaction is being processed...</Heading>
+                  <div className="d-grid p-3">
+                    <Button
+                      color="success"
+                      disabled={swapTx.status !== "Success"}
+                      onClick={() => {
+                        if (swapTx.status === "Success") {
+                          onDismiss();
+                        }
+                      }}
+                    >
+                      {swapTx.status === "Success" ? "Close" : <Spinner color="brand" />}
+                    </Button>
+                  </div>
+                </Box>
               )}
             </CardBody>
-            <CardFooter>
-              <Button
-                primary
-                onClick={(e) => {
-                  handlePressTrade(e);
-                  setConfirmStatus("Waiting");
-                }}
-              >
-                Confirm Swap
-              </Button>
-            </CardFooter>
+            {confirmStatus === "None" && (
+              <CardFooter justify="center" pad={{ top: "small" }}>
+                <Button
+                  primary
+                  onClick={(e) => {
+                    handlePressTrade(e);
+                    setConfirmStatus("Waiting");
+                  }}
+                  label="Confirm Swap"
+                />
+              </CardFooter>
+            )}
           </Card>
         </Layer>
       )}
