@@ -146,6 +146,7 @@ const ConfirmSwapModal: FC<Props> = ({
               <CardFooter justify="center" pad={{ top: "small" }}>
                 <Button
                   primary
+                  color="brand"
                   onClick={(e) => {
                     handlePressTrade(e);
                     setConfirmStatus("Waiting");
