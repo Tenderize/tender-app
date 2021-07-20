@@ -11,7 +11,7 @@ import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
-import Faucet from "../faucet";
+import Navbar from "../../components/nav";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -41,7 +41,9 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box align="center" justify="start">
+    <>
+    <Navbar symbol={info.symbol} name={name} />
+    <Box align="center" alignSelf="start">
       <TenderBox
         margin={{
           top: "xlarge",
@@ -54,6 +56,10 @@ const Token: FC = () => {
             plain
             title={
               <Box
+                direction="row"
+                justify="center"
+                align="center"
+                gap="small"
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
@@ -62,6 +68,7 @@ const Token: FC = () => {
                   <Avatar size="medium" src={logo} />
                   <Text>{info.title}</Text>
                 </Box>
+                <FormDown color="white" />
               </Box>
             }
           />
@@ -116,6 +123,7 @@ const Token: FC = () => {
         </Tabs>
       </TenderBox>
     </Box>
+    </>
   );
 };
 

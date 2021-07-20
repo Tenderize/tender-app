@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { BorderRad, Colors, Gradients, Shadows, Sizes, Transitions, Fonts } from "../../global/styles";
 import { Title } from "../../typography";
+import {Button as GrommetButton} from 'grommet'
 
 export const Page = styled.div`
   display: flex;
@@ -100,4 +101,15 @@ export const Link = styled.a`
   &:focus-within {
     color: ${Colors.Yellow[500]};
   }
+`;
+
+export const Button = styled(GrommetButton)`
+  padding: 10px 20px;
+  border-radius:none;
+`;
+
+export const XLButton = styled(GrommetButton)`
+  width: 270px;
+  height: 70px;
+  margin-bottom: 50px;
 `;
