@@ -40,59 +40,64 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
-    <>
-      <Grid fill rows={["1/2", "1/2"]}>
-        <Box flex fill="horizontal" direction="row" justify="center" pad="medium">
-          <InfoCard
-            title={`${symbol} Balance`}
-            text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-          />
-          <InfoCard title={"My Stake"} text={`0.00 tender${symbol}`} />
-          <InfoCard title={"My Rewards"} text={`0.00 tender${symbol}`} />
-        </Box>
+    <Grid fill rows={["1/2", "1/2"]}>
+      <Box flex fill="horizontal" direction="row" justify="center">
+        <InfoCard
+          title={`${symbol} Balance`}
+          text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+        />
+        <InfoCard title={"My Stake"} text={`0.00 tender${symbol}`} />
+        <InfoCard title={"My Rewards"} text={`0.00 tender${symbol}`} />
+      </Box>
 
-        <Box fill="horizontal" direction="row" justify="center" align="center" pad={{ horizontal: "xlarge" }}>
-          <Form>
-            <FormField label="Deposit Amount" controlId="formDeposit">
-              <TextInput
-                width={1}
-                value={depositInput}
-                onChange={handleInputChange}
-                type="text"
-                placeholder={"0 " + symbol}
-                className="amount"
-              />
-              <Text className="balance" onClick={maxDeposit}>
-                Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-              </Text>
-            </FormField>
-            <div className="d-grid gap-2">
-              <ApproveToken
-                symbol={symbol}
-                spender={addresses[name].controller}
-                token={contracts[name].token}
-                hasAllowance={isTokenApproved}
-              />
-              <Button
-                disabled={
-                  !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
-                }
-                onClick={depositTokens}
-              >
-                {depositTx.status === "Mining" ? (
-                  <Box direction="row">
+      <Box fill="horizontal" direction="row" justify="center" align="center" pad={{ horizontal: "xlarge" }}>
+        <Form>
+          <FormField label="Deposit Amount" controlId="formDeposit">
+            <TextInput
+              width={1}
+              value={depositInput}
+              onChange={handleInputChange}
+              type="text"
+              placeholder={"0 " + symbol}
+              className="amount"
+            />
+            <Box direction="row" gap="small">
+              <Text>{`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}</Text>
+              <Button plain onClick={maxDeposit}>
+                <Text color="brand">(Max)</Text>
+              </Button>
+            </Box>
+          </FormField>
+          <Box gap="small" direction="column">
+            <ApproveToken
+              symbol={symbol}
+              spender={addresses[name].controller}
+              token={contracts[name].token}
+              hasAllowance={isTokenApproved}
+            />
+            <Button
+              primary
+              color="brand"
+              fill="horizontal"
+              disabled={
+                !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
+              }
+              onClick={depositTokens}
+              label={
+                depositTx.status === "Mining" ? (
+                  <Box direction="row" align="center" justify="center" gap="center">
                     <Spinner color="white" />
                     Depositing...
                   </Box>
                 ) : (
                   "Deposit"
-                )}
-              </Button>
-            </div>
-          </Form>
-        </Box>
-      </Grid>
-    </>
+                )
+              }
+            />
+          </Box>
+        </Form>
+      </Box>
+    </Grid>
   );
 };
 

@@ -5,8 +5,13 @@ import { Link } from "react-router-dom";
 
 import { AccountButton } from "../account";
 import TestnetBanner from "../testnet-banner";
+import Faucet from "../faucet"
 
-const Navbar: FC = () => {
+type props = {
+  symbol:string,
+  name:string
+}
+const Navbar: FC<props> = (props) => {
   const logo = require("../../images/tenderizeLogo.svg").default;
 
   const location = useLocation();
@@ -30,24 +35,17 @@ const Navbar: FC = () => {
   return (
     <Box>
       <TestnetBanner />
-      {location.pathname !== "/" && (
         <Header justify="around" pad="xsmall">
           <Link to="/">
             <Image width="150px" src={logo} />
           </Link>
           <Box direction="row" align="center" gap="medium">
-            <Link to="/stakers/livepeer" style={{ textDecoration: "none" }}>
-              <Text color="white">App</Text>
-            </Link>
-            <Link to="/faucet" style={{ textDecoration: "none" }}>
-              <Text color="white">Faucet</Text>
-            </Link>
+            <Faucet {...props} />
             <Nav direction="row">
               <AccountButton />
             </Nav>
           </Box>
         </Header>
-      )}
     </Box>
   );
 };

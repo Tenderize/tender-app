@@ -45,28 +45,31 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
   return (
     <Box flex={true} fill="horizontal">
       <Grid fill rows={["2/5", "2/5", "1/5"]} columns={["flex", "flex", "flex"]}>
-        <Box gridArea="1 / 1 / 2 / 2" pad={{ horizontal: "small" }}>
+        <Box gridArea="1 / 1 / 2 / 2" pad={{ horizontal: "25%" }}>
           <InfoCard title={"Total Staked"} text={`${utils.formatEther(totalStake?.toString() || "0")} ${symbolFull}`} />
         </Box>
-        <Box gridArea="1 / 2 / 2 / 3" pad={{ horizontal: "small" }}>
+        <Box gridArea="1 / 2 / 2 / 3" pad={{ horizontal: "25%" }}>
           <InfoCard title={"Total Rewards"} text={`0 tender${symbol}`} />
         </Box>
-        <Box gridArea="1 / 3 / 2 / 4" pad={{ horizontal: "small" }}>
+        <Box gridArea="1 / 3 / 2 / 4" pad={{ horizontal: "25%" }}>
           <InfoCard title={"APY"} text={`10 %`} />
         </Box>
-        <Box gridArea="2 / 1 / 3 / 2" pad={{ horizontal: "small" }}>
-          <InfoCard title={`Pool Balance`} text={`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`} />
+        <Box gridArea="2 / 1 / 3 / 2" pad={{ horizontal: "25%" }}>
+          <InfoCard
+            title={`Pool Balance`}
+            text={`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
+          />
         </Box>
-        <Box gridArea="2 / 2 / 3 / 3" pad={{ horizontal: "small" }}>
+        <Box gridArea="2 / 2 / 3 / 3" pad={{ horizontal: "25%" }}>
           <InfoCard title={"My stake"} text={`${utils.formatEther(stakeOf?.toString() || "0")} ${symbolFull}`} />
         </Box>
-        <Box gridArea="2 / 3 / 3 / 4" pad={{ horizontal: "small" }}>
+        <Box gridArea="2 / 3 / 3 / 4" pad={{ horizontal: "25%" }}>
           <InfoCard
             title={"Available Rewards"}
             text={`${utils.formatEther(availableRewards?.toString() || "0")} tender${symbol}`}
           />
         </Box>
-        <Box gridArea="3 / 1 / 4 / 2" pad={{ horizontal: "small", top: "medium" }}>
+        <Box gridArea="3 / 1 / 4 / 2" pad={{ horizontal: "large", top: "medium" }}>
           <Farm
             name={name}
             symbol={symbolFull}
@@ -74,10 +77,10 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
             tokenAllowance={lpTokenAllowance || "0"}
           />
         </Box>
-        <Box gridArea="3 / 2 / 4 / 3" pad={{ horizontal: "small", top: "medium" }}>
+        <Box gridArea="3 / 2 / 4 / 3" pad={{ horizontal: "large", top: "medium" }}>
           <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
         </Box>
-        <Box gridArea="3 / 3 / 4 / 4" pad={{ horizontal: "small", top: "medium" }}>
+        <Box gridArea="3 / 3 / 4 / 4" pad={{ horizontal: "large", top: "medium" }}>
           <Harvest name={name} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
         </Box>
       </Grid>

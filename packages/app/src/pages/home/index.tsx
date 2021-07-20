@@ -3,13 +3,7 @@ import { Link } from "react-router-dom";
 import FeaturedCards from "../../components/featured-card/";
 import { Box, Heading, Text, Button } from "grommet";
 import TenderBox from "../../components/tenderbox";
-import styled from "styled-components";
-const XLButton = styled(Button)`
-  width: 270px;
-  height: 70px;
-  margin-bottom: 50px;
-`;
-
+import { XLButton } from '../../components/base'
 const Home: FC = () => {
   return (
     <Box>
@@ -32,7 +26,7 @@ const Home: FC = () => {
           </span>
         </Text>
         <Link to="/stakers/livepeer">
-          <XLButton size="large" primary label="Open App" />
+          <XLButton size="large" primary color="white" label="Open App" style={{color:"#4E66DE"}} />
         </Link>
       </Box>
       <Box flex fill justify="center" align="center">

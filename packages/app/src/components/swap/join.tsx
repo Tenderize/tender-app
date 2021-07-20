@@ -230,7 +230,7 @@ const JoinPool: FC<Props> = ({
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
-      <Button primary onClick={handleShow} label="Join Pool" />
+      <Button primary color="brand" onClick={handleShow} label="Join Pool" />
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card height="medium" width="large" background="light-1">

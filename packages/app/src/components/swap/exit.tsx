@@ -2,7 +2,7 @@ import { FC, useState, useCallback } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
-
+import {Button as SecondaryButton} from "../base"
 import {
   Button,
   Box,
@@ -175,7 +175,7 @@ const ExitPool: FC<Props> = ({
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
-      <Button primary onClick={handleShow} label="Exit Pool" />
+      <SecondaryButton secondary color="brand" onClick={handleShow} label="Exit Pool" />
 
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>

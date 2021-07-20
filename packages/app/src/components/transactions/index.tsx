@@ -11,7 +11,6 @@ import {
 import { FC, ReactElement, ReactNode } from "react";
 import styled from "styled-components";
 import { TextBold } from "../../typography";
-import { ContentBlock, Link } from "../base";
 import {
   CheckIcon,
   ClockIcon,
@@ -22,10 +21,13 @@ import {
   WrapIcon,
   SpinnerIcon,
 } from "./Icons";
-import { Colors, Shadows } from "../../global/styles";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatEther } from "@ethersproject/units";
 import { BigNumber } from "ethers";
+
+import {Link} from "../base"
+
+import {Box, Table, TableHeader, TableBody, TableCell, Text} from "grommet"
 
 interface TableWrapperProps {
   children: ReactNode;
@@ -41,10 +43,16 @@ const formatBalance = (balance: BigNumber | undefined) =>
   formatter.format(parseFloat(formatEther(balance ?? BigNumber.from("0"))));
 
 const TableWrapper = ({ children, title }: TableWrapperProps) => (
-  <SmallContentBlock>
-    <TitleRow>{title}</TitleRow>
-    <Table>{children}</Table>
-  </SmallContentBlock>
+    <Table>
+      <TableHeader>
+        <Text size="large">{title}</Text>
+      </TableHeader>
+      <TableBody>
+        <Box height="medium" style={{overflow: "scroll"}}>
+        {children}
+        </Box>
+      </TableBody>
+    </Table>
 );
 
 interface DateProps {
@@ -83,7 +91,7 @@ const TransactionLink = ({ transaction }: TransactionLinkProps) => (
       >
         View on Etherscan
         <LinkIconWrapper>
-          <ShareIcon />
+          <ShareIcon fill="#FFFFFF" />
         </LinkIconWrapper>
       </Link>
     )}
@@ -91,10 +99,10 @@ const TransactionLink = ({ transaction }: TransactionLinkProps) => (
 );
 
 const notificationContent: { [key in Notification["type"]]: { title: string; icon: ReactElement } } = {
-  transactionFailed: { title: "Transaction failed", icon: <ExclamationIcon /> },
-  transactionStarted: { title: "Transaction started", icon: <ClockIcon /> },
-  transactionSucceed: { title: "Transaction succeed", icon: <CheckIcon /> },
-  walletConnected: { title: "Wallet connected", icon: <WalletIcon /> },
+  transactionFailed: { title: "Transaction failed", icon: <ExclamationIcon fill="white"/> },
+  transactionStarted: { title: "Transaction started", icon: <ClockIcon fill="white"/> },
+  transactionSucceed: { title: "Transaction succeed", icon: <CheckIcon fill="white"/> },
+  walletConnected: { title: "Wallet connected", icon: <WalletIcon fill="white"/> },
 };
 
 interface ListElementProps {
@@ -102,12 +110,13 @@ interface ListElementProps {
   title: string | undefined;
   transaction?: TransactionResponse;
   date: number;
+  type: Notification["type"];
 }
 
-const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date }) => {
+const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date, type }) => {
   return (
     <ListElementWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-      <ListIconContainer>{icon}</ListIconContainer>
+      <ListIconContainer><Text color="white">{icon}</Text></ListIconContainer>
       <ListDetailsWrapper>
         <TextBold>{title}</TextBold>
         <TransactionLink transaction={transaction} />
@@ -119,15 +128,15 @@ const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date }) =
 
 function TransactionIcon(transaction: StoredTransaction) {
   if (getStoredTransactionState(transaction) === "Mining") {
-    return <SpinnerIcon />;
+    return <SpinnerIcon fill="#FFFFFF" />;
   } else if (getStoredTransactionState(transaction) === "Fail") {
-    return <ExclamationIcon />;
+    return <ExclamationIcon fill="#FFFFFF" />;
   } else if (transaction.transactionName === "Unwrap") {
-    return <UnwrapIcon />;
+    return <UnwrapIcon fill="#FFFFFF" />;
   } else if (transaction.transactionName === "Wrap") {
-    return <WrapIcon />;
+    return <WrapIcon fill="#FFFFFF" />;
   } else {
-    return <CheckIcon />;
+    return <CheckIcon fill="#FFFFFF" />;
   }
 }
 
@@ -143,6 +152,7 @@ export const TransactionsList: FC = () => {
             icon={TransactionIcon(transaction)}
             key={transaction.transaction.hash}
             date={transaction.submittedAt}
+            type={"transactionSucceed"}
           />
         ))}
       </AnimatePresence>
@@ -150,9 +160,15 @@ export const TransactionsList: FC = () => {
   );
 };
 
-const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title }) => {
+const useNotificationBackground = (notification: Notification["type"]) => {
+  if (notification === "transactionFailed") return "#FF4040"
+  if (notification === "transactionSucceed") return "#00C781"
+  return "#777777"
+}
+const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title, type }) => {
   return (
     <NotificationWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+      <Box direction="row" background={useNotificationBackground(type)} pad={{horizontal: "20px", vertical:"10px"}} round="20px">
       <NotificationIconContainer>{icon}</NotificationIconContainer>
       <NotificationDetailsWrapper>
         <NotificationText>{title}</NotificationText>
@@ -161,6 +177,7 @@ const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title })
           {transaction && `${shortenTransactionHash(transaction?.hash)} #${transaction.nonce}`}
         </TransactionDetails>
       </NotificationDetailsWrapper>
+      </Box>
     </NotificationWrapper>
   );
 };
@@ -179,6 +196,7 @@ export const NotificationsList: FC = () => {
                 title={`${notificationContent[notification.type].title}: ${notification.transactionName}`}
                 transaction={notification.transaction}
                 date={Date.now()}
+                type={notification.type}
               />
             );
           else
@@ -188,6 +206,7 @@ export const NotificationsList: FC = () => {
                 icon={notificationContent[notification.type].icon}
                 title={notificationContent[notification.type].title}
                 date={Date.now()}
+                type={notification.type}
               />
             );
         })}
@@ -208,8 +227,6 @@ const TransactionDetails = styled.div`
 const NotificationWrapper = styled(motion.div)`
   display: flex;
   align-items: center;
-  background-color: ${Colors.White};
-  box-shadow: ${Shadows.notification};
   width: 395px;
   border-radius: 10px;
   margin: 15px;
@@ -256,31 +273,17 @@ const ListDetailsWrapper = styled.div`
   padding: 4px 0;
 `;
 
-const Table = styled.div`
-  height: 300px;
-  overflow: scroll;
-  padding: 12px;
-
-  & > * + * {
-    margin-top: 12px;
-  }
-`;
-
 const LinkIconWrapper = styled.div`
   width: 12px;
   height: 12px;
   margin-left: 8px;
 `;
 
-const SmallContentBlock = styled(ContentBlock)`
-  padding: 0;
-`;
-
 const TitleRow = styled(TextBold)`
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  border-bottom: ${Colors.Gray["300"]} 1px solid;
+  border-bottom: gray 1px solid;
   padding: 16px;
   font-size: 18px;
 `;
@@ -302,5 +305,5 @@ const DateDisplay = styled.div`
 `;
 const HourDisplay = styled.div`
   font-size: 12px;
-  color: ${Colors.Gray["600"]};
+  color: gray;
 `;

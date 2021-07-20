@@ -5,26 +5,18 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import Home from "./pages/home";
 import Token from "./pages/token";
-import { NotificationsList } from "./components/transactions";
 import Foot from "./components/footer";
-import Navbar from "./components/nav";
-import Faucet from "./pages/faucet";
 
 const App: FC = () => {
   return (
     <Router>
-      <Grid height={{ min: "100vh" }} rows={["xsmall", "1fr"]}>
-        <Navbar />
-        <Grid rows={["1fr", "auto"]}>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/faucet" component={Faucet} />
-            <Route path="/stakers/:id" component={Token} />
-          </Switch>
-          <Foot />
-        </Grid>
+      <Grid height={{ min: "100vh" }} rows={["1fr", "auto"]}>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/stakers/:id" component={Token} />
+        </Switch>
+        <Foot />
       </Grid>
-      <NotificationsList />
     </Router>
   );
 };
