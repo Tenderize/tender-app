@@ -5,6 +5,8 @@ import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
 import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Spinner, Text } from "grommet";
 
+const harvestIcon = require("../../images/harvest.svg");
+
 type Props = {
   name: string;
   symbol: string;
@@ -30,7 +32,12 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
 
   return (
     <>
-      <Button fill="horizontal" secondary onClick={handleShow} label="Harvest" />
+      <Button primary color="light-2" onClick={handleShow} label={
+        <Box direction="row" align="center" justify="center" gap="small">
+          <img src={harvestIcon.default} />
+          <Text>Harvest</Text>
+        </Box>
+      } style={{color:"#4E66DE"}}/>
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
