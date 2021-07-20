@@ -2,19 +2,11 @@ import { ChangeEventHandler, FC, useCallback, useState } from "react";
 import {
   Button,
   Box,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Layer,
   Form,
   FormField,
   TextInput,
-  Spinner,
   Text,
-  Select,
-  Tabs,
-  Tab,
+
 } from "grommet";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
 import { useContractCall } from "@usedapp/core";
@@ -114,7 +106,8 @@ const Swap: FC<Props> = ({
   return (
     <Box>
       <Form>
-        <Box align="center" justify="around">
+        <Box align="center" justify="center">
+        <Box direction="row">
           <FormField
             label={`Send ${tokenSendedSymbol}`}
             validate={{ function: () => isSendInputInvalid, message: "Please provide an available amount" }}
@@ -151,11 +144,10 @@ const Swap: FC<Props> = ({
                 placeholder={"0"}
                 value={utils.formatEther(calcOutGivenIn || "0")}
               />
-              <Text>{`Balance: ${weiToEthWithDecimals(tokenReceivedBalance, 4)} ${tokenReceivedSymbol}`}</Text>
             </Box>
           </FormField>
         </Box>
-        <Box direction="column" pad={{ horizontal: "large" }} gap="small">
+        <Box width="large" direction="column" pad={{ horizontal: "large" }} gap="small">
           <ApproveToken
             symbol={tokenSendedSymbol}
             spender={addresses[protocolName].swap}
@@ -164,10 +156,12 @@ const Swap: FC<Props> = ({
           />
           <Button
             primary
+            color="brand"
             disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
             onClick={() => setShowConfirm(true)}
             label="Trade"
           />
+        </Box>
         </Box>
       </Form>
       <ConfirmSwapModal

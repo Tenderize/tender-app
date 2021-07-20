@@ -1,8 +1,8 @@
 import { FC, MouseEventHandler } from "react";
 import { BigNumberish, constants, Contract } from "ethers";
 import { useContractFunction } from "@usedapp/core";
-import { Box, Button, Tip, Spinner, Text } from "grommet";
-
+import { Box, Tip, Spinner, Text } from "grommet";
+import {Button} from '../base/'
 type Props = {
   symbol: string;
   hasAllowance: boolean;
@@ -31,6 +31,8 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
   return (
     <Button
       secondary
+      color="brand"
+      gap="medium"
       fill="horizontal"
       onClick={handleApproval}
       disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
@@ -39,8 +41,8 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
           {approveTx.status !== "None" && approveTx.status !== "Success" ? (
             <Spinner color="white" />
           ) : (
-            <>
-              Allow the Tenderize Protocol to use your {symbol}
+            <Box justify="center" align="center" direction="row" gap="medium">
+              <Text>Allow Tenderize to use your {symbol}</Text>
               <Tip
                 plain
                 dropProps={{
@@ -66,7 +68,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
                   &#8505;
                 </span>
               </Tip>
-            </>
+            </Box>
           )}
         </>
       }

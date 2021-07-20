@@ -15,7 +15,7 @@ const Stat = styled(Text)`
   font-family: IBM Plex Sans;
   font-style: normal;
   font-weight: bold;
-  font-size: 56px;
+  font-size: 52px;
   color: #ffffff;
 `;
 

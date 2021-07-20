@@ -6,7 +6,7 @@ import { addresses, contracts } from "@tender/contracts";
 import Swap from "./swap";
 import JoinPool from "./join";
 import ExitPool from "./exit";
-import { Box } from "grommet";
+import { Box, Text } from "grommet";
 
 type Props = {
   name: string;
@@ -82,7 +82,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
   ]);
 
   return (
-    <Box>
+    <Box justify="start" align="center">
       <Swap
         protocolName={name}
         tokenSymbol={symbol}
@@ -96,6 +96,9 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
         spotPrice={spotPrice ? spotPrice[0] : "0"}
       />
+      <Box border={{side: "top"}} direction="column" justify="center" align="center" pad={{horizontal: "large", top:"medium"}} width="large" margin={{top: "large"}}>
+        <Text>Provide Liquidity</Text>
+      <Box direction="row" gap="large" justify="center" align="center">
       <JoinPool
         name={name}
         symbol={symbol}
@@ -121,6 +124,8 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         lpShares={lpShares ? lpShares[0] : "0"}
         lpTokenBalance={lpTokenBalance}
       />
+      </Box>
+      </Box>
     </Box>
   );
 };

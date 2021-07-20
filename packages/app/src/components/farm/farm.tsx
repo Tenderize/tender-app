@@ -61,7 +61,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
 
   return (
     <>
-      <Button fill="horizontal" secondary onClick={handleShow} label="Farm" />
+      <Button primary color="brand" onClick={handleShow} label="Farm" />
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>

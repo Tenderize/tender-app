@@ -62,11 +62,17 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                 placeholder={"0 " + symbol}
                 className="amount"
               />
-              <Text className="balance" onClick={maxDeposit}>
-                Current Balance: {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-              </Text>
+              <Box direction="row" gap="small">
+                <Text>{`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}</Text>
+                <Button
+                  plain
+                  onClick={maxDeposit}
+                >
+                  <Text color="brand">(Max)</Text>
+                </Button>
+              </Box>
             </FormField>
-            <div className="d-grid gap-2">
+            <Box gap="small" direction="column">
               <ApproveToken
                 symbol={symbol}
                 spender={addresses[name].controller}
@@ -74,21 +80,23 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                 hasAllowance={isTokenApproved}
               />
               <Button
+                primary
+                color="brand"
+                fill="horizontal"
                 disabled={
                   !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
                 }
                 onClick={depositTokens}
-              >
-                {depositTx.status === "Mining" ? (
-                  <Box direction="row">
+                label={depositTx.status === "Mining" ? (
+                  <Box direction="row" align="center" justify="center" gap="center">
                     <Spinner color="white" />
                     Depositing...
                   </Box>
                 ) : (
                   "Deposit"
                 )}
-              </Button>
-            </div>
+              />
+            </Box>
           </Form>
         </Box>
       </Grid>
