@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
 import { Button } from "grommet";
+import { Button as SecondaryButton} from "../base"
 import styled from "styled-components";
 
 import { AccountModal } from "./AccountModal";
@@ -26,14 +27,14 @@ export const AccountButton: FC = () => {
   return (
     <Account>
       <ErrorWrapper>{activateError}</ErrorWrapper>
-      {showModal && <AccountModal setShowModal={setShowModal} />}
+      <AccountModal showModal={showModal} setShowModal={setShowModal} />
       {account ? (
         <>
-          <AccountLabel onClick={() => setShowModal(!showModal)}>{ens ?? shortenAddress(account)}</AccountLabel>
-          <LoginButton onClick={() => deactivate()}>Disconnect</LoginButton>
+          <AccountLabel primary color="light-2" style={{color: "#4E66DE"}} onClick={() => setShowModal(!showModal)} label={ens ?? shortenAddress(account)} />
+          <Button secondary color="light-2" onClick={() => deactivate()} label="Disconnect" />
         </>
       ) : (
-        <LoginButton onClick={activate}>Connect</LoginButton>
+        <LoginButton primary color="light-2" style={{color: "#4E66DE"}} onClick={activate} label="Connect" />
       )}
     </Account>
   );
@@ -51,12 +52,13 @@ const Account = styled.div`
   align-items: center;
 `;
 
-const LoginButton = styled(Button)``;
+const LoginButton = styled(SecondaryButton)``;
 
-const AccountLabel = styled(Button)`
-  height: 32px;
-  margin-right: -40px;
+const AccountLabel = styled(SecondaryButton)`
+  margin-right: -20px;
   padding-right: 40px;
   padding-left: 8px;
-  font-size: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 `;
