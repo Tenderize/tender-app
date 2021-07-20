@@ -45,7 +45,7 @@ const Token: FC = () => {
     <Box>
       <NotificationsList />
       <Navbar symbol={info.symbol} name={name} />
-      <Box align="center" alignSelf="start">
+      <Box width="100vw" align="center" alignSelf="start">
         <TenderBox
           margin={{
             top: "xlarge",
