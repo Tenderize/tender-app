@@ -64,10 +64,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
               />
               <Box direction="row" gap="small">
                 <Text>{`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}</Text>
-                <Button
-                  plain
-                  onClick={maxDeposit}
-                >
+                <Button plain onClick={maxDeposit}>
                   <Text color="brand">(Max)</Text>
                 </Button>
               </Box>
@@ -87,14 +84,16 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                   !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
                 }
                 onClick={depositTokens}
-                label={depositTx.status === "Mining" ? (
-                  <Box direction="row" align="center" justify="center" gap="center">
-                    <Spinner color="white" />
-                    Depositing...
-                  </Box>
-                ) : (
-                  "Deposit"
-                )}
+                label={
+                  depositTx.status === "Mining" ? (
+                    <Box direction="row" align="center" justify="center" gap="center">
+                      <Spinner color="white" />
+                      Depositing...
+                    </Box>
+                  ) : (
+                    "Deposit"
+                  )
+                }
               />
             </Box>
           </Form>

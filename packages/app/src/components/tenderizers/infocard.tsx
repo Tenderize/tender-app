@@ -10,11 +10,11 @@ type Props = {
 const InfoCard: FC<Props> = ({ title = "", text = "" }) => {
   return (
     <Box fill="horizontal">
-      <Card align="baseline" elevation="none" round="none" pad={{left: "25%"}}>
+      <Card align="baseline" elevation="none" round="none">
         <CardHeader
           pad={{
             horizontal: "0",
-            vertical: "small",
+            bottom: "small",
           }}
         >
           {title}

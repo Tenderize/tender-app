@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Button as GrommetButton} from 'grommet'
+import { Button as GrommetButton } from "grommet";
 
 export const Link = styled.a`
   display: flex;
@@ -7,18 +7,18 @@ export const Link = styled.a`
   gap: 4px;
   font-size: 12px;
   text-decoration: underline;
-  color: #F2F2F2;
+  color: #f2f2f2;
   cursor: pointer;
   transition: 0.3s;
   &:hover,
   &:focus-within {
-    color: #4E66DE;
+    color: #4e66de;
   }
 `;
 
 export const Button = styled(GrommetButton)`
   padding: 10px 20px;
-  border-radius:none;
+  border-radius: none;
 `;
 
 export const XLButton = styled(GrommetButton)`

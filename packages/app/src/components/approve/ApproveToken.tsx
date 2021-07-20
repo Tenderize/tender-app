@@ -2,7 +2,8 @@ import { FC, MouseEventHandler } from "react";
 import { BigNumberish, constants, Contract } from "ethers";
 import { useContractFunction } from "@usedapp/core";
 import { Box, Tip, Spinner, Text } from "grommet";
-import {Button} from '../base/'
+import { Button } from "../base/";
+
 type Props = {
   symbol: string;
   hasAllowance: boolean;

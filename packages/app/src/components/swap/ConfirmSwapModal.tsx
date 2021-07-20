@@ -108,7 +108,7 @@ const ConfirmSwapModal: FC<Props> = ({
                     </Box>
                   </Form>
                   <Box>
-                    <InfoCard title="Price" text={utils.formatEther(tokenSpotPrice)} />
+                    <InfoCard title="Price" text={`${utils.formatEther(tokenSpotPrice)} ${tokenSendedSymbol}`} />
                   </Box>
                 </>
               )}

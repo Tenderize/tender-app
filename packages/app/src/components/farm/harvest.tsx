@@ -32,12 +32,18 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
 
   return (
     <>
-      <Button primary color="light-2" onClick={handleShow} label={
-        <Box direction="row" align="center" justify="center" gap="small">
-          <img src={harvestIcon.default} />
-          <Text>Harvest</Text>
-        </Box>
-      } style={{color:"#4E66DE"}}/>
+      <Button
+        primary
+        color="light-2"
+        onClick={handleShow}
+        label={
+          <Box direction="row" align="center" justify="center" gap="small">
+            <img src={harvestIcon.default} />
+            <Text>Harvest</Text>
+          </Box>
+        }
+        style={{ color: "#4E66DE" }}
+      />
       {show && (
         <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
