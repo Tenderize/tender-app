@@ -42,7 +42,7 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <>
+    <Box>
       <NotificationsList />
       <Navbar symbol={info.symbol} name={name} />
       <Box align="center" alignSelf="start">
@@ -126,7 +126,7 @@ const Token: FC = () => {
           </Tabs>
         </TenderBox>
       </Box>
-    </>
+    </Box>
   );
 };
 

@@ -10,13 +10,13 @@ import Foot from "./components/footer";
 const App: FC = () => {
   return (
     <Router>
-        <Grid height={{ min: "100vh" }} rows={["1fr", "auto"]}>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/stakers/:id" component={Token} />
-          </Switch>
-          <Foot />
-        </Grid>
+      <Grid height={{ min: "100vh" }} rows={["1fr", "auto"]}>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/stakers/:id" component={Token} />
+        </Switch>
+        <Foot />
+      </Grid>
     </Router>
   );
 };
