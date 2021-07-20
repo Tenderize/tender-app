@@ -5,9 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import Home from "./pages/home";
 import Token from "./pages/token";
-import { NotificationsList } from "./components/transactions";
 import Foot from "./components/footer";
-import Navbar from "./components/nav";
 
 const App: FC = () => {
   return (
@@ -19,7 +17,6 @@ const App: FC = () => {
           </Switch>
           <Foot />
         </Grid>
-      <NotificationsList />
     </Router>
   );
 };

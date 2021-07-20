@@ -12,6 +12,7 @@ import LiquidityPool from "../../components/swap";
 import stakers from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
+import { NotificationsList } from "../../components/transactions";
 
 const Token: FC = () => {
   const location = useLocation();
@@ -42,6 +43,7 @@ const Token: FC = () => {
 
   return (
     <>
+    <NotificationsList />
     <Navbar symbol={info.symbol} name={name} />
     <Box align="center" alignSelf="start">
       <TenderBox
