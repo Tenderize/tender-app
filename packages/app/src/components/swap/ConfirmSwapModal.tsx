@@ -19,6 +19,8 @@ import {
 
 import { useContractFunction } from "@usedapp/core";
 import InfoCard from "../tenderizers/infocard";
+import { normalizeColor } from "grommet/utils";
+import { theme } from "../../theme";
 
 type Props = {
   show: boolean;
@@ -84,7 +86,7 @@ const ConfirmSwapModal: FC<Props> = ({
           }}
           onClickOutside={() => confirmStatus !== "Submitted" && onDismiss()}
         >
-          <Card pad="medium" background="#262528">
+          <Card pad="medium" background={normalizeColor("modalBackground", theme)}>
             <CardHeader
               justify="center"
               pad={{ bottom: "small" }}
