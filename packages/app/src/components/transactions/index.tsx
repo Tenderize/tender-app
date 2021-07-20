@@ -99,10 +99,10 @@ const TransactionLink = ({ transaction }: TransactionLinkProps) => (
 );
 
 const notificationContent: { [key in Notification["type"]]: { title: string; icon: ReactElement } } = {
-  transactionFailed: { title: "Transaction failed", icon: <ExclamationIcon fill="grey"/> },
-  transactionStarted: { title: "Transaction started", icon: <ClockIcon fill="grey"/> },
-  transactionSucceed: { title: "Transaction succeed", icon: <CheckIcon fill="grey"/> },
-  walletConnected: { title: "Wallet connected", icon: <WalletIcon fill="grey"/> },
+  transactionFailed: { title: "Transaction failed", icon: <ExclamationIcon fill="white"/> },
+  transactionStarted: { title: "Transaction started", icon: <ClockIcon fill="white"/> },
+  transactionSucceed: { title: "Transaction succeed", icon: <CheckIcon fill="white"/> },
+  walletConnected: { title: "Wallet connected", icon: <WalletIcon fill="white"/> },
 };
 
 interface ListElementProps {
@@ -110,9 +110,10 @@ interface ListElementProps {
   title: string | undefined;
   transaction?: TransactionResponse;
   date: number;
+  type: Notification["type"];
 }
 
-const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date }) => {
+const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date, type }) => {
   return (
     <ListElementWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
       <ListIconContainer><Text color="white">{icon}</Text></ListIconContainer>
@@ -151,6 +152,7 @@ export const TransactionsList: FC = () => {
             icon={TransactionIcon(transaction)}
             key={transaction.transaction.hash}
             date={transaction.submittedAt}
+            type={"transactionSucceed"}
           />
         ))}
       </AnimatePresence>
@@ -158,10 +160,16 @@ export const TransactionsList: FC = () => {
   );
 };
 
-const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title }) => {
+const useNotificationBackground = (notification: Notification["type"]) => {
+  if (notification === "transactionFailed") return "#FF4040"
+  if (notification === "transactionSucceed") return "#00C781"
+  return "#777777"
+}
+const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title, type }) => {
   return (
     <NotificationWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-      <NotificationIconContainer style={{color: "white"}}>{icon}</NotificationIconContainer>
+      <Box direction="row" background={useNotificationBackground(type)} pad={{horizontal: "20px", vertical:"10px"}} round="20px">
+      <NotificationIconContainer>{icon}</NotificationIconContainer>
       <NotificationDetailsWrapper>
         <NotificationText>{title}</NotificationText>
         <TransactionLink transaction={transaction} />
@@ -169,6 +177,7 @@ const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title })
           {transaction && `${shortenTransactionHash(transaction?.hash)} #${transaction.nonce}`}
         </TransactionDetails>
       </NotificationDetailsWrapper>
+      </Box>
     </NotificationWrapper>
   );
 };
@@ -187,6 +196,7 @@ export const NotificationsList: FC = () => {
                 title={`${notificationContent[notification.type].title}: ${notification.transactionName}`}
                 transaction={notification.transaction}
                 date={Date.now()}
+                type={notification.type}
               />
             );
           else
@@ -196,6 +206,7 @@ export const NotificationsList: FC = () => {
                 icon={notificationContent[notification.type].icon}
                 title={notificationContent[notification.type].title}
                 date={Date.now()}
+                type={notification.type}
               />
             );
         })}
