@@ -96,35 +96,43 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
         spotPrice={spotPrice ? spotPrice[0] : "0"}
       />
-      <Box border={{side: "top"}} direction="column" justify="center" align="center" pad={{horizontal: "large", top:"medium"}} width="large" margin={{top: "large"}}>
+      <Box
+        border={{ side: "top" }}
+        direction="column"
+        justify="center"
+        align="center"
+        pad={{ horizontal: "large", top: "medium" }}
+        width="large"
+        margin={{ top: "large" }}
+      >
         <Text>Provide Liquidity</Text>
-      <Box direction="row" gap="large" justify="center" align="center">
-      <JoinPool
-        name={name}
-        symbol={symbol}
-        tokenBalance={tokenBalance}
-        tenderTokenBalance={tenderTokenBalance}
-        tokenWeight={tokenDenormWeight ? tokenDenormWeight[0] : "0"}
-        tenderTokenWeight={tenderTokenDenormWeight ? tenderTokenDenormWeight[0] : "0"}
-        totalWeight={totalDenormWeight ? totalDenormWeight[0] : "0"}
-        swapFee={swapFee ? swapFee[0] : "0"}
-        tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
-        tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
-        lpShares={lpShares ? lpShares[0] : "0"}
-      />
-      <ExitPool
-        name={name}
-        symbol={symbol}
-        tokenWeight={tokenDenormWeight ? tokenDenormWeight[0] : "0"}
-        tenderTokenWeight={tenderTokenDenormWeight ? tenderTokenDenormWeight[0] : "0"}
-        totalWeight={totalDenormWeight ? totalDenormWeight[0] : "0"}
-        swapFee={swapFee ? swapFee[0] : "0"}
-        tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
-        tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
-        lpShares={lpShares ? lpShares[0] : "0"}
-        lpTokenBalance={lpTokenBalance}
-      />
-      </Box>
+        <Box direction="row" gap="large" justify="center" align="center">
+          <JoinPool
+            name={name}
+            symbol={symbol}
+            tokenBalance={tokenBalance}
+            tenderTokenBalance={tenderTokenBalance}
+            tokenWeight={tokenDenormWeight ? tokenDenormWeight[0] : "0"}
+            tenderTokenWeight={tenderTokenDenormWeight ? tenderTokenDenormWeight[0] : "0"}
+            totalWeight={totalDenormWeight ? totalDenormWeight[0] : "0"}
+            swapFee={swapFee ? swapFee[0] : "0"}
+            tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
+            tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
+            lpShares={lpShares ? lpShares[0] : "0"}
+          />
+          <ExitPool
+            name={name}
+            symbol={symbol}
+            tokenWeight={tokenDenormWeight ? tokenDenormWeight[0] : "0"}
+            tenderTokenWeight={tenderTokenDenormWeight ? tenderTokenDenormWeight[0] : "0"}
+            totalWeight={totalDenormWeight ? totalDenormWeight[0] : "0"}
+            swapFee={swapFee ? swapFee[0] : "0"}
+            tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
+            tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
+            lpShares={lpShares ? lpShares[0] : "0"}
+            lpTokenBalance={lpTokenBalance}
+          />
+        </Box>
       </Box>
     </Box>
   );

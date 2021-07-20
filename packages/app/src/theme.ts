@@ -34,17 +34,22 @@ const overrideDefaultTheme: ThemeType = {
       extend: `
       padding: 10px 20px;
       border-width: -1px;
-      `
+      `,
     },
     secondary: {
       extend: `
       padding: 10px 20px;
       border-width: -1px;
-      `
-    }
+      `,
+    },
   },
   formField: {
     border: false,
+    label: {
+      margin: {
+        top: "0px",
+      },
+    },
   },
   tab: {
     border: undefined,

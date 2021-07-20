@@ -1,13 +1,5 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import {
-  Button,
-  Box,
-  Form,
-  FormField,
-  TextInput,
-  Text,
-
-} from "grommet";
+import { Button, Box, Form, FormField, TextInput, Text } from "grommet";
 import { BigNumberish, utils, BigNumber, constants } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
@@ -107,61 +99,61 @@ const Swap: FC<Props> = ({
     <Box>
       <Form>
         <Box align="center" justify="center">
-        <Box direction="row">
-          <FormField
-            label={`Send ${tokenSendedSymbol}`}
-            validate={{ function: () => isSendInputInvalid, message: "Please provide an available amount" }}
-          >
-            <Box width="medium">
-              <TextInput
-                id="formSwapSend"
-                type="number"
-                value={sendTokenAmount}
-                onChange={handleSendTokenInput}
-                required={true}
-              />
-              <Box direction="row" gap="small">
-                <Text>{`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}</Text>
-                <Button
-                  plain
-                  onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
-                >
-                  <Text color="brand">(Max)</Text>
-                </Button>
+          <Box direction="row">
+            <FormField
+              label={`Send ${tokenSendedSymbol}`}
+              validate={{ function: () => isSendInputInvalid, message: "Please provide an available amount" }}
+            >
+              <Box width="medium">
+                <TextInput
+                  id="formSwapSend"
+                  type="number"
+                  value={sendTokenAmount}
+                  onChange={handleSendTokenInput}
+                  required={true}
+                />
+                <Box direction="row" gap="small">
+                  <Text>{`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}</Text>
+                  <Button
+                    plain
+                    onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
+                  >
+                    <Text color="brand">(Max)</Text>
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-          </FormField>
-          <Button
-            color="none"
-            icon={<Transaction color="white" />}
-            onClick={() => setIsSendingToken(!isSendingToken)}
-          />
-          <FormField label={`Receive ${tokenReceivedSymbol}`} readOnly>
-            <Box width="medium">
-              <TextInput
-                readOnly
-                id="formSwapReceive"
-                placeholder={"0"}
-                value={utils.formatEther(calcOutGivenIn || "0")}
-              />
-            </Box>
-          </FormField>
-        </Box>
-        <Box width="large" direction="column" pad={{ horizontal: "large" }} gap="small">
-          <ApproveToken
-            symbol={tokenSendedSymbol}
-            spender={addresses[protocolName].swap}
-            token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-            hasAllowance={isTokenApproved}
-          />
-          <Button
-            primary
-            color="brand"
-            disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
-            onClick={() => setShowConfirm(true)}
-            label="Trade"
-          />
-        </Box>
+            </FormField>
+            <Button
+              color="none"
+              icon={<Transaction color="white" />}
+              onClick={() => setIsSendingToken(!isSendingToken)}
+            />
+            <FormField label={`Receive ${tokenReceivedSymbol}`} readOnly>
+              <Box width="medium">
+                <TextInput
+                  readOnly
+                  id="formSwapReceive"
+                  placeholder={"0"}
+                  value={utils.formatEther(calcOutGivenIn || "0")}
+                />
+              </Box>
+            </FormField>
+          </Box>
+          <Box width="large" direction="column" pad={{ horizontal: "large" }} gap="small">
+            <ApproveToken
+              symbol={tokenSendedSymbol}
+              spender={addresses[protocolName].swap}
+              token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
+              hasAllowance={isTokenApproved}
+            />
+            <Button
+              primary
+              color="brand"
+              disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
+              onClick={() => setShowConfirm(true)}
+              label="Trade"
+            />
+          </Box>
         </Box>
       </Form>
       <ConfirmSwapModal
