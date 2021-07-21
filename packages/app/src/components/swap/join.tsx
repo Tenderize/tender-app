@@ -266,9 +266,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 placeholder={"0 " + symbol}
                               />
-                              <Button secondary onClick={() => maxDeposit(false)}>
-                                Max
-                              </Button>
+                              <Button onClick={() => maxDeposit(false)}>Max</Button>
                             </Box>
                           </Box>
                         </FormField>
@@ -282,9 +280,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 placeholder={"0 " + "t" + symbol}
                               />
-                              <Button secondary onClick={() => maxDeposit(true)}>
-                                Max
-                              </Button>
+                              <Button onClick={() => maxDeposit(true)}>Max</Button>
                             </Box>
                           </Box>
                         </FormField>
