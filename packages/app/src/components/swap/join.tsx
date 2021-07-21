@@ -235,7 +235,13 @@ const JoinPool: FC<Props> = ({
     <Box pad={{ horizontal: "large", top: "small" }}>
       <Button primary color="brand" onClick={handleShow} label="Join Pool" />
       {show && (
-        <Layer background="transparent" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
+        <Layer
+          margin={{ top: "xlarge" }}
+          position="top"
+          background="transparent"
+          onEsc={() => setShow(false)}
+          onClickOutside={() => setShow(false)}
+        >
           <Card pad="medium" width="large" background={normalizeColor("modalBackground", theme)}>
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Join tender${symbol}/${symbol}`}</CardHeader>
             <CardBody>
