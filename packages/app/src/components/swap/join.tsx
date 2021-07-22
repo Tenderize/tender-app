@@ -123,7 +123,7 @@ const JoinPool: FC<Props> = ({
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].liquidity, tokenInput);
   const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput);
 
-  const hasValue = (val: any) => {
+  const hasValue = (val: string) => {
     return val && val !== "0";
   };
 
@@ -344,15 +344,13 @@ const JoinPool: FC<Props> = ({
                   symbol={symbol}
                   spender={addresses[name].liquidity}
                   token={contracts[name].token}
-                  hasAllowance={!hasValue(tokenInput) || ((isMulti || selectToken === symbol) && isTokenApproved)}
+                  hasAllowance={(isMulti || selectToken === symbol) && isTokenApproved}
                 />
                 <ApproveToken
                   symbol={`t${symbol}`}
                   spender={addresses[name].liquidity}
                   token={contracts[name].tenderToken}
-                  hasAllowance={
-                    !hasValue(tenderInput) || ((isMulti || selectToken === `t${symbol}`) && isTenderApproved)
-                  }
+                  hasAllowance={(isMulti || selectToken === `t${symbol}`) && isTenderApproved}
                 />
                 <Button
                   primary

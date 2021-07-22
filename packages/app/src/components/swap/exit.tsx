@@ -278,7 +278,7 @@ const ExitPool: FC<Props> = ({
                   symbol={symbolFull}
                   spender={addresses[name].liquidity}
                   token={contracts[name].liquidity}
-                  hasAllowance={!hasValue(lpSharesInput) || isLpSharesApproved}
+                  hasAllowance={isLpSharesApproved}
                 />
                 <Button
                   primary
