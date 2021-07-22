@@ -94,8 +94,6 @@ type TenderFarm @entity {
 type TenderizerDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<portocol>"
   id: ID!
-  "Name of the protocol eg. 'livepeer'"
-  protocolName: String!
   "Tenderizer"
   tenderizer: Tenderizer!
   "The date beginning at 12:00am UTC"
@@ -119,8 +117,6 @@ type TenderizerDay @entity {
 type TenderFarmDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<portocol>"
   id: ID!
-  "Name of the protocol eg. 'livepeer'"
-  protocolName: String!
   "TenderFarm"
   tenderFarm: TenderFarm!
   "The date beginning at 12:00am UTC"
@@ -151,8 +147,6 @@ type User @entity {
 type UserProtocol @entity { 
   "<wallet-address>_<portocol>"
   id: ID!
-  "Name of the protocol eg. 'livepeer'"
-  protocolName: String!
   "Protocol"
   protocol: Protocol!
   "User"

@@ -74,7 +74,6 @@ export function loadOrCreateUserProtocol(address: string, protocolName: string):
   let userProtocol = UserProtocol.load(id)
   if(userProtocol == null){
     userProtocol = new UserProtocol(id)
-    userProtocol.protocolName = protocolName
     userProtocol.protocol = id
     userProtocol.user = address
 
@@ -125,7 +124,6 @@ export function getProtocolIdByTenderizerAddress(address: string): string {
   // TODO: Is there a better way to do this?
   let globals = TenderizeGlobal.load('1')
   let globalConfigs = globals.configs
-  // TODO: use map/filter
   for (let i = 0; i < globalConfigs.length; i++) { 
     let c = ProtocolConfig.load(globalConfigs[i]) as ProtocolConfig
     if(c.tenderizer == address){
@@ -139,7 +137,6 @@ export function getProtocolIdByTenderFarmAddress(address: string): string {
   // TODO: Is there a better way to do this?
   let globals = TenderizeGlobal.load('1')
   let globalConfigs = globals.configs
-  // TODO: use map/filter
   for (let i = 0; i < globalConfigs.length; i++) { 
     let c = ProtocolConfig.load(globalConfigs[i]) as ProtocolConfig
     if(c.tenderFarm == address){
@@ -159,7 +156,6 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
     day = new TenderizerDay(dayID)
     let tenderizer = loadOrCreateTenderizer(protocol)
     day.date = dayStartTimestamp
-    day.protocolName = protocol
     day.tenderizer = tenderizer.id
     day.deposits = ZERO_BD
     day.withdrawals = ZERO_BD
@@ -181,7 +177,6 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     day = new TenderFarmDay(dayID)
     let tenderFarm = loadOrCreateTenderFarm(protocol)
     day.date = dayStartTimestamp
-    day.protocolName = protocol
     day.tenderFarm = tenderFarm.id
     day.deposits = ZERO_BD
     day.withdrawals = ZERO_BD
