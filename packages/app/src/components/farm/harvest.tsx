@@ -45,7 +45,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         style={{ color: "#4E66DE" }}
       />
       {show && (
-        <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
+        <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
             <CardHeader>{`Harvest ${symbol}`}</CardHeader>
             <CardBody>

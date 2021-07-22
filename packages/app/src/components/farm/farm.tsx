@@ -63,7 +63,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
     <>
       <Button primary color="brand" onClick={handleShow} label="Farm" />
       {show && (
-        <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
+        <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
             <CardHeader>{`Farm ${symbol}`}</CardHeader>
             <CardBody>

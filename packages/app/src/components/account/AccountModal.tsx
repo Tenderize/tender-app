@@ -22,46 +22,49 @@ export type AccountModalProps = {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal}) => {
+export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal }) => {
   const { account, chainId } = useEthers();
   const balance = useEtherBalance(account);
-    return (
-      <>
-      {account && chainId && showModal && 
-      <Layer onEsc={() => setShowModal(false)} onClickOutside={() => setShowModal(false)}>
+  return (
+    <>
+      {account && chainId && showModal && (
+        <Layer animation="fadeIn" onEsc={() => setShowModal(false)} onClickOutside={() => setShowModal(false)}>
           <Card>
-          <Box pad="medium" gap="medium">
-            <CardHeader>
-              <Text size="xlarge">Account info</Text>
-            </CardHeader>
-            <CardBody>
-              <Box gap="medium">
-                <Text size="medium" weight="bold">Address: {account}</Text>
-              </Box>
-              <Box direction="row" justify="between">
-                <Link href={getExplorerAddressLink(account, chainId)} target="_blank" rel="noopener noreferrer">
-                  Show on etherscan
-                  <LinkIconWrapper>
-                    <ShareIcon fill="#FFFFFF" />
-                  </LinkIconWrapper>
-                </Link>
-                {window.isSecureContext && (
-                  <Link onClick={() => console.log(navigator.clipboard.writeText(account))}>Copy to clipboard</Link>
-                )}
-              </Box>
-              <Box  direction="row" justify="between" margin={{vertical:"12px"}}>
-                <Text>Balance: </Text>
-                <Text>ETH: {balance && formatBalance(balance)}</Text>
-              </Box>
-            <Box>
-              <TransactionsList />
+            <Box pad="medium" gap="medium">
+              <CardHeader>
+                <Text size="xlarge">Account info</Text>
+              </CardHeader>
+              <CardBody>
+                <Box gap="medium">
+                  <Text size="medium" weight="bold">
+                    Address: {account}
+                  </Text>
+                </Box>
+                <Box direction="row" justify="between">
+                  <Link href={getExplorerAddressLink(account, chainId)} target="_blank" rel="noopener noreferrer">
+                    Show on etherscan
+                    <LinkIconWrapper>
+                      <ShareIcon fill="#FFFFFF" />
+                    </LinkIconWrapper>
+                  </Link>
+                  {window.isSecureContext && (
+                    <Link onClick={() => console.log(navigator.clipboard.writeText(account))}>Copy to clipboard</Link>
+                  )}
+                </Box>
+                <Box direction="row" justify="between" margin={{ vertical: "12px" }}>
+                  <Text>Balance: </Text>
+                  <Text>ETH: {balance && formatBalance(balance)}</Text>
+                </Box>
+                <Box>
+                  <TransactionsList />
+                </Box>
+              </CardBody>
             </Box>
-            </CardBody>
-            </Box>  
-          </Card>  
-      </Layer>}
-      </>
-    );
+          </Card>
+        </Layer>
+      )}
+    </>
+  );
 };
 
 const LinkIconWrapper = styled.div`

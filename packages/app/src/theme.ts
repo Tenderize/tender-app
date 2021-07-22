@@ -8,24 +8,6 @@ const overrideDefaultTheme: ThemeType = {
       text: "#FFFFFF",
       modalBackground: "#262528",
     },
-    elevation: {
-      light: {
-        none: "none",
-        xsmall: "0px 1px 2px rgba(0, 0, 0, 0.20)",
-        small: "0px 2px 4px rgba(0, 0, 0, 0.20)",
-        medium: "0px 4px 8px rgba(0, 0, 0, 0.20)",
-        large: "0px 8px 16px rgba(0, 0, 0, 0.20)",
-        xlarge: "0px 12px 24px rgba(0, 0, 0, 0.20)",
-      },
-      dark: {
-        none: "none",
-        xsmall: "0px 2px 2px rgba(255, 255, 255, 0.20)",
-        small: "0px 4px 4px rgba(255, 255, 255, 0.20)",
-        medium: "0px 6px 8px rgba(255, 255, 255, 0.20)",
-        large: "0px 8px 16px rgba(255, 255, 255, 0.20)",
-        xlarge: "0px 12px 24px rgba(255, 255, 255, 0.20)",
-      },
-    },
     font: {
       family: "IBM Plex Mono",
     },
@@ -44,6 +26,20 @@ const overrideDefaultTheme: ThemeType = {
       `,
     },
   },
+  card: {
+    header: {
+      elevation: "none",
+    },
+    body: {
+      elevation: "none",
+    },
+    container: {
+      elevation: "none",
+    },
+    footer: {
+      elevation: "none",
+    },
+  },
   formField: {
     border: false,
     label: {
@@ -52,6 +48,7 @@ const overrideDefaultTheme: ThemeType = {
       },
     },
   },
+  layer: {},
   tab: {
     border: undefined,
     pad: "none",
