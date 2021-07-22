@@ -151,34 +151,18 @@ type UserProtocol @entity {
   protocol: Protocol!
   "User"
   user: User!
-  "Tenderizer data for user"
-  tenderizer: UserTenderizer @derivedFrom(field: "userProtocol")
-  "TenderFarm data for user"
-  tenderFarm: UserTenderFarm @derivedFrom(field: "userProtocol")
-}
 
-type UserTenderizer @entity {
-  "ID: <wallet-address>_<portocol>"
-  id: ID!
-  "User-Protocol"
-  userProtocol: UserProtocol!
-  "Total amount depositied in tenderizer by given user"
-  deposits: BigDecimal!
-  "Total amount depositied in tenderizer by given user"
-  withdrawals: BigDecimal!
-}
+  "Total amount depositied in tenderizer by user"
+  tenderizerDeposits: BigDecimal!
+  "Total amount withdrawn from tenderizer by user"
+  tenderizerWithdrawals: BigDecimal!
 
-type UserTenderFarm @entity {
-  "ID: <wallet-address>_<portocol>"
-  id: ID!
-  "User-Protocol"
-  userProtocol: UserProtocol!
-  "Total amount depositied in farm by given user"
-  deposits: BigDecimal!
-  "Total amount withdrawn from farm by given user"
-  withdrawals: BigDecimal!
-  "Total amount harvest collected from farm by given user"
-  harvest: BigDecimal!
+  "Total amount depositied in farm by user"
+  farmDeposits: BigDecimal!
+  "Total amount withdrawn from farm by  user"
+  farmWithdrawals: BigDecimal!
+  "Total amount harvest collected from farm by  user"
+  farmHarvest: BigDecimal!
 }
 
 # Registry event entity

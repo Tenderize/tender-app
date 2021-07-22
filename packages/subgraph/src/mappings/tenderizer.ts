@@ -15,7 +15,7 @@ import {
 import { 
   loadOrCreateTenderizer,
   getProtocolIdByTenderizerAddress,
-  loadOrCreateUserTenderizer,
+  loadOrCreateUserProtocol,
   loadOrCreateTernderizerDay,
   ONE_BI
  } from "./utils"
@@ -32,8 +32,8 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   }
 
   // Update User data
-  let userData = loadOrCreateUserTenderizer(depositEvent.params.from.toHex(), protocolId)
-  userData.deposits = userData.deposits.plus(amount)
+  let userData = loadOrCreateUserProtocol(depositEvent.params.from.toHex(), protocolId)
+  userData.tenderizerDeposits = userData.tenderizerDeposits.plus(amount)
   userData.save()
 
   // Update day data
@@ -71,8 +71,8 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   }
 
   // Update User data
-  let userData = loadOrCreateUserTenderizer(withdrawEvent.params.from.toHex(), protocolId)
-  userData.withdrawals = userData.withdrawals.plus(amount)
+  let userData = loadOrCreateUserProtocol(withdrawEvent.params.from.toHex(), protocolId)
+  userData.tenderizerWithdrawals = userData.tenderizerWithdrawals.plus(amount)
   userData.save()
 
   // Update day data

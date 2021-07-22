@@ -4,7 +4,7 @@ import {
     getProtocolIdByTenderFarmAddress,
     loadOrCreateTenderFarmDay,
     loadOrCreateTenderFarm,
-    loadOrCreateUserTenderFarm,
+    loadOrCreateUserProtocol,
     ONE_BI,
    } from "./utils"
 
@@ -20,8 +20,8 @@ export function handleFarmEvent(farmEvent: Farm): void {
     }
     
     // Update User data
-    let userData = loadOrCreateUserTenderFarm(farmEvent.params.account.toHex(), protocolId)
-    userData.deposits = userData.deposits.plus(amount)
+    let userData = loadOrCreateUserProtocol(farmEvent.params.account.toHex(), protocolId)
+    userData.farmDeposits = userData.farmDeposits.plus(amount)
     userData.save()
 
     // Update day data
@@ -59,8 +59,8 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
     }
 
     // Update User data
-    let userData = loadOrCreateUserTenderFarm(unfarmEvent.params.account.toHex(), protocolId)
-    userData.withdrawals = userData.withdrawals.plus(amount)
+    let userData = loadOrCreateUserProtocol(unfarmEvent.params.account.toHex(), protocolId)
+    userData.farmWithdrawals = userData.farmWithdrawals.plus(amount)
     userData.save()
 
     // Update day data
@@ -98,8 +98,8 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
   }
   
   // Update User data
-  let userData = loadOrCreateUserTenderFarm(harvestEvent.params.account.toHex(), protocolId)
-  userData.harvest = userData.harvest.plus(amount)
+  let userData = loadOrCreateUserProtocol(harvestEvent.params.account.toHex(), protocolId)
+  userData.farmHarvest = userData.farmHarvest.plus(amount)
   userData.save()
 
   // Update day data

@@ -1,5 +1,5 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-import { Protocol, ProtocolConfig, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserTenderizer, UserProtocol, UserTenderFarm, TenderFarmDay, TenderFarm } from "../types/schema";
+import { Protocol, ProtocolConfig, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserProtocol, TenderFarmDay, TenderFarm } from "../types/schema";
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
@@ -76,6 +76,11 @@ export function loadOrCreateUserProtocol(address: string, protocolName: string):
     userProtocol = new UserProtocol(id)
     userProtocol.protocol = id
     userProtocol.user = address
+    userProtocol.tenderizerDeposits = ZERO_BD
+    userProtocol.tenderizerWithdrawals = ZERO_BD
+    userProtocol.farmDeposits = ZERO_BD
+    userProtocol.farmWithdrawals = ZERO_BD
+    userProtocol.farmHarvest = ZERO_BD
 
     // Save derived field
     let user = loadOrCreateUser(address)
@@ -86,38 +91,6 @@ export function loadOrCreateUserProtocol(address: string, protocolName: string):
     protocol.save()
   }
   return userProtocol as UserProtocol
-}
-
-export function loadOrCreateUserTenderizer(address: string, protocolName: string): UserTenderizer{
-  let userProtocol = loadOrCreateUserProtocol(address, protocolName)
-
-  let userTenderizer = UserTenderizer.load(address + '_' + protocolName)
-  if (userTenderizer == null){
-    userTenderizer = new UserTenderizer(address + '_' + protocolName)
-    userTenderizer.userProtocol = userProtocol.id
-    userTenderizer.deposits = ZERO_BD
-    userTenderizer.withdrawals = ZERO_BD
-
-    userProtocol.save()
-  }
-  return userTenderizer as UserTenderizer
-}
-
-
-export function loadOrCreateUserTenderFarm(address: string, protocolName: string): UserTenderFarm{
-  let userProtocol = loadOrCreateUserProtocol(address, protocolName)
-
-  let userTenderFarm = UserTenderFarm.load(address + '_' + protocolName)
-  if (userTenderFarm == null){
-    userTenderFarm = new UserTenderFarm(address + '_' + protocolName)
-    userTenderFarm.userProtocol = userProtocol.id
-    userTenderFarm.deposits = ZERO_BD
-    userTenderFarm.withdrawals = ZERO_BD
-    userTenderFarm.harvest = ZERO_BD
-
-    userProtocol.save()
-  }
-  return userTenderFarm as UserTenderFarm
 }
 
 export function getProtocolIdByTenderizerAddress(address: string): string {
