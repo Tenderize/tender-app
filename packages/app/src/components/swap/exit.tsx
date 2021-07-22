@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, ChangeEventHandler } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
@@ -65,17 +65,8 @@ const ExitPool: FC<Props> = ({
   };
 
   const [lpSharesInput, setLpSharesInput] = useState("");
-  const handleLpSharesInputChange = (e: any) => {
-    const val = e.target.value;
-    if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
-    setLpSharesInput(val);
-  };
 
   const [selectToken, setSelectToken] = useState(symbol);
-
-  const maxDeposit = () => {
-    setLpSharesInput(utils.formatEther(lpTokenBalance || "0"));
-  };
 
   const isLpSharesApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].liquidity, lpSharesInput);
 
@@ -202,23 +193,12 @@ const ExitPool: FC<Props> = ({
                   <Box pad={{ top: "medium" }} align="center">
                     <Form>
                       <Box gap="medium">
-                        <FormField label="LP Tokens to remove">
-                          <Box direction="row" align="center" gap="small">
-                            <TextInput
-                              value={lpSharesInput}
-                              onChange={handleLpSharesInputChange}
-                              type="text"
-                              placeholder={"0 " + symbolFull}
-                              className="amount"
-                            />
-                            <Button secondary onClick={() => maxDeposit()}>
-                              Max
-                            </Button>
-                          </Box>
-                          <Text>
-                            Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
-                          </Text>
-                        </FormField>
+                        <LPTokensToRemoveInputField
+                          lpTokenBalance={lpTokenBalance}
+                          lpSharesInput={lpSharesInput}
+                          setLpSharesInput={setLpSharesInput}
+                          symbolFull={symbolFull}
+                        />
                         <FormField label="You will receive">
                           <Box direction="row">
                             <Box justify="around" pad={{ right: "small" }}>
@@ -257,23 +237,12 @@ const ExitPool: FC<Props> = ({
                   <Box pad={{ top: "medium" }} align="center">
                     <Form>
                       <Box gap="medium">
-                        <FormField label="LP Tokens to remove">
-                          <Box direction="row" align="center" gap="small">
-                            <TextInput
-                              value={lpSharesInput}
-                              onChange={handleLpSharesInputChange}
-                              type="text"
-                              placeholder={"0 " + symbolFull}
-                              className="amount"
-                            />
-                            <Button secondary onClick={() => maxDeposit()}>
-                              Max
-                            </Button>
-                          </Box>
-                          <Text>
-                            Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
-                          </Text>
-                        </FormField>
+                        <LPTokensToRemoveInputField
+                          lpTokenBalance={lpTokenBalance}
+                          lpSharesInput={lpSharesInput}
+                          setLpSharesInput={setLpSharesInput}
+                          symbolFull={symbolFull}
+                        />
                         <Box>
                           <FormField label="Select Token To Receive" controlId="selectTokenReceive">
                             <Box width="medium">
@@ -335,6 +304,44 @@ const ExitPool: FC<Props> = ({
         </Layer>
       )}
     </Box>
+  );
+};
+
+const LPTokensToRemoveInputField: FC<{
+  lpSharesInput: string;
+  setLpSharesInput: (value: string) => void;
+  symbolFull: string;
+  lpTokenBalance: BigNumberish;
+}> = ({ lpSharesInput, setLpSharesInput, symbolFull, lpTokenBalance }) => {
+  const maxDeposit = useCallback(() => {
+    setLpSharesInput(utils.formatEther(lpTokenBalance || "0"));
+  }, [lpTokenBalance, setLpSharesInput]);
+
+  const handleLpSharesInputChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      const val = e.target.value;
+      if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
+      setLpSharesInput(val);
+    },
+    [setLpSharesInput]
+  );
+
+  return (
+    <FormField label="LP Tokens to remove">
+      <Box direction="row" align="center" gap="small">
+        <TextInput
+          value={lpSharesInput}
+          onChange={handleLpSharesInputChange}
+          type="text"
+          placeholder={"0 " + symbolFull}
+          className="amount"
+        />
+        <Button secondary onClick={() => maxDeposit()}>
+          Max
+        </Button>
+      </Box>
+      <Text>Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}</Text>
+    </FormField>
   );
 };
 
