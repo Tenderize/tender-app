@@ -17,19 +17,17 @@ import {
   getProtocolIdByTenderizerAddress,
   loadOrCreateUserProtocol,
   loadOrCreateTernderizerDay,
-  ONE_BI
+  ONE_BI,
+  BI_18,
+  exponentToBigDecimal,
+  getUSDPrice,
  } from "./utils"
 
 export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizerAddress = depositEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = depositEvent.params.amount.toBigDecimal()
-
-  // Sanity check, tenderizers would generally always be registered
-  if(protocolId ==  ''){
-    // TODO: add log
-    return
-  }
+  let usdPrice = getUSDPrice(protocolId)
 
   // Update User data
   let userData = loadOrCreateUserProtocol(depositEvent.params.from.toHex(), protocolId)
@@ -48,6 +46,7 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   tenderizer.deposits = tenderizer.deposits.plus(amount)
   tenderizer.depositCount = tenderizer.depositCount.plus(ONE_BI)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
+  tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event
@@ -63,12 +62,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizerAddress = withdrawEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = withdrawEvent.params.amount.toBigDecimal()
-
-  // Sanity check, tenderizers would generally always be registered
-  if(protocolId ==  ''){
-    // TODO: add log
-    return
-  }
+  let usdPrice = getUSDPrice(protocolId)
 
   // Update User data
   let userData = loadOrCreateUserProtocol(withdrawEvent.params.from.toHex(), protocolId)
@@ -87,6 +81,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   tenderizer.withdrawals = tenderizer.withdrawals.plus(amount)
   tenderizer.withdrawalCount = tenderizer.withdrawalCount.plus(ONE_BI)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.minus(amount)
+  tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event
@@ -102,12 +97,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   let tenderizerAddress = rewardsClaimedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = rewardsClaimedEvent.params.rewards.toBigDecimal()
-
-  // Sanity check, tenderizers would generally always be registered
-  if(protocolId ==  ''){
-    // TODO: add log
-    return
-  }
+  let usdPrice = getUSDPrice(protocolId)
 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
@@ -118,8 +108,10 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   // Update Tenderizer data
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.rewards = tenderizer.rewards.plus(amount)
+  tenderizer.rewardsUSD = tenderizer.rewards.div(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.rewardCount = tenderizer.rewardCount.plus(ONE_BI)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
+  tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event
@@ -134,16 +126,12 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
 export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: ProtocolFeeCollected): void {
   let tenderizerAddress = protocolFeeCollectedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
+  let usdPrice = getUSDPrice(protocolId)
 
-  // Sanity check, tenderizers would generally always be registered
-  if(protocolId ==  ''){
-    // TODO: add log
-    return
-  }
-
-  // Update Tenderizer deposit total
+  // Update Tenderizer totals
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.protocolFees = tenderizer.protocolFees.plus(protocolFeeCollectedEvent.params.amount.toBigDecimal())
+  tenderizer.protocolFeesUSD = tenderizer.protocolFees.div(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event
@@ -157,16 +145,12 @@ export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: Proto
 export function handleLiquidityFeeCollectedEvent(liquidityFeeCollectedEvent: LiquidityFeeCollected): void {
   let tenderizerAddress = liquidityFeeCollectedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
+  let usdPrice = getUSDPrice(protocolId)
 
-  // Sanity check, tenderizers would generally always be registered
-  if(protocolId ==  ''){
-    // TODO: add log
-    return
-  }
-
-  // Update Tenderizer deposit total
+  // Update Tenderizer totals
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.liquidityFees = tenderizer.liquidityFees.plus(liquidityFeeCollectedEvent.params.amount.toBigDecimal())
+  tenderizer.liquidityFeesUSD = tenderizer.liquidityFees.div(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event

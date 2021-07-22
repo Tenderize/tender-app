@@ -6,19 +6,18 @@ import {
     loadOrCreateTenderFarm,
     loadOrCreateUserProtocol,
     ONE_BI,
+    getUSDPrice,
+    BI_18,
+    exponentToBigDecimal,
+    LPTokenToToken,
    } from "./utils"
 
 export function handleFarmEvent(farmEvent: Farm): void {
     let tenderFarmAddress = farmEvent.address.toHex()
     let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = farmEvent.params.amount.toBigDecimal()
-
-    // Sanity check, tenderizers would generally always be registered
-    if(protocolId ==  ''){
-      // TODO: add log
-      return
-    }
-    
+    let usdPrice = getUSDPrice(protocolId)
+   
     // Update User data
     let userData = loadOrCreateUserProtocol(farmEvent.params.account.toHex(), protocolId)
     userData.farmDeposits = userData.farmDeposits.plus(amount)
@@ -36,6 +35,8 @@ export function handleFarmEvent(farmEvent: Farm): void {
     tenderFarm.deposits = tenderFarm.deposits.plus(amount)
     tenderFarm.depositCount = tenderFarm.depositCount.plus(ONE_BI)
     tenderFarm.currentPrincipal = tenderFarm.currentPrincipal.plus(amount)
+    let tokens = LPTokenToToken(tenderFarm.currentPrincipal, protocolId)
+    tenderFarm.TVL = tokens.div(exponentToBigDecimal(BI_18)).times(usdPrice)
     tenderFarm.save()
 
     // Save raw event
@@ -51,12 +52,7 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
     let tenderFarmAddress = unfarmEvent.address.toHex()
     let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = unfarmEvent.params.amount.toBigDecimal()
-
-    // Sanity check, tenderizers would generally always be registered
-    if(protocolId ==  ''){
-      // TODO: add log
-      return
-    }
+    let usdPrice = getUSDPrice(protocolId)
 
     // Update User data
     let userData = loadOrCreateUserProtocol(unfarmEvent.params.account.toHex(), protocolId)
@@ -75,6 +71,8 @@ export function handleUnfarmEvent(unfarmEvent: Farm): void {
     tenderFarm.withdrawals = tenderFarm.withdrawals.plus(amount)
     tenderFarm.withdrawalCount = tenderFarm.withdrawalCount.plus(ONE_BI)
     tenderFarm.currentPrincipal = tenderFarm.currentPrincipal.minus(amount)
+    let tokens = LPTokenToToken(tenderFarm.currentPrincipal, protocolId)
+    tenderFarm.TVL = tokens.div(exponentToBigDecimal(BI_18)).times(usdPrice)
     tenderFarm.save()
 
     // Save raw event
@@ -90,12 +88,7 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
   let tenderFarmAddress = harvestEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
   let amount = harvestEvent.params.amount.toBigDecimal()
-
-  // Sanity check, tenderizers would generally always be registered
-  if(protocolId ==  ''){
-    // TODO: add log
-    return
-  }
+  let usdPrice = getUSDPrice(protocolId)
   
   // Update User data
   let userData = loadOrCreateUserProtocol(harvestEvent.params.account.toHex(), protocolId)
@@ -108,10 +101,11 @@ export function handleHarvestEvent(harvestEvent: Farm): void {
   day.cumulatinveHarvest = day.cumulatinveHarvest.plus(amount)
   day.save()
 
-  // Update Tenderizer deposit total
+  // Update Tenderizer totals
   let tenderFarm = loadOrCreateTenderFarm(protocolId)
   tenderFarm.harvest = tenderFarm.harvest.plus(amount)
   tenderFarm.harvestCount = tenderFarm.harvestCount.plus(ONE_BI)
+  tenderFarm.harvestUSD = tenderFarm.harvest.div(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderFarm.save()
 
   // Save raw event
