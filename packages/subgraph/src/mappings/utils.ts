@@ -1,9 +1,22 @@
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { BigDecimal, BigInt, Address, dataSource } from "@graphprotocol/graph-ts";
 import { Protocol, ProtocolConfig, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserProtocol, TenderFarmDay, TenderFarm } from "../types/schema";
+import { OneInch } from "../types/templates/Tenderizer/OneInch"
+import * as config from "./config"
+import { BPool } from "../types/templates/TenderFarm/BPool"
+import { ElasticSupplyPool } from "../types/templates/TenderFarm/ElasticSupplyPool"
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
 export let ZERO_BD = BigDecimal.fromString('0')
+export let BI_18 = BigInt.fromI32(18)
+
+export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
+  let bd = BigDecimal.fromString("1");
+  for (let i = ZERO_BI; i.lt(decimals as BigInt); i = i.plus(ONE_BI)) {
+    bd = bd.times(BigDecimal.fromString("10"));
+  }
+  return bd;
+}
 
 export function loadOrCreateTenderizeGlobal(): TenderizeGlobal {
   let tenderizeGlobal = TenderizeGlobal.load('1')
@@ -34,10 +47,14 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
     tenderizer.withdrawals = ZERO_BD
     tenderizer.withdrawalCount = ZERO_BI
     tenderizer.rewards = ZERO_BD
+    tenderizer.rewardsUSD = ZERO_BD
     tenderizer.rewardCount = ZERO_BI
     tenderizer.currentPrincipal = ZERO_BD
+    tenderizer.TVL = ZERO_BD
     tenderizer.protocolFees = ZERO_BD
+    tenderizer.protocolFeesUSD = ZERO_BD
     tenderizer.liquidityFees = ZERO_BD
+    tenderizer.liquidityFeesUSD = ZERO_BD
   }
 
   return tenderizer as Tenderizer
@@ -55,7 +72,9 @@ export function loadOrCreateTenderFarm(id: string): TenderFarm {
     tenderFarm.withdrawalCount = ZERO_BI
     tenderFarm.harvest = ZERO_BD
     tenderFarm.harvestCount = ZERO_BI
+    tenderFarm.harvestUSD = ZERO_BD
     tenderFarm.currentPrincipal = ZERO_BD
+    tenderFarm.TVL = ZERO_BD
   }
 
   return tenderFarm as TenderFarm
@@ -159,4 +178,33 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     day.cumulatinveHarvest = tenderFarm.harvest
   }
   return day as TenderFarmDay;
+}
+
+export function getUSDPrice(protocol: string): BigDecimal {
+  if(dataSource.network() != 'mainnet'){
+    return ZERO_BD
+  }
+
+  if(protocol == 'livepeer'){
+    let daiLptBPool = OneInch.bind(Address.fromString(config.ONEINCH_ADDRESS))
+    let res = daiLptBPool.getExpectedReturn(
+      Address.fromString(config.DAI_ADDRESS),
+      Address.fromString(config.LPT_ADDRESS),
+      BigInt.fromI32(100),
+      BigInt.fromI32(10),
+      ZERO_BI
+    )
+    return res.value0.divDecimal(BigDecimal.fromString('100'))
+  }
+  return ZERO_BD
+}
+
+export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {
+  let config = ProtocolConfig.load(protocol)
+  let bPool = BPool.bind(Address.fromString(config.bpool))
+  let esp = ElasticSupplyPool.bind(Address.fromString(config.esp))
+  let totalSupply = esp.totalSupply().toBigDecimal()
+  let steakTokens = bPool.getBalance(Address.fromString(config.steak)).toBigDecimal()
+  let tenderTokens = bPool.getBalance(Address.fromString(config.tenderToken)).toBigDecimal()
+  return amount.div(totalSupply).times(steakTokens.plus(tenderTokens))
 }

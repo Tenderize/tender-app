@@ -42,6 +42,8 @@ templates:
         abis:
           - name: Tenderizer
             file: ../contracts/src/abis/Tenderizer.json
+          - name: OneInch
+            file: ../contracts/src/abis/OneInch.json
         eventHandlers:
           - event: Deposit(indexed address,uint256)
             handler: handleDepositEvent
@@ -68,6 +70,12 @@ templates:
         abis:
           - name: TenderFarm
             file: ../contracts/src/abis/TenderFarm.json
+          - name: OneInch
+            file: ../contracts/src/abis/OneInch.json
+          - name: BPool
+            file: ../contracts/src/abis/BPool.json
+          - name: ElasticSupplyPool
+            file: ../contracts/src/abis/ElasticSupplyPool.json
         eventHandlers:
           - event: Farm(indexed address,uint256)
             handler: handleFarmEvent
