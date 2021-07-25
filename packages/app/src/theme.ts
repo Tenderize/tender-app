@@ -48,7 +48,9 @@ const overrideDefaultTheme: ThemeType = {
       },
     },
   },
-  layer: {},
+  layer: {
+    background: "modalBackground",
+  },
   tab: {
     border: undefined,
     pad: "none",
