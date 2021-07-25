@@ -80,13 +80,13 @@ const ConfirmSwapModal: FC<Props> = ({
     <>
       {show && (
         <Layer
-          background="transparent"
+          animation="fadeIn"
           onEsc={() => {
             confirmStatus !== "Submitted" && onDismiss();
           }}
           onClickOutside={() => confirmStatus !== "Submitted" && onDismiss()}
         >
-          <Card pad="medium" background={normalizeColor("modalBackground", theme)}>
+          <Card pad="medium">
             <CardHeader
               justify="center"
               pad={{ bottom: "small" }}

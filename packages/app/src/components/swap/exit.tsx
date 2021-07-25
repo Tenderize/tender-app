@@ -173,13 +173,13 @@ const ExitPool: FC<Props> = ({
 
       {show && (
         <Layer
+          animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"
-          background="transparent"
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
         >
-          <Card pad="medium" width="large" background={normalizeColor("modalBackground", theme)}>
+          <Card pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Exit tender${symbol}/${symbol}`}</CardHeader>
             <CardBody>
               <Tabs id="exit-type" activeIndex={tabIndex} onActive={onActive}>

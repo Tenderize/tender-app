@@ -236,13 +236,13 @@ const JoinPool: FC<Props> = ({
       <Button primary color="brand" onClick={handleShow} label="Join Pool" />
       {show && (
         <Layer
+          animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"
-          background="transparent"
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
         >
-          <Card pad="medium" width="large" background={normalizeColor("modalBackground", theme)}>
+          <Card pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Join tender${symbol}/${symbol}`}</CardHeader>
             <CardBody>
               <Tabs id="join-type" activeIndex={tabIndex} onActive={onActive}>
