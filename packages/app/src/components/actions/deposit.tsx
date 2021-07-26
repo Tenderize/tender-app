@@ -77,7 +77,6 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
             />
             <Button
               primary
-              color="brand"
               fill="horizontal"
               disabled={
                 !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"

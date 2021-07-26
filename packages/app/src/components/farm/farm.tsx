@@ -46,7 +46,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenapproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput);
+  const isTokenApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput);
 
   // Contract Functions
   const { state: farmTx, send: farm } = useContractFunction(contracts[name].farm, "farm", {
@@ -61,16 +61,15 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
 
   return (
     <>
-      <Button primary color="brand" onClick={handleShow} label="Farm" />
+      <Button primary onClick={handleShow} label="Farm" />
       {show && (
         <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
-          <Card>
-            <CardHeader>{`Farm ${symbol}`}</CardHeader>
+          <Card pad="medium" width="large">
+            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Farm ${symbol}`}</CardHeader>
             <CardBody>
               <Form>
                 <FormField>
                   <TextInput
-                    width={1}
                     value={farmInput}
                     onChange={handleFarmInputChange}
                     type="text"
@@ -83,27 +82,28 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
                 </FormField>
               </Form>
             </CardBody>
-            <CardFooter>
+            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <ApproveToken
                 symbol={symbol}
                 spender={addresses[name].farm}
                 token={contracts[name].liquidity}
-                hasAllowance={isTokenapproved}
+                hasAllowance={isTokenApproved}
               />
               <Button
-                secondary
-                disabled={!isTokenapproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
+                primary
+                disabled={!isTokenApproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
                 onClick={farmLpTokens}
-              >
-                {farmTx.status === "Mining" ? (
-                  <Box direction="row">
-                    <Spinner color="white" />
-                    Farming...
-                  </Box>
-                ) : (
-                  "Farm"
-                )}
-              </Button>
+                label={
+                  farmTx.status === "Mining" ? (
+                    <Box direction="row">
+                      <Spinner color="white" />
+                      Farming...
+                    </Box>
+                  ) : (
+                    "Farm"
+                  )
+                }
+              />
             </CardFooter>
           </Card>
         </Layer>

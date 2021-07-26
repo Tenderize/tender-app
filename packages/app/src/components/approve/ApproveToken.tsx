@@ -32,7 +32,6 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
   return (
     <Button
       secondary
-      color="brand"
       gap="medium"
       fill="horizontal"
       onClick={handleApproval}

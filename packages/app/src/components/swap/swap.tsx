@@ -148,7 +148,6 @@ const Swap: FC<Props> = ({
             />
             <Button
               primary
-              color="brand"
               disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
               onClick={() => setShowConfirm(true)}
               label="Trade"

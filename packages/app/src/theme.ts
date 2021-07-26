@@ -13,16 +13,18 @@ const overrideDefaultTheme: ThemeType = {
     },
   },
   button: {
+    border: {
+      color: "brand",
+    },
     primary: {
+      color: "brand",
       extend: `
       padding: 10px 20px;
-      border-width: -1px;
       `,
     },
     secondary: {
       extend: `
       padding: 10px 20px;
-      border-width: -1px;
       `,
     },
   },
