@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 
-import { Box, Text, TextExtendedProps } from "grommet";
+import { Text, TextExtendedProps } from "grommet";
 
 const Symbol = styled(Text)`
   font-family: IBM Plex Sans;

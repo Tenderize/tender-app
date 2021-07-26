@@ -1,10 +1,7 @@
-import { FC, useState } from "react";
-// import { useContractFunction } from "@usedapp/core";
+import { FC, useCallback, useState } from "react";
 import { addresses, contracts } from "@tender/contracts";
-import { BigNumber, BigNumberish, utils } from "ethers";
+import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
-import ApproveToken from "../approve/ApproveToken";
-import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import {
   Button,
   Box,
@@ -19,6 +16,8 @@ import {
   Spinner,
   Text,
 } from "grommet";
+import ApproveToken from "../approve/ApproveToken";
+import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 
 type Props = {
   name: string;
@@ -32,8 +31,8 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = useCallback(() => setShow(false), []);
+  const handleShow = useCallback(() => setShow(true), []);
 
   const [farmInput, setFarmInput] = useState("");
   const handleFarmInputChange = (e: any) => {
@@ -63,7 +62,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
     <>
       <Button primary onClick={handleShow} label="Farm" />
       {show && (
-        <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
+        <Layer animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
           <Card pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Farm ${symbol}`}</CardHeader>
             <CardBody>

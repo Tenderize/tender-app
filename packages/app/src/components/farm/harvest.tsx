@@ -46,14 +46,14 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
       />
       {show && (
         <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
-          <Card>
-            <CardHeader>{`Harvest ${symbol}`}</CardHeader>
-            <CardBody>
+          <Card pad="medium" width="large">
+            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Harvest ${symbol}`}</CardHeader>
+            <CardBody align="center">
               <Text className="balance">
                 Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
               </Text>
             </CardBody>
-            <CardFooter>
+            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Button primary onClick={handleClose}>
                 Cancel
               </Button>

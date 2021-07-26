@@ -16,13 +16,19 @@ const overrideDefaultTheme: ThemeType = {
     border: {
       color: "brand",
     },
+    padding: {
+      vertical: "0px",
+      horizontal: "0px",
+    },
     primary: {
       color: "brand",
+
       extend: `
       padding: 10px 20px;
       `,
     },
     secondary: {
+      color: "brand",
       extend: `
       padding: 10px 20px;
       `,
