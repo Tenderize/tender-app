@@ -32,10 +32,9 @@ const Faucet: FC<props> = ({ symbol, name }) => {
             <CardBody>
               <Box width="large" gap="small">
                 <Text>{`Get some testnet ${symbol} and ETH (you need ETH to get ${symbol})`}</Text>
-                <Button primary color="brand" onClick={requestTokens} label={`Get ${symbol}`} />
+                <Button primary onClick={requestTokens} label={`Get ${symbol}`} />
                 <Button
                   primary
-                  color="brand"
                   href="https://faucet.metamask.io/"
                   target="_blank"
                   label="Get ETH"

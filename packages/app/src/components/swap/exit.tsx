@@ -23,8 +23,6 @@ import {
 } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
-import { normalizeColor } from "grommet/utils";
-import { theme } from "../../theme";
 
 type Props = {
   name: string;
@@ -169,7 +167,7 @@ const ExitPool: FC<Props> = ({
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
-      <SecondaryButton secondary color="brand" onClick={handleShow} label="Exit Pool" />
+      <SecondaryButton secondary onClick={handleShow} label="Exit Pool" />
 
       {show && (
         <Layer
@@ -282,20 +280,17 @@ const ExitPool: FC<Props> = ({
                 />
                 <Button
                   primary
-                  color="brand"
                   onClick={removeLiquidity}
                   disabled={!hasValue(lpSharesInput) || !isLpSharesApproved}
                   label={
-                    <>
-                      {exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
-                        <Box direction="row" align="center">
-                          <Spinner color="white" />
-                          Removing Liquidity...
-                        </Box>
-                      ) : (
-                        "Remove Liquidity"
-                      )}
-                    </>
+                    exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
+                      <Box direction="row" align="center">
+                        <Spinner color="white" />
+                        Removing Liquidity...
+                      </Box>
+                    ) : (
+                      "Remove Liquidity"
+                    )
                   }
                 />
               </Box>

@@ -233,7 +233,7 @@ const JoinPool: FC<Props> = ({
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
-      <Button primary color="brand" onClick={handleShow} label="Join Pool" />
+      <Button primary onClick={handleShow} label="Join Pool" />
       {show && (
         <Layer
           animation="fadeIn"
@@ -354,20 +354,17 @@ const JoinPool: FC<Props> = ({
                 />
                 <Button
                   primary
-                  color="brand"
                   onClick={addLiquidity}
                   disabled={true}
                   label={
-                    <>
-                      {joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
-                        <>
-                          <Spinner color="white" />
-                          Adding Liquidity...
-                        </>
-                      ) : (
-                        "Add Liquidity"
-                      )}
-                    </>
+                    joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
+                      <>
+                        <Spinner color="white" />
+                        Adding Liquidity...
+                      </>
+                    ) : (
+                      "Add Liquidity"
+                    )
                   }
                 />
               </Box>

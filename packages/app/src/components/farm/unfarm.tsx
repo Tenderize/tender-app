@@ -57,7 +57,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
 
   return (
     <>
-      <Button fill="horizontal" primary color="brand" onClick={handleShow} label="Unfarm" />
+      <Button fill="horizontal" primary onClick={handleShow} label="Unfarm" />
       {show && (
         <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
           <Card>
