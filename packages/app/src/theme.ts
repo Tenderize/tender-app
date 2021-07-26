@@ -18,9 +18,6 @@ const overrideDefaultTheme: ThemeType = {
     },
     primary: {
       color: "brand",
-      border: {
-        width: "0px",
-      },
       extend: `
       padding: 10px 20px;
       `,
