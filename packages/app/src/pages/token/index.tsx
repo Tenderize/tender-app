@@ -58,6 +58,7 @@ const Token: FC = () => {
               plain
               title={
                 <Box
+                  focusIndicator={false}
                   direction="row"
                   justify="center"
                   align="center"
