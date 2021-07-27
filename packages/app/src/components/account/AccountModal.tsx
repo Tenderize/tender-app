@@ -7,8 +7,8 @@ import { BigNumber } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
 import { motion } from "framer-motion";
 import { Link } from "../base";
-
 import { Box, Text, Layer, Card, CardHeader, CardBody } from "grommet";
+
 const formatter = new Intl.NumberFormat("en-us", {
   minimumFractionDigits: 4,
   maximumFractionDigits: 4,

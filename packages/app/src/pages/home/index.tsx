@@ -1,9 +1,12 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import FeaturedCards from "../../components/featured-card/";
-import { Box, Heading, Text, Button } from "grommet";
+import { Box, Heading, Text } from "grommet";
 import TenderBox from "../../components/tenderbox";
-import { XLButton } from '../../components/base'
+import { XLButton } from "../../components/base";
+import { normalizeColor } from "grommet/utils";
+import { theme } from "../../theme";
+
 const Home: FC = () => {
   return (
     <Box>
@@ -26,12 +29,18 @@ const Home: FC = () => {
           </span>
         </Text>
         <Link to="/stakers/livepeer">
-          <XLButton size="large" primary color="white" label="Open App" style={{color:"#4E66DE"}} />
+          <XLButton
+            primary
+            size="large"
+            color="white"
+            label="Open App"
+            style={{ color: normalizeColor("brand", theme) }}
+          />
         </Link>
       </Box>
       <Box flex fill justify="center" align="center">
         <TenderBox width="large">
-          <FeaturedCards /* provider={this.props.provider} */ />
+          <FeaturedCards />
         </TenderBox>
       </Box>
     </Box>

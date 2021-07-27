@@ -99,7 +99,7 @@ const Swap: FC<Props> = ({
     <Box>
       <Form>
         <Box align="center" justify="center">
-          <Box direction="row">
+          <Box direction="row" gap="small">
             <FormField
               label={`Send ${tokenSendedSymbol}`}
               validate={{ function: () => isSendInputInvalid, message: "Please provide an available amount" }}
@@ -124,6 +124,7 @@ const Swap: FC<Props> = ({
               </Box>
             </FormField>
             <Button
+              plain
               color="none"
               icon={<Transaction color="white" />}
               onClick={() => setIsSendingToken(!isSendingToken)}

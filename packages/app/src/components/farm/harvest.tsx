@@ -38,7 +38,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         onClick={handleShow}
         label={
           <Box direction="row" align="center" justify="center" gap="small">
-            <img src={harvestIcon.default} />
+            <img height={18} src={harvestIcon.default} />
             <Text>Harvest</Text>
           </Box>
         }
@@ -54,24 +54,22 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
               </Text>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Button primary onClick={handleClose}>
-                Cancel
-              </Button>
-
+              <Button primary onClick={handleClose} label="Cancel" />
               <Button
                 secondary
                 disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
                 onClick={harvestRewards}
-              >
-                {harvestTx.status === "Mining" ? (
-                  <Box direction="row">
-                    <Spinner color="white" />
-                    Harvesting...
-                  </Box>
-                ) : (
-                  "Harvest"
-                )}
-              </Button>
+                label={
+                  harvestTx.status === "Mining" ? (
+                    <Box direction="row">
+                      <Spinner color="white" />
+                      Harvesting...
+                    </Box>
+                  ) : (
+                    "Harvest"
+                  )
+                }
+              />
             </CardFooter>
           </Card>
         </Layer>
