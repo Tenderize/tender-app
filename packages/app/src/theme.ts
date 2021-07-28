@@ -8,6 +8,24 @@ const overrideDefaultTheme: ThemeType = {
       text: "#FFFFFF",
       modalBackground: "#262528",
     },
+    elevation: {
+      light: {
+        none: "none",
+        xsmall: "0px 1px 2px rgba(0, 0, 0, 0.20)",
+        small: "none",
+        medium: "0px 4px 8px rgba(0, 0, 0, 0.0)",
+        large: "0px 8px 16px rgba(0, 0, 0, 0.20)",
+        xlarge: "0px 12px 24px rgba(0, 0, 0, 0.20)",
+      },
+      dark: {
+        none: "none",
+        xsmall: "0px 2px 2px rgba(255, 255, 255, 0.20)",
+        small: "none",
+        medium: "0px 6px 8px rgba(255, 255, 255, 0.20)",
+        large: "0px 8px 16px rgba(255, 255, 255, 0.20)",
+        xlarge: "0px 12px 24px rgba(255, 255, 255, 0.20)",
+      },
+    },
     font: {
       family: "IBM Plex Mono",
     },
@@ -56,6 +74,7 @@ const overrideDefaultTheme: ThemeType = {
       elevation: "none",
     },
   },
+
   formField: {
     border: false,
     label: {
