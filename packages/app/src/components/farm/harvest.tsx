@@ -54,9 +54,9 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
               </Text>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Button primary onClick={handleClose} label="Cancel" />
+              <Button secondary onClick={handleClose} label="Cancel" />
               <Button
-                secondary
+                primary
                 disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
                 onClick={harvestRewards}
                 label={

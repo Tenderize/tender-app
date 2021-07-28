@@ -82,27 +82,31 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
               </Form>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <ApproveToken
-                symbol={symbol}
-                spender={addresses[name].farm}
-                token={contracts[name].liquidity}
-                hasAllowance={isTokenApproved}
-              />
-              <Button
-                primary
-                disabled={!isTokenApproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"}
-                onClick={farmLpTokens}
-                label={
-                  farmTx.status === "Mining" ? (
-                    <Box direction="row">
-                      <Spinner color="white" />
-                      Farming...
-                    </Box>
-                  ) : (
-                    "Farm"
-                  )
-                }
-              />
+              <Box justify="center" gap="small">
+                <ApproveToken
+                  symbol={symbol}
+                  spender={addresses[name].farm}
+                  token={contracts[name].liquidity}
+                  hasAllowance={isTokenApproved}
+                />
+                <Button
+                  primary
+                  disabled={
+                    !isTokenApproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"
+                  }
+                  onClick={farmLpTokens}
+                  label={
+                    farmTx.status === "Mining" ? (
+                      <Box direction="row">
+                        <Spinner color="white" />
+                        Farming...
+                      </Box>
+                    ) : (
+                      "Farm"
+                    )
+                  }
+                />
+              </Box>
             </CardFooter>
           </Card>
         </Layer>
