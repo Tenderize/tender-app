@@ -60,8 +60,8 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
       <Button fill="horizontal" primary onClick={handleShow} label="Unfarm" />
       {show && (
         <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
-          <Card>
-            <CardHeader>{`Unfarm ${symbol}`}</CardHeader>
+          <Card pad="medium" width="large">
+            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Unfarm ${symbol}`}</CardHeader>
             <CardBody>
               <Form>
                 <FormField label="Unfarm Amount" controlId="unfarmLpTokens">
@@ -79,25 +79,23 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
                 </FormField>
               </Form>
             </CardBody>
-            <CardFooter>
-              <Button primary onClick={handleClose}>
-                Cancel
-              </Button>
-
+            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
+              <Button primary onClick={handleClose} label="Cancel" />
               <Button
                 secondary
                 disabled={!unfarmInput || unfarmInput.toString() === "0" || unfarmTx.status === "Mining"}
                 onClick={unfarmLpTokens}
-              >
-                {unfarmTx.status === "Mining" ? (
-                  <Box direction="row">
-                    <Spinner color="white" />
-                    Unfarming...
-                  </Box>
-                ) : (
-                  "Unfarm"
-                )}
-              </Button>
+                label={
+                  unfarmTx.status === "Mining" ? (
+                    <Box direction="row">
+                      <Spinner color="white" />
+                      Unfarming...
+                    </Box>
+                  ) : (
+                    "Unfarm"
+                  )
+                }
+              />
             </CardFooter>
           </Card>
         </Layer>

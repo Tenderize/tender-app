@@ -38,7 +38,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         onClick={handleShow}
         label={
           <Box direction="row" align="center" justify="center" gap="small">
-            <img src={harvestIcon.default} />
+            <img height={18} src={harvestIcon.default} />
             <Text>Harvest</Text>
           </Box>
         }
@@ -46,32 +46,30 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
       />
       {show && (
         <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
-          <Card>
-            <CardHeader>{`Harvest ${symbol}`}</CardHeader>
-            <CardBody>
+          <Card pad="medium" width="large">
+            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Harvest ${symbol}`}</CardHeader>
+            <CardBody align="center">
               <Text className="balance">
                 Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
               </Text>
             </CardBody>
-            <CardFooter>
-              <Button primary onClick={handleClose}>
-                Cancel
-              </Button>
-
+            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
+              <Button secondary onClick={handleClose} label="Cancel" />
               <Button
-                secondary
+                primary
                 disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
                 onClick={harvestRewards}
-              >
-                {harvestTx.status === "Mining" ? (
-                  <Box direction="row">
-                    <Spinner color="white" />
-                    Harvesting...
-                  </Box>
-                ) : (
-                  "Harvest"
-                )}
-              </Button>
+                label={
+                  harvestTx.status === "Mining" ? (
+                    <Box direction="row">
+                      <Spinner color="white" />
+                      Harvesting...
+                    </Box>
+                  ) : (
+                    "Harvest"
+                  )
+                }
+              />
             </CardFooter>
           </Card>
         </Layer>

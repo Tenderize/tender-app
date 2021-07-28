@@ -16,16 +16,30 @@ const overrideDefaultTheme: ThemeType = {
     border: {
       color: "brand",
     },
+    default: {
+      background: "transparent",
+      border: {
+        color: "light-2",
+        width: "2px",
+      },
+    },
     primary: {
-      color: "brand",
-      extend: `
-      padding: 10px 20px;
-      `,
+      background: "brand",
+      padding: {
+        vertical: "10px",
+        horizontal: "20px",
+      },
     },
     secondary: {
-      extend: `
-      padding: 10px 20px;
-      `,
+      background: "transparent",
+      border: {
+        color: "brand",
+        width: "2px",
+      },
+      padding: {
+        vertical: "10px",
+        horizontal: "20px",
+      },
     },
   },
   card: {

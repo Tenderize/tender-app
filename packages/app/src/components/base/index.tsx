@@ -16,11 +16,6 @@ export const Link = styled.a`
   }
 `;
 
-export const Button = styled(GrommetButton)`
-  padding: 10px 20px;
-  border-radius: none;
-`;
-
 export const XLButton = styled(GrommetButton)`
   width: 270px;
   height: 70px;

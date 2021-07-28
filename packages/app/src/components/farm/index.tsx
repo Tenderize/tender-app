@@ -43,7 +43,7 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
   });
 
   return (
-    <Box flex={true} fill="horizontal">
+    <Box flex fill="horizontal">
       <Grid fill rows={["2/5", "2/5", "1/5"]} columns={["flex", "flex", "flex"]}>
         <Box gridArea="1 / 1 / 2 / 2" pad={{ horizontal: "25%" }}>
           <InfoCard title={"Total Staked"} text={`${utils.formatEther(totalStake?.toString() || "0")} ${symbolFull}`} />
