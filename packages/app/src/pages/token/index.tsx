@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { constants } from "ethers";
 import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
-
+import styled from "styled-components";
 import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
@@ -136,17 +136,13 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
       }
       dropAlign={{ top: "bottom" }}
       dropContent={
-        <Box
-          border={{ side: "vertical" }}
-          background={{
-            image: "url('/background.svg')",
-            size: "100vw 100vh",
-            opacity: 0.6,
-          }}
-        >
-          {options.map((option) => (
-            <DropdownOption staker={option} onClick={() => setOpen(false)} />
-          ))}
+        <Box border={{ side: "right", size: "2px" }}>
+          <DropdownBackground style={{ zIndex: 1 }} />
+          <Box style={{ zIndex: 2 }}>
+            {options.map((option) => (
+              <DropdownOption staker={option} onClick={() => setOpen(false)} />
+            ))}
+          </Box>
         </Box>
       }
     />
@@ -155,21 +151,16 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
 
 const DropdownOption: FC<{ staker: Staker; onClick: () => void }> = ({ staker, onClick }) => (
   <MaybeLink staker={staker}>
-    <Button
-      fill
-      plain
-      hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }}
-      disabled={!staker.available}
-      onClick={onClick}
-      label={
-        <Box border={{ side: "bottom" }} direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
+    <Box border={{ side: "bottom" }}>
+      <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available} onClick={onClick}>
+        <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
           <Box direction="column" align="center" pad={{ bottom: "small" }}>
             <Avatar size="medium" src={require("../../images/" + staker.logo).default} />
             <Text color="light-1">{staker.title}</Text>
           </Box>
         </Box>
-      }
-    />
+      </Button>
+    </Box>
   </MaybeLink>
 );
 
@@ -184,5 +175,15 @@ const MaybeLink: FC<{ staker: Staker }> = ({ staker, children }) => {
     return <>{children}</>;
   }
 };
+
+const DropdownBackground = styled.div`
+  background-image: url("/background.svg");
+  background-position: -50px -300px;
+  filter: blur(2px);
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+`;
 
 export default Token;
