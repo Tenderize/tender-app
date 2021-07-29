@@ -7,7 +7,7 @@ const Symbol = styled(Text)`
   font-family: IBM Plex Sans;
   font-style: normal;
   font-weight: 300;
-  font-size: 18px;
+  font-size: 16px;
   color: #ffffff;
 `;
 
@@ -15,7 +15,7 @@ const Stat = styled(Text)`
   font-family: IBM Plex Sans;
   font-style: normal;
   font-weight: bold;
-  font-size: 52px;
+  font-size: 48px;
   color: #ffffff;
 `;
 
@@ -23,7 +23,7 @@ const Decimals = styled(Text)`
   font-family: IBM Plex Sans;
   font-style: normal;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
 `;
 
