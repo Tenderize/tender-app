@@ -118,6 +118,7 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
   return (
     <DropButton
       plain
+      hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }}
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
@@ -153,21 +154,23 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
 };
 
 const DropdownOption: FC<{ staker: Staker; onClick: () => void }> = ({ staker, onClick }) => (
-  <Box border={{ side: "bottom" }} direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
-    <MaybeLink staker={staker}>
-      <Button
-        plain
-        disabled={!staker.available}
-        onClick={onClick}
-        label={
+  <MaybeLink staker={staker}>
+    <Button
+      fill
+      plain
+      hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }}
+      disabled={!staker.available}
+      onClick={onClick}
+      label={
+        <Box border={{ side: "bottom" }} direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
           <Box direction="column" align="center" pad={{ bottom: "small" }}>
             <Avatar size="medium" src={require("../../images/" + staker.logo).default} />
             <Text color="light-1">{staker.title}</Text>
           </Box>
-        }
-      />
-    </MaybeLink>
-  </Box>
+        </Box>
+      }
+    />
+  </MaybeLink>
 );
 
 const MaybeLink: FC<{ staker: Staker }> = ({ staker, children }) => {

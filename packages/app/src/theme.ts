@@ -111,6 +111,7 @@ const overrideDefaultTheme: ThemeType = {
     header: {
       extend: `
         overflow: hidden;
+        border-top-left-radius: 50px;
         border-top-right-radius: 50px;
         min-width: 100%;
         flex: 1 1 auto;
