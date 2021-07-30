@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Text } from "grommet";
+import { Box } from "grommet";
 
 import TokenCard from "../token-card";
 import stakers from "../../data/stakers";

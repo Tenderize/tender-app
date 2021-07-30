@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { utils, BigNumberish } from "ethers";
-import { useContractCall, useTokenAllowance } from "@usedapp/core";
+import { useContractCall } from "@usedapp/core";
 import { Box, Grid } from "grommet";
 import Farm from "./farm";
 import Unfarm from "./unfarm";
@@ -17,9 +17,6 @@ type Props = {
 
 const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
   const symbolFull = `t${symbol}-${symbol} Pool Token`;
-
-  // Contract state
-  const lpTokenAllowance = useTokenAllowance(addresses[name].liquidity, account, addresses[name].farm);
 
   const stakeOf = useContractCall({
     abi: contracts[name].farm.interface,
@@ -74,7 +71,6 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
             name={name}
             symbol={symbolFull}
             tokenBalance={lpTokenBalance || "0"}
-            tokenAllowance={lpTokenAllowance || "0"}
           />
         </Box>
         <Box gridArea="3 / 2 / 4 / 3" pad={{ horizontal: "large", top: "medium" }}>

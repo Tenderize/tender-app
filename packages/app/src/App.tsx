@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Route, Switch } from "react-router";
-import { Box, Grid } from "grommet";
+import { Grid } from "grommet";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import Home from "./pages/home";

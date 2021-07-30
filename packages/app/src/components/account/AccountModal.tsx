@@ -5,7 +5,6 @@ import { TransactionsList } from "../transactions";
 import { formatEther } from "@ethersproject/units";
 import { BigNumber } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
-import { motion } from "framer-motion";
 import { Link } from "../base";
 import { Box, Text, Layer, Card, CardHeader, CardBody } from "grommet";
 
@@ -17,7 +16,7 @@ const formatter = new Intl.NumberFormat("en-us", {
 const formatBalance = (balance: BigNumber | undefined) =>
   formatter.format(parseFloat(formatEther(balance ?? BigNumber.from("0"))));
 
-export type AccountModalProps = {
+type AccountModalProps = {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };

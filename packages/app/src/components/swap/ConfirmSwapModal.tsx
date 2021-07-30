@@ -19,8 +19,6 @@ import {
 
 import { useContractFunction } from "@usedapp/core";
 import InfoCard from "../tenderizers/infocard";
-import { normalizeColor } from "grommet/utils";
-import { theme } from "../../theme";
 
 type Props = {
   show: boolean;

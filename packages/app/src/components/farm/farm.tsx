@@ -23,10 +23,9 @@ type Props = {
   name: string;
   symbol: string;
   tokenBalance: BigNumberish;
-  tokenAllowance: BigNumberish;
 };
 
-const Farm: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
+const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
   // Component state & helpers
 
   const [show, setShow] = useState(false);

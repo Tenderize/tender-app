@@ -1,6 +1,6 @@
 import { FC, useState, useCallback, ChangeEventHandler } from "react";
 import { addresses, contracts } from "@tender/contracts";
-import { BigNumber, BigNumberish, utils, constants } from "ethers";
+import { BigNumberish, utils } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 import {
   Button,
@@ -56,11 +56,6 @@ const ExitPool: FC<Props> = ({
   const handleShow = () => setShow(true);
 
   const [isMulti, setIsMulti] = useState(true);
-  const handleMulti = (v: string | null) => {
-    if (v === "single") setIsMulti(false);
-    if (v === "multi") setIsMulti(true);
-  };
-
   const [lpSharesInput, setLpSharesInput] = useState("");
 
   const [selectToken, setSelectToken] = useState(symbol);
@@ -69,11 +64,6 @@ const ExitPool: FC<Props> = ({
 
   const hasValue = (val: any) => {
     return val && val !== "0";
-  };
-
-  const useButtonDisabled = () => {
-    if (!hasValue(lpSharesInput)) return true;
-    if (!isLpSharesApproved) return true;
   };
 
   const useCalcSingleOutGivenPoolIn = () => {
@@ -118,14 +108,6 @@ const ExitPool: FC<Props> = ({
       transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
     }
   );
-
-  const calcWeight = (weight: BigNumberish): BigNumberish => {
-    if (totalWeight.toString() === "0") {
-      return constants.Zero;
-    }
-    const weightBn = BigNumber.from(weight.toString());
-    return weightBn.mul(utils.parseEther("1")).div(totalWeight.toString()).mul(100);
-  };
 
   const calcPoolOutFromRatio = (balance: BigNumberish) => {
     const tokenInBN = utils.parseEther(lpSharesInput || "0");
@@ -173,8 +155,8 @@ const ExitPool: FC<Props> = ({
           animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"
-          onEsc={() => setShow(false)}
-          onClickOutside={() => setShow(false)}
+          onEsc={handleClose}
+          onClickOutside={handleClose}
         >
           <Card pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Exit tender${symbol}/${symbol}`}</CardHeader>

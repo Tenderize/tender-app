@@ -3,7 +3,7 @@ import { Box, Tabs, Tab, Text, Paragraph, Avatar, DropButton, Button } from "gro
 import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
 import { Link, useLocation } from "react-router-dom";
 import { constants } from "ethers";
-import { useEthers, useTokenAllowance, useTokenBalance } from "@usedapp/core";
+import { useEthers, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import styled from "styled-components";
 import { Deposit } from "../../components/actions";
@@ -25,11 +25,6 @@ const Token: FC = () => {
   const tokenBalance = useTokenBalance(addresses[name].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
   const lpTokenBal = useTokenBalance(addresses[name].liquidity, account) || constants.Zero;
-
-  const tokenAllowance =
-    useTokenAllowance(addresses[name].token, account, addresses[name].controller) || constants.Zero;
-  const tenderAllowance =
-    useTokenAllowance(addresses[name].tenderToken, account, addresses[name].swap) || constants.Zero;
 
   const logo = require("../../images/" + info.logo).default;
 
@@ -70,7 +65,7 @@ const Token: FC = () => {
                   top: "medium",
                 }}
               >
-                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tokenAllowance={tokenAllowance} />
+                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} />
               </Box>
             </Tab>
             <Tab
