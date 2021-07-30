@@ -40,8 +40,8 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
-    <Grid fill rows={["1/2", "1/2"]}>
-      <Box flex fill="horizontal" direction="row" justify="center">
+    <Box align="center" justify="center" gap="medium" pad={{ left: "medium" }}>
+      <Box flex fill="horizontal" direction="row" justify="center" pad={{ left: "large" }}>
         <InfoCard
           title={`${symbol} Balance`}
           text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
@@ -50,7 +50,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
         <InfoCard title={"My Rewards"} text={`0.00 tender${symbol}`} />
       </Box>
 
-      <Box fill="horizontal" direction="row" justify="center" align="center" pad={{ horizontal: "xlarge" }}>
+      <Box fill="horizontal" direction="row" justify="center" align="center">
         <Form>
           <FormField label="Deposit Amount" controlId="formDeposit">
             <TextInput
@@ -96,7 +96,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
           </Box>
         </Form>
       </Box>
-    </Grid>
+    </Box>
   );
 };
 

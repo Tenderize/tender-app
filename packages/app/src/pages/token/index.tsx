@@ -87,7 +87,6 @@ const Token: FC = () => {
                 round={{ corner: "bottom" }}
                 border="top"
                 pad={{
-                  horizontal: "large",
                   top: "medium",
                 }}
               >
