@@ -38,7 +38,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         onClick={handleShow}
         label={
           <Box direction="row" align="center" justify="center" gap="small">
-            <img height={18} src={harvestIcon.default} />
+            <img height={18} width={8.69} src={harvestIcon.default} alt="" />
             <Text>Harvest</Text>
           </Box>
         }

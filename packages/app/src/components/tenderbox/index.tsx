@@ -18,6 +18,7 @@ const TenderBox: FC<BoxExtendedProps> = (props) => {
   return (
     <BlurryBox {...props}>
       <img
+        alt="hammer logo"
         src={hammer.default}
         style={{
           position: "absolute",
@@ -28,6 +29,7 @@ const TenderBox: FC<BoxExtendedProps> = (props) => {
         }}
       />
       <img
+        alt="steak logo"
         src={meat.default}
         style={{
           position: "absolute",

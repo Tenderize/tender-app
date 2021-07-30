@@ -9,7 +9,7 @@ const Foot: FC = () => {
   return (
     <Footer pad={{ horizontal: "100px", vertical: "5px" }}>
       <Box align="end" direction="row" gap="xsmall">
-        <img width="120" src={logo.default} />
+        <img width="120" height="34.97" src={logo.default} alt="footer logo" />
       </Box>
       <Text alignSelf="center" textAlign="center" size="xsmall" color="white">
         © Tenderize Me, inc. 2021
