@@ -8,6 +8,10 @@ In the project directory, you can run:
 
 ### Subgraph
 
+#### `yarn prepare:[network]`
+
+Generate subgraph.yaml from the template, eg. `yarn prepare:rinkeby`
+
 #### `yarn codegen`
 
 Generates AssemblyScript types for smart contract ABIs and the subgraph schema.
