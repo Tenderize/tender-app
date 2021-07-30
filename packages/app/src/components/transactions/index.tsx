@@ -100,7 +100,7 @@ interface ListElementProps {
   type: Notification["type"];
 }
 
-const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date, type }) => {
+const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date }) => {
   return (
     <ListElementWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
       <ListIconContainer>

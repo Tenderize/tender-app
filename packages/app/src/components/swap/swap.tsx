@@ -51,7 +51,6 @@ const Swap: FC<Props> = ({
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
-  const tokenReceivedBalance = isSendingToken ? tenderTokenBalance : tokenBalance;
   const tokenSendedLpBalance = isSendingToken ? tokenLpBalance : tenderLpBalance;
   const tokenSendedWeight = isSendingToken ? tokenWeight : tenderTokenWeight;
   const tokenSendedAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Card, CardHeader, CardBody, Text } from "grommet";
+import { Box, Card, CardHeader, CardBody } from "grommet";
 import Statistic from "./statistic";
 
 type Props = {

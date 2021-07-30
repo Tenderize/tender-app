@@ -5,7 +5,6 @@ import { TransactionsList } from "../transactions";
 import { formatEther } from "@ethersproject/units";
 import { BigNumber } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
-import { motion } from "framer-motion";
 import { Link } from "../base";
 import { Box, Text, Layer, Card, CardHeader, CardBody } from "grommet";
 

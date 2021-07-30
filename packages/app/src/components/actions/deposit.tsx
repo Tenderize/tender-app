@@ -5,16 +5,15 @@ import { FC, useState } from "react";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import InfoCard from "../tenderizers/infocard";
-import { Button, Box, Grid, Form, FormField, TextInput, Spinner, Text } from "grommet";
+import { Button, Box, Form, FormField, TextInput, Spinner, Text } from "grommet";
 
 type Props = {
   name: string;
   symbol: string;
   tokenBalance: BigNumberish;
-  tokenAllowance: BigNumberish;
 };
 
-const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tokenAllowance }) => {
+const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
   const [depositInput, setDepositInput] = useState("");
 
   const maxDeposit = () => {

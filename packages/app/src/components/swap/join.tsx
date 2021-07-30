@@ -23,8 +23,6 @@ import {
 } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
-import { normalizeColor } from "grommet/utils";
-import { theme } from "../../theme";
 
 type Props = {
   name: string;
@@ -62,12 +60,6 @@ const JoinPool: FC<Props> = ({
   const handleShow = () => setShow(true);
 
   const [isMulti, setIsMulti] = useState(true);
-  const handleMulti = (v: string | null) => {
-    if (v === "single") setIsMulti(false);
-    if (v === "multi") setIsMulti(true);
-    setTokenInput("");
-    setTenderInput("");
-  };
 
   const [tokenInput, setTokenInput] = useState("");
   const handleTokenInputChange = (e: any) => {
@@ -127,7 +119,7 @@ const JoinPool: FC<Props> = ({
     return val && val !== "0";
   };
 
-  const useButtonDisabled = () => {
+  const isButtonDisabled = () => {
     if (isMulti) {
       return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved);
     } else {
@@ -239,8 +231,8 @@ const JoinPool: FC<Props> = ({
           animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"
-          onEsc={() => setShow(false)}
-          onClickOutside={() => setShow(false)}
+          onEsc={handleClose}
+          onClickOutside={handleClose}
         >
           <Card pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Join tender${symbol}/${symbol}`}</CardHeader>
@@ -355,7 +347,7 @@ const JoinPool: FC<Props> = ({
                 <Button
                   primary
                   onClick={addLiquidity}
-                  disabled={true}
+                  disabled={isButtonDisabled()}
                   label={
                     joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
                       <>

@@ -1,4 +1,4 @@
-import { BigNumberish, utils, BigNumber } from "ethers";
+import { BigNumberish, utils } from "ethers";
 
 export const weiToEth = (amount: BigNumberish): string => {
   return utils.formatEther(amount.toString()) ?? "0";
