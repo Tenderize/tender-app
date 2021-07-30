@@ -1,13 +1,289 @@
-type Token @entity {
+type TenderizeGlobal @entity { # Global Values/ TODO: better name?
+  "Fixed ID of '1'"
   id: ID!
-  decimals: Int
-  name: String
-  symbol: String
+  "List of congifs for all integrations"
+  configs: [Config!]!
+  # TODO: Add global totals 
 }
 
-type Transfer @entity {
+type Config @entity{
+  "Name of the protocol eg. 'livepeer'"
   id: ID!
+  "Address of the Controller"
+  controller: String!
+  "Address of the ERC20 token for integration"
+  steak: String!
+  "Address of Tenderizer"
+  tenderizer: String!
+  "Address of ERC20 Tender Token"
+  tenderToken: String!
+  "Address of Elastic Supply Pool"
+  esp: String!
+  "Address of liquidity pool for pair"
+  bpool: String!
+  "Address of TenderFarm contract"
+  tenderFarm: String!
+}
+
+type Deployment @entity {
+  "Name of the protocol eg. 'livepeer'"
+  id: ID!
+  "Tenderizer Data"
+  tenderizer: Tenderizer!
+  "TenderFarm Data"
+  tenderFarm: TenderFarm!
+  "Paritcipating user list"
+  users: [UserDeployment!] @derivedFrom(field: "deployment")
+}
+
+type Tenderizer @entity {
+  "Name of the protocol eg. 'livepeer'"
+  id: ID!
+
+  "Total amount depositied in tenderizer"
+  deposits: BigInt!
+  "Total amount withdrawn from tenderizer"
+  withdrawals: BigInt!
+  "Total rewards collected from protocol"
+  rewards: BigInt!
+  "Total rewards collected from protocol in USD"
+  rewardsUSD: BigDecimal!
+  "Total deposits + total rewards - slashes - total withdrawals"
+  currentPrincipal: BigInt!
+  "Current Principle in USD"
+  TVL: BigDecimal!
+
+  "Total amount of protocol fees collected from tenderizer"
+  protocolFees: BigInt!
+  "Total amount of protocol fees collected from tenderizer in USD"
+  protocolFeesUSD: BigDecimal!
+  "Total amount of liquidity fees collected from tenderizer"
+  liquidityFees: BigInt!
+  "Total amount of liquidity fees collected from tenderizer in USD"
+  liquidityFeesUSD: BigDecimal!
+
+  "Day data for tenderizer"
+  dayData: [TenderizerDay!]
+}
+
+type TenderFarm @entity {
+  "Name of the protocol eg. 'livepeer'"
+  id: ID!
+
+  "Total deposits made into farm"
+  deposits: BigInt!
+  "Total withrawals made from farm"
+  withdrawals: BigInt!
+  "Total rewards collected from farm"
+  harvest: BigInt!
+  "Total rewards collected from farm in USD"
+  harvestUSD: BigDecimal!
+  "Total depsotis - total withdrawals"
+  currentPrincipal: BigInt!
+  "Pending rewards in tender token shares"
+  pendingRewardShares: BigInt!
+  "CurrentPrincipal in USD"
+  TVL: BigDecimal!
+
+  "Day data for tenderFarm"
+  dayData: [TenderFarmDay!]
+}
+
+type TenderizerDay @entity {
+  "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
+  id: ID!
+  "The date beginning at 12:00am UTC"
+  date: Int!
+
+  "deposits volume in tenderizer for the day"
+  deposits: BigInt!
+  "unstakes volume in tenderizer for the day"
+  unstakes: BigInt!
+  "withdraw volume in tenderizer for the day"
+  withdrawals: BigInt!
+  "staking rewards collected from protocol for the day"
+  rewards: BigInt!
+
+  "Principle on the first event of the day"
+  startPrinciple: BigInt!
+  "Day APY - rewards/dayStartPrinciple"
+  DPY: BigDecimal!
+  "Last Total Tender Token shares of the day"
+  shares: BigInt!
+  "Last Total Tender Token supply of the day"
+  supply: BigInt!
+}
+
+type TenderFarmDay @entity {
+  "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
+  id: ID!
+  "The date beginning at 12:00am UTC"
+  date: Int!
+
+  "farm volume for the day"
+  deposits: BigInt!
+  "unfarm volume for the day"
+  withdrawals: BigInt!
+  "rewards added for the day"
+  rewards: BigInt!
+  "harvest volume for the day"
+  harvest: BigInt!
+
+  "principle in Token (not BPT) value at the start of the day"
+  startPrinciple: BigDecimal!
+  "Day APY - total rewards / total volume"
+  DPY: BigDecimal!
+}
+
+type User @entity {
+  "Wallet address of user"
+  id: ID!
+  "Data for each integration per user"
+  deployments: [UserDeployment!]! @derivedFrom(field: "user")
+}
+
+type UserDeployment @entity { 
+  "<wallet-address>_<protocol>"
+  id: ID!
+  "Protocol"
+  deployment: Deployment!
+  "User"
+  user: User!
+
+  "Users current stake: total deposits - withdrawals"
+  tenderizerStake: BigInt!
+  "Amount of rewards claimed on outbound transfers"
+  claimedRewards: BigInt!
+  "Users current amout of BPT Farmed: famrs - unfarms"
+  farmAmount: BigInt!
+  "Total amount harvest collected from farm by  user"
+  farmHarvest: BigInt!
+  "TenderToken Shares held by the user"
+  shares: BigInt!
+
+  "Day data for User"
+  dayData: [UserDeploymentDay!]
+}
+
+type UserDeploymentDay @entity {
+  "<Timestamp rounded to current day by dividing by 86400>_<wallet-address>_<protocol>"
+  id: ID!
+  "The date beginning at 12:00am UTC"
+  date: Int!
+  "Last Tender Token shares of the day"
+  shares: BigInt!
+}
+
+# Registry event entity
+type TenderizerCreatedEvent @entity {
+  id: ID!
+  name: String!
+  controller: String!
+  steak: String!
+  tenderizer: String!
+  tenderToken: String!
+  esp: String!
+  bpool: String!
+  tenderFarm: String!
+  timestamp: BigInt!
+}
+
+# Tenderizer Event entities
+type DepositEvent @entity {
+  id: ID!
+  tenderizer: String!
+  from: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type StakeEvent @entity {
+  id: ID!
+  tenderizer: String!
+  node: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type UnstakeEvent @entity {
+  id: ID!
+  tenderizer: String!
+  from: String!
+  node: String!
+  amount: BigInt!
+  unstakeLockID: BigInt!
+  timestamp: BigInt!
+}
+
+type WithdrawEvent @entity {
+  id: ID!
+  tenderizer: String!
+  from: String!
+  amount: BigInt!
+  unstakeLockID: BigInt!
+  timestamp: BigInt!
+}
+
+type RewardsClaimedEvent @entity {
+  id: ID!
+  tenderizer: String!
+  rewards: BigInt!
+  currentPrincipal: BigInt!
+  oldPrincipal: BigInt!
+  timestamp: BigInt!
+}
+
+type ProtocolFeeCollectedEvent @entity {
+  id: ID!
+  tenderizer: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type LiquidityFeeCollectedEvent @entity {
+  id: ID!
+  tenderizer: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+# TenderFarm Event entities
+type FarmEvent @entity {
+  id: ID!
+  tenderFarm: String!
+  from: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type UnfarmEvent @entity {
+  id: ID!
+  tenderFarm: String!
+  from: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type HarvestEvent @entity {
+  id: ID!
+  tenderFarm: String!
+  from: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type RewardsAddedEvent @entity {
+  id: ID!
+  tenderFarm: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type TenderTokenTransferEvent @entity {
+  id: ID!
+  tenderToken: String!
   from: String!
   to: String!
-  value: BigInt!
+  amount: BigInt!
+  timestamp: BigInt!
 }
