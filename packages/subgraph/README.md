@@ -8,6 +8,10 @@ In the project directory, you can run:
 
 ### Subgraph
 
+#### `yarn prepare:[network]`
+
+Generate subgraph manifest for the provided network from a pre-made template. This links the necessary contract addresses and starting blocks. E.g. for rinkeby: `yarn prepare:rinkeby`
+
 #### `yarn codegen`
 
 Generates AssemblyScript types for smart contract ABIs and the subgraph schema.

@@ -1,0 +1,113 @@
+specVersion: 0.0.2
+description: Liquid staking yield aggregator for web3 protocols
+repository: https://github.com/Tenderize/tender-app/packages/subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Registry
+    network: {{networkName}}
+    source:
+      startBlock: {{contracts.registry.startBlock}}
+      address: {{contracts.registry.address}}
+      abi: Registry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      abis:
+        - name: Registry
+          file: ../contracts/src/abis/Registry.json
+        - name: Tenderizer
+          file: ../contracts/src/abis/Tenderizer.json
+        - name: TenderToken
+          file: ../contracts/src/abis/TenderToken.json
+      entities:
+        - TenderizerConfig
+      eventHandlers:
+        - event: TenderizerCreated((string,address,address,address,address,address,address,address))
+          handler: handleTenderizerCreated
+      file: ./src/mappings/registry.ts
+      language: wasm/assemblyscript
+templates:
+    - name: Tenderizer
+      kind: ethereum/contract
+      network: {{networkName}}
+      source:
+        abi: Tenderizer
+      mapping:
+        kind: ethereum/events
+        apiVersion: 0.0.1
+        language: wasm/assemblyscript
+        file: ./src/mappings/tenderizer.ts
+        entities:
+          - Tenderizer
+        abis:
+          - name: Tenderizer
+            file: ../contracts/src/abis/Tenderizer.json
+          - name: OneInch
+            file: ../contracts/src/abis/OneInch.json
+          - name: TenderToken
+            file: ../contracts/src/abis/TenderToken.json
+        eventHandlers:
+          - event: Deposit(indexed address,uint256)
+            handler: handleDepositEvent
+          - event: Unstake(indexed address,indexed address,uint256,uint256)
+            handler: handleUnstakeEvent
+          - event: Withdraw(indexed address,uint256,uint256)
+            handler: handleWithdrawEvent
+          - event: RewardsClaimed(uint256,uint256,uint256)
+            handler: handleRewardsClaimedEvent
+          - event: ProtocolFeeCollected(uint256)
+            handler: handleProtocolFeeCollectedEvent
+          - event: LiquidityFeeCollected(uint256)
+            handler: handleLiquidityFeeCollectedEvent
+    - name: TenderFarm
+      kind: ethereum/contract
+      network: {{networkName}}
+      source:
+        abi: TenderFarm
+      mapping:
+        kind: ethereum/events
+        apiVersion: 0.0.1
+        language: wasm/assemblyscript
+        file: ./src/mappings/tenderFarm.ts
+        entities:
+          - Tenderizer
+        abis:
+          - name: TenderFarm
+            file: ../contracts/src/abis/TenderFarm.json
+          - name: OneInch
+            file: ../contracts/src/abis/OneInch.json
+          - name: BPool
+            file: ../contracts/src/abis/BPool.json
+          - name: ElasticSupplyPool
+            file: ../contracts/src/abis/ElasticSupplyPool.json
+          - name: TenderToken
+            file: ../contracts/src/abis/TenderToken.json
+        eventHandlers:
+          - event: Farm(indexed address,uint256)
+            handler: handleFarmEvent
+          - event: Unfarm(indexed address,uint256)
+            handler: handleUnfarmEvent
+          - event: Harvest(indexed address,uint256)
+            handler: handleHarvestEvent
+          - event: RewardsAdded(uint256)
+            handler: handleRewardsAddedEvent
+    - name: TenderToken
+      kind: ethereum/contract
+      network: {{networkName}}
+      source:
+        abi: TenderToken
+      mapping:
+        kind: ethereum/events
+        apiVersion: 0.0.1
+        language: wasm/assemblyscript
+        file: ./src/mappings/tenderToken.ts
+        entities:
+          - Tenderizer
+        abis:
+          - name: TenderToken
+            file: ../contracts/src/abis/TenderToken.json
+        eventHandlers:
+          - event: Transfer(indexed address,indexed address,uint256)
+            handler: handleTransferEvent
