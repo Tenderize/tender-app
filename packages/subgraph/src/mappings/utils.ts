@@ -53,6 +53,7 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
     tenderizer.protocolFeesUSD = ZERO_BD
     tenderizer.liquidityFees = ZERO_BD
     tenderizer.liquidityFeesUSD = ZERO_BD
+    tenderizer.shares = ZERO_BD
     tenderizer.dayData = []
   }
 
@@ -95,6 +96,7 @@ export function loadOrCreateUserDeployment(address: string, protocolName: string
     userProtocol.tenderizerStake = ZERO_BD
     userProtocol.farmAmount = ZERO_BD
     userProtocol.farmHarvest = ZERO_BD
+    userProtocol.shares = ZERO_BD
    
     // Save derived fields
     let user = loadOrCreateUser(address)

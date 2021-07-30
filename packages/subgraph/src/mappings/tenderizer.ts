@@ -1,4 +1,5 @@
 import { 
+  Config,
   DepositEvent,
   LiquidityFeeCollectedEvent,
   ProtocolFeeCollectedEvent,
@@ -23,16 +24,22 @@ import {
   getUSDPrice,
   BD_100
  } from "./utils"
+import { TenderToken } from "../types/templates/Tenderizer/TenderToken"
+import { Address, BigInt, Value } from "@graphprotocol/graph-ts";
 
 export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizerAddress = depositEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = depositEvent.params.amount.toBigDecimal()
   let usdPrice = getUSDPrice(protocolId)
+  let config = Config.load(protocolId)
+  let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
 
   // Update User data
   let userData = loadOrCreateUserDeployment(depositEvent.params.from.toHex(), protocolId)
   userData.tenderizerStake = userData.tenderizerStake.plus(amount)
+  userData.shares = tenderToken.sharesOf(depositEvent.params.from).toBigDecimal()
+  
   userData.save()
 
   // Update day data
@@ -45,6 +52,8 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   tenderizer.deposits = tenderizer.deposits.plus(amount)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
   tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
+  // let tokens = Value.fromBigDecimal(tenderizer.deposits.minus(tenderizer.withdrawals)).toBigInt()
+  // tenderizer.shares = tenderToken.tokensToShares(tokens).toBigDecimal()
   tenderizer.save()
 
   // Save raw event
@@ -61,10 +70,13 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = withdrawEvent.params.amount.toBigDecimal()
   let usdPrice = getUSDPrice(protocolId)
+  let config = Config.load(protocolId)
+  let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
 
   // Update User data
   let userData = loadOrCreateUserDeployment(withdrawEvent.params.from.toHex(), protocolId)
   userData.tenderizerStake = userData.tenderizerStake.minus(amount)
+  userData.shares = tenderToken.sharesOf(withdrawEvent.params.from).toBigDecimal()
   userData.save()
 
   // Update day data
@@ -77,6 +89,8 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   tenderizer.withdrawals = tenderizer.withdrawals.plus(amount)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.minus(amount)
   tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
+  // let tokens = Value.fromBigDecimal(tenderizer.deposits.minus(tenderizer.withdrawals)).toBigInt()
+  // tenderizer.shares = tenderToken.tokensToShares(tokens).toBigDecimal()
   tenderizer.save()
 
   // Save raw event

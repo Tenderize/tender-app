@@ -44,6 +44,8 @@ templates:
             file: ../contracts/src/abis/Tenderizer.json
           - name: OneInch
             file: ../contracts/src/abis/OneInch.json
+          - name: TenderToken
+            file: ../contracts/src/abis/TenderToken.json
         eventHandlers:
           - event: Deposit(indexed address,uint256)
             handler: handleDepositEvent
