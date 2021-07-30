@@ -17,7 +17,7 @@ const formatter = new Intl.NumberFormat("en-us", {
 const formatBalance = (balance: BigNumber | undefined) =>
   formatter.format(parseFloat(formatEther(balance ?? BigNumber.from("0"))));
 
-export type AccountModalProps = {
+type AccountModalProps = {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };

@@ -1,3 +1,5 @@
+import { FC, ReactElement, ReactNode } from "react";
+import { Box, Table, TableHeader, TableBody, Text } from "grommet";
 import type { TransactionResponse } from "@ethersproject/providers";
 import {
   getExplorerTransactionLink,
@@ -8,9 +10,8 @@ import {
   StoredTransaction,
   shortenTransactionHash,
 } from "@usedapp/core";
-import { FC, ReactElement, ReactNode } from "react";
 import styled from "styled-components";
-import { TextBold } from "../../typography";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckIcon,
   ClockIcon,
@@ -21,38 +22,24 @@ import {
   WrapIcon,
   SpinnerIcon,
 } from "./Icons";
-import { AnimatePresence, motion } from "framer-motion";
-import { formatEther } from "@ethersproject/units";
-import { BigNumber } from "ethers";
-
-import {Link} from "../base"
-
-import {Box, Table, TableHeader, TableBody, TableCell, Text} from "grommet"
+import { Link } from "../base";
 
 interface TableWrapperProps {
   children: ReactNode;
   title: string;
 }
 
-const formatter = new Intl.NumberFormat("en-us", {
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 3,
-});
-
-const formatBalance = (balance: BigNumber | undefined) =>
-  formatter.format(parseFloat(formatEther(balance ?? BigNumber.from("0"))));
-
 const TableWrapper = ({ children, title }: TableWrapperProps) => (
-    <Table>
-      <TableHeader>
-        <Text size="large">{title}</Text>
-      </TableHeader>
-      <TableBody>
-        <Box height="medium" style={{overflow: "scroll"}}>
+  <Table>
+    <TableHeader>
+      <Text size="large">{title}</Text>
+    </TableHeader>
+    <TableBody>
+      <Box height="medium" style={{ overflow: "scroll" }}>
         {children}
-        </Box>
-      </TableBody>
-    </Table>
+      </Box>
+    </TableBody>
+  </Table>
 );
 
 interface DateProps {
@@ -99,10 +86,10 @@ const TransactionLink = ({ transaction }: TransactionLinkProps) => (
 );
 
 const notificationContent: { [key in Notification["type"]]: { title: string; icon: ReactElement } } = {
-  transactionFailed: { title: "Transaction failed", icon: <ExclamationIcon fill="white"/> },
-  transactionStarted: { title: "Transaction started", icon: <ClockIcon fill="white"/> },
-  transactionSucceed: { title: "Transaction succeed", icon: <CheckIcon fill="white"/> },
-  walletConnected: { title: "Wallet connected", icon: <WalletIcon fill="white"/> },
+  transactionFailed: { title: "Transaction failed", icon: <ExclamationIcon fill="white" /> },
+  transactionStarted: { title: "Transaction started", icon: <ClockIcon fill="white" /> },
+  transactionSucceed: { title: "Transaction succeed", icon: <CheckIcon fill="white" /> },
+  walletConnected: { title: "Wallet connected", icon: <WalletIcon fill="white" /> },
 };
 
 interface ListElementProps {
@@ -116,7 +103,9 @@ interface ListElementProps {
 const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date, type }) => {
   return (
     <ListElementWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-      <ListIconContainer><Text color="white">{icon}</Text></ListIconContainer>
+      <ListIconContainer>
+        <Text color="white">{icon}</Text>
+      </ListIconContainer>
       <ListDetailsWrapper>
         <TextBold>{title}</TextBold>
         <TransactionLink transaction={transaction} />
@@ -161,22 +150,27 @@ export const TransactionsList: FC = () => {
 };
 
 const useNotificationBackground = (notification: Notification["type"]) => {
-  if (notification === "transactionFailed") return "#FF4040"
-  if (notification === "transactionSucceed") return "#00C781"
-  return "#777777"
-}
+  if (notification === "transactionFailed") return "#FF4040";
+  if (notification === "transactionSucceed") return "#00C781";
+  return "#777777";
+};
 const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title, type }) => {
   return (
     <NotificationWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-      <Box direction="row" background={useNotificationBackground(type)} pad={{horizontal: "20px", vertical:"10px"}} round="20px">
-      <NotificationIconContainer>{icon}</NotificationIconContainer>
-      <NotificationDetailsWrapper>
-        <NotificationText>{title}</NotificationText>
-        <TransactionLink transaction={transaction} />
-        <TransactionDetails>
-          {transaction && `${shortenTransactionHash(transaction?.hash)} #${transaction.nonce}`}
-        </TransactionDetails>
-      </NotificationDetailsWrapper>
+      <Box
+        direction="row"
+        background={useNotificationBackground(type)}
+        pad={{ horizontal: "20px", vertical: "10px" }}
+        round="20px"
+      >
+        <NotificationIconContainer>{icon}</NotificationIconContainer>
+        <NotificationDetailsWrapper>
+          <NotificationText>{title}</NotificationText>
+          <TransactionLink transaction={transaction} />
+          <TransactionDetails>
+            {transaction && `${shortenTransactionHash(transaction?.hash)} #${transaction.nonce}`}
+          </TransactionDetails>
+        </NotificationDetailsWrapper>
       </Box>
     </NotificationWrapper>
   );
@@ -214,6 +208,12 @@ export const NotificationsList: FC = () => {
     </NotificationsWrapper>
   );
 };
+
+const TextBold = styled(Text)`
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+`;
 
 const NotificationText = styled(TextBold)`
   font-size: 20px;
@@ -277,15 +277,6 @@ const LinkIconWrapper = styled.div`
   width: 12px;
   height: 12px;
   margin-left: 8px;
-`;
-
-const TitleRow = styled(TextBold)`
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: gray 1px solid;
-  padding: 16px;
-  font-size: 18px;
 `;
 
 const DateRow = styled.div`
