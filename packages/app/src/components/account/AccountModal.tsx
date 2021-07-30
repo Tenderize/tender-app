@@ -27,8 +27,13 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
   return (
     <>
       {account && chainId && showModal && (
-        <Layer animation="fadeIn" onEsc={() => setShowModal(false)} onClickOutside={() => setShowModal(false)}>
-          <Card>
+        <Layer
+          style={{ overflow: "scroll" }}
+          animation="fadeIn"
+          onEsc={() => setShowModal(false)}
+          onClickOutside={() => setShowModal(false)}
+        >
+          <Card flex={false}>
             <Box pad="medium" gap="medium">
               <CardHeader>
                 <Text size="xlarge">Account info</Text>

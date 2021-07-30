@@ -61,8 +61,8 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     <>
       <Button primary onClick={handleShow} label="Farm" />
       {show && (
-        <Layer animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
-          <Card pad="medium" width="large">
+        <Layer style={{ overflow: "scroll" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
+          <Card flex={false} pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Farm ${symbol}`}</CardHeader>
             <CardBody>
               <Form>

@@ -78,13 +78,14 @@ const ConfirmSwapModal: FC<Props> = ({
     <>
       {show && (
         <Layer
+          style={{ overflow: "scroll" }}
           animation="fadeIn"
           onEsc={() => {
             confirmStatus !== "Submitted" && onDismiss();
           }}
           onClickOutside={() => confirmStatus !== "Submitted" && onDismiss()}
         >
-          <Card pad="medium">
+          <Card flex={false} pad="medium">
             <CardHeader
               justify="center"
               pad={{ bottom: "small" }}

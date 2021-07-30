@@ -152,13 +152,14 @@ const ExitPool: FC<Props> = ({
 
       {show && (
         <Layer
+          style={{ overflow: "scroll" }}
           animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"
           onEsc={handleClose}
           onClickOutside={handleClose}
         >
-          <Card pad="medium" width="large">
+          <Card flex={false} pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Exit tender${symbol}/${symbol}`}</CardHeader>
             <CardBody>
               <Tabs id="exit-type" activeIndex={tabIndex} onActive={onActive}>

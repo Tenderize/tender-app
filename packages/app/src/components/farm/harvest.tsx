@@ -45,8 +45,13 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         style={{ color: "#4E66DE" }}
       />
       {show && (
-        <Layer animation="fadeIn" onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
-          <Card pad="medium" width="large">
+        <Layer
+          style={{ overflow: "scroll" }}
+          animation="fadeIn"
+          onEsc={() => setShow(false)}
+          onClickOutside={() => setShow(false)}
+        >
+          <Card flex={false} pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Harvest ${symbol}`}</CardHeader>
             <CardBody align="center">
               <Text className="balance">
