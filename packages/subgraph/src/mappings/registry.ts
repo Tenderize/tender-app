@@ -2,7 +2,8 @@ import { Config, TenderizerCreatedEvent } from "../types/schema";
 import { TenderizerCreated } from "../types/Registry/Registry"
 import { 
   Tenderizer as TenderizerContract, 
-  TenderFarm as TenderFarmContract 
+  TenderFarm as TenderFarmContract,
+  TenderToken as TenderTokenContract 
 } from "../types/templates"
 import { Tenderizer } from "../types/templates/Tenderizer/Tenderizer"
 import {
@@ -42,6 +43,7 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Create new sources
   TenderizerContract.create(params.tenderizer)
   TenderFarmContract.create(params.tenderFarm)
+  TenderTokenContract.create(params.tenderToken)
 
   // Accomodate initial deposit
   // The registry event is fired after bootstrap deposit 

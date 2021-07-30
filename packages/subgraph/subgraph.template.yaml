@@ -87,3 +87,21 @@ templates:
             handler: handleHarvestEvent
           - event: RewardsAdded(uint256)
             handler: handleRewardsAddedEvent
+    - name: TenderToken
+      kind: ethereum/contract
+      network: {{networkName}}
+      source:
+        abi: TenderToken
+      mapping:
+        kind: ethereum/events
+        apiVersion: 0.0.1
+        language: wasm/assemblyscript
+        file: ./src/mappings/tenderToken.ts
+        entities:
+          - Tenderizer
+        abis:
+          - name: TenderToken
+            file: ../contracts/src/abis/TenderToken.json
+        eventHandlers:
+          - event: Transfer(indexed address,indexed address,uint256)
+            handler: handleTransferEvent
