@@ -39,7 +39,6 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   let userData = loadOrCreateUserDeployment(depositEvent.params.from.toHex(), protocolId)
   userData.tenderizerStake = userData.tenderizerStake.plus(amount)
   userData.shares = tenderToken.sharesOf(depositEvent.params.from).toBigDecimal()
-  
   userData.save()
 
   // Update day data

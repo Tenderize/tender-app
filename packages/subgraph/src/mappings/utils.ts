@@ -133,6 +133,19 @@ export function getProtocolIdByTenderFarmAddress(address: string): string {
   return ''
 }
 
+export function getProtocolIdByTenderTokenAddress(address: string): string {
+  // TODO: Is there a better way to do this?
+  let globals = TenderizeGlobal.load('1')
+  let globalConfigs = globals.configs
+  for (let i = 0; i < globalConfigs.length; i++) { 
+    let c = Config.load(globalConfigs[i]) as Config
+    if(c.tenderToken == address){
+      return c.id
+    }
+  }
+  return ''
+}
+
 export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): TenderizerDay {
   let dayTimestamp = timestamp / 86400
   let dayID = dayTimestamp.toString() + '_' + protocol

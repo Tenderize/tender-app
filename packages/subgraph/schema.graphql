@@ -254,3 +254,12 @@ type RewardsAddedEvent @entity {
   amount: BigInt!
   timestamp: BigInt!
 }
+
+type TenderTokenTransferEvent @entity {
+  id: ID!
+  tenderToken: String!
+  from: String!
+  to: String!
+  amount: BigInt!
+  timestamp: BigInt!
+}
