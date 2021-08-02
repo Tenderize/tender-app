@@ -25,12 +25,12 @@ import {
   BD_100
  } from "./utils"
 import { TenderToken } from "../types/templates/Tenderizer/TenderToken"
-import { Address, BigInt, Value } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizerAddress = depositEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
-  let amount = depositEvent.params.amount.toBigDecimal()
+  let amount = depositEvent.params.amount
   let usdPrice = getUSDPrice(protocolId)
   let config = Config.load(protocolId)
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
@@ -38,7 +38,7 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   // Update User data
   let userData = loadOrCreateUserDeployment(depositEvent.params.from.toHex(), protocolId)
   userData.tenderizerStake = userData.tenderizerStake.plus(amount)
-  userData.shares = tenderToken.sharesOf(depositEvent.params.from).toBigDecimal()
+  userData.shares = tenderToken.sharesOf(depositEvent.params.from)
   userData.save()
 
   // Update day data
@@ -50,9 +50,9 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.deposits = tenderizer.deposits.plus(amount)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
-  tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
-  // let tokens = Value.fromBigDecimal(tenderizer.deposits.minus(tenderizer.withdrawals)).toBigInt()
-  // tenderizer.shares = tenderToken.tokensToShares(tokens).toBigDecimal()
+  tenderizer.TVL = tenderizer.currentPrincipal.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
+  let tokens = tenderizer.deposits.minus(tenderizer.withdrawals)
+  tenderizer.shares = tenderToken.tokensToShares(tokens)
   tenderizer.save()
 
   // Save raw event
@@ -67,7 +67,7 @@ export function handleDepositEvent(depositEvent: Deposit): void {
 export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizerAddress = withdrawEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
-  let amount = withdrawEvent.params.amount.toBigDecimal()
+  let amount = withdrawEvent.params.amount
   let usdPrice = getUSDPrice(protocolId)
   let config = Config.load(protocolId)
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
@@ -75,7 +75,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   // Update User data
   let userData = loadOrCreateUserDeployment(withdrawEvent.params.from.toHex(), protocolId)
   userData.tenderizerStake = userData.tenderizerStake.minus(amount)
-  userData.shares = tenderToken.sharesOf(withdrawEvent.params.from).toBigDecimal()
+  userData.shares = tenderToken.sharesOf(withdrawEvent.params.from)
   userData.save()
 
   // Update day data
@@ -87,9 +87,9 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.withdrawals = tenderizer.withdrawals.plus(amount)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.minus(amount)
-  tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
-  // let tokens = Value.fromBigDecimal(tenderizer.deposits.minus(tenderizer.withdrawals)).toBigInt()
-  // tenderizer.shares = tenderToken.tokensToShares(tokens).toBigDecimal()
+  tenderizer.TVL = tenderizer.currentPrincipal.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
+  let tokens = tenderizer.deposits.minus(tenderizer.withdrawals)
+  tenderizer.shares = tenderToken.tokensToShares(tokens)
   tenderizer.save()
 
   // Save raw event
@@ -104,21 +104,21 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
 export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): void {
   let tenderizerAddress = rewardsClaimedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
-  let amount = rewardsClaimedEvent.params.rewards.toBigDecimal()
+  let amount = rewardsClaimedEvent.params.rewards
   let usdPrice = getUSDPrice(protocolId)
 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
-  day.APY = day.rewards.div(day.startPrinciple).times(BD_100)
+  day.APY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal()).times(BD_100)
   day.save()
   
   // Update Tenderizer data
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.rewards = tenderizer.rewards.plus(amount)
-  tenderizer.rewardsUSD = tenderizer.rewards.div(exponentToBigDecimal(BI_18)).times(usdPrice)
-  tenderizer.currentPrincipal = rewardsClaimedEvent.params.currentPrincipal.toBigDecimal()
-  tenderizer.TVL = tenderizer.currentPrincipal.div(exponentToBigDecimal(BI_18)).times(usdPrice)
+  tenderizer.rewardsUSD = tenderizer.rewards.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
+  tenderizer.currentPrincipal = rewardsClaimedEvent.params.currentPrincipal
+  tenderizer.TVL = tenderizer.currentPrincipal.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event
@@ -137,8 +137,8 @@ export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: Proto
 
   // Update Tenderizer totals
   let tenderizer = loadOrCreateTenderizer(protocolId)
-  tenderizer.protocolFees = tenderizer.protocolFees.plus(protocolFeeCollectedEvent.params.amount.toBigDecimal())
-  tenderizer.protocolFeesUSD = tenderizer.protocolFees.div(exponentToBigDecimal(BI_18)).times(usdPrice)
+  tenderizer.protocolFees = tenderizer.protocolFees.plus(protocolFeeCollectedEvent.params.amount)
+  tenderizer.protocolFeesUSD = tenderizer.protocolFees.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event
@@ -156,8 +156,8 @@ export function handleLiquidityFeeCollectedEvent(liquidityFeeCollectedEvent: Liq
 
   // Update Tenderizer totals
   let tenderizer = loadOrCreateTenderizer(protocolId)
-  tenderizer.liquidityFees = tenderizer.liquidityFees.plus(liquidityFeeCollectedEvent.params.amount.toBigDecimal())
-  tenderizer.liquidityFeesUSD = tenderizer.liquidityFees.div(exponentToBigDecimal(BI_18)).times(usdPrice)
+  tenderizer.liquidityFees = tenderizer.liquidityFees.plus(liquidityFeeCollectedEvent.params.amount)
+  tenderizer.liquidityFeesUSD = tenderizer.liquidityFees.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
   tenderizer.save()
 
   // Save raw event

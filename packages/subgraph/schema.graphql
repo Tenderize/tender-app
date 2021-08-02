@@ -39,28 +39,28 @@ type Tenderizer @entity {
   id: ID!
 
   "Total amount depositied in tenderizer"
-  deposits: BigDecimal!
+  deposits: BigInt!
   "Total amount withdrawn from tenderizer"
-  withdrawals: BigDecimal!
+  withdrawals: BigInt!
   "Total rewards collected from protocol"
-  rewards: BigDecimal!
+  rewards: BigInt!
   "Total rewards collected from protocol in USD"
   rewardsUSD: BigDecimal!
   "Total deposits + total rewards - slashes - total withdrawals"
-  currentPrincipal: BigDecimal!
+  currentPrincipal: BigInt!
   "Current Principle in USD"
   TVL: BigDecimal!
 
   "Total amount of protocol fees collected from tenderizer"
-  protocolFees: BigDecimal!
+  protocolFees: BigInt!
   "Total amount of protocol fees collected from tenderizer in USD"
   protocolFeesUSD: BigDecimal!
   "Total amount of liquidity fees collected from tenderizer"
-  liquidityFees: BigDecimal!
+  liquidityFees: BigInt!
   "Total amount of liquidity fees collected from tenderizer in USD"
   liquidityFeesUSD: BigDecimal!
   "Total TenderToken Shares"
-  shares: BigDecimal!
+  shares: BigInt!
 
   "Day data for tenderizer"
   dayData: [TenderizerDay!]
@@ -71,17 +71,17 @@ type TenderFarm @entity {
   id: ID!
 
   "Total deposits made into farm"
-  deposits: BigDecimal!
+  deposits: BigInt!
   "Total withrawals made from farm"
-  withdrawals: BigDecimal!
+  withdrawals: BigInt!
   "Total rewards collected from farm"
-  harvest: BigDecimal!
+  harvest: BigInt!
   "Total rewards collected from farm in USD"
   harvestUSD: BigDecimal!
   "Total depsotis - total withdrawals"
-  currentPrincipal: BigDecimal!
+  currentPrincipal: BigInt!
   "Total rewards added"
-  rewards: BigDecimal!
+  rewards: BigInt!
   "CurrentPrincipal in USD"
   TVL: BigDecimal!
 
@@ -96,14 +96,14 @@ type TenderizerDay @entity {
   date: Int!
 
   "deposits volume in tenderizer for the day"
-  deposits: BigDecimal!
+  deposits: BigInt!
   "withdraw volume in tenderizer for the day"
-  withdrawals: BigDecimal!
+  withdrawals: BigInt!
   "staking rewards collected from protocol for the day"
-  rewards: BigDecimal!
+  rewards: BigInt!
 
   "Principle on the first event of the day"
-  startPrinciple: BigDecimal!
+  startPrinciple: BigInt!
   "Day APY - rewards/principle %"
   APY: BigDecimal!
 }
@@ -115,13 +115,13 @@ type TenderFarmDay @entity {
   date: Int!
 
   "farm volume for the day"
-  deposits: BigDecimal!
+  deposits: BigInt!
   "unfarm volume for the day"
-  withdrawals: BigDecimal!
+  withdrawals: BigInt!
   "rewards added for the day"
-  rewards: BigDecimal!
+  rewards: BigInt!
   "harvest volume for the day"
-  harvest: BigDecimal!
+  harvest: BigInt!
 
   "principle in Token (not BPT) value at the start of the day"
   startPrinciple: BigDecimal!
@@ -145,13 +145,13 @@ type UserDeployment @entity {
   user: User!
 
   "Users current stake: total deposits - withdrawals"
-  tenderizerStake: BigDecimal! # TODO: Better name?
+  tenderizerStake: BigInt! # TODO: Better name?
   "Users current amout of BPT Farmed: famrs - unfarms"
-  farmAmount: BigDecimal! # TODO: Better name?
+  farmAmount: BigInt! # TODO: Better name?
   "Total amount harvest collected from farm by  user"
-  farmHarvest: BigDecimal! # TODO: Better name?
+  farmHarvest: BigInt! # TODO: Better name?
   "TenderToken Shares held by the user"
-  shares: BigDecimal!
+  shares: BigInt!
 }
 
 # Registry event entity

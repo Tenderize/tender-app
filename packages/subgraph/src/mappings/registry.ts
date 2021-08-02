@@ -48,7 +48,7 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Accomodate initial deposit
   // The registry event is fired after bootstrap deposit 
   let tenderizerContract = Tenderizer.bind(Address.fromString(params.tenderizer.toHex()))
-  let amount = tenderizerContract.currentPrincipal().toBigDecimal()
+  let amount = tenderizerContract.currentPrincipal()
 
   // Update day data
   let day = loadOrCreateTernderizerDay(config.block.timestamp.toI32(), params.name)

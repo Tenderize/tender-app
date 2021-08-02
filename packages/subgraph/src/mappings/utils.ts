@@ -43,17 +43,17 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
 
   if(tenderizer == null){
     tenderizer = new Tenderizer(id)
-    tenderizer.deposits = ZERO_BD
-    tenderizer.withdrawals = ZERO_BD
-    tenderizer.rewards = ZERO_BD
+    tenderizer.deposits = ZERO_BI
+    tenderizer.withdrawals = ZERO_BI
+    tenderizer.rewards = ZERO_BI
     tenderizer.rewardsUSD = ZERO_BD
-    tenderizer.currentPrincipal = ZERO_BD
+    tenderizer.currentPrincipal = ZERO_BI
     tenderizer.TVL = ZERO_BD
-    tenderizer.protocolFees = ZERO_BD
+    tenderizer.protocolFees = ZERO_BI
     tenderizer.protocolFeesUSD = ZERO_BD
-    tenderizer.liquidityFees = ZERO_BD
+    tenderizer.liquidityFees = ZERO_BI
     tenderizer.liquidityFeesUSD = ZERO_BD
-    tenderizer.shares = ZERO_BD
+    tenderizer.shares = ZERO_BI
     tenderizer.dayData = []
   }
 
@@ -65,12 +65,12 @@ export function loadOrCreateTenderFarm(id: string): TenderFarm {
 
   if(tenderFarm == null){
     tenderFarm = new TenderFarm(id)
-    tenderFarm.deposits = ZERO_BD
-    tenderFarm.withdrawals = ZERO_BD
-    tenderFarm.harvest = ZERO_BD
+    tenderFarm.deposits = ZERO_BI
+    tenderFarm.withdrawals = ZERO_BI
+    tenderFarm.harvest = ZERO_BI
     tenderFarm.harvestUSD = ZERO_BD
-    tenderFarm.currentPrincipal = ZERO_BD
-    tenderFarm.rewards = ZERO_BD
+    tenderFarm.currentPrincipal = ZERO_BI
+    tenderFarm.rewards = ZERO_BI
     tenderFarm.TVL = ZERO_BD
     tenderFarm.dayData = []
   }
@@ -93,10 +93,10 @@ export function loadOrCreateUserDeployment(address: string, protocolName: string
     userProtocol = new UserDeployment(id)
     userProtocol.deployment = protocolName
     userProtocol.user = address
-    userProtocol.tenderizerStake = ZERO_BD
-    userProtocol.farmAmount = ZERO_BD
-    userProtocol.farmHarvest = ZERO_BD
-    userProtocol.shares = ZERO_BD
+    userProtocol.tenderizerStake = ZERO_BI
+    userProtocol.farmAmount = ZERO_BI
+    userProtocol.farmHarvest = ZERO_BI
+    userProtocol.shares = ZERO_BI
    
     // Save derived fields
     let user = loadOrCreateUser(address)
@@ -156,9 +156,9 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
     day = new TenderizerDay(dayID)
     let tenderizer = loadOrCreateTenderizer(protocol)
     day.date = dayStartTimestamp
-    day.deposits = ZERO_BD
-    day.withdrawals = ZERO_BD
-    day.rewards = ZERO_BD
+    day.deposits = ZERO_BI
+    day.withdrawals = ZERO_BI
+    day.rewards = ZERO_BI
     day.startPrinciple = tenderizer.currentPrincipal
     day.APY = ZERO_BD
 
@@ -180,12 +180,12 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     day = new TenderFarmDay(dayID)
     let tenderFarm = loadOrCreateTenderFarm(protocol)
     day.date = dayStartTimestamp
-    day.deposits = ZERO_BD
-    day.withdrawals = ZERO_BD
-    day.harvest = ZERO_BD
-    day.rewards = ZERO_BD
+    day.deposits = ZERO_BI
+    day.withdrawals = ZERO_BI
+    day.harvest = ZERO_BI
+    day.rewards = ZERO_BI
     day.APY = ZERO_BD
-    day.startPrinciple = LPTokenToToken(tenderFarm.currentPrincipal, protocol)
+    day.startPrinciple = LPTokenToToken(tenderFarm.currentPrincipal.toBigDecimal(), protocol)
     day.save()
 
     let dayList = tenderFarm.dayData
