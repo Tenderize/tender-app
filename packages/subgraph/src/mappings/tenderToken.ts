@@ -11,10 +11,10 @@ export function handleTransferEvent(transferEvent: Transfer): void {
 
     // Update shares for to/from users
     let fromUser = loadOrCreateUserDeployment(transferEvent.params.from.toHexString(), protocolId)
-    fromUser.shares = tenderToken.sharesOf(transferEvent.params.from).toBigDecimal()
+    fromUser.shares = tenderToken.sharesOf(transferEvent.params.from)
     fromUser.save()
     let toUser = loadOrCreateUserDeployment(transferEvent.params.to.toHexString(), protocolId)
-    toUser.shares = tenderToken.sharesOf(transferEvent.params.to).toBigDecimal()
+    toUser.shares = tenderToken.sharesOf(transferEvent.params.to)
     toUser.save()
 
     // Save raw event
