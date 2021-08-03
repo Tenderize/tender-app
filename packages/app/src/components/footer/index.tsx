@@ -18,10 +18,17 @@ const Foot: FC = () => {
         <Anchor
           color="white"
           a11yTitle="Chat with us on Discord"
-          href="#"
+          href="https://discord.gg/WXR5VBttP5"
           icon={<FontAwesomeIcon icon={faDiscord} />}
+          target="_blank"
         />
-        <Anchor color="white" a11yTitle="Follow us on Twitter" href="#" icon={<FontAwesomeIcon icon={faTwitter} />} />
+        <Anchor
+          color="white"
+          a11yTitle="Follow us on Twitter"
+          href="https://twitter.com/tenderize_me"
+          icon={<FontAwesomeIcon icon={faTwitter} />}
+          target="_blank"
+        />
         <Anchor color="white" as="div" a11yTitle="Built on Tenderizer" href="#" label="Docs"></Anchor>
       </Box>
     </Footer>
