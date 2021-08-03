@@ -144,7 +144,7 @@ const Swap: FC<Props> = ({
               symbol={tokenSendedSymbol}
               spender={addresses[protocolName].swap}
               token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-              hasAllowance={isTokenApproved}
+              show={!isTokenApproved}
             />
             <Button
               primary

@@ -72,7 +72,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
               symbol={symbol}
               spender={addresses[name].controller}
               token={contracts[name].token}
-              hasAllowance={isTokenApproved}
+              show={!isTokenApproved}
             />
             <Button
               primary

@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, ChangeEventHandler, MouseEventHandler } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
@@ -62,7 +62,7 @@ const JoinPool: FC<Props> = ({
   const [isMulti, setIsMulti] = useState(true);
 
   const [tokenInput, setTokenInput] = useState("");
-  const handleTokenInputChange = (e: any) => {
+  const handleTokenInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const val = e.target.value;
     if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
     setTokenInput(val);
@@ -78,7 +78,7 @@ const JoinPool: FC<Props> = ({
   };
 
   const [tenderInput, setTenderInput] = useState("");
-  const handleTenderInputChange = (e: any) => {
+  const handleTenderInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const val = e.target.value;
     if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
     setTenderInput(val);
@@ -133,8 +133,8 @@ const JoinPool: FC<Props> = ({
 
   // Contract Functions
   const useCalcSinglePoolOut = () => {
-    const hasValue = (val: any) => {
-      return val && val !== "0";
+    const hasValue = (val: BigNumberish) => {
+      return val != null && val !== "0";
     };
     let tokenIn: BigNumberish = 0;
     let tokenInBal: BigNumberish = 0;
@@ -191,7 +191,7 @@ const JoinPool: FC<Props> = ({
     return tokenInBN.mul(lpShares).div(tokenLpBalance);
   };
 
-  const addLiquidity = async (e: any) => {
+  const addLiquidity: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
@@ -337,13 +337,13 @@ const JoinPool: FC<Props> = ({
                   symbol={symbol}
                   spender={addresses[name].liquidity}
                   token={contracts[name].token}
-                  hasAllowance={(isMulti || selectToken === symbol) && isTokenApproved}
+                  show={!isTokenApproved && (isMulti || (!isMulti && selectToken === symbol))}
                 />
                 <ApproveToken
                   symbol={`t${symbol}`}
                   spender={addresses[name].liquidity}
                   token={contracts[name].tenderToken}
-                  hasAllowance={(isMulti || selectToken === `t${symbol}`) && isTenderApproved}
+                  show={!isTokenApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`))}
                 />
                 <Button
                   primary
