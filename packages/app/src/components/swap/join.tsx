@@ -187,9 +187,10 @@ const JoinPool: FC<Props> = ({
 
   const calcPoolOutFromRatio = () => {
     const tokenInBN = utils.parseEther(tokenInput);
-    const lpSharesBN = utils.parseEther(lpShares.toString());
-    const tokenLpBalanceBN = utils.parseEther(tokenLpBalance.toString());
-    return tokenInBN.mul(lpSharesBN.sub(1)).div(tokenLpBalanceBN.add(1));
+    const lpSharesBN = BigNumber.from(lpShares)
+    const tokenLpBalanceBN = BigNumber.from(tokenLpBalance)
+
+    return tokenInBN.mul(lpSharesBN.sub(1)).div(tokenLpBalanceBN.add(1)).sub(1000)
   };
 
   const addLiquidity: MouseEventHandler<HTMLButtonElement> = async (e) => {
