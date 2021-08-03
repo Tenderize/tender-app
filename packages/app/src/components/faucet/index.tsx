@@ -22,8 +22,8 @@ const Faucet: FC<props> = ({ symbol }) => {
     <>
       <Button plain onClick={handleShow} label="Faucet" />
       {show && (
-        <Layer animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
-          <Card pad="medium" height="medium" width="medium">
+        <Layer style={{ overflow: "scroll" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
+          <Card flex={false} pad="medium" height="medium" width="medium">
             <CardHeader>
               <Heading>{symbol} Faucet</Heading>
             </CardHeader>
