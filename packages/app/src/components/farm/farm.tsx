@@ -86,7 +86,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                   symbol={symbol}
                   spender={addresses[name].farm}
                   token={contracts[name].liquidity}
-                  hasAllowance={isTokenApproved}
+                  show={!isTokenApproved}
                 />
                 <Button
                   primary

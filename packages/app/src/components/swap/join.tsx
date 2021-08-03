@@ -337,13 +337,13 @@ const JoinPool: FC<Props> = ({
                   symbol={symbol}
                   spender={addresses[name].liquidity}
                   token={contracts[name].token}
-                  hasAllowance={isTokenApproved}
+                  show={!isTokenApproved && (isMulti || (!isMulti && selectToken === symbol))}
                 />
                 <ApproveToken
                   symbol={`t${symbol}`}
                   spender={addresses[name].liquidity}
                   token={contracts[name].tenderToken}
-                  hasAllowance={isTenderApproved}
+                  show={!isTokenApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`))}
                 />
                 <Button
                   primary

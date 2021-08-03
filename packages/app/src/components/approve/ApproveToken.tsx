@@ -5,13 +5,13 @@ import { Box, Button, Tip, Spinner, Text } from "grommet";
 
 type Props = {
   symbol: string;
-  hasAllowance: boolean;
+  show: boolean;
   spender: string;
   token: Contract;
   amount?: BigNumberish;
 };
 
-const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount }) => {
+const ApproveToken: FC<Props> = ({ symbol, spender, show, token, amount }) => {
   const { state: approveTx, send: approveToken } = useContractFunction(token, "approve", {
     transactionName: `Approve ${symbol}`,
   });
@@ -19,12 +19,12 @@ const ApproveToken: FC<Props> = ({ symbol, spender, hasAllowance, token, amount 
   const handleApproval: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
 
-    if (!hasAllowance) {
+    if (show) {
       await approveToken(spender, amount ?? constants.MaxUint256);
     }
   };
 
-  if (hasAllowance) {
+  if (!show) {
     return <></>;
   }
 
