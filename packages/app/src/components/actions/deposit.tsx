@@ -49,21 +49,27 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
-    <Box align="center" justify="center" gap="medium" pad={{ left: "medium" }}>
-      <Box flex fill="horizontal" direction="row" justify="center" pad={{ left: "large" }}>
-        <InfoCard
-          title={`${symbol} Balance`}
-          text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-        />
-        <InfoCard
-          title={"My Stake"}
-          // TODO this should update when depositing funds (moving from left to right column)
-          text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 4)} tender${symbol}`}
-        />
-        <InfoCard
-          title={"My Rewards"}
-          text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.farmHarvest ?? "0", 4)} tender${symbol}`}
-        />
+    <Box gap="medium">
+      <Box justify="around" direction="row">
+        <Box>
+          <InfoCard
+            title={`${symbol} Balance`}
+            text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+          />
+        </Box>
+        <Box>
+          <InfoCard
+            title={"My Stake"}
+            // TODO this should update when depositing funds (moving from left to right column)
+            text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 4)} tender${symbol}`}
+          />
+        </Box>
+        <Box>
+          <InfoCard
+            title={"My Rewards"}
+            text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.farmHarvest ?? "0", 4)} tender${symbol}`}
+          />
+        </Box>
       </Box>
 
       <Box fill="horizontal" direction="row" justify="center" align="center">
