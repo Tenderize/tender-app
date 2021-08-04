@@ -78,6 +78,8 @@ templates:
             file: ../contracts/src/abis/BPool.json
           - name: ElasticSupplyPool
             file: ../contracts/src/abis/ElasticSupplyPool.json
+          - name: TenderToken
+            file: ../contracts/src/abis/TenderToken.json
         eventHandlers:
           - event: Farm(indexed address,uint256)
             handler: handleFarmEvent

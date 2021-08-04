@@ -1,4 +1,4 @@
-import { FarmEvent, HarvestEvent, RewardsAddedEvent, UnfarmEvent } from "../types/schema"
+import { Config, FarmEvent, HarvestEvent, RewardsAddedEvent, UnfarmEvent } from "../types/schema"
 import { Farm, Harvest, RewardsAdded, Unfarm } from "../types/templates/TenderFarm/TenderFarm"
 import {
     getProtocolIdByTenderFarmAddress,
@@ -12,6 +12,7 @@ import {
     LPTokenToToken,
     BD_100,
     ZERO_BD,
+    tokensToShares,
    } from "./utils"
 
 export function handleFarmEvent(farmEvent: Farm): void {
@@ -100,6 +101,8 @@ export function handleHarvestEvent(harvestEvent: Harvest): void {
   let tenderFarm = loadOrCreateTenderFarm(protocolId)
   tenderFarm.harvest = tenderFarm.harvest.plus(amount)
   tenderFarm.harvestUSD = tenderFarm.harvest.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
+  let shares = tokensToShares(amount, protocolId)
+  tenderFarm.pendingRewardShares = tenderFarm.pendingRewardShares.minus(shares)
   tenderFarm.save()
 
   // Save raw event
@@ -132,7 +135,8 @@ export function handleRewardsAddedEvent(rewardsAddedEvent: RewardsAdded): void {
 
   // Update TenderFarm totals
   let tenderFarm = loadOrCreateTenderFarm(protocolId)
-  tenderFarm.rewards = tenderFarm.rewards.plus(amount)
+  let shares = tokensToShares(amount, protocolId)
+  tenderFarm.pendingRewardShares = tenderFarm.pendingRewardShares.plus(shares)
   tenderFarm.save()
 
   // Save raw event

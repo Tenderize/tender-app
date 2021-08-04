@@ -4,6 +4,7 @@ import { OneInch } from "../types/templates/Tenderizer/OneInch"
 import * as config from "./config"
 import { BPool } from "../types/templates/TenderFarm/BPool"
 import { ElasticSupplyPool } from "../types/templates/TenderFarm/ElasticSupplyPool"
+import { TenderToken } from "../types/templates/TenderFarm/TenderToken"
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
@@ -70,7 +71,7 @@ export function loadOrCreateTenderFarm(id: string): TenderFarm {
     tenderFarm.harvest = ZERO_BI
     tenderFarm.harvestUSD = ZERO_BD
     tenderFarm.currentPrincipal = ZERO_BI
-    tenderFarm.rewards = ZERO_BI
+    tenderFarm.pendingRewardShares = ZERO_BI
     tenderFarm.TVL = ZERO_BD
     tenderFarm.dayData = []
   }
@@ -223,4 +224,10 @@ export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal
   let steakTokens = bPool.getBalance(Address.fromString(config.steak)).toBigDecimal()
   let tenderTokens = bPool.getBalance(Address.fromString(config.tenderToken)).toBigDecimal()
   return amount.div(totalSupply).times(steakTokens.plus(tenderTokens))
+}
+
+export function tokensToShares(amount: BigInt, protocol: string): BigInt {
+  let config = Config.load(protocol)
+  let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
+  return tenderToken.tokensToShares(amount)
 }

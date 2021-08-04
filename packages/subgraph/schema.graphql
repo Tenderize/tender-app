@@ -80,8 +80,8 @@ type TenderFarm @entity {
   harvestUSD: BigDecimal!
   "Total depsotis - total withdrawals"
   currentPrincipal: BigInt!
-  "Total rewards added"
-  rewards: BigInt!
+  "Pending rewards in tender token shares"
+  pendingRewardShares: BigInt!
   "CurrentPrincipal in USD"
   TVL: BigDecimal!
 
