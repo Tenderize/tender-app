@@ -3,7 +3,7 @@ import { addresses, contracts } from "@tender/contracts";
 import { utils, BigNumberish } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { useQuery } from "@apollo/client";
-import { Box, Grid } from "grommet";
+import { Box } from "grommet";
 import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
