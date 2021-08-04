@@ -2,11 +2,14 @@ import { FC } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { utils, BigNumberish } from "ethers";
 import { useContractCall } from "@usedapp/core";
+import { useQuery } from "@apollo/client";
 import { Box, Grid } from "grommet";
 import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
 import InfoCard from "../tenderizers/infocard";
+import { GetDeployments } from "../../pages/token/queries";
+import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
   name: string;
@@ -39,6 +42,10 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
     args: [account],
   });
 
+  const { data } = useQuery(GetDeployments, {
+    variables: { id: name },
+  });
+
   return (
     <Box flex fill="horizontal">
       <Grid fill rows={["2/5", "2/5", "1/5"]} columns={["flex", "flex", "flex"]}>
@@ -46,7 +53,10 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
           <InfoCard title={"Total Staked"} text={`${utils.formatEther(totalStake?.toString() || "0")} ${symbolFull}`} />
         </Box>
         <Box gridArea="1 / 2 / 2 / 3" pad={{ left: "large" }}>
-          <InfoCard title={"Total Rewards"} text={`0 tender${symbol}`} />
+          <InfoCard
+            title={"Total Rewards"}
+            text={`${weiToEthWithDecimals(data?.deployment?.tenderizer.rewards ?? "0", 4)} tender${symbol}`}
+          />
         </Box>
         <Box gridArea="1 / 3 / 2 / 4" pad={{ left: "large" }}>
           <InfoCard title={"APY"} text={`10 %`} />
