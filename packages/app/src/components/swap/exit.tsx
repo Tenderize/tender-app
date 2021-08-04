@@ -113,7 +113,7 @@ const ExitPool: FC<Props> = ({
     const tokenInBN = utils.parseEther(lpSharesInput || "0");
     // return tokenInBN.mul(utils.parseEther("1")).div(tokenLpBalance).mul(lpShares).div(utils.parseEther("1"))
     const total = hasValue(lpShares) ? lpShares : "1";
-    return tokenInBN.mul(balance).div(total);
+    return tokenInBN.mul(balance).div(total).sub(1000);
   };
 
   const removeLiquidity = async (e: any) => {
