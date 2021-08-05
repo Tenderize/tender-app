@@ -53,7 +53,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
 
   return (
     <Box gap="medium">
-      <Box justify="around" direction="row">
+      <Box justify="center" direction="row" gap="xlarge">
         <Box>
           <InfoCard
             title={`${symbol} Balance`}
@@ -63,14 +63,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
         <Box>
           <InfoCard
             title={"My Stake"}
-            // TODO this should update when depositing funds (moving from left to right column)
             text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 4)} tender${symbol}`}
-          />
-        </Box>
-        <Box>
-          <InfoCard
-            title={"My Rewards"}
-            text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.farmHarvest ?? "0", 4)} tender${symbol}`}
           />
         </Box>
       </Box>
