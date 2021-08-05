@@ -16,6 +16,7 @@ import {
   Spinner,
 } from "grommet";
 import { AmountInputFooter } from "../AmountInputFooter";
+import {FormSubtract} from "grommet-icons"
 
 type Props = {
   name: string;
@@ -56,7 +57,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
 
   return (
     <>
-      <Button primary onClick={handleShow} label="Unfarm" />
+      <Button primary reverse icon={<FormSubtract color="white" />} onClick={handleShow} label="Unfarm" disabled={stake.toString() === "0"} />
       {show && (
         <Layer
           style={{ overflow: "scroll" }}

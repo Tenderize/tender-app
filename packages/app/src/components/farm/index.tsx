@@ -1,6 +1,6 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { addresses, contracts } from "@tender/contracts";
-import { utils, BigNumberish } from "ethers";
+import { BigNumberish } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { useQuery } from "@apollo/client";
 import { Box } from "grommet";
@@ -8,7 +8,7 @@ import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
 import InfoCard from "../tenderizers/infocard";
-import { GetDeployments } from "../../pages/token/queries";
+import {  GetUserDeployments} from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
-  const symbolFull = `t${symbol}-${symbol} Pool Token`;
+  const symbolFull = `POOL-t${symbol}-${symbol}`;
 
   const stakeOf = useContractCall({
     abi: contracts[name].farm.interface,
@@ -28,12 +28,12 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
     args: [account],
   });
 
-  const totalStake = useContractCall({
-    abi: contracts[name].farm.interface,
-    address: addresses[name].farm,
-    method: "nextTotalStake",
-    args: [],
-  });
+  // const totalStake = useContractCall({
+  //   abi: contracts[name].farm.interface,
+  //   address: addresses[name].farm,
+  //   method: "nextTotalStake",
+  //   args: [],
+  // });
 
   const availableRewards = useContractCall({
     abi: contracts[name].farm.interface,
@@ -42,33 +42,49 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
     args: [account],
   });
 
-  const { data } = useQuery(GetDeployments, {
-    variables: { id: name },
+  // const { data } = useQuery(GetDeployments, {
+  //   variables: { id: name },
+  // });
+
+  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1)
+  const { data: userData, refetch } = useQuery(GetUserDeployments, {
+    variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
+
+  // update my stake when tokenBalance changes
+  useEffect(() => {
+    refetch();
+  }, [refetch, availableRewards]);
 
   return (
     <Box>
-      <Box justify="around" direction="row" pad={{ bottom: "large" }}>
+      <Box justify="around" direction="row" pad={{ bottom: "medium" }}>
         <Box>
-          <InfoCard
-            title={`My Pool Balance`}
-            text={`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
+          <InfoCard 
+            title={"Pool Tokens Staked"}
+            text={`${weiToEthWithDecimals(stakeOf?.toString() || "0", 3)} ${symbolFull}`}
+            subText={`Balance: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 3)}`}
           />
-          <Farm name={name} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
-        </Box>
-        <Box>
-          <InfoCard title={"My stake"} text={`${utils.formatEther(stakeOf?.toString() || "0")} ${symbolFull}`} />
-          <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
         </Box>
         <Box>
           <InfoCard
-            title={"Available Rewards"}
-            text={`${utils.formatEther(availableRewards?.toString() || "0")} tender${symbol}`}
+            title={"Harvestable Rewards"}
+            text={`${weiToEthWithDecimals(availableRewards?.toString() || "0", 3)} tender${symbol}`}
           />
-          <Harvest name={name} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
+        </Box>
+        <Box>
+          <InfoCard
+            title={"Total Harvested"}
+            text={`${weiToEthWithDecimals(userData?.userDeployments?.[0]?.farmHarvest?.toString() || "0", 3)} tender${symbol}`}
+          />
         </Box>
       </Box>
-      <Box gap="large" justify="center" direction="row">
+      <Box flex justify="around" align="center" direction="row" pad={{ bottom: "large" }}>
+      <Farm name={name} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
+      <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
+      <Harvest name={name} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
+      </Box>
+      {/* <Box gap="large" justify="center" direction="row">
         <Box
           border={{ side: "top" }}
           gap="large"
@@ -92,7 +108,7 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
             <InfoCard title={"APY"} text={`10 %`} />
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
