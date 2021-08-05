@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
@@ -19,12 +19,15 @@ type Props = {
 const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
-  console.log("address", account);
-  // const { loading, error, data } = useQuery(GetUserDeployments);
-  console.log("id", `${account}_${name}`);
-  const { data } = useQuery(GetUserDeployments, {
+
+  const { data, refetch } = useQuery(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${name}` },
   });
+
+  // update my stake when tokenBalance changes
+  useEffect(() => {
+    refetch();
+  }, [refetch, tokenBalance]);
 
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
