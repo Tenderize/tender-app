@@ -4,6 +4,7 @@ export const GetUserDeployments = gql`
   query GetUserDeployments($id: ID!) {
     userDeployments(where: { id: $id }) {
       tenderizerStake
+      farmHarvest
     }
   }
 `;
