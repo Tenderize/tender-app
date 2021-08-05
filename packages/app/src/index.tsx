@@ -10,7 +10,7 @@ import "./index.css";
 import { theme } from "./theme";
 
 const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/reubenr0d/reuben123",
+  uri: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize",
   cache: new InMemoryCache(),
 });
 
