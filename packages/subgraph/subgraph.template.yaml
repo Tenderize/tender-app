@@ -22,7 +22,7 @@ dataSources:
       entities:
         - TenderizerConfig
       eventHandlers:
-        - event: TenderizerCreated((string,address,address,address,address,address,address))
+        - event: TenderizerCreated((string,address,address,address,address,address,address,address))
           handler: handleTenderizerCreated
       file: ./src/mappings/registry.ts
       language: wasm/assemblyscript

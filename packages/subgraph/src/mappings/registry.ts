@@ -22,6 +22,7 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   let protocolConfigEvent = new TenderizerCreatedEvent(config.transaction.hash.toHex())
   
   protocolConfigEvent.name = params.name
+  protocolConfigEvent.controller = protocolConfig.controller = params.controller.toHex()
   protocolConfigEvent.steak = protocolConfig.steak = params.steak.toHex()
   protocolConfigEvent.tenderizer = protocolConfig.tenderizer = params.tenderizer.toHex()
   protocolConfigEvent.tenderToken = protocolConfig.tenderToken = params.tenderToken.toHex()

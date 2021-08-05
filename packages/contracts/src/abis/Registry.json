@@ -1,4 +1,4 @@
-[
+  [
     {
       "anonymous": false,
       "inputs": [
@@ -27,6 +27,11 @@
               "internalType": "string",
               "name": "name",
               "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "controller",
+              "type": "address"
             },
             {
               "internalType": "address",
@@ -76,6 +81,11 @@
               "internalType": "string",
               "name": "name",
               "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "controller",
+              "type": "address"
             },
             {
               "internalType": "address",
