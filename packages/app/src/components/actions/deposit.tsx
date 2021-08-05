@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Form, FormField, TextInput, Spinner } from "grommet";
+import { Button, Box, Form, FormField, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -10,6 +10,7 @@ import InfoCard from "../tenderizers/infocard";
 import { GetUserDeployments } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
+import { ButtonSpinner } from "../ButtonSpinner";
 
 type Props = {
   name: string;
@@ -86,7 +87,6 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) 
               onChange={handleInputChange}
               type="text"
               placeholder={"0 " + symbol}
-              className="amount"
             />
             <AmountInputFooter
               label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
@@ -109,8 +109,8 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) 
               onClick={depositTokens}
               label={
                 depositTx.status === "Mining" ? (
-                  <Box direction="row" align="center" justify="center" gap="center">
-                    <Spinner color="white" />
+                  <Box direction="row" align="center" justify="center" gap="small">
+                    <ButtonSpinner />
                     Depositing...
                   </Box>
                 ) : (

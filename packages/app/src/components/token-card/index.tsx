@@ -33,7 +33,7 @@ const TokenCard: FC<Props> = (props) => {
         <CardBody style={{ textTransform: "capitalize", textAlign: "center" }}>
           <div style={{ margin: "5 0" }}>
             <h5>
-              <span className="percent">{info.apy}%</span>
+              <span>{info.apy}%</span>
             </h5>
           </div>
         </CardBody>

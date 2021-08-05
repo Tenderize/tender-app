@@ -115,7 +115,7 @@ const ConfirmSwapModal: FC<Props> = ({
               )}
               {confirmStatus === "Waiting" && (
                 <Box justify="center" align="center">
-                  <Spinner color="brand" />
+                  <Spinner size="medium" color="brand" />
                   <Heading textAlign="center">Waiting For Confirmation...</Heading>
                   <Text>
                     Swapping {sendTokenAmount} {tokenSendedSymbol} for {utils.formatEther(receiveTokenAmount || "0")}{" "}
@@ -127,7 +127,7 @@ const ConfirmSwapModal: FC<Props> = ({
               {confirmStatus === "Submitted" && (
                 <Box justify="center" align="center">
                   <Heading textAlign="center">Transaction is being processed...</Heading>
-                  <div className="d-grid p-3">
+                  <div>
                     <Button
                       color="success"
                       disabled={swapTx.status !== "Success"}
@@ -137,7 +137,7 @@ const ConfirmSwapModal: FC<Props> = ({
                         }
                       }}
                     >
-                      {swapTx.status === "Success" ? "Close" : <Spinner color="brand" />}
+                      {swapTx.status === "Success" ? "Close" : <Spinner size="medium" color="brand" />}
                     </Button>
                   </div>
                 </Box>

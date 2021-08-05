@@ -44,10 +44,9 @@ const TableWrapper = ({ children, title }: TableWrapperProps) => (
 
 interface DateProps {
   date: number;
-  className?: string;
 }
 
-const DateCell = ({ date, className }: DateProps) => {
+const DateCell = ({ date }: DateProps) => {
   const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString();
   const formattedTime = dateObject.toLocaleTimeString("en-US", {
@@ -57,7 +56,7 @@ const DateCell = ({ date, className }: DateProps) => {
   });
 
   return (
-    <DateRow className={className}>
+    <DateRow>
       <DateDisplay>{formattedDate}</DateDisplay>
       <HourDisplay>{formattedTime}</HourDisplay>
     </DateRow>

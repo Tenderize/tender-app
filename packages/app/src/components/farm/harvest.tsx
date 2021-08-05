@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
-// import { useContractFunction } from "@usedapp/core";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Spinner, Text } from "grommet";
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text } from "grommet";
+import { ButtonSpinner } from "../ButtonSpinner";
 
 const harvestIcon = require("../../images/harvest.svg");
 
@@ -54,7 +54,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
           <Card flex={false} pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Harvest ${symbol}`}</CardHeader>
             <CardBody align="center">
-              <Text className="balance">
+              <Text>
                 Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
               </Text>
             </CardBody>
@@ -66,8 +66,8 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
                 onClick={harvestRewards}
                 label={
                   harvestTx.status === "Mining" ? (
-                    <Box direction="row">
-                      <Spinner color="white" />
+                    <Box direction="row" gap="small">
+                      <ButtonSpinner />
                       Harvesting...
                     </Box>
                   ) : (

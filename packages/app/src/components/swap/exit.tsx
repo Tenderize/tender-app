@@ -13,7 +13,6 @@ import {
   Form,
   FormField,
   TextInput,
-  Spinner,
   Text,
   Select,
   Tabs,
@@ -23,6 +22,7 @@ import {
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
+import { ButtonSpinner } from "../ButtonSpinner";
 
 type Props = {
   name: string;
@@ -267,8 +267,8 @@ const ExitPool: FC<Props> = ({
                   disabled={!hasValue(lpSharesInput) || !isLpSharesApproved}
                   label={
                     exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
-                      <Box direction="row" align="center">
-                        <Spinner color="white" />
+                      <Box direction="row" align="center" gap="small">
+                        <ButtonSpinner />
                         Removing Liquidity...
                       </Box>
                     ) : (
@@ -312,7 +312,6 @@ const LPTokensToRemoveInputField: FC<{
           onChange={handleLpSharesInputChange}
           type="text"
           placeholder={"0 " + symbolFull}
-          className="amount"
         />
       </Box>
       <AmountInputFooter

@@ -2,21 +2,10 @@ import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
-import {
-  Button,
-  Box,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Layer,
-  Form,
-  FormField,
-  TextInput,
-  Spinner,
-} from "grommet";
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
 import { AmountInputFooter } from "../AmountInputFooter";
-import {FormSubtract} from "grommet-icons"
+import { FormSubtract } from "grommet-icons";
+import { ButtonSpinner } from "../ButtonSpinner";
 
 type Props = {
   name: string;
@@ -25,8 +14,6 @@ type Props = {
 };
 
 const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
-  // Component state & helpers
-
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -57,7 +44,14 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
 
   return (
     <>
-      <Button primary reverse icon={<FormSubtract color="white" />} onClick={handleShow} label="Unfarm" disabled={stake.toString() === "0"} />
+      <Button
+        primary
+        reverse
+        icon={<FormSubtract color="white" />}
+        onClick={handleShow}
+        label="Unfarm"
+        disabled={stake.toString() === "0"}
+      />
       {show && (
         <Layer
           style={{ overflow: "scroll" }}
@@ -92,8 +86,8 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
                 onClick={unfarmLpTokens}
                 label={
                   unfarmTx.status === "Mining" ? (
-                    <Box direction="row">
-                      <Spinner color="white" />
+                    <Box direction="row" gap="small">
+                      <ButtonSpinner />
                       Unfarming...
                     </Box>
                   ) : (
