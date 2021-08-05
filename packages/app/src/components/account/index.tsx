@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
-import { Button } from "grommet";
-import styled from "styled-components";
+import { Button, ThemeType } from "grommet";
+import styled, { css } from "styled-components";
 
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
@@ -34,20 +34,14 @@ export const AccountButton: FC = () => {
           <AccountLabel
             primary
             color="light-2"
-            style={{ color: "#4E66DE" }}
+            style={{ color: normalizeColor("brand", theme) }}
             onClick={() => setShowModal(!showModal)}
             label={ens ?? shortenAddress(account)}
           />
-          <Button onClick={() => deactivate()} label="Disconnect" />
+          <DisconnectButton onClick={() => deactivate()} label="Disconnect" />
         </>
       ) : (
-        <Button
-          primary
-          color="light-2"
-          style={{ color: normalizeColor("brand", theme) }}
-          onClick={activate}
-          label="Connect"
-        />
+        <ConnectButton primary color="light-2" onClick={activate} label="Connect" />
       )}
     </Account>
   );
@@ -66,10 +60,31 @@ const Account = styled.div`
 `;
 
 const AccountLabel = styled(Button)`
+  ${({ theme }: { theme: ThemeType }) => css`
+    color: ${normalizeColor("brand", theme)};
+  `}
+  border-radius: 18px;
   margin-right: -20px;
   padding-right: 40px;
   padding-left: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const ConnectButton = styled(Button)`
+  ${({ theme }: { theme: ThemeType }) => css`
+    color: ${normalizeColor("brand", theme)};
+  `}
+  border-radius: 18px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+`;
+
+const DisconnectButton = styled(Button)`
+  border-radius: 18px;
 `;
