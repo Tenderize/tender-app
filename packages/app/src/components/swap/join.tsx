@@ -231,7 +231,7 @@ const JoinPool: FC<Props> = ({
       <Button primary onClick={handleShow} label="Join Pool" />
       {show && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"

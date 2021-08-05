@@ -153,7 +153,7 @@ const ExitPool: FC<Props> = ({
 
       {show && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"

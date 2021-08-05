@@ -35,7 +35,7 @@ const TableWrapper = ({ children, title }: TableWrapperProps) => (
       <Text size="large">{title}</Text>
     </TableHeader>
     <TableBody>
-      <Box height="medium" style={{ overflow: "scroll" }}>
+      <Box height="medium" style={{ overflow: "auto" }}>
         {children}
       </Box>
     </TableBody>

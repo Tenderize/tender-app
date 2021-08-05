@@ -54,7 +54,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
       />
       {show && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}

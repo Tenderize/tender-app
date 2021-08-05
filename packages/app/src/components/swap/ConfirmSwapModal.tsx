@@ -78,7 +78,7 @@ const ConfirmSwapModal: FC<Props> = ({
     <>
       {show && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           onEsc={() => {
             confirmStatus !== "Submitted" && onDismiss();

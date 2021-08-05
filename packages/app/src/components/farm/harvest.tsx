@@ -46,7 +46,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
       />
       {show && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
