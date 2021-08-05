@@ -2,17 +2,21 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import { Grommet } from "grommet";
 import { ChainId, DAppProvider, Config } from "@usedapp/core";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
 import "./index.css";
 import { theme } from "./theme";
+
+const client = new ApolloClient({
+  uri: "https://api.thegraph.com/subgraphs/name/reubenr0d/reuben123",
+  cache: new InMemoryCache(),
+});
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
   ? process.env.ETHERSCAN_API_KEY
   : "AYVQKI2AW5TZCHII5KIVB5N6QQIY1MM1Y9";
-
-// https://api.etherscan.io/api?module=transaction&action=getstatus&txhash=0x15f8e5ea1079d9a0bb04a4c58ae5fe7654b5b2b4463375ff7ffb490aa0032f3a&apikey=YourApiKeyToken
 
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Rinkeby,
@@ -23,21 +27,23 @@ const dappConfig: Config = {
 
 ReactDOM.render(
   <StrictMode>
-    <DAppProvider config={dappConfig}>
-      <Grommet
-        themeMode="dark"
-        full={true}
-        style={{
-          background: "url('/background.svg')",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundAttachment: "fixed",
-        }}
-        theme={theme}
-      >
-        <App />
-      </Grommet>
-    </DAppProvider>
+    <ApolloProvider client={client}>
+      <DAppProvider config={dappConfig}>
+        <Grommet
+          themeMode="dark"
+          full={true}
+          style={{
+            background: "url('/background.svg')",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundAttachment: "fixed",
+          }}
+          theme={theme}
+        >
+          <App />
+        </Grommet>
+      </DAppProvider>
+    </ApolloProvider>
   </StrictMode>,
   document.getElementById("root")
 );

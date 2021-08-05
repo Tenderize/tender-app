@@ -21,7 +21,6 @@ const InfoCard: FC<Props> = ({ title = "", text = "" }) => {
         </CardHeader>
         <CardBody
           pad={{
-            horizontal: "5px",
             vertical: "small",
           }}
         >

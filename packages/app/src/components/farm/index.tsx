@@ -2,11 +2,14 @@ import { FC } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { utils, BigNumberish } from "ethers";
 import { useContractCall } from "@usedapp/core";
-import { Box, Grid } from "grommet";
+import { useQuery } from "@apollo/client";
+import { Box } from "grommet";
 import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
 import InfoCard from "../tenderizers/infocard";
+import { GetDeployments } from "../../pages/token/queries";
+import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
   name: string;
@@ -39,43 +42,57 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
     args: [account],
   });
 
+  const { data } = useQuery(GetDeployments, {
+    variables: { id: name },
+  });
+
   return (
-    <Box flex fill="horizontal">
-      <Grid fill rows={["2/5", "2/5", "1/5"]} columns={["flex", "flex", "flex"]}>
-        <Box gridArea="1 / 1 / 2 / 2" pad={{ left: "large" }}>
-          <InfoCard title={"Total Staked"} text={`${utils.formatEther(totalStake?.toString() || "0")} ${symbolFull}`} />
-        </Box>
-        <Box gridArea="1 / 2 / 2 / 3" pad={{ left: "large" }}>
-          <InfoCard title={"Total Rewards"} text={`0 tender${symbol}`} />
-        </Box>
-        <Box gridArea="1 / 3 / 2 / 4" pad={{ left: "large" }}>
-          <InfoCard title={"APY"} text={`10 %`} />
-        </Box>
-        <Box gridArea="2 / 1 / 3 / 2" pad={{ left: "large" }}>
+    <Box>
+      <Box justify="around" direction="row" pad={{ bottom: "large" }}>
+        <Box>
           <InfoCard
-            title={`Pool Balance`}
+            title={`My Pool Balance`}
             text={`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
           />
+          <Farm name={name} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
         </Box>
-        <Box gridArea="2 / 2 / 3 / 3" pad={{ left: "large" }}>
+        <Box>
           <InfoCard title={"My stake"} text={`${utils.formatEther(stakeOf?.toString() || "0")} ${symbolFull}`} />
+          <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
         </Box>
-        <Box gridArea="2 / 3 / 3 / 4" pad={{ left: "large" }}>
+        <Box>
           <InfoCard
             title={"Available Rewards"}
             text={`${utils.formatEther(availableRewards?.toString() || "0")} tender${symbol}`}
           />
-        </Box>
-        <Box gridArea="3 / 1 / 4 / 2" pad={{ left: "large", right: "xlarge", top: "medium" }}>
-          <Farm name={name} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
-        </Box>
-        <Box gridArea="3 / 2 / 4 / 3" pad={{ left: "large", right: "xlarge", top: "medium" }}>
-          <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
-        </Box>
-        <Box gridArea="3 / 3 / 4 / 4" pad={{ left: "large", right: "xlarge", top: "medium" }}>
           <Harvest name={name} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
         </Box>
-      </Grid>
+      </Box>
+      <Box gap="large" justify="center" direction="row">
+        <Box
+          border={{ side: "top" }}
+          gap="large"
+          justify="center"
+          direction="row"
+          pad={{ top: "large", horizontal: "medium" }}
+        >
+          <Box>
+            <InfoCard
+              title={"Total Staked"}
+              text={`${utils.formatEther(totalStake?.toString() || "0")} ${symbolFull}`}
+            />
+          </Box>
+          <Box>
+            <InfoCard
+              title={"Total Rewards"}
+              text={`${weiToEthWithDecimals(data?.deployment?.tenderizer.rewards ?? "0", 4)} tender${symbol}`}
+            />
+          </Box>
+          <Box>
+            <InfoCard title={"APY"} text={`10 %`} />
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 };

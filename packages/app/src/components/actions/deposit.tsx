@@ -1,11 +1,14 @@
+import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
-import { useContractFunction } from "@usedapp/core";
+import { useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
-import { FC, useState } from "react";
+import { Button, Box, Form, FormField, TextInput, Spinner, Text } from "grommet";
+import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import InfoCard from "../tenderizers/infocard";
-import { Button, Box, Form, FormField, TextInput, Spinner, Text } from "grommet";
+import { GetUserDeployments } from "../../pages/token/queries";
+import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
   name: string;
@@ -15,6 +18,16 @@ type Props = {
 
 const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
   const [depositInput, setDepositInput] = useState("");
+  const { account } = useEthers();
+
+  const { data, refetch } = useQuery(GetUserDeployments, {
+    variables: { id: `${account?.toLowerCase()}_${name}` },
+  });
+
+  // update my stake when tokenBalance changes
+  useEffect(() => {
+    refetch();
+  }, [refetch, tokenBalance]);
 
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
@@ -39,14 +52,20 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
-    <Box align="center" justify="center" gap="medium" pad={{ left: "medium" }}>
-      <Box flex fill="horizontal" direction="row" justify="center" pad={{ left: "large" }}>
-        <InfoCard
-          title={`${symbol} Balance`}
-          text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-        />
-        <InfoCard title={"My Stake"} text={`0.00 tender${symbol}`} />
-        <InfoCard title={"My Rewards"} text={`0.00 tender${symbol}`} />
+    <Box gap="medium">
+      <Box justify="center" direction="row" gap="xlarge">
+        <Box>
+          <InfoCard
+            title={`${symbol} Balance`}
+            text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+          />
+        </Box>
+        <Box>
+          <InfoCard
+            title={"My Stake"}
+            text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 4)} tender${symbol}`}
+          />
+        </Box>
       </Box>
 
       <Box fill="horizontal" direction="row" justify="center" align="center">

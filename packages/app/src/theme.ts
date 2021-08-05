@@ -33,6 +33,7 @@ const overrideDefaultTheme: ThemeType = {
   button: {
     border: {
       color: "brand",
+      radius: "5px",
     },
     default: {
       background: "transparent",
@@ -44,8 +45,8 @@ const overrideDefaultTheme: ThemeType = {
     primary: {
       background: "brand",
       padding: {
-        vertical: "10px",
-        horizontal: "20px",
+        vertical: "16px",
+        horizontal: "36px",
       },
     },
     secondary: {
@@ -55,8 +56,8 @@ const overrideDefaultTheme: ThemeType = {
         width: "2px",
       },
       padding: {
-        vertical: "10px",
-        horizontal: "20px",
+        vertical: "16px",
+        horizontal: "36px",
       },
     },
   },
