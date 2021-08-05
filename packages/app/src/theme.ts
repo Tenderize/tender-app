@@ -8,6 +8,7 @@ const overrideDefaultTheme: ThemeType = {
       text: "#FFFFFF",
       modalBackground: "#262528",
       focus: "brand",
+      control: "brand",
     },
     elevation: {
       light: {
