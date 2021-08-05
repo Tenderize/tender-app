@@ -14,10 +14,10 @@ import {
   FormField,
   TextInput,
   Spinner,
-  Text,
 } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
+import { AmountInputFooter } from "../AmountInputFooter";
 
 type Props = {
   name: string;
@@ -74,9 +74,10 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                     placeholder={"0 " + symbol}
                     className="amount"
                   />
-                  <Text className="balance" onClick={maxDeposit}>
-                    Current Balance {`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-                  </Text>
+                  <AmountInputFooter
+                    label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                    onClick={maxDeposit}
+                  />
                 </FormField>
               </Form>
             </CardBody>

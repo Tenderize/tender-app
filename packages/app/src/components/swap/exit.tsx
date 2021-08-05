@@ -22,6 +22,7 @@ import {
 } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
+import { AmountInputFooter } from "../AmountInputFooter";
 
 type Props = {
   name: string;
@@ -313,11 +314,11 @@ const LPTokensToRemoveInputField: FC<{
           placeholder={"0 " + symbolFull}
           className="amount"
         />
-        <Button secondary onClick={() => maxDeposit()}>
-          Max
-        </Button>
       </Box>
-      <Text>Current Balance {`${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}</Text>
+      <AmountInputFooter
+        label={`Balance: ${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
+        onClick={maxDeposit}
+      />
     </FormField>
   );
 };

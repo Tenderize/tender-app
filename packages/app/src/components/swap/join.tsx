@@ -23,6 +23,7 @@ import {
 } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
+import { AmountInputFooter } from "../AmountInputFooter";
 
 type Props = {
   name: string;
@@ -100,17 +101,17 @@ const JoinPool: FC<Props> = ({
     setTenderInput("");
   };
 
-  const maxDeposit = (tenderToken: boolean) => {
-    if (tenderToken) {
-      setTenderInput(utils.formatEther(tenderTokenBalance || "0"));
-      const balBN = BigNumber.from(tenderTokenBalance.toString());
-      setTokenInput(utils.formatEther(balBN.mul(tokenWeight).div(tenderTokenWeight)));
-    } else {
-      setTokenInput(utils.formatEther(tokenBalance || "0"));
-      const balBN = BigNumber.from(tokenBalance.toString());
-      setTenderInput(utils.formatEther(balBN.mul(tenderTokenWeight).div(tokenWeight)));
-    }
-  };
+  const maxTokenDeposit = useCallback(() => {
+    setTokenInput(utils.formatEther(tokenBalance || "0"));
+    const balBN = BigNumber.from(tokenBalance.toString());
+    setTenderInput(utils.formatEther(balBN.mul(tenderTokenWeight).div(tokenWeight)));
+  }, [tenderTokenWeight, tokenBalance, tokenWeight]);
+
+  const maxTenderTokenDeposit = useCallback(() => {
+    setTenderInput(utils.formatEther(tenderTokenBalance || "0"));
+    const balBN = BigNumber.from(tenderTokenBalance.toString());
+    setTokenInput(utils.formatEther(balBN.mul(tokenWeight).div(tenderTokenWeight)));
+  }, [tenderTokenBalance, tenderTokenWeight, tokenWeight]);
 
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].liquidity, tokenInput);
   const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput);
@@ -187,10 +188,10 @@ const JoinPool: FC<Props> = ({
 
   const calcPoolOutFromRatio = () => {
     const tokenInBN = utils.parseEther(tokenInput);
-    const lpSharesBN = BigNumber.from(lpShares)
-    const tokenLpBalanceBN = BigNumber.from(tokenLpBalance)
+    const lpSharesBN = BigNumber.from(lpShares);
+    const tokenLpBalanceBN = BigNumber.from(tokenLpBalance);
 
-    return tokenInBN.mul(lpSharesBN.sub(1)).div(tokenLpBalanceBN.add(1)).sub(1000)
+    return tokenInBN.mul(lpSharesBN.sub(1)).div(tokenLpBalanceBN.add(1)).sub(1000);
   };
 
   const addLiquidity: MouseEventHandler<HTMLButtonElement> = async (e) => {
@@ -254,30 +255,36 @@ const JoinPool: FC<Props> = ({
                         <FormField label={`${symbol} Amount`} controlId="tokenInput">
                           <Box direction="row" align="center" gap="small">
                             <Text>{`${utils.formatEther(calcWeight(tokenWeight)).substr(0, 5)} %`}</Text>
-                            <Box direction="row" width="medium">
+                            <Box width="medium">
                               <TextInput
                                 value={tokenInput}
                                 onChange={handleTokenInputChange}
                                 type="text"
                                 placeholder={"0 " + symbol}
                               />
-                              <Button onClick={() => maxDeposit(false)}>Max</Button>
                             </Box>
                           </Box>
+                          <AmountInputFooter
+                            label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                            onClick={maxTokenDeposit}
+                          />
                         </FormField>
                         <FormField label={`t${symbol} Amount`} controlId="tenderInput">
                           <Box direction="row" align="center" gap="small">
                             <Text>{`${utils.formatEther(calcWeight(tenderTokenWeight)).substr(0, 5)} %`}</Text>
-                            <Box direction="row" width="medium">
+                            <Box width="medium">
                               <TextInput
                                 value={tenderInput}
                                 onChange={handleTenderInputChange}
                                 type="text"
                                 placeholder={"0 " + "t" + symbol}
                               />
-                              <Button onClick={() => maxDeposit(true)}>Max</Button>
                             </Box>
                           </Box>
+                          <AmountInputFooter
+                            label={`Balance: ${utils.formatEther(tenderTokenBalance?.toString() || "0")} ${symbol}`}
+                            onClick={maxTenderTokenDeposit}
+                          />
                         </FormField>
                       </Box>
                     </Form>
@@ -302,29 +309,31 @@ const JoinPool: FC<Props> = ({
                             />
                           </Box>
                           {selectToken === symbol ? (
-                            <>
+                            <Box>
                               <TextInput
                                 value={tokenInput}
                                 onChange={handleTokenInputChange}
                                 type="text"
                                 placeholder={"0 " + symbol}
                               />
-                              <Button secondary onClick={() => maxDeposit(false)}>
-                                Max
-                              </Button>
-                            </>
+                              <AmountInputFooter
+                                label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                                onClick={maxTokenDeposit}
+                              />
+                            </Box>
                           ) : (
-                            <>
+                            <Box>
                               <TextInput
                                 value={tenderInput}
                                 onChange={handleTenderInputChange}
                                 type="text"
                                 placeholder={"0 " + "t" + symbol}
                               />
-                              <Button secondary onClick={() => maxDeposit(true)}>
-                                Max
-                              </Button>
-                            </>
+                              <AmountInputFooter
+                                label={`Balance: ${utils.formatEther(tenderTokenBalance?.toString() || "0")} ${symbol}`}
+                                onClick={maxTenderTokenDeposit}
+                              />
+                            </Box>
                           )}
                         </Box>
                       </FormField>
