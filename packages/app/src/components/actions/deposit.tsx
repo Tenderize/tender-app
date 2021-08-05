@@ -2,13 +2,14 @@ import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Form, FormField, TextInput, Spinner, Text } from "grommet";
+import { Button, Box, Form, FormField, TextInput, Spinner } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import InfoCard from "../tenderizers/infocard";
 import { GetUserDeployments } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
+import { AmountInputFooter } from "../AmountInputFooter";
 
 type Props = {
   name: string;
@@ -79,12 +80,10 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
               placeholder={"0 " + symbol}
               className="amount"
             />
-            <Box direction="row" gap="small">
-              <Text>{`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}</Text>
-              <Button plain onClick={maxDeposit}>
-                <Text color="brand">(Max)</Text>
-              </Button>
-            </Box>
+            <AmountInputFooter
+              label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+              onClick={maxDeposit}
+            />
           </FormField>
           <Box gap="small" direction="column">
             <ApproveToken

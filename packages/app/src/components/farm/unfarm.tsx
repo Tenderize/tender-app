@@ -14,8 +14,8 @@ import {
   FormField,
   TextInput,
   Spinner,
-  Text,
 } from "grommet";
+import { AmountInputFooter } from "../AmountInputFooter";
 
 type Props = {
   name: string;
@@ -75,11 +75,11 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
                     onChange={handleUnfarmInputChange}
                     type="text"
                     placeholder={"0 " + symbol}
-                    className="amount"
                   />
-                  <Text className="balance" onClick={maxUnfarm}>
-                    Current Stake {`${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
-                  </Text>
+                  <AmountInputFooter
+                    label={`Current Stake: ${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
+                    onClick={maxUnfarm}
+                  />
                 </FormField>
               </Form>
             </CardBody>
