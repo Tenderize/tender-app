@@ -15,14 +15,16 @@ type Props = {
   name: string;
   symbol: string;
   tokenBalance: BigNumberish;
+  tenderTokenBalance: BigNumberish
 };
 
-const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
+const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
+  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1)
   const { data, refetch } = useQuery(GetUserDeployments, {
-    variables: { id: `${account?.toLowerCase()}_${name}` },
+    variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
 
   // update my stake when tokenBalance changes
@@ -49,22 +51,28 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance }) => {
     await deposit(utils.parseEther(depositInput || "0"));
     setDepositInput("");
   };
-
+  
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
     <Box gap="medium">
-      <Box justify="center" direction="row" gap="xlarge">
+      <Box justify="around" direction="row">
         <Box>
           <InfoCard
-            title={`${symbol} Balance`}
-            text={`${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+            title={`Available ${symbol}`}
+            text={`${weiToEthWithDecimals(tokenBalance ?? "0", 3)} ${symbol}`}
           />
         </Box>
         <Box>
           <InfoCard
-            title={"My Stake"}
-            text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 4)} tender${symbol}`}
+            title={`My Staked ${symbol}`}
+            text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 3)} ${symbol}`}
+          />
+        </Box>
+        <Box>
+          <InfoCard
+            title={"My TenderTokens"}
+            text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} tender${symbol}`}
           />
         </Box>
       </Box>

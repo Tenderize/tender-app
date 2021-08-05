@@ -65,7 +65,7 @@ const Token: FC = () => {
                   top: "medium",
                 }}
               >
-                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} />
+                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tenderTokenBalance={tenderBalance} />
               </Box>
             </Tab>
             <Tab

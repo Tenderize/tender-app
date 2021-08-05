@@ -18,6 +18,7 @@ import {
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
+import {FormAdd} from "grommet-icons"
 
 type Props = {
   name: string;
@@ -59,7 +60,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
 
   return (
     <>
-      <Button primary onClick={handleShow} label="Farm" />
+      <Button primary onClick={handleShow} label="Farm" reverse icon={<FormAdd color="white" />} />
       {show && (
         <Layer style={{ overflow: "scroll" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
           <Card flex={false} pad="medium" width="large">
