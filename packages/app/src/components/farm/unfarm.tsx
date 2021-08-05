@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-// import { useContractFunction } from "@usedapp/core";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
@@ -57,7 +56,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
 
   return (
     <>
-      <Button fill="horizontal" primary onClick={handleShow} label="Unfarm" />
+      <Button primary onClick={handleShow} label="Unfarm" />
       {show && (
         <Layer
           style={{ overflow: "scroll" }}
