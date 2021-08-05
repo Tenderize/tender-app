@@ -97,6 +97,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   event.tenderizer = tenderizerAddress
   event.from = withdrawEvent.params.from.toHex()
   event.amount = withdrawEvent.params.amount
+  event.unstakeLockID = withdrawEvent.params.unstakeLockID
   event.timestamp = withdrawEvent.block.timestamp
   event.save()
 }
@@ -126,6 +127,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   event.tenderizer = tenderizerAddress
   event.rewards = rewardsClaimedEvent.params.rewards
   event.currentPrincipal = rewardsClaimedEvent.params.currentPrincipal
+  event.oldPrincipal = rewardsClaimedEvent.params.oldPrincipal
   event.timestamp = rewardsClaimedEvent.block.timestamp
   event.save()
 }

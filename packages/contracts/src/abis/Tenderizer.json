@@ -71,6 +71,12 @@
         "internalType": "uint256",
         "name": "currentPrincipal",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldPrincipal",
+        "type": "uint256"
       }
     ],
     "name": "RewardsClaimed",
@@ -115,6 +121,12 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "unstakeLockID",
+        "type": "uint256"
       }
     ],
     "name": "Unstake",
@@ -133,6 +145,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "unstakeLockID",
         "type": "uint256"
       }
     ],
@@ -417,8 +435,38 @@
       }
     ],
     "name": "unstake",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "unstakeLockID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "unstakeLocks",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -430,7 +478,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_unstakeLockID",
         "type": "uint256"
       }
     ],

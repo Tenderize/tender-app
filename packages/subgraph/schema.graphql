@@ -201,6 +201,7 @@ type WithdrawEvent @entity {
   tenderizer: String!
   from: String!
   amount: BigInt!
+  unstakeLockID: BigInt!
   timestamp: BigInt!
 }
 
@@ -209,6 +210,7 @@ type RewardsClaimedEvent @entity {
   tenderizer: String!
   rewards: BigInt!
   currentPrincipal: BigInt!
+  oldPrincipal: BigInt!
   timestamp: BigInt!
 }
 
