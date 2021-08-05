@@ -2,13 +2,13 @@
 // Goerli, Kovan, Rinkeby and Ropsten. Replace it with your smart contracts.
 const addresses = {
   livepeer: {
-    faucet: "0x4868A5e950e386E3d99038B141FcfA53362E67Ba",
-    token: "0xe80110C0a290c493C543148c5445a23D3403a096",
-    controller: "0x3891FB6b6B145Ad104FE98aC6EFAFc7d8feDD63C",
-    tenderToken: "0x6b903e6751e10d9F8AEa932891DED743F2F22616",
-    swap: "0x132101F2F131B93cB5AaDe8b6568e431F32F64D7",
-    liquidity: "0xfb852b5F27B29394d2b51062BF677C6539279807",
-    farm: "0xEf078e54495cBa7A7932f1753D4A6A3b806A010D"
+    faucet: "0x441a02aD16141E6cd65922f10787B38a5b238f4f",
+    token: "0x90db03fc9F6a903460761465Fc3a0D4c8d67F84e",
+    controller: "0xbB477F437c1Cd6d351b9652C17294A79d4DA801E",
+    tenderToken: "0x30d76E48e1DfD6b90D11a0a224c8220E604890DE",
+    swap: "0xd30C9cc981BCcAd162b760c595ee4Ab48B6D0265",
+    liquidity: "0x167D3c9E98c27Ab6402546FDd7363Dd26cd1CF58",
+    farm: "0xdf2Ec6a4F34ecE5aFd343802AE4df140f6B9E51C"
   },
   graph: {
     faucet: "0xa10b8eea1df22268b244129a52ef0d600c29836b",
