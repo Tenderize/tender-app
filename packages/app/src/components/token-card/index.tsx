@@ -44,7 +44,7 @@ const TokenCard: FC<Props> = (props) => {
   return (
     <>
       {info.available ? (
-        <Link to={url} style={{ textDecoration: "none", display: "flex", flex: 1 }}>
+        <Link to={url} style={{ textDecoration: "none", flex: 1 }}>
           {renderCard()}
         </Link>
       ) : (
