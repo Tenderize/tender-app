@@ -28,7 +28,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
     <>
       {account && chainId && showModal && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           onEsc={() => setShowModal(false)}
           onClickOutside={() => setShowModal(false)}

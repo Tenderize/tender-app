@@ -14,7 +14,6 @@ import {
   TextInput,
   Spinner,
   Text,
-  Heading,
 } from "grommet";
 
 import { useContractFunction } from "@usedapp/core";
@@ -78,7 +77,7 @@ const ConfirmSwapModal: FC<Props> = ({
     <>
       {show && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           onEsc={() => {
             confirmStatus !== "Submitted" && onDismiss();
@@ -114,9 +113,11 @@ const ConfirmSwapModal: FC<Props> = ({
                 </>
               )}
               {confirmStatus === "Waiting" && (
-                <Box justify="center" align="center">
-                  <Spinner color="brand" />
-                  <Heading textAlign="center">Waiting For Confirmation...</Heading>
+                <Box justify="center" align="center" gap="medium">
+                  <Spinner size="medium" color="brand" />
+                  <Text size="xlarge" textAlign="center">
+                    Waiting For Confirmation...
+                  </Text>
                   <Text>
                     Swapping {sendTokenAmount} {tokenSendedSymbol} for {utils.formatEther(receiveTokenAmount || "0")}{" "}
                     {tokenReceivedSymbol}
@@ -125,21 +126,12 @@ const ConfirmSwapModal: FC<Props> = ({
                 </Box>
               )}
               {confirmStatus === "Submitted" && (
-                <Box justify="center" align="center">
-                  <Heading textAlign="center">Transaction is being processed...</Heading>
-                  <div className="d-grid p-3">
-                    <Button
-                      color="success"
-                      disabled={swapTx.status !== "Success"}
-                      onClick={() => {
-                        if (swapTx.status === "Success") {
-                          onDismiss();
-                        }
-                      }}
-                    >
-                      {swapTx.status === "Success" ? "Close" : <Spinner color="brand" />}
-                    </Button>
-                  </div>
+                <Box justify="center" align="center" gap="medium">
+                  <Text size="large" textAlign="center">
+                    Transaction is being processed...
+                  </Text>
+                  {swapTx.status !== "Success" && <Spinner size="medium" color="brand" />}
+                  <Button primary onClick={onDismiss} label="Dismiss" />
                 </Box>
               )}
             </CardBody>

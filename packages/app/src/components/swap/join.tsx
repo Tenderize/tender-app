@@ -14,7 +14,6 @@ import {
   Form,
   FormField,
   TextInput,
-  Spinner,
   Text,
   Select,
   Tabs,
@@ -24,6 +23,7 @@ import {
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
+import { ButtonSpinner } from "../ButtonSpinner";
 
 type Props = {
   name: string;
@@ -231,7 +231,7 @@ const JoinPool: FC<Props> = ({
       <Button primary onClick={handleShow} label="Join Pool" />
       {show && (
         <Layer
-          style={{ overflow: "scroll" }}
+          style={{ overflow: "auto" }}
           animation="fadeIn"
           margin={{ top: "xlarge" }}
           position="top"
@@ -362,10 +362,10 @@ const JoinPool: FC<Props> = ({
                   disabled={isButtonDisabled()}
                   label={
                     joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
-                      <>
-                        <Spinner color="white" />
+                      <Box direction="row" align="center" gap="small">
+                        <ButtonSpinner />
                         Adding Liquidity...
-                      </>
+                      </Box>
                     ) : (
                       "Add Liquidity"
                     )

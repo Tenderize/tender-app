@@ -2,23 +2,12 @@ import { FC, useCallback, useState } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction } from "@usedapp/core";
-import {
-  Button,
-  Box,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Layer,
-  Form,
-  FormField,
-  TextInput,
-  Spinner,
-} from "grommet";
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
-import {FormAdd} from "grommet-icons"
+import { FormAdd } from "grommet-icons";
+import { ButtonSpinner } from "../ButtonSpinner";
 
 type Props = {
   name: string;
@@ -27,8 +16,6 @@ type Props = {
 };
 
 const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
-  // Component state & helpers
-
   const [show, setShow] = useState(false);
 
   const handleClose = useCallback(() => setShow(false), []);
@@ -62,7 +49,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     <>
       <Button primary onClick={handleShow} label="Farm" reverse icon={<FormAdd color="white" />} />
       {show && (
-        <Layer style={{ overflow: "scroll" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
+        <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
           <Card flex={false} pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Farm ${symbol}`}</CardHeader>
             <CardBody>
@@ -73,7 +60,6 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                     onChange={handleFarmInputChange}
                     type="text"
                     placeholder={"0 " + symbol}
-                    className="amount"
                   />
                   <AmountInputFooter
                     label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
@@ -98,8 +84,8 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                   onClick={farmLpTokens}
                   label={
                     farmTx.status === "Mining" ? (
-                      <Box direction="row">
-                        <Spinner color="white" />
+                      <Box direction="row" gap="small">
+                        <ButtonSpinner />
                         Farming...
                       </Box>
                     ) : (
