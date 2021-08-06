@@ -23,6 +23,7 @@ import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
+import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -172,7 +173,7 @@ const ExitPool: FC<Props> = ({
                   }
                 >
                   <Box pad={{ top: "medium" }} align="center">
-                    <Form>
+                    <Form validate="change">
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
                           lpTokenBalance={lpTokenBalance}
@@ -305,7 +306,16 @@ const LPTokensToRemoveInputField: FC<{
   );
 
   return (
-    <FormField label="LP Tokens to remove">
+    <FormField
+      label="LP Tokens to remove"
+      name="lpTokenToRemove"
+      validate={() => {
+        if (isPositiveAndSmallerThanMax(lpSharesInput, lpTokenBalance)) {
+          return { message: "Please provide an available amount", status: "error" };
+        }
+        return undefined;
+      }}
+    >
       <Box direction="row" align="center" gap="small">
         <TextInput
           value={lpSharesInput}

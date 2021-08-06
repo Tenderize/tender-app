@@ -10,6 +10,7 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
+import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
 
 type Props = {
   protocolName: string;
@@ -46,7 +47,7 @@ const Swap: FC<Props> = ({
 }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
-  const [sendTokenAmount, setSendTokenAmount] = useState("0");
+  const [sendTokenAmount, setSendTokenAmount] = useState("");
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -92,11 +93,7 @@ const Swap: FC<Props> = ({
     setSendTokenAmount(e.target.value);
   }, []);
 
-  const isSendInputInvalid =
-    sendTokenAmount === "" ||
-    utils.parseEther(sendTokenAmount).isNegative() ||
-    utils.parseEther(sendTokenAmount).isZero() ||
-    utils.parseEther(sendTokenAmount).gt(tokenSendedBalance);
+  const isSendInputInvalid = isPositiveAndSmallerThanMax(sendTokenAmount, tokenSendedBalance);
 
   return (
     <Box>
@@ -118,6 +115,7 @@ const Swap: FC<Props> = ({
                   id="formSwapSend"
                   type="number"
                   value={sendTokenAmount}
+                  placeholder={`0 ${tokenSendedSymbol}`}
                   onChange={handleSendTokenInput}
                   required={true}
                 />

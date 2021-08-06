@@ -11,19 +11,20 @@ import { GetUserDeployments } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
+import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
   symbol: string;
   tokenBalance: BigNumberish;
-  tenderTokenBalance: BigNumberish
+  tenderTokenBalance: BigNumberish;
 };
 
 const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
-  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1)
+  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1);
   const { data, refetch } = useQuery(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
@@ -52,17 +53,14 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) 
     await deposit(utils.parseEther(depositInput || "0"));
     setDepositInput("");
   };
-  
+
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
     <Box gap="medium">
       <Box justify="around" direction="row">
         <Box>
-          <InfoCard
-            title={`Available ${symbol}`}
-            text={`${weiToEthWithDecimals(tokenBalance ?? "0", 3)} ${symbol}`}
-          />
+          <InfoCard title={`Available ${symbol}`} text={`${weiToEthWithDecimals(tokenBalance ?? "0", 3)} ${symbol}`} />
         </Box>
         <Box>
           <InfoCard
@@ -79,14 +77,24 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) 
       </Box>
 
       <Box fill="horizontal" direction="row" justify="center" align="center">
-        <Form>
-          <FormField label="Deposit Amount" controlId="formDeposit">
+        <Form validate="change">
+          <FormField
+            fill
+            label="Deposit Amount"
+            name="depositAmount"
+            validate={() => {
+              if (isPositiveAndSmallerThanMax(depositInput, tokenBalance)) {
+                return { message: "Please provide an available amount", status: "error" };
+              }
+              return undefined;
+            }}
+          >
             <TextInput
               width={1}
               value={depositInput}
               onChange={handleInputChange}
               type="text"
-              placeholder={"0 " + symbol}
+              placeholder={`0 ${symbol}`}
             />
             <AmountInputFooter
               label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
