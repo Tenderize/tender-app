@@ -65,7 +65,12 @@ const Token: FC = () => {
                   top: "medium",
                 }}
               >
-                <Deposit name={name} symbol={info.symbol} tokenBalance={tokenBalance} tenderTokenBalance={tenderBalance} />
+                <Deposit
+                  name={name}
+                  symbol={info.symbol}
+                  tokenBalance={tokenBalance}
+                  tenderTokenBalance={tenderBalance}
+                />
               </Box>
             </Tab>
             <Tab
@@ -114,8 +119,14 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
       plain
       hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }}
       open={open}
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
+      onClose={(e) => {
+        e.stopPropagation();
+        setOpen(false);
+      }}
+      onOpen={(e) => {
+        e.stopPropagation();
+        setOpen(true);
+      }}
       style={{ paddingTop: 30, paddingBottom: 30 }}
       label={
         <Box focusIndicator={false} direction="row" justify="center" gap="small">
