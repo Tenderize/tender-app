@@ -51,14 +51,15 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   let tenderizerContract = Tenderizer.bind(Address.fromString(params.tenderizer.toHex()))
   let amount = tenderizerContract.currentPrincipal()
 
-  // Update day data
-  let day = loadOrCreateTernderizerDay(config.block.timestamp.toI32(), params.name)
-  day.deposits = day.deposits.plus(amount)
-  day.save()
-
   // Update tenderizer data
   let tenderizer = loadOrCreateTenderizer(params.name)
   tenderizer.deposits = tenderizer.deposits.plus(amount)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
   tenderizer.save()
+  
+  // Update day data
+  let day = loadOrCreateTernderizerDay(config.block.timestamp.toI32(), params.name)
+  day.deposits = day.deposits.plus(amount)
+  day.save()
+
 }
