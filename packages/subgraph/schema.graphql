@@ -193,6 +193,7 @@ type UnstakeEvent @entity {
   from: String!
   node: String!
   amount: BigInt!
+  unstakeLockID: BigInt!
   timestamp: BigInt!
 }
 
