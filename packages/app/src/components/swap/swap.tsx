@@ -10,7 +10,7 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
+import { isLargerThanMax, isPositive, validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
 type Props = {
   protocolName: string;
@@ -93,8 +93,6 @@ const Swap: FC<Props> = ({
     setSendTokenAmount(e.target.value);
   }, []);
 
-  const isSendInputInvalid = isPositiveAndSmallerThanMax(sendTokenAmount, tokenSendedBalance);
-
   return (
     <Box>
       <Form validate="change">
@@ -103,12 +101,10 @@ const Swap: FC<Props> = ({
             <FormField
               name="sendAmount"
               label={`Send ${tokenSendedSymbol}`}
-              validate={() => {
-                if (isSendInputInvalid) {
-                  return { message: "Please provide an available amount", status: "error" };
-                }
-                return undefined;
-              }}
+              validate={[
+                validateIsPositive(sendTokenAmount),
+                validateIsLargerThanMax(sendTokenAmount, tokenSendedBalance),
+              ]}
             >
               <Box width="medium">
                 <TextInput
@@ -151,7 +147,12 @@ const Swap: FC<Props> = ({
             />
             <Button
               primary
-              disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).isZero()}
+              disabled={
+                !isTokenApproved ||
+                !isPositive(sendTokenAmount) ||
+                isLargerThanMax(sendTokenAmount, tokenSendedBalance) ||
+                utils.parseEther(sendTokenAmount).isZero()
+              }
               onClick={() => setShowConfirm(true)}
               label="Trade"
             />

@@ -6,7 +6,7 @@ import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormF
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormSubtract } from "grommet-icons";
 import { ButtonSpinner } from "../ButtonSpinner";
-import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
+import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -66,12 +66,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
               <Form validate="change">
                 <FormField
                   label="Unfarm Amount"
-                  validate={() => {
-                    if (isPositiveAndSmallerThanMax(unfarmInput, stake)) {
-                      return { message: "Please provide an available amount", status: "error" };
-                    }
-                    return undefined;
-                  }}
+                  validate={[validateIsPositive(unfarmInput), validateIsLargerThanMax(unfarmInput, stake)]}
                 >
                   <TextInput
                     value={unfarmInput}

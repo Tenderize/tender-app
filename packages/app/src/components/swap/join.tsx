@@ -24,7 +24,7 @@ import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
-import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
+import { validateIsPositive, validateIsLargerThanMax } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -256,12 +256,7 @@ const JoinPool: FC<Props> = ({
                         <FormField
                           label={`${symbol} Amount`}
                           name="tokenInput"
-                          validate={() => {
-                            if (isPositiveAndSmallerThanMax(tokenInput, tokenBalance)) {
-                              return { message: "Please provide an available amount", status: "error" };
-                            }
-                            return undefined;
-                          }}
+                          validate={[validateIsPositive(tokenInput), validateIsLargerThanMax(tokenInput, tokenBalance)]}
                         >
                           <Box direction="row" align="center" gap="small">
                             <Text>{`${utils.formatEther(calcWeight(tokenWeight)).substr(0, 5)} %`}</Text>
@@ -282,12 +277,10 @@ const JoinPool: FC<Props> = ({
                         <FormField
                           label={`t${symbol} Amount`}
                           name="tenderInput"
-                          validate={() => {
-                            if (isPositiveAndSmallerThanMax(tenderInput, tenderTokenBalance)) {
-                              return { message: "Please provide an available amount", status: "error" };
-                            }
-                            return undefined;
-                          }}
+                          validate={[
+                            validateIsPositive(tenderInput),
+                            validateIsLargerThanMax(tenderInput, tenderTokenBalance),
+                          ]}
                         >
                           <Box direction="row" align="center" gap="small">
                             <Text>{`${utils.formatEther(calcWeight(tenderTokenWeight)).substr(0, 5)} %`}</Text>
@@ -321,14 +314,13 @@ const JoinPool: FC<Props> = ({
                       <FormField
                         label={`${symbol} Amount`}
                         name="tokenInput"
-                        validate={() => {
-                          const inputToCheck = selectToken === symbol ? tokenInput : tenderInput;
-                          const balanceToCheck = selectToken === symbol ? tokenBalance : tenderTokenBalance;
-                          if (isPositiveAndSmallerThanMax(inputToCheck, balanceToCheck)) {
-                            return { message: "Please provide an available amount", status: "error" };
-                          }
-                          return undefined;
-                        }}
+                        validate={[
+                          validateIsPositive(selectToken === symbol ? tokenInput : tenderInput),
+                          validateIsLargerThanMax(
+                            selectToken === symbol ? tokenInput : tenderInput,
+                            symbol ? tokenBalance : tenderTokenBalance
+                          ),
+                        ]}
                       >
                         <Box direction="row" gap="small">
                           <Box width="small">

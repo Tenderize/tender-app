@@ -8,7 +8,7 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd } from "grommet-icons";
 import { ButtonSpinner } from "../ButtonSpinner";
-import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
+import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -57,12 +57,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
               <Form validate="change">
                 <FormField
                   name="farmInput"
-                  validate={() => {
-                    if (isPositiveAndSmallerThanMax(farmInput, tokenBalance)) {
-                      return { message: "Please provide an available amount", status: "error" };
-                    }
-                    return undefined;
-                  }}
+                  validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
                 >
                   <TextInput
                     value={farmInput}

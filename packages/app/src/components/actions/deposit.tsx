@@ -11,7 +11,7 @@ import { GetUserDeployments } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
-import { isPositiveAndSmallerThanMax } from "../../utils/inputValidation";
+import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -82,12 +82,7 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) 
             fill
             label="Deposit Amount"
             name="depositAmount"
-            validate={() => {
-              if (isPositiveAndSmallerThanMax(depositInput, tokenBalance)) {
-                return { message: "Please provide an available amount", status: "error" };
-              }
-              return undefined;
-            }}
+            validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
           >
             <TextInput
               width={1}
