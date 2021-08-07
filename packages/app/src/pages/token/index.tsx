@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, MouseEventHandler, useCallback, useState } from "react";
 import { Box, Tabs, Tab, Text, Paragraph, Avatar, DropButton, Button } from "grommet";
 import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
 import { Link, useLocation } from "react-router-dom";
@@ -145,7 +145,13 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
           <DropdownBackground style={{ zIndex: 1 }} />
           <Box style={{ zIndex: 2 }}>
             {options.map((option) => (
-              <DropdownOption staker={option} onClick={() => setOpen(false)} />
+              <DropdownOption
+                staker={option}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(false);
+                }}
+              />
             ))}
           </Box>
         </Box>
@@ -154,10 +160,10 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
   );
 };
 
-const DropdownOption: FC<{ staker: Staker; onClick: () => void }> = ({ staker, onClick }) => (
+const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButtonElement> }> = ({ staker, onClick }) => (
   <MaybeLink staker={staker}>
-    <Box border={{ side: "bottom" }}>
-      <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available} onClick={onClick}>
+    <Box border={{ side: "bottom" }} onClick={onClick}>
+      <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
         <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
           <Box direction="column" align="center" pad={{ bottom: "small" }}>
             <Avatar size="medium" src={require("../../images/" + staker.logo).default} />
