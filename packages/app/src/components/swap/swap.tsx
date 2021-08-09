@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import { Button, Box, Form, FormField, TextInput, Text } from "grommet";
-import { BigNumberish, utils, BigNumber, constants } from "ethers";
+import { Button, Box, Form, FormField, TextInput } from "grommet";
+import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 
@@ -9,6 +9,8 @@ import ConfirmSwapModal from "./ConfirmSwapModal";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
+import { AmountInputFooter } from "../AmountInputFooter";
+import { isLargerThanMax, isPositive, validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
 type Props = {
   protocolName: string;
@@ -45,7 +47,7 @@ const Swap: FC<Props> = ({
 }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
-  const [sendTokenAmount, setSendTokenAmount] = useState("0");
+  const [sendTokenAmount, setSendTokenAmount] = useState("");
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -91,35 +93,32 @@ const Swap: FC<Props> = ({
     setSendTokenAmount(e.target.value);
   }, []);
 
-  const isSendInputInvalid =
-    sendTokenAmount === "" || BigNumber.from(utils.parseEther(sendTokenAmount)).gt(tokenSendedBalance);
-
   return (
     <Box>
-      <Form>
+      <Form validate="change">
         <Box align="center" justify="center">
           <Box direction="row" gap="small">
             <FormField
+              name="sendAmount"
               label={`Send ${tokenSendedSymbol}`}
-              validate={{ function: () => isSendInputInvalid, message: "Please provide an available amount" }}
+              validate={[
+                validateIsPositive(sendTokenAmount),
+                validateIsLargerThanMax(sendTokenAmount, tokenSendedBalance),
+              ]}
             >
               <Box width="medium">
                 <TextInput
                   id="formSwapSend"
                   type="number"
                   value={sendTokenAmount}
+                  placeholder={`0 ${tokenSendedSymbol}`}
                   onChange={handleSendTokenInput}
                   required={true}
                 />
-                <Box direction="row" gap="small">
-                  <Text>{`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}</Text>
-                  <Button
-                    plain
-                    onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
-                  >
-                    <Text color="brand">(Max)</Text>
-                  </Button>
-                </Box>
+                <AmountInputFooter
+                  label={`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}
+                  onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
+                />
               </Box>
             </FormField>
             <Button
@@ -148,7 +147,12 @@ const Swap: FC<Props> = ({
             />
             <Button
               primary
-              disabled={!isTokenApproved || isSendInputInvalid || utils.parseEther(sendTokenAmount).eq(constants.Zero)}
+              disabled={
+                !isTokenApproved ||
+                !isPositive(sendTokenAmount) ||
+                isLargerThanMax(sendTokenAmount, tokenSendedBalance) ||
+                utils.parseEther(sendTokenAmount).isZero()
+              }
               onClick={() => setShowConfirm(true)}
               label="Trade"
             />

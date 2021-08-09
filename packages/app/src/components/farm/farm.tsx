@@ -8,6 +8,7 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd } from "grommet-icons";
 import { ButtonSpinner } from "../ButtonSpinner";
+import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -53,8 +54,11 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
           <Card flex={false} pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Farm ${symbol}`}</CardHeader>
             <CardBody>
-              <Form>
-                <FormField>
+              <Form validate="change">
+                <FormField
+                  name="farmInput"
+                  validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
+                >
                   <TextInput
                     value={farmInput}
                     onChange={handleFarmInputChange}

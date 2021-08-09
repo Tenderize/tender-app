@@ -6,6 +6,7 @@ import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormF
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormSubtract } from "grommet-icons";
 import { ButtonSpinner } from "../ButtonSpinner";
+import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -62,10 +63,12 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
           <Card flex={false} pad="medium" width="large">
             <CardHeader justify="center" pad={{ bottom: "small" }}>{`Unfarm ${symbol}`}</CardHeader>
             <CardBody>
-              <Form>
-                <FormField label="Unfarm Amount" controlId="unfarmLpTokens">
+              <Form validate="change">
+                <FormField
+                  label="Unfarm Amount"
+                  validate={[validateIsPositive(unfarmInput), validateIsLargerThanMax(unfarmInput, stake)]}
+                >
                   <TextInput
-                    width={1}
                     value={unfarmInput}
                     onChange={handleUnfarmInputChange}
                     type="text"

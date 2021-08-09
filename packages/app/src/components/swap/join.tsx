@@ -24,6 +24,7 @@ import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
+import { validateIsPositive, validateIsLargerThanMax } from "../../utils/inputValidation";
 
 type Props = {
   name: string;
@@ -250,9 +251,13 @@ const JoinPool: FC<Props> = ({
                   }
                 >
                   <Box pad={{ top: "medium" }} align="center">
-                    <Form>
+                    <Form validate="change">
                       <Box gap="medium">
-                        <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                        <FormField
+                          label={`${symbol} Amount`}
+                          name="tokenInput"
+                          validate={[validateIsPositive(tokenInput), validateIsLargerThanMax(tokenInput, tokenBalance)]}
+                        >
                           <Box direction="row" align="center" gap="small">
                             <Text>{`${utils.formatEther(calcWeight(tokenWeight)).substr(0, 5)} %`}</Text>
                             <Box width="medium">
@@ -269,7 +274,14 @@ const JoinPool: FC<Props> = ({
                             onClick={maxTokenDeposit}
                           />
                         </FormField>
-                        <FormField label={`t${symbol} Amount`} controlId="tenderInput">
+                        <FormField
+                          label={`t${symbol} Amount`}
+                          name="tenderInput"
+                          validate={[
+                            validateIsPositive(tenderInput),
+                            validateIsLargerThanMax(tenderInput, tenderTokenBalance),
+                          ]}
+                        >
                           <Box direction="row" align="center" gap="small">
                             <Text>{`${utils.formatEther(calcWeight(tenderTokenWeight)).substr(0, 5)} %`}</Text>
                             <Box width="medium">
@@ -298,8 +310,18 @@ const JoinPool: FC<Props> = ({
                   }
                 >
                   <Box pad={{ top: "medium" }} align="center">
-                    <Form>
-                      <FormField label={`${symbol} Amount`} controlId="tokenInput">
+                    <Form validate="change">
+                      <FormField
+                        label={`${symbol} Amount`}
+                        name="tokenInput"
+                        validate={[
+                          validateIsPositive(selectToken === symbol ? tokenInput : tenderInput),
+                          validateIsLargerThanMax(
+                            selectToken === symbol ? tokenInput : tenderInput,
+                            symbol ? tokenBalance : tenderTokenBalance
+                          ),
+                        ]}
+                      >
                         <Box direction="row" gap="small">
                           <Box width="small">
                             <Select
@@ -354,7 +376,7 @@ const JoinPool: FC<Props> = ({
                   symbol={`t${symbol}`}
                   spender={addresses[name].liquidity}
                   token={contracts[name].tenderToken}
-                  show={!isTokenApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`))}
+                  show={!isTenderApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`))}
                 />
                 <Button
                   primary
