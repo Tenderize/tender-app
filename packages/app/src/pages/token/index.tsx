@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler, useCallback, useState } from "react";
-import { Box, Tabs, Tab, Text, Paragraph, Avatar, DropButton, Button } from "grommet";
+import { Box, Tabs, Tab, Text, Paragraph, Avatar, DropButton, Button, Tip } from "grommet";
 import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
 import { Link, useLocation } from "react-router-dom";
 import { constants } from "ethers";
@@ -52,10 +52,15 @@ const Token: FC = () => {
             <Tab plain title={<TokenDropdown title={info.title} logo={logo} />} />
             <Tab
               title={
-                <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                  <Currency />
-                  <Paragraph>Stake</Paragraph>
-                </Box>
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Stake your ${info.symbol} and earn staking rewards`}
+                >
+                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                    <Currency />
+                    <Paragraph>Stake</Paragraph>
+                  </Box>
+                </Tip>
               }
             >
               <Box
@@ -75,10 +80,15 @@ const Token: FC = () => {
             </Tab>
             <Tab
               title={
-                <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                  <PhoneHorizontal />
-                  <Paragraph>Swap</Paragraph>
-                </Box>
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
+                >
+                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                    <PhoneHorizontal />
+                    <Paragraph>Swap</Paragraph>
+                  </Box>
+                </Tip>
               }
             >
               <Box round={{ corner: "bottom" }} border="top" pad="medium">
@@ -93,10 +103,15 @@ const Token: FC = () => {
             </Tab>
             <Tab
               title={
-                <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                  <Grow />
-                  <Paragraph>Farm</Paragraph>
-                </Box>
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Farm your liquidity pool tokens for more rewards`}
+                >
+                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                    <Grow />
+                    <Paragraph>Farm</Paragraph>
+                  </Box>
+                </Tip>
               }
             >
               <Box round={{ corner: "bottom" }} border="top" pad="medium">
