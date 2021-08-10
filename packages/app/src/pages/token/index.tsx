@@ -161,6 +161,7 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
           <Box style={{ zIndex: 2 }}>
             {options.map((option) => (
               <DropdownOption
+                key={option.title}
                 staker={option}
                 onClick={(e) => {
                   e.stopPropagation();
