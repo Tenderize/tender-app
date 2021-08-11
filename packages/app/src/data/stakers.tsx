@@ -44,7 +44,7 @@ const stakers: Record<string, Staker> = {
     description:
       "The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible.",
     stakerAddress: "",
-    available: false,
+    available: true,
     apy: 6.5,
     logo: "graph.svg",
     bwLogo: "GRT.svg",
