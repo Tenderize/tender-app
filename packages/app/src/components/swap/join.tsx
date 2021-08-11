@@ -456,7 +456,7 @@ const SingleAssetTenderInputForm: FC<BodyProps> = ({
   return (
     <Form validate="change">
       <FormField
-        label={`${symbol} Amount`}
+        label={`t${symbol} Amount`}
         name="tokenInput"
         validate={[validateIsPositive(input), validateIsLargerThanMax(input, balance)]}
       >
