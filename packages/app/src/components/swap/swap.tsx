@@ -1,8 +1,9 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import { Button, Box, Form, FormField, TextInput } from "grommet";
+import { Button, Box, Form, FormField, TextInput, Avatar } from "grommet";
 import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
+import stakers from "../../data/stakers";
 
 import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
@@ -45,13 +46,18 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
+  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
+  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
+  const tokenSendedLogo = isSendingToken ? logo : tenderLogo
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
+  const tokenReceivedLogo = isSendingToken ? tenderLogo : logo
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
   const tokenSendedLpBalance = isSendingToken ? tokenLpBalance : tenderLpBalance;
   const tokenSendedWeight = isSendingToken ? tokenWeight : tenderTokenWeight;
@@ -109,8 +115,10 @@ const Swap: FC<Props> = ({
               <Box width="medium">
                 <TextInput
                   id="formSwapSend"
-                  type="number"
+                  type="text"
                   value={sendTokenAmount}
+                  icon={<Avatar src={tokenSendedLogo.default} />}
+                  style={{textAlign:"right", padding:"20px 50px"}}
                   placeholder={`0 ${tokenSendedSymbol}`}
                   onChange={handleSendTokenInput}
                   required={true}
@@ -132,7 +140,9 @@ const Swap: FC<Props> = ({
                 <TextInput
                   readOnly
                   id="formSwapReceive"
-                  placeholder={"0"}
+                  placeholder={`0 ${tokenReceivedSymbol}`}
+                  icon={<Avatar src={tokenReceivedLogo.default} />}
+                  style={{textAlign:"right", padding:"20px 50px"}}
                   value={utils.formatEther(calcOutGivenIn || "0")}
                 />
               </Box>

@@ -18,7 +18,7 @@ const FeaturedCards: FC = () => {
     );
   }
   return (
-    <Box flex height="fill" width="100%" direction="row" gap="small" justify="center" align="center">
+    <Box direction="row" justify="around" align="center">
       {cards}
     </Box>
   );

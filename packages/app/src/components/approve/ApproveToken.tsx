@@ -40,7 +40,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token, amount }) => {
         <>
           <Box justify="center" align="center" direction="row" gap="medium">
             {approveTx.status !== "None" && approveTx.status !== "Success" && <ButtonSpinner />}
-            <Text>Allow Tenderize to use your {symbol}</Text>
+            <Text weight="normal">Allow Tenderize to use your {symbol}</Text>
             <Tip
               plain
               dropProps={{

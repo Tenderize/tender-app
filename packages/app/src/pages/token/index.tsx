@@ -73,6 +73,7 @@ const Token: FC = () => {
                 <Deposit
                   name={name}
                   symbol={info.symbol}
+                  logo={info.bwLogo}
                   tokenBalance={tokenBalance}
                   tenderTokenBalance={tenderBalance}
                 />

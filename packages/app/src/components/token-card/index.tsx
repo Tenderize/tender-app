@@ -1,7 +1,5 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { Avatar, Card, CardBody, CardHeader } from "grommet";
+import { Avatar, Box, Text } from "grommet";
 
 type Props = {
   url: string;
@@ -16,54 +14,51 @@ type CardInfo = {
   available: boolean;
   apy: number;
   logo: string;
+  bwLogo: string;
+  bwTenderLogo: string;
   symbol: string;
 };
 
 const TokenCard: FC<Props> = (props) => {
-  const { url, info } = props;
-  const logo = require("../../images/" + info.logo);
-
-  const renderCard = () => {
-    return (
-      <TCard style={{ zIndex: 1 }}>
-        <CardHeader flex direction="column">
-          <Avatar size="medium" src={logo.default} style={{ margin: "1em auto 0" }} />
-          <h3>{info.title}</h3>
-        </CardHeader>
-        <CardBody style={{ textTransform: "capitalize", textAlign: "center" }}>
-          <div style={{ margin: "5 0" }}>
-            <h5>
-              <span>{info.apy}%</span>
-            </h5>
-          </div>
-        </CardBody>
-      </TCard>
-    );
-  };
+  const { info } = props;
+  const logo = require("../../images/" + info.bwTenderLogo);
 
   return (
-    <>
-      {info.available ? (
-        <Link to={url} style={{ textDecoration: "none", flex: 1 }}>
-          {renderCard()}
-        </Link>
-      ) : (
-        renderCard()
-      )}
-    </>
+    <Box pad="large" style={{flex:"1"}}>
+      <Box align="center" margin={{vertical: "small"}}>
+        <Avatar size="large" src={logo.default} />
+        <Text size="xlarge">{info.title}</Text>
+      </Box>
+      <Box pad={{horizontal: "large"}} gap="medium">
+        <Box direction="column" align="center">
+          <Text size="medium" color="light-3">
+            Stake
+          </Text>
+          <Box direction="row" align="center" gap="small">
+          <Text size="large" weight="bold">
+            {info.apy} 
+          </Text>
+          <Text size="small" weight="normal" color="light-3">
+              % APY
+          </Text>
+          </Box>
+        </Box>
+        <Box direction="column" align="center">
+          <Text size="medium" color="light-3">
+            Farm
+          </Text>
+          <Box direction="row" align="center" gap="small">
+          <Text size="large" weight="bold">
+            {info.apy} 
+          </Text>
+          <Text size="small" weight="normal" color="light-3">
+              % APY
+          </Text>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
-
-const TCard = styled(Card)`
-  flex: 1;
-  background: none;
-  margin: 0 0 20px !important; // I don't feel like figuring out how to override it without this.
-  text-decoration: none;
-  box-shadow: none;
-  color: white;
-  &.disabled {
-    cursor: default;
-  }
-`;
 
 export default TokenCard;

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Form, FormField, TextInput } from "grommet";
+import { Button, Box, Form, FormField, TextInput, Avatar} from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -16,11 +16,13 @@ import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputVa
 type Props = {
   name: string;
   symbol: string;
+  logo: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
 };
 
-const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
+const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalance }) => {
+  const logoImg = require("../../images/" + logo);
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
@@ -89,6 +91,8 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) 
               value={depositInput}
               onChange={handleInputChange}
               type="text"
+              icon={<Avatar src={logoImg.default} />}
+              style={{textAlign:"right", padding:"20px 50px"}}
               placeholder={`0 ${symbol}`}
             />
             <AmountInputFooter
