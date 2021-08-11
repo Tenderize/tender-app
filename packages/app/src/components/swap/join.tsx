@@ -300,7 +300,7 @@ const JoinPool: FC<Props> = ({
                             </Box>
                           </Box>
                           <AmountInputFooter
-                            label={`Balance: ${utils.formatEther(tenderTokenBalance?.toString() || "0")} ${symbol}`}
+                            label={`Balance: ${utils.formatEther(tenderTokenBalance?.toString() || "0")} t${symbol}`}
                             onClick={maxTenderTokenDeposit}
                           />
                         </FormField>
