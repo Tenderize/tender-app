@@ -47,8 +47,8 @@ const stakers: Record<string, Staker> = {
     available: false,
     apy: 6.5,
     logo: "graph.svg",
-    bwLogo: "LPT.svg",
-    bwTenderLogo: "tenderLPT.svg",
+    bwLogo: "GRT.svg",
+    bwTenderLogo: "tenderGRT.svg",
     symbol: "GRT",
   },
 };
