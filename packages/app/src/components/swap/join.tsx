@@ -436,7 +436,7 @@ const SingleAssetTokenInputForm: FC<BodyProps> = ({
             />
           </Box>
           <Box>
-            <TextInput value={input} onChange={handleInputChange} type="text" placeholder={"0 " + symbol} />
+            <TextInput value={input} onChange={handleInputChange} type="text" placeholder={"0"} />
           </Box>
         </Box>
         <AmountInputFooter
@@ -458,7 +458,6 @@ const SingleAssetTenderInputForm: FC<BodyProps> = ({
   tenderLogo,
   setInputToMax,
 }) => {
-  console.log("tender");
   return (
     <Form validate="change">
       <FormField
@@ -489,7 +488,7 @@ const SingleAssetTenderInputForm: FC<BodyProps> = ({
           </Box>
 
           <Box>
-            <TextInput value={input} onChange={handleInputChange} type="text" placeholder={"0 " + "t" + symbol} />
+            <TextInput value={input} onChange={handleInputChange} type="text" placeholder={"0"} />
           </Box>
         </Box>
         <AmountInputFooter
