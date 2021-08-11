@@ -421,8 +421,8 @@ const SingleAssetTokenInputForm: FC<BodyProps> = ({
             <Select
               value={
                 // TODO padding workaround, select is a button internally and can't take up available space easily
-                <Box fill direction="row" gap="small" align="center" pad="9px">
-                  <img height={27} width={27} src={logo.default} alt="token logo" />
+                <Box fill direction="row" gap="small" align="center" pad="7px">
+                  <img height={30} width={30} src={logo.default} alt="token logo" />
                   {selectedToken}
                 </Box>
               }

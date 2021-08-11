@@ -24,6 +24,8 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
+import stakers from "../../data/stakers";
+import { useLocation } from "react-router";
 
 type Props = {
   name: string;
@@ -50,7 +52,10 @@ const ExitPool: FC<Props> = ({
   lpShares,
   lpTokenBalance,
 }) => {
-  // Component state & helpers
+  const location = useLocation();
+  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
+  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
+
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -60,7 +65,7 @@ const ExitPool: FC<Props> = ({
   const [isMulti, setIsMulti] = useState(true);
   const [lpSharesInput, setLpSharesInput] = useState("");
 
-  const [selectToken, setSelectToken] = useState(symbol);
+  const [selectedToken, setSelectedToken] = useState(symbol);
 
   const isLpSharesApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].liquidity, lpSharesInput);
 
@@ -72,7 +77,7 @@ const ExitPool: FC<Props> = ({
     let tokenBalOut: BigNumberish = 0;
     let tokenWeightOut: BigNumberish = 0;
 
-    if (selectToken === symbol) {
+    if (selectedToken === symbol) {
       tokenBalOut = tokenLpBalance;
       tokenWeightOut = tokenWeight;
     } else {
@@ -128,9 +133,9 @@ const ExitPool: FC<Props> = ({
       await exitPool(poolIn, [minTenderOut, minTokenOut]);
     } else {
       let token;
-      if (selectToken === symbol) {
+      if (selectedToken === symbol) {
         token = addresses[name].token;
-      } else if (selectToken === `t${symbol}`) {
+      } else if (selectedToken === `t${symbol}`) {
         token = addresses[name].tenderToken;
       }
       exitSwapPoolAmountIn(token, poolIn, singleOutPoolIn);
@@ -229,15 +234,25 @@ const ExitPool: FC<Props> = ({
                           <FormField label="Select Token To Receive" controlId="selectTokenReceive">
                             <Box width="medium">
                               <Select
-                                value={selectToken}
+                                value={
+                                  <Box direction="row" gap="small" align="center" pad="7px">
+                                    <img
+                                      height={30}
+                                      width={30}
+                                      src={selectedToken === symbol ? logo.default : tenderLogo.default}
+                                      alt="token logo"
+                                    />
+                                    {selectedToken}
+                                  </Box>
+                                }
                                 options={[symbol, `t${symbol}`]}
-                                onChange={({ option }) => setSelectToken(option)}
+                                onChange={({ option }) => setSelectedToken(option)}
                               />
                             </Box>
                           </FormField>
                           <FormField label="You will receive">
                             <Box direction="row" align="center" width="medium" gap="small">
-                              <Text>{selectToken}</Text>
+                              <Text>{selectedToken}</Text>
                               <TextInput
                                 readOnly
                                 disabled
