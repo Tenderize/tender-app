@@ -99,9 +99,9 @@ const JoinPool: FC<Props> = ({
     }
   };
 
-  const [selectToken, setSelectToken] = useState(symbol);
+  const [selectedToken, setSelectedToken] = useState(symbol);
   const handleSelectToken = (symbol: string) => {
-    setSelectToken(symbol);
+    setSelectedToken(symbol);
     setTokenInput("");
     setTenderInput("");
   };
@@ -121,7 +121,7 @@ const JoinPool: FC<Props> = ({
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].liquidity, tokenInput);
   const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput);
 
-  const tokenSelected = selectToken === symbol;
+  const tokenSelected = selectedToken === symbol;
 
   const hasValue = (val: string) => {
     return val && val !== "0";
@@ -216,7 +216,7 @@ const JoinPool: FC<Props> = ({
       if (tokenSelected) {
         token = addresses[name].token;
         amount = tokenIn;
-      } else if (selectToken === `t${symbol}`) {
+      } else if (selectedToken === `t${symbol}`) {
         token = addresses[name].tenderToken;
         amount = tenderIn;
       }
@@ -316,65 +316,29 @@ const JoinPool: FC<Props> = ({
                   }
                 >
                   <Box pad={{ top: "medium" }} align="center">
-                    <Form validate="change">
-                      <FormField
-                        label={`${symbol} Amount`}
-                        name="tokenInput"
-                        validate={[
-                          validateIsPositive(tokenSelected ? tokenInput : tenderInput),
-                          validateIsLargerThanMax(
-                            tokenSelected ? tokenInput : tenderInput,
-                            symbol ? tokenBalance : tenderTokenBalance
-                          ),
-                        ]}
-                      >
-                        <Box direction="row" gap="small">
-                          <Box width="small">
-                            <Select
-                              value={
-                                <Box fill direction="row" gap="small" align="center" pad="7px">
-                                  <img
-                                    height={tokenSelected ? 27 : 30}
-                                    width={tokenSelected ? 27 : 30}
-                                    src={tokenSelected ? logo.default : tenderLogo.default}
-                                    alt="token logo"
-                                  />
-
-                                  {selectToken}
-                                </Box>
-                              }
-                              options={[selectToken !== symbol ? symbol : `t${symbol}`]}
-                              onChange={({ option }) => handleSelectToken(option)}
-                            />
-                          </Box>
-                          {tokenSelected ? (
-                            <Box>
-                              <TextInput
-                                value={tokenInput}
-                                onChange={handleTokenInputChange}
-                                type="text"
-                                placeholder={"0 " + symbol}
-                              />
-                            </Box>
-                          ) : (
-                            <Box>
-                              <TextInput
-                                value={tenderInput}
-                                onChange={handleTenderInputChange}
-                                type="text"
-                                placeholder={"0 " + "t" + symbol}
-                              />
-                            </Box>
-                          )}
-                        </Box>
-                        <AmountInputFooter
-                          label={`Balance: ${utils.formatEther(
-                            (tokenSelected ? tokenBalance?.toString() : tenderTokenBalance?.toString()) || "0"
-                          )} ${tokenSelected ? "" : "t"}${symbol}`}
-                          onClick={maxTenderTokenDeposit}
-                        />
-                      </FormField>
-                    </Form>
+                    {selectedToken === symbol ? (
+                      <SingleAssetTokenInputForm
+                        input={tokenInput}
+                        symbol={symbol}
+                        balance={tokenBalance}
+                        selectedToken={selectedToken}
+                        handleSelectToken={handleSelectToken}
+                        handleInputChange={handleTokenInputChange}
+                        logo={logo}
+                        setInputToMax={maxTenderTokenDeposit}
+                      />
+                    ) : (
+                      <SingleAssetTenderInputForm
+                        input={tenderInput}
+                        symbol={symbol}
+                        balance={tenderTokenBalance}
+                        selectedToken={selectedToken}
+                        handleSelectToken={handleSelectToken}
+                        handleInputChange={handleTokenInputChange}
+                        logo={tenderLogo}
+                        setInputToMax={maxTenderTokenDeposit}
+                      />
+                    )}
                   </Box>
                 </Tab>
               </Tabs>
@@ -392,12 +356,12 @@ const JoinPool: FC<Props> = ({
                     />
                   )
                 }
-                {!isTenderApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`)) && (
+                {!isTenderApproved && (isMulti || (!isMulti && selectedToken === `t${symbol}`)) && (
                   <ApproveToken
                     symbol={`t${symbol}`}
                     spender={addresses[name].liquidity}
                     token={contracts[name].tenderToken}
-                    show={!isTenderApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`))}
+                    show={!isTenderApproved && (isMulti || (!isMulti && selectedToken === `t${symbol}`))}
                   />
                 )}
                 <Button
@@ -421,6 +385,106 @@ const JoinPool: FC<Props> = ({
         </Layer>
       )}
     </Box>
+  );
+};
+
+type BodyProps = {
+  input: string;
+  symbol: string;
+  balance: BigNumberish;
+  selectedToken: string;
+  handleSelectToken: (symbol: string) => void;
+  handleInputChange: ChangeEventHandler<HTMLInputElement>;
+  logo: any;
+  setInputToMax: () => void;
+};
+
+const SingleAssetTokenInputForm: FC<BodyProps> = ({
+  input,
+  symbol,
+  balance,
+  selectedToken,
+  handleSelectToken,
+  handleInputChange,
+  logo,
+  setInputToMax,
+}) => {
+  return (
+    <Form validate="change">
+      <FormField
+        label={`${symbol} Amount`}
+        name="tokenInput"
+        validate={[validateIsPositive(input), validateIsLargerThanMax(input, balance)]}
+      >
+        <Box direction="row" gap="small">
+          <Box width="small">
+            <Select
+              value={
+                // TODO padding workaround, select is a button internally and can't take up available space easily
+                <Box fill direction="row" gap="small" align="center" pad="9px">
+                  <img height={27} width={27} src={logo.default} alt="token logo" />
+                  {selectedToken}
+                </Box>
+              }
+              options={[`t${symbol}`]}
+              onChange={({ option }) => handleSelectToken(option)}
+            />
+          </Box>
+          <Box>
+            <TextInput value={input} onChange={handleInputChange} type="text" placeholder={"0 " + symbol} />
+          </Box>
+        </Box>
+        <AmountInputFooter
+          label={`Balance: ${utils.formatEther(balance?.toString() || "0")} ${symbol}`}
+          onClick={setInputToMax}
+        />
+      </FormField>
+    </Form>
+  );
+};
+
+const SingleAssetTenderInputForm: FC<BodyProps> = ({
+  input,
+  symbol,
+  balance,
+  selectedToken,
+  handleSelectToken,
+  handleInputChange,
+  logo,
+  setInputToMax,
+}) => {
+  return (
+    <Form validate="change">
+      <FormField
+        label={`${symbol} Amount`}
+        name="tokenInput"
+        validate={[validateIsPositive(input), validateIsLargerThanMax(input, balance)]}
+      >
+        <Box direction="row" gap="small">
+          <Box width="small">
+            <Select
+              value={
+                // TODO padding workaround, select is a button internally and can't take up available space easily
+                <Box direction="row" gap="small" align="center" pad="8px">
+                  <img height={30} width={30} src={logo.default} alt="token logo" />
+                  {selectedToken}
+                </Box>
+              }
+              options={[symbol]}
+              onChange={({ option }) => handleSelectToken(option)}
+            />
+          </Box>
+
+          <Box>
+            <TextInput value={input} onChange={handleInputChange} type="text" placeholder={"0 " + "t" + symbol} />
+          </Box>
+        </Box>
+        <AmountInputFooter
+          label={`Balance: ${utils.formatEther(balance?.toString() || "0")} t${symbol}`}
+          onClick={setInputToMax}
+        />
+      </FormField>
+    </Form>
   );
 };
 
