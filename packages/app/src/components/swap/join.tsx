@@ -321,10 +321,10 @@ const JoinPool: FC<Props> = ({
                         input={tokenInput}
                         symbol={symbol}
                         balance={tokenBalance}
-                        selectedToken={selectedToken}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
                         logo={logo}
+                        tenderLogo={tenderLogo}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     ) : (
@@ -332,10 +332,10 @@ const JoinPool: FC<Props> = ({
                         input={tenderInput}
                         symbol={symbol}
                         balance={tenderTokenBalance}
-                        selectedToken={selectedToken}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
-                        logo={tenderLogo}
+                        logo={logo}
+                        tenderLogo={tenderLogo}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     )}
@@ -392,10 +392,10 @@ type BodyProps = {
   input: string;
   symbol: string;
   balance: BigNumberish;
-  selectedToken: string;
   handleSelectToken: (symbol: string) => void;
   handleInputChange: ChangeEventHandler<HTMLInputElement>;
   logo: any;
+  tenderLogo: any;
   setInputToMax: () => void;
 };
 
@@ -403,10 +403,10 @@ const SingleAssetTokenInputForm: FC<BodyProps> = ({
   input,
   symbol,
   balance,
-  selectedToken,
   handleSelectToken,
   handleInputChange,
   logo,
+  tenderLogo,
   setInputToMax,
 }) => {
   return (
@@ -423,11 +423,16 @@ const SingleAssetTokenInputForm: FC<BodyProps> = ({
                 // TODO padding workaround, select is a button internally and can't take up available space easily
                 <Box fill direction="row" gap="small" align="center" pad="7px">
                   <img height={30} width={30} src={logo.default} alt="token logo" />
-                  {selectedToken}
+                  {symbol}
                 </Box>
               }
-              options={[`t${symbol}`]}
-              onChange={({ option }) => handleSelectToken(option)}
+              options={[
+                <Box fill direction="row" gap="small" align="center">
+                  <img height={30} width={30} src={tenderLogo.default} alt="token logo" />
+                  {`t${symbol}`}
+                </Box>,
+              ]}
+              onChange={() => handleSelectToken(`t${symbol}`)}
             />
           </Box>
           <Box>
@@ -447,12 +452,13 @@ const SingleAssetTenderInputForm: FC<BodyProps> = ({
   input,
   symbol,
   balance,
-  selectedToken,
   handleSelectToken,
   handleInputChange,
   logo,
+  tenderLogo,
   setInputToMax,
 }) => {
+  console.log("tender");
   return (
     <Form validate="change">
       <FormField
@@ -466,12 +472,19 @@ const SingleAssetTenderInputForm: FC<BodyProps> = ({
               value={
                 // TODO padding workaround, select is a button internally and can't take up available space easily
                 <Box direction="row" gap="small" align="center" pad="8px">
-                  <img height={30} width={30} src={logo.default} alt="token logo" />
-                  {selectedToken}
+                  <img height={30} width={30} src={tenderLogo.default} alt="token logo" />
+                  {`t${symbol}`}
                 </Box>
               }
-              options={[symbol]}
-              onChange={({ option }) => handleSelectToken(option)}
+              options={[
+                <Box direction="row" gap="small" align="center">
+                  <img height={30} width={30} src={logo.default} alt="token logo" />
+                  {symbol}
+                </Box>,
+              ]}
+              onChange={() => {
+                handleSelectToken(symbol);
+              }}
             />
           </Box>
 

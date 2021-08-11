@@ -245,8 +245,18 @@ const ExitPool: FC<Props> = ({
                                     {selectedToken}
                                   </Box>
                                 }
-                                options={[symbol, `t${symbol}`]}
-                                onChange={({ option }) => setSelectedToken(option)}
+                                options={[
+                                  <Box direction="row" gap="small" align="center">
+                                    <img
+                                      height={30}
+                                      width={30}
+                                      src={selectedToken === symbol ? tenderLogo.default : logo.default}
+                                      alt="token logo"
+                                    />
+                                    {selectedToken === symbol ? `t${symbol}` : symbol}
+                                  </Box>,
+                                ]}
+                                onChange={() => setSelectedToken(selectedToken === symbol ? `t${symbol}` : symbol)}
                               />
                             </Box>
                           </FormField>
