@@ -5,6 +5,8 @@ export type Staker = {
   available: boolean;
   apy: number;
   logo: string;
+  bwLogo: string;
+  bwTenderLogo: string;
   path: string;
   symbol: string;
 };
@@ -19,6 +21,8 @@ const stakers: Record<string, Staker> = {
     available: true,
     apy: 23.3,
     logo: "livepeer.svg",
+    bwLogo: "LPT.svg",
+    bwTenderLogo: "tenderLPT.svg",
     symbol: "LPT",
   },
   "/stakers/matic": {
@@ -30,6 +34,8 @@ const stakers: Record<string, Staker> = {
     available: false,
     apy: 14.8,
     logo: "matic.svg",
+    bwLogo: "LPT.svg",
+    bwTenderLogo: "tenderLPT.svg",
     symbol: "MATIC",
   },
   "/stakers/graph": {
@@ -41,6 +47,8 @@ const stakers: Record<string, Staker> = {
     available: false,
     apy: 6.5,
     logo: "graph.svg",
+    bwLogo: "GRT.svg",
+    bwTenderLogo: "tenderGRT.svg",
     symbol: "GRT",
   },
 };
