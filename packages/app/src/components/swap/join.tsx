@@ -2,7 +2,6 @@ import { FC, useState, useCallback, ChangeEventHandler, MouseEventHandler } from
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
-
 import {
   Button,
   Box,
@@ -25,6 +24,8 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
 import { validateIsPositive, validateIsLargerThanMax } from "../../utils/inputValidation";
+import stakers from "../../data/stakers";
+import { useLocation } from "react-router";
 
 type Props = {
   name: string;
@@ -53,7 +54,10 @@ const JoinPool: FC<Props> = ({
   tenderLpBalance,
   lpShares,
 }) => {
-  // Component state & helpers
+  const location = useLocation();
+  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
+  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
+
   const [show, setShow] = useState(false);
 
   const [tabIndex, setTabIndex] = useState(0);
@@ -117,6 +121,8 @@ const JoinPool: FC<Props> = ({
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].liquidity, tokenInput);
   const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].liquidity, tenderInput);
 
+  const tokenSelected = selectToken === symbol;
+
   const hasValue = (val: string) => {
     return val && val !== "0";
   };
@@ -125,7 +131,7 @@ const JoinPool: FC<Props> = ({
     if (isMulti) {
       return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved);
     } else {
-      if (selectToken === symbol) {
+      if (tokenSelected) {
         return !hasValue(tokenInput) && !isTokenApproved;
       } else {
         return !hasValue(tenderInput) && !isTenderApproved;
@@ -141,7 +147,7 @@ const JoinPool: FC<Props> = ({
     let tokenIn: BigNumberish = 0;
     let tokenInBal: BigNumberish = 0;
     let weight: BigNumberish = 0;
-    if (selectToken === symbol) {
+    if (tokenSelected) {
       tokenIn = utils.parseEther(tokenInput || "0");
       tokenInBal = tokenLpBalance || "0";
       weight = tokenWeight || "0";
@@ -207,7 +213,7 @@ const JoinPool: FC<Props> = ({
       const poolTokensOut = BigNumber.from(singlePoolOut.toString()); // 5% slippage acceptable for now
       let token;
       let amount;
-      if (selectToken === symbol) {
+      if (tokenSelected) {
         token = addresses[name].token;
         amount = tokenIn;
       } else if (selectToken === `t${symbol}`) {
@@ -315,9 +321,9 @@ const JoinPool: FC<Props> = ({
                         label={`${symbol} Amount`}
                         name="tokenInput"
                         validate={[
-                          validateIsPositive(selectToken === symbol ? tokenInput : tenderInput),
+                          validateIsPositive(tokenSelected ? tokenInput : tenderInput),
                           validateIsLargerThanMax(
-                            selectToken === symbol ? tokenInput : tenderInput,
+                            tokenSelected ? tokenInput : tenderInput,
                             symbol ? tokenBalance : tenderTokenBalance
                           ),
                         ]}
@@ -325,22 +331,29 @@ const JoinPool: FC<Props> = ({
                         <Box direction="row" gap="small">
                           <Box width="small">
                             <Select
-                              value={selectToken}
-                              options={[symbol, `t${symbol}`]}
+                              value={
+                                <Box fill direction="row" gap="small" align="center" pad="7px">
+                                  <img
+                                    height={tokenSelected ? 27 : 30}
+                                    width={tokenSelected ? 27 : 30}
+                                    src={tokenSelected ? logo.default : tenderLogo.default}
+                                    alt="token logo"
+                                  />
+
+                                  {selectToken}
+                                </Box>
+                              }
+                              options={[selectToken !== symbol ? symbol : `t${symbol}`]}
                               onChange={({ option }) => handleSelectToken(option)}
                             />
                           </Box>
-                          {selectToken === symbol ? (
+                          {tokenSelected ? (
                             <Box>
                               <TextInput
                                 value={tokenInput}
                                 onChange={handleTokenInputChange}
                                 type="text"
                                 placeholder={"0 " + symbol}
-                              />
-                              <AmountInputFooter
-                                label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-                                onClick={maxTokenDeposit}
                               />
                             </Box>
                           ) : (
@@ -351,13 +364,15 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 placeholder={"0 " + "t" + symbol}
                               />
-                              <AmountInputFooter
-                                label={`Balance: ${utils.formatEther(tenderTokenBalance?.toString() || "0")} ${symbol}`}
-                                onClick={maxTenderTokenDeposit}
-                              />
                             </Box>
                           )}
                         </Box>
+                        <AmountInputFooter
+                          label={`Balance: ${utils.formatEther(
+                            (tokenSelected ? tokenBalance?.toString() : tenderTokenBalance?.toString()) || "0"
+                          )} ${tokenSelected ? "" : "t"}${symbol}`}
+                          onClick={maxTenderTokenDeposit}
+                        />
                       </FormField>
                     </Form>
                   </Box>
@@ -366,18 +381,25 @@ const JoinPool: FC<Props> = ({
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box justify="center" gap="small">
-                <ApproveToken
-                  symbol={symbol}
-                  spender={addresses[name].liquidity}
-                  token={contracts[name].token}
-                  show={!isTokenApproved && (isMulti || (!isMulti && selectToken === symbol))}
-                />
-                <ApproveToken
-                  symbol={`t${symbol}`}
-                  spender={addresses[name].liquidity}
-                  token={contracts[name].tenderToken}
-                  show={!isTenderApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`))}
-                />
+                {
+                  // TODO this is a workaround, report gap bug to grommet (applying gap for undefined or empty elements)
+                  !isTokenApproved && (isMulti || (!isMulti && tokenSelected)) && (
+                    <ApproveToken
+                      symbol={symbol}
+                      spender={addresses[name].liquidity}
+                      token={contracts[name].token}
+                      show={!isTokenApproved && (isMulti || (!isMulti && tokenSelected))}
+                    />
+                  )
+                }
+                {!isTenderApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`)) && (
+                  <ApproveToken
+                    symbol={`t${symbol}`}
+                    spender={addresses[name].liquidity}
+                    token={contracts[name].tenderToken}
+                    show={!isTenderApproved && (isMulti || (!isMulti && selectToken === `t${symbol}`))}
+                  />
+                )}
                 <Button
                   primary
                   onClick={addLiquidity}
