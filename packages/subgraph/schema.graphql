@@ -147,11 +147,13 @@ type UserDeployment @entity {
   user: User!
 
   "Users current stake: total deposits - withdrawals"
-  tenderizerStake: BigInt! # TODO: Better name?
+  tenderizerStake: BigInt!
+  "Amount of rewards claimed on outbound transfers"
+  claimedRewards: BigInt!
   "Users current amout of BPT Farmed: famrs - unfarms"
-  farmAmount: BigInt! # TODO: Better name?
+  farmAmount: BigInt!
   "Total amount harvest collected from farm by  user"
-  farmHarvest: BigInt! # TODO: Better name?
+  farmHarvest: BigInt!
   "TenderToken Shares held by the user"
   shares: BigInt!
 }
