@@ -95,6 +95,7 @@ export function loadOrCreateUserDeployment(address: string, protocolName: string
     userProtocol.deployment = protocolName
     userProtocol.user = address
     userProtocol.tenderizerStake = ZERO_BI
+    userProtocol.claimedRewards = ZERO_BI
     userProtocol.farmAmount = ZERO_BI
     userProtocol.farmHarvest = ZERO_BI
     userProtocol.shares = ZERO_BI

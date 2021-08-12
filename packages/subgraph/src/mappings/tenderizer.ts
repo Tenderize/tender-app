@@ -76,7 +76,13 @@ export function handleUnstakeEvent(unstakeEvent: Unstake): void {
 
   // Update User data
   let userData = loadOrCreateUserDeployment(unstakeEvent.params.from.toHex(), protocolId)
-  userData.tenderizerStake = userData.tenderizerStake.minus(amount)
+  let totalUserRewards = tenderToken.balanceOf(unstakeEvent.params.from).plus(amount).minus(userData.tenderizerStake)
+  if ( totalUserRewards < amount ){
+    userData.claimedRewards = userData.claimedRewards.plus(totalUserRewards)
+    userData.tenderizerStake = userData.tenderizerStake.minus(amount.minus(totalUserRewards))    
+  } else {
+    userData.claimedRewards = userData.claimedRewards.plus(amount)
+  }
   userData.shares = tenderToken.sharesOf(unstakeEvent.params.from)
   userData.save()
 

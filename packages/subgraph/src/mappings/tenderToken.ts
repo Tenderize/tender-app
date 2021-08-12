@@ -8,13 +8,22 @@ export function handleTransferEvent(transferEvent: Transfer): void {
     let protocolId  = getProtocolIdByTenderTokenAddress(tenderTokenAddress)
     let config = Config.load(protocolId)
     let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
+    let amount = transferEvent.params.value
 
     // Update shares for to/from users
     let fromUser = loadOrCreateUserDeployment(transferEvent.params.from.toHexString(), protocolId)
+    let totalUserRewards = tenderToken.balanceOf(transferEvent.params.from).plus(amount).minus(fromUser.tenderizerStake)
+    if ( totalUserRewards < amount ){
+        fromUser.claimedRewards = fromUser.claimedRewards.plus(totalUserRewards)
+        fromUser.tenderizerStake = fromUser.tenderizerStake.minus(amount.minus(totalUserRewards))    
+    } else {
+        fromUser.claimedRewards = fromUser.claimedRewards.plus(amount)
+    }
     fromUser.shares = tenderToken.sharesOf(transferEvent.params.from)
-    fromUser.save()
     let toUser = loadOrCreateUserDeployment(transferEvent.params.to.toHexString(), protocolId)
+    toUser.tenderizerStake = toUser.tenderizerStake.plus(amount) 
     toUser.shares = tenderToken.sharesOf(transferEvent.params.to)
+    fromUser.save()
     toUser.save()
 
     // Save raw event
