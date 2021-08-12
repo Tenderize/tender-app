@@ -125,5 +125,10 @@ const overrideDefaultTheme: ThemeType = {
       `,
     },
   },
+  textInput: {
+    extend: `
+      height: inherit:
+    `
+  }
 };
 export const theme = deepMerge(grommet, overrideDefaultTheme);

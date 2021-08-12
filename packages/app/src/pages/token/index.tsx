@@ -58,7 +58,7 @@ const Token: FC = () => {
                 >
                   <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
                     <Currency />
-                    <Paragraph>Stake</Paragraph>
+                    <Paragraph style={{fontWeight:600}}>Stake</Paragraph>
                   </Box>
                 </Tip>
               }
@@ -87,7 +87,7 @@ const Token: FC = () => {
                 >
                   <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
                     <PhoneHorizontal />
-                    <Paragraph>Swap</Paragraph>
+                    <Paragraph style={{fontWeight:600}}>Swap</Paragraph>
                   </Box>
                 </Tip>
               }
@@ -110,7 +110,7 @@ const Token: FC = () => {
                 >
                   <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
                     <Grow />
-                    <Paragraph>Farm</Paragraph>
+                    <Paragraph style={{fontWeight:600}}>Farm</Paragraph>
                   </Box>
                 </Tip>
               }

@@ -272,7 +272,7 @@ const JoinPool: FC<Props> = ({
                                 value={tokenInput}
                                 onChange={handleTokenInputChange}
                                 type="text"
-                                icon={<Image src={logo.default} />}
+                                icon={<Image height="50" src={logo.default} />}
                                 style={{textAlign:"right", padding:"20px 50px"}}
                                 placeholder={"0 " + symbol}
                               />
@@ -298,7 +298,7 @@ const JoinPool: FC<Props> = ({
                                 value={tenderInput}
                                 onChange={handleTenderInputChange}
                                 type="text"
-                                icon={<Image src={tenderLogo.default} />}
+                                icon={<Image height="50"  src={tenderLogo.default} />}
                                 style={{textAlign:"right", padding:"20px 50px"}}
                                 placeholder={"0 " + "t" + symbol}
                               />

@@ -195,7 +195,7 @@ const ExitPool: FC<Props> = ({
                                 readOnly
                                 id="exitMultiReceive"
                                 placeholder={`0 ${symbol}`}
-                                icon={<Image src={logo.default} />}
+                                icon={<Image height="50"  src={logo.default} />}
                                 style={{textAlign:"right", padding:"20px 50px"}}
                                 value={`${utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")} ${symbol}`}
                               />
@@ -204,7 +204,7 @@ const ExitPool: FC<Props> = ({
                                 disabled
                                 id="exitMultiReceive"
                                 placeholder={`0 t${symbol}`}
-                                icon={<Image src={tenderLogo.default} />}
+                                icon={<Image height="50"  src={tenderLogo.default} />}
                                 style={{textAlign:"right", padding:"20px 50px"}}
                                 value={`${utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")} t${symbol}`}
                               />

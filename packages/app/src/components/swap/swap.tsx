@@ -117,7 +117,7 @@ const Swap: FC<Props> = ({
                   id="formSwapSend"
                   type="text"
                   value={sendTokenAmount}
-                  icon={<Image src={tokenSendedLogo.default} />}
+                  icon={<Image height="50"  src={tokenSendedLogo.default} />}
                   style={{textAlign:"right", padding:"20px 50px"}}
                   placeholder={`0 ${tokenSendedSymbol}`}
                   onChange={handleSendTokenInput}
@@ -141,14 +141,14 @@ const Swap: FC<Props> = ({
                   readOnly
                   id="formSwapReceive"
                   placeholder={`0 ${tokenReceivedSymbol}`}
-                  icon={<Image src={tokenReceivedLogo.default} />}
+                  icon={<Image height="50" src={tokenReceivedLogo.default} />}
                   style={{textAlign:"right", padding:"20px 50px"}}
                   value={utils.formatEther(calcOutGivenIn || "0")}
                 />
               </Box>
             </FormField>
           </Box>
-          <Box width="large" direction="column" pad={{ horizontal: "large" }} gap="small">
+          <Box width="434px" direction="column" gap="small">
             <ApproveToken
               symbol={tokenSendedSymbol}
               spender={addresses[protocolName].swap}

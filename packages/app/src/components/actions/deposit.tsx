@@ -59,6 +59,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
+    <>
     <Box gap="medium">
       <Box justify="around" direction="row">
         <Box>
@@ -77,21 +78,22 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
           />
         </Box>
       </Box>
+      </Box>
 
-      <Box fill="horizontal" direction="row" justify="center" align="center">
+      <Box direction="row" justify="center" align="center">
         <Form validate="change">
+        <Box align="center" justify="center">
+          <Box direction="row" gap="small">
           <FormField
-            fill
             label="Deposit Amount"
             name="depositAmount"
             validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
           >
             <TextInput
-              width={1}
               value={depositInput}
               onChange={handleInputChange}
               type="text"
-              icon={<Image src={logoImg.default} />}
+              icon={<Image height="50" src={logoImg.default} />}
               style={{textAlign:"right", padding:"20px 50px"}}
               placeholder={`0 ${symbol}`}
             />
@@ -100,7 +102,8 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
               onClick={maxDeposit}
             />
           </FormField>
-          <Box gap="small" direction="column">
+          </Box>
+          <Box width="435px"  gap="small" direction="column">
             <ApproveToken
               symbol={symbol}
               spender={addresses[name].controller}
@@ -109,7 +112,6 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
             />
             <Button
               primary
-              fill="horizontal"
               disabled={
                 !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
               }
@@ -126,9 +128,10 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
               }
             />
           </Box>
+          </Box>
         </Form>
-      </Box>
     </Box>
+    </>
   );
 };
 
