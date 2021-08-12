@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { useContractFunction } from "@usedapp/core";
 import { contracts } from "@tender/contracts";
 import { Box, Button, Text, Heading, Layer, Card, CardHeader, CardBody } from "grommet";
+import { useLocation } from "react-router";
 
 type props = {
   symbol: string;
@@ -13,11 +14,11 @@ const Faucet: FC<props> = ({ symbol }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { send } = useContractFunction(contracts.livepeer.faucet, "request");
+  const location = useLocation();
+  const name = location.pathname.split("/")[2];
 
-  const requestTokens = () => {
-    send();
-  };
+  const { send: requestTokens } = useContractFunction(contracts[name].faucet, "request");
+
   return (
     <>
       <Button plain onClick={handleShow} label="Faucet" />
