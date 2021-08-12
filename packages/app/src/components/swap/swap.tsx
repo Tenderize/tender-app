@@ -1,5 +1,5 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import { Button, Box, Form, FormField, TextInput, Avatar } from "grommet";
+import { Button, Box, Form, FormField, TextInput, Image } from "grommet";
 import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
@@ -117,7 +117,7 @@ const Swap: FC<Props> = ({
                   id="formSwapSend"
                   type="text"
                   value={sendTokenAmount}
-                  icon={<Avatar src={tokenSendedLogo.default} />}
+                  icon={<Image style={{marginLeft:"-40px"}} src={tokenSendedLogo.default} />}
                   style={{textAlign:"right", padding:"20px 50px"}}
                   placeholder={`0 ${tokenSendedSymbol}`}
                   onChange={handleSendTokenInput}
@@ -141,7 +141,7 @@ const Swap: FC<Props> = ({
                   readOnly
                   id="formSwapReceive"
                   placeholder={`0 ${tokenReceivedSymbol}`}
-                  icon={<Avatar src={tokenReceivedLogo.default} />}
+                  icon={<Image src={tokenReceivedLogo.default} />}
                   style={{textAlign:"right", padding:"20px 50px"}}
                   value={utils.formatEther(calcOutGivenIn || "0")}
                 />

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Form, FormField, TextInput, Avatar} from "grommet";
+import { Button, Box, Form, FormField, TextInput, Image} from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -91,7 +91,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
               value={depositInput}
               onChange={handleInputChange}
               type="text"
-              icon={<Avatar src={logoImg.default} />}
+              icon={<Image src={logoImg.default} />}
               style={{textAlign:"right", padding:"20px 50px"}}
               placeholder={`0 ${symbol}`}
             />

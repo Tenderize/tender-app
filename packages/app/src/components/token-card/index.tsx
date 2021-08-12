@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Avatar, Box, Text } from "grommet";
+import { Box, Text, Image } from "grommet";
 
 type Props = {
   url: string;
@@ -26,7 +26,7 @@ const TokenCard: FC<Props> = (props) => {
   return (
     <Box pad="large" style={{flex:"1"}}>
       <Box align="center" margin={{vertical: "small"}}>
-        <Avatar size="large" src={logo.default} />
+        <Image src={logo.default} sizes="large" />
         <Text size="xlarge">{info.title}</Text>
       </Box>
       <Box pad={{horizontal: "large"}} gap="medium">

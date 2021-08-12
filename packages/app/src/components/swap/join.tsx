@@ -3,7 +3,7 @@ import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 import {
-  Avatar,
+  Image,
   Button,
   Box,
   Card,
@@ -272,7 +272,7 @@ const JoinPool: FC<Props> = ({
                                 value={tokenInput}
                                 onChange={handleTokenInputChange}
                                 type="text"
-                                icon={<Avatar src={logo.default} />}
+                                icon={<Image src={logo.default} />}
                                 style={{textAlign:"right", padding:"20px 50px"}}
                                 placeholder={"0 " + symbol}
                               />
@@ -298,7 +298,7 @@ const JoinPool: FC<Props> = ({
                                 value={tenderInput}
                                 onChange={handleTenderInputChange}
                                 type="text"
-                                icon={<Avatar src={tenderLogo.default} />}
+                                icon={<Image src={tenderLogo.default} />}
                                 style={{textAlign:"right", padding:"20px 50px"}}
                                 placeholder={"0 " + "t" + symbol}
                               />
