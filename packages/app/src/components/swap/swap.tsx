@@ -117,7 +117,7 @@ const Swap: FC<Props> = ({
                   id="formSwapSend"
                   type="text"
                   value={sendTokenAmount}
-                  icon={<Image style={{marginLeft:"-40px"}} src={tokenSendedLogo.default} />}
+                  icon={<Image src={tokenSendedLogo.default} />}
                   style={{textAlign:"right", padding:"20px 50px"}}
                   placeholder={`0 ${tokenSendedSymbol}`}
                   onChange={handleSendTokenInput}
