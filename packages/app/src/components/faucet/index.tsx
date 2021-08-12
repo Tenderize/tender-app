@@ -17,7 +17,13 @@ const Faucet: FC<props> = ({ symbol }) => {
   const location = useLocation();
   const name = location.pathname.split("/")[2];
 
-  const { send: requestTokens } = useContractFunction(contracts[name].faucet, "request");
+  console.log(contracts[name]);
+  const { send } = useContractFunction(contracts[name].faucet, "request");
+
+  // TODO why is this needed
+  const requestTokens = () => {
+    send();
+  };
 
   return (
     <>
