@@ -1,5 +1,5 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import { Button, Box, Form, FormField, TextInput, Image } from "grommet";
+import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
@@ -55,9 +55,9 @@ const Swap: FC<Props> = ({
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
-  const tokenSendedLogo = isSendingToken ? logo : tenderLogo
+  const tokenSendedLogo = isSendingToken ? logo : tenderLogo;
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
-  const tokenReceivedLogo = isSendingToken ? tenderLogo : logo
+  const tokenReceivedLogo = isSendingToken ? tenderLogo : logo;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
   const tokenSendedLpBalance = isSendingToken ? tokenLpBalance : tenderLpBalance;
   const tokenSendedWeight = isSendingToken ? tokenWeight : tenderTokenWeight;
@@ -106,7 +106,7 @@ const Swap: FC<Props> = ({
           <Box direction="row" gap="small">
             <FormField
               name="sendAmount"
-              label={`Send ${tokenSendedSymbol}`}
+              label={`Send`}
               validate={[
                 validateIsPositive(sendTokenAmount),
                 validateIsLargerThanMax(sendTokenAmount, tokenSendedBalance),
@@ -117,9 +117,14 @@ const Swap: FC<Props> = ({
                   id="formSwapSend"
                   type="text"
                   value={sendTokenAmount}
-                  icon={<Image height="50"  src={tokenSendedLogo.default} />}
-                  style={{textAlign:"right", padding:"20px 50px"}}
-                  placeholder={`0 ${tokenSendedSymbol}`}
+                  icon={
+                    <Box pad="xsmall" direction="row" align="center" gap="small">
+                      <Image height="35" src={tokenSendedLogo.default} />
+                      <Text>{tokenSendedSymbol}</Text>
+                    </Box>
+                  }
+                  style={{ textAlign: "right", padding: "20px 50px" }}
+                  placeholder={`0`}
                   onChange={handleSendTokenInput}
                   required={true}
                 />
@@ -135,14 +140,19 @@ const Swap: FC<Props> = ({
               icon={<Transaction color="white" />}
               onClick={() => setIsSendingToken(!isSendingToken)}
             />
-            <FormField label={`Receive ${tokenReceivedSymbol}`} readOnly>
+            <FormField label={`Receive`} readOnly>
               <Box width="medium">
                 <TextInput
                   readOnly
                   id="formSwapReceive"
                   placeholder={`0 ${tokenReceivedSymbol}`}
-                  icon={<Image height="50" src={tokenReceivedLogo.default} />}
-                  style={{textAlign:"right", padding:"20px 50px"}}
+                  icon={
+                    <Box pad="xsmall" direction="row" align="center" gap="small">
+                      <Image height="35" src={tokenReceivedLogo.default} />
+                      <Text>{tokenReceivedSymbol}</Text>
+                    </Box>
+                  }
+                  style={{ textAlign: "right", padding: "20px 50px" }}
                   value={utils.formatEther(calcOutGivenIn || "0")}
                 />
               </Box>

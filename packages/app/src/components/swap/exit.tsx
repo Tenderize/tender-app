@@ -195,18 +195,28 @@ const ExitPool: FC<Props> = ({
                                 readOnly
                                 id="exitMultiReceive"
                                 placeholder={`0 ${symbol}`}
-                                icon={<Image height="50"  src={logo.default} />}
-                                style={{textAlign:"right", padding:"20px 50px"}}
-                                value={`${utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")} ${symbol}`}
+                                icon={
+                                  <Box pad="xsmall" direction="row" align="center" gap="small">
+                                    <Image height="35" src={logo.default} />
+                                    <Text>{symbol}</Text>
+                                  </Box>
+                                }
+                                style={{ textAlign: "right", padding: "20px 50px" }}
+                                value={`${utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")}`}
                               />
                               <TextInput
                                 readOnly
                                 disabled
                                 id="exitMultiReceive"
                                 placeholder={`0 t${symbol}`}
-                                icon={<Image height="50"  src={tenderLogo.default} />}
-                                style={{textAlign:"right", padding:"20px 50px"}}
-                                value={`${utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")} t${symbol}`}
+                                icon={
+                                  <Box pad="xsmall" direction="row" align="center" gap="small">
+                                    <Image height="35" src={tenderLogo.default} />
+                                    <Text>t{symbol}</Text>
+                                  </Box>
+                                }
+                                style={{ textAlign: "right", padding: "20px 50px" }}
+                                value={`${utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")}`}
                               />
                             </Box>
                           </Box>
@@ -281,7 +291,7 @@ const ExitPool: FC<Props> = ({
               </Tabs>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Box pad={{horizontal: "large"}} justify="center" gap="small">
+              <Box pad={{ horizontal: "large" }} justify="center" gap="small">
                 <ApproveToken
                   symbol={symbolFull}
                   spender={addresses[name].liquidity}

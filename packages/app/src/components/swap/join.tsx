@@ -272,9 +272,14 @@ const JoinPool: FC<Props> = ({
                                 value={tokenInput}
                                 onChange={handleTokenInputChange}
                                 type="text"
-                                icon={<Image height="50" src={logo.default} />}
-                                style={{textAlign:"right", padding:"20px 50px"}}
-                                placeholder={"0 " + symbol}
+                                icon={
+                                  <Box pad="xsmall" direction="row" align="center" gap="small">
+                                    <Image height="35" src={logo.default} />
+                                    <Text>{symbol}</Text>
+                                  </Box>
+                                }
+                                style={{ textAlign: "right", padding: "20px 50px" }}
+                                placeholder={"0"}
                               />
                             </Box>
                           </Box>
@@ -298,9 +303,14 @@ const JoinPool: FC<Props> = ({
                                 value={tenderInput}
                                 onChange={handleTenderInputChange}
                                 type="text"
-                                icon={<Image height="50"  src={tenderLogo.default} />}
-                                style={{textAlign:"right", padding:"20px 50px"}}
-                                placeholder={"0 " + "t" + symbol}
+                                icon={
+                                  <Box pad="xsmall" direction="row" align="center" gap="small">
+                                    <Image height="35" src={tenderLogo.default} />
+                                    <Text>t{symbol}</Text>
+                                  </Box>
+                                }
+                                style={{ textAlign: "right", padding: "20px 50px" }}
+                                placeholder={"0"}
                               />
                             </Box>
                           </Box>
