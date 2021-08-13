@@ -86,7 +86,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
       <Box direction="row" justify="center" align="center">
         <Form validate="change">
           <Box align="center" justify="center">
-            <Box width="435px" gap="small" direction="column">
+            <Box width="470px" gap="small" direction="column">
               <FormField
                 fill
                 label="Deposit Amount"
