@@ -3,6 +3,7 @@ import { addresses, contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { useContractFunction, useContractCall } from "@usedapp/core";
 import {
+  Image,
   Button,
   Box,
   Card,
@@ -188,24 +189,34 @@ const ExitPool: FC<Props> = ({
                         />
                         <FormField label="You will receive">
                           <Box direction="row">
-                            <Box justify="around" pad={{ right: "small" }}>
-                              <Text>{symbol}</Text>
-                              <Text>{`t${symbol}`}</Text>
-                            </Box>
                             <Box gap="small" fill>
                               <TextInput
                                 disabled
                                 readOnly
                                 id="exitMultiReceive"
-                                placeholder={"0"}
-                                value={utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")}
+                                placeholder={`0 ${symbol}`}
+                                icon={
+                                  <Box pad="xsmall" direction="row" align="center" gap="small">
+                                    <Image height="35" src={logo.default} />
+                                    <Text>{symbol}</Text>
+                                  </Box>
+                                }
+                                style={{ textAlign: "right", padding: "20px 50px" }}
+                                value={`${utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")}`}
                               />
                               <TextInput
                                 readOnly
                                 disabled
                                 id="exitMultiReceive"
-                                placeholder={"0"}
-                                value={utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")}
+                                placeholder={`0 t${symbol}`}
+                                icon={
+                                  <Box pad="xsmall" direction="row" align="center" gap="small">
+                                    <Image height="35" src={tenderLogo.default} />
+                                    <Text>t{symbol}</Text>
+                                  </Box>
+                                }
+                                style={{ textAlign: "right", padding: "20px 50px" }}
+                                value={`${utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")}`}
                               />
                             </Box>
                           </Box>
@@ -280,7 +291,7 @@ const ExitPool: FC<Props> = ({
               </Tabs>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Box justify="center" gap="small">
+              <Box pad={{ horizontal: "large" }} justify="center" gap="small">
                 <ApproveToken
                   symbol={symbolFull}
                   spender={addresses[name].liquidity}

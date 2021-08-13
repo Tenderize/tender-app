@@ -1,8 +1,9 @@
 import { ChangeEventHandler, FC, useCallback, useState } from "react";
-import { Button, Box, Form, FormField, TextInput } from "grommet";
+import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
+import stakers from "../../data/stakers";
 
 import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
@@ -45,13 +46,18 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
+  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
+  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
+  const tokenSendedLogo = isSendingToken ? logo : tenderLogo;
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
+  const tokenReceivedLogo = isSendingToken ? tenderLogo : logo;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
   const tokenSendedLpBalance = isSendingToken ? tokenLpBalance : tenderLpBalance;
   const tokenSendedWeight = isSendingToken ? tokenWeight : tenderTokenWeight;
@@ -100,7 +106,7 @@ const Swap: FC<Props> = ({
           <Box direction="row" gap="small">
             <FormField
               name="sendAmount"
-              label={`Send ${tokenSendedSymbol}`}
+              label={`Send`}
               validate={[
                 validateIsPositive(sendTokenAmount),
                 validateIsLargerThanMax(sendTokenAmount, tokenSendedBalance),
@@ -109,9 +115,16 @@ const Swap: FC<Props> = ({
               <Box width="medium">
                 <TextInput
                   id="formSwapSend"
-                  type="number"
+                  type="text"
                   value={sendTokenAmount}
-                  placeholder={`0 ${tokenSendedSymbol}`}
+                  icon={
+                    <Box pad="xsmall" direction="row" align="center" gap="small">
+                      <Image height="35" src={tokenSendedLogo.default} />
+                      <Text>{tokenSendedSymbol}</Text>
+                    </Box>
+                  }
+                  style={{ textAlign: "right", padding: "20px 50px" }}
+                  placeholder={`0`}
                   onChange={handleSendTokenInput}
                   required={true}
                 />
@@ -127,18 +140,25 @@ const Swap: FC<Props> = ({
               icon={<Transaction color="white" />}
               onClick={() => setIsSendingToken(!isSendingToken)}
             />
-            <FormField label={`Receive ${tokenReceivedSymbol}`} readOnly>
+            <FormField label={`Receive`} readOnly>
               <Box width="medium">
                 <TextInput
                   readOnly
                   id="formSwapReceive"
-                  placeholder={"0"}
+                  placeholder={`0 ${tokenReceivedSymbol}`}
+                  icon={
+                    <Box pad="xsmall" direction="row" align="center" gap="small">
+                      <Image height="35" src={tokenReceivedLogo.default} />
+                      <Text>{tokenReceivedSymbol}</Text>
+                    </Box>
+                  }
+                  style={{ textAlign: "right", padding: "20px 50px" }}
                   value={utils.formatEther(calcOutGivenIn || "0")}
                 />
               </Box>
             </FormField>
           </Box>
-          <Box width="large" direction="column" pad={{ horizontal: "large" }} gap="small">
+          <Box width="434px" direction="column" gap="small">
             <ApproveToken
               symbol={tokenSendedSymbol}
               spender={addresses[protocolName].swap}

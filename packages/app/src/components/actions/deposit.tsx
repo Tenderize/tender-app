@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Form, FormField, TextInput } from "grommet";
+import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -16,11 +16,13 @@ import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputVa
 type Props = {
   name: string;
   symbol: string;
+  logo: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
 };
 
-const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
+const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalance }) => {
+  const logoImg = require("../../images/" + logo);
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
@@ -57,74 +59,87 @@ const Deposit: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) 
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   return (
-    <Box gap="medium">
-      <Box justify="around" direction="row">
-        <Box>
-          <InfoCard title={`Available ${symbol}`} text={`${weiToEthWithDecimals(tokenBalance ?? "0", 3)} ${symbol}`} />
-        </Box>
-        <Box>
-          <InfoCard
-            title={`My Staked ${symbol}`}
-            text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 3)} ${symbol}`}
-          />
-        </Box>
-        <Box>
-          <InfoCard
-            title={"My TenderTokens"}
-            text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} tender${symbol}`}
-          />
+    <>
+      <Box gap="medium">
+        <Box justify="around" direction="row">
+          <Box>
+            <InfoCard
+              title={`Available ${symbol}`}
+              text={`${weiToEthWithDecimals(tokenBalance ?? "0", 3)} ${symbol}`}
+            />
+          </Box>
+          <Box>
+            <InfoCard
+              title={`My Staked ${symbol}`}
+              text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 3)} ${symbol}`}
+            />
+          </Box>
+          <Box>
+            <InfoCard
+              title={"My TenderTokens"}
+              text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} tender${symbol}`}
+            />
+          </Box>
         </Box>
       </Box>
 
-      <Box fill="horizontal" direction="row" justify="center" align="center">
+      <Box direction="row" justify="center" align="center">
         <Form validate="change">
-          <FormField
-            fill
-            label="Deposit Amount"
-            name="depositAmount"
-            validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
-          >
-            <TextInput
-              width={1}
-              value={depositInput}
-              onChange={handleInputChange}
-              type="text"
-              placeholder={`0 ${symbol}`}
-            />
-            <AmountInputFooter
-              label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-              onClick={maxDeposit}
-            />
-          </FormField>
-          <Box gap="small" direction="column">
-            <ApproveToken
-              symbol={symbol}
-              spender={addresses[name].controller}
-              token={contracts[name].token}
-              show={!isTokenApproved}
-            />
-            <Button
-              primary
-              fill="horizontal"
-              disabled={
-                !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
-              }
-              onClick={depositTokens}
-              label={
-                depositTx.status === "Mining" ? (
-                  <Box direction="row" align="center" justify="center" gap="small">
-                    <ButtonSpinner />
-                    Depositing...
-                  </Box>
-                ) : (
-                  "Deposit"
-                )
-              }
-            />
+          <Box align="center" justify="center">
+            <Box direction="row" gap="small">
+              <FormField
+                label="Deposit Amount"
+                name="depositAmount"
+                validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
+              >
+                <TextInput
+                  value={depositInput}
+                  onChange={handleInputChange}
+                  type="text"
+                  icon={
+                    <Box pad="xsmall" direction="row" align="center" gap="small">
+                      <Image height="35" src={logoImg.default} />
+                      <Text>{symbol}</Text>
+                    </Box>
+                  }
+                  style={{ textAlign: "right", padding: "20px 50px" }}
+                  placeholder={`0`}
+                />
+                <AmountInputFooter
+                  label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                  onClick={maxDeposit}
+                />
+              </FormField>
+            </Box>
+            <Box width="435px" gap="small" direction="column">
+              <ApproveToken
+                symbol={symbol}
+                spender={addresses[name].controller}
+                token={contracts[name].token}
+                show={!isTokenApproved}
+              />
+              <Button
+                primary
+                disabled={
+                  !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
+                }
+                onClick={depositTokens}
+                label={
+                  depositTx.status === "Mining" ? (
+                    <Box direction="row" align="center" justify="center" gap="small">
+                      <ButtonSpinner />
+                      Depositing...
+                    </Box>
+                  ) : (
+                    "Deposit"
+                  )
+                }
+              />
+            </Box>
           </Box>
         </Form>
       </Box>
-    </Box>
+    </>
   );
 };
 
