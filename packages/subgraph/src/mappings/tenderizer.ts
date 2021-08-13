@@ -24,7 +24,8 @@ import {
   BI_18,
   exponentToBigDecimal,
   getUSDPrice,
-  BD_100
+  BD_100,
+  loadOrCreateUserDeploymentDay
  } from "./utils"
 import { TenderToken } from "../types/templates/Tenderizer/TenderToken"
 import { Address } from "@graphprotocol/graph-ts";
@@ -36,16 +37,25 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   let usdPrice = getUSDPrice(protocolId)
   let config = Config.load(protocolId)
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
+  let timestamp = depositEvent.block.timestamp.toI32()
+  let userAddress = depositEvent.params.from.toHex()
 
   // Update User data
-  let userData = loadOrCreateUserDeployment(depositEvent.params.from.toHex(), protocolId)
+  let userData = loadOrCreateUserDeployment(userAddress, protocolId)
   userData.tenderizerStake = userData.tenderizerStake.plus(amount)
   userData.shares = tenderToken.sharesOf(depositEvent.params.from)
   userData.save()
 
+  // Update User day data
+  let userDay = loadOrCreateUserDeploymentDay(timestamp, userAddress, protocolId)
+  userDay.shares = tenderToken.sharesOf(depositEvent.params.from)
+  userDay.save()
+
   // Update day data
-  let day = loadOrCreateTernderizerDay(depositEvent.block.timestamp.toI32(), protocolId)
+  let day = loadOrCreateTernderizerDay(timestamp, protocolId)
   day.deposits = day.deposits.plus(amount)
+  day.shares = tenderToken.getTotalShares()
+  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
 
   // Update Tenderizer data
@@ -53,8 +63,6 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   tenderizer.deposits = tenderizer.deposits.plus(amount)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.plus(amount)
   tenderizer.TVL = tenderizer.currentPrincipal.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
-  let tokens = tenderizer.deposits.minus(tenderizer.withdrawals)
-  tenderizer.shares = tenderToken.tokensToShares(tokens)
   tenderizer.save()
 
   // Save raw event
@@ -73,6 +81,7 @@ export function handleUnstakeEvent(unstakeEvent: Unstake): void {
   let amount = unstakeEvent.params.amount
   let config = Config.load(protocolId)
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
+  let timestamp = unstakeEvent.block.timestamp.toI32()
 
   // Update User data
   let userData = loadOrCreateUserDeployment(unstakeEvent.params.from.toHex(), protocolId)
@@ -86,11 +95,25 @@ export function handleUnstakeEvent(unstakeEvent: Unstake): void {
   userData.shares = tenderToken.sharesOf(unstakeEvent.params.from)
   userData.save()
 
+  // Update User day data
+  let userDay = loadOrCreateUserDeploymentDay(
+    timestamp, 
+    unstakeEvent.params.from.toHex(), 
+    protocolId
+  )
+  userDay.shares = tenderToken.sharesOf(unstakeEvent.params.from)
+  userDay.save()
+
+  // Update day data
+  let day = loadOrCreateTernderizerDay(timestamp, protocolId)
+  day.unstakes = day.unstakes.plus(amount)
+  day.shares = tenderToken.getTotalShares()
+  day.supply = tenderToken.getTotalPooledTokens()
+  day.save()
+
   // Update Tenderizer data
   let tenderizer = loadOrCreateTenderizer(protocolId)
   tenderizer.currentPrincipal = tenderizer.currentPrincipal.minus(amount)
-  let tokens = tenderizer.deposits.minus(tenderizer.withdrawals)
-  tenderizer.shares = tenderToken.tokensToShares(tokens)
   tenderizer.save()
 
   // Save raw event
@@ -110,10 +133,14 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = withdrawEvent.params.amount
   let usdPrice = getUSDPrice(protocolId)
+  let config = Config.load(protocolId)
+  let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
 
   // Update day data
   let day = loadOrCreateTernderizerDay(withdrawEvent.block.timestamp.toI32(), protocolId)
   day.withdrawals = day.withdrawals.plus(amount)
+  day.shares = tenderToken.getTotalShares()
+  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
 
   // Update Tenderizer data
@@ -137,11 +164,15 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = rewardsClaimedEvent.params.rewards
   let usdPrice = getUSDPrice(protocolId)
+  let config = Config.load(protocolId)
+  let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
   day.APY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal()).times(BD_100)
+  day.shares = tenderToken.getTotalShares()
+  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
   
   // Update Tenderizer data
