@@ -1,5 +1,5 @@
 import { BigDecimal, BigInt, Address, dataSource } from "@graphprotocol/graph-ts";
-import { Deployment, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserDeployment, TenderFarmDay, TenderFarm, Config } from "../types/schema";
+import { Deployment, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserDeployment, UserDeploymentDay, TenderFarmDay, TenderFarm, Config } from "../types/schema";
 import { OneInch } from "../types/templates/Tenderizer/OneInch"
 import * as config from "./config"
 import { BPool } from "../types/templates/TenderFarm/BPool"
@@ -54,7 +54,6 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
     tenderizer.protocolFeesUSD = ZERO_BD
     tenderizer.liquidityFees = ZERO_BI
     tenderizer.liquidityFeesUSD = ZERO_BD
-    tenderizer.shares = ZERO_BI
     tenderizer.dayData = []
   }
 
@@ -99,6 +98,7 @@ export function loadOrCreateUserDeployment(address: string, protocolName: string
     userProtocol.farmAmount = ZERO_BI
     userProtocol.farmHarvest = ZERO_BI
     userProtocol.shares = ZERO_BI
+    userProtocol.dayData = []
    
     // Save derived fields
     let user = loadOrCreateUser(address)
@@ -159,10 +159,13 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
     let tenderizer = loadOrCreateTenderizer(protocol)
     day.date = dayStartTimestamp
     day.deposits = ZERO_BI
+    day.unstakes = ZERO_BI
     day.withdrawals = ZERO_BI
     day.rewards = ZERO_BI
     day.startPrinciple = tenderizer.currentPrincipal
     day.APY = ZERO_BD
+    day.shares = ZERO_BI
+    day.supply = ZERO_BI
 
     let dayList = tenderizer.dayData
     dayList.push(day.id)
@@ -196,6 +199,36 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     tenderFarm.save()
   }
   return day as TenderFarmDay;
+}
+
+export function loadOrCreateUserDeploymentDay(timestamp: i32, address: string, protocol: string): UserDeploymentDay {
+  let dayTimestamp = timestamp / 86400
+  let dayID = dayTimestamp.toString() + '_' + address + '_' + protocol
+  let dayStartTimestamp = dayTimestamp * 86400
+  let day = UserDeploymentDay.load(dayID)
+
+  if (day == null) {
+    day = new UserDeploymentDay(dayID)
+    let user = loadOrCreateUserDeployment(address, protocol)
+    day.date = dayStartTimestamp
+    // Initialize data with previous day data
+    // Not needed for just a single value
+    let dayList = user.dayData
+    if(dayList.length == 0) {
+      day.shares = ZERO_BI
+    } else {
+      let previousDayID = dayList.pop()
+      let previousDay = UserDeploymentDay.load(previousDayID)
+      day.shares = previousDay.shares
+    }
+    day.save()
+
+    dayList = user.dayData
+    dayList.push(day.id)
+    user.dayData = dayList
+    user.save()
+  }
+  return day as UserDeploymentDay;
 }
 
 export function getUSDPrice(protocol: string): BigDecimal {

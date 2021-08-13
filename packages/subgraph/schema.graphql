@@ -61,8 +61,6 @@ type Tenderizer @entity {
   liquidityFees: BigInt!
   "Total amount of liquidity fees collected from tenderizer in USD"
   liquidityFeesUSD: BigDecimal!
-  "Total TenderToken Shares"
-  shares: BigInt!
 
   "Day data for tenderizer"
   dayData: [TenderizerDay!]
@@ -99,6 +97,8 @@ type TenderizerDay @entity {
 
   "deposits volume in tenderizer for the day"
   deposits: BigInt!
+  "unstakes volume in tenderizer for the day"
+  unstakes: BigInt!
   "withdraw volume in tenderizer for the day"
   withdrawals: BigInt!
   "staking rewards collected from protocol for the day"
@@ -108,6 +108,10 @@ type TenderizerDay @entity {
   startPrinciple: BigInt!
   "Day APY - rewards/principle %"
   APY: BigDecimal!
+  "Last Total Tender Token shares of the day"
+  shares: BigInt!
+  "Last Total Tender Token supply of the day"
+  supply: BigInt!
 }
 
 type TenderFarmDay @entity {
@@ -155,6 +159,18 @@ type UserDeployment @entity {
   "Total amount harvest collected from farm by  user"
   farmHarvest: BigInt!
   "TenderToken Shares held by the user"
+  shares: BigInt!
+
+  "Day data for User"
+  dayData: [UserDeploymentDay!]
+}
+
+type UserDeploymentDay @entity {
+  "<Timestamp rounded to current day by dividing by 86400>_<wallet-address>_<protocol>"
+  id: ID!
+  "The date beginning at 12:00am UTC"
+  date: Int!
+  "Last Tender Token shares of the day"
   shares: BigInt!
 }
 
