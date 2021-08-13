@@ -7,7 +7,6 @@ import {
 } from "../types/templates"
 import { Tenderizer } from "../types/templates/Tenderizer/Tenderizer"
 import {
-  loadOrCreateTenderFarm,
   loadOrCreateTenderizeGlobal,
   loadOrCreateTenderizer,
   loadOrCreateTernderizerDay,
