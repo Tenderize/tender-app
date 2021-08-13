@@ -94,7 +94,6 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                 validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
               >
                 <TextInput
-                  width={1}
                   value={depositInput}
                   onChange={handleInputChange}
                   type="text"
