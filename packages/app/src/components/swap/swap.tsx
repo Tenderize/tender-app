@@ -158,7 +158,7 @@ const Swap: FC<Props> = ({
               </Box>
             </FormField>
           </Box>
-          <Box width="434px" direction="column" gap="small">
+          <Box width="470px" direction="column" gap="small">
             <ApproveToken
               symbol={tokenSendedSymbol}
               spender={addresses[protocolName].swap}
