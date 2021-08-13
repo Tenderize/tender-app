@@ -265,3 +265,13 @@ export function tokensToShares(amount: BigInt, protocol: string): BigInt {
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
   return tenderToken.tokensToShares(amount)
 }
+
+export function addressIsContract(config: Config, address: Address): Boolean {
+  let addressString = address.toHex()
+  return (
+  addressString.includes(config.esp) ||
+  addressString.includes(config.bpool) ||
+  addressString.includes(config.tenderFarm) ||
+  addressString.includes(config.tenderizer)
+  ) as Boolean
+}
