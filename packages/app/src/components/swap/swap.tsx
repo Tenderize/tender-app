@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, useCallback, useState } from "react";
+import { ChangeEventHandler, FC, useCallback, useEffect, useState } from "react";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
@@ -52,6 +52,7 @@ const Swap: FC<Props> = ({
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(true);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
+  const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -72,6 +73,9 @@ const Swap: FC<Props> = ({
     .div(10);
 
   const isTokenApproved = useIsTokenApproved(tokenSendedAddress, addresses[protocolName].swap, sendTokenAmount);
+
+  const [sendFocused, setSendFocused] = useState(false);
+  const [receiveFocused, setReceiveFocused] = useState(false);
 
   const [calcOutGivenIn] =
     useContractCall(
@@ -95,9 +99,43 @@ const Swap: FC<Props> = ({
         }
     ) ?? [];
 
+  const [calcInGivenOut] =
+    useContractCall(
+      hasValue(tokenSendedLpBalance) &&
+        hasValue(tokenSendedWeight) &&
+        hasValue(tokenReceivedLpBalance) &&
+        hasValue(tokenReceivedWeight) &&
+        hasValue(receiveTokenAmount) &&
+        hasValue(swapFee) && {
+          abi: contracts[protocolName].swap.interface,
+          address: addresses[protocolName].swap,
+          method: "calcInGivenOut",
+          args: [
+            tokenSendedLpBalance || "0",
+            tokenSendedWeight || "0",
+            tokenReceivedLpBalance || "0",
+            tokenReceivedWeight || utils.parseEther("1"),
+            utils.parseEther(receiveTokenAmount || "0"),
+            swapFee || "0",
+          ],
+        }
+    ) ?? [];
+
   const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setSendTokenAmount(e.target.value);
   }, []);
+
+  const handleReceiveTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    setReceiveTokenAmount(e.target.value);
+  }, []);
+
+  useEffect(() => {
+    if (sendFocused) {
+      setReceiveTokenAmount(utils.formatEther(calcOutGivenIn || "0"));
+    } else if (receiveFocused) {
+      setSendTokenAmount(utils.formatEther(calcInGivenOut || "0"));
+    }
+  }, [calcInGivenOut, calcOutGivenIn, receiveFocused, receiveTokenAmount, sendFocused, sendTokenAmount]);
 
   return (
     <Box>
@@ -115,7 +153,7 @@ const Swap: FC<Props> = ({
               <Box width="medium">
                 <TextInput
                   id="formSwapSend"
-                  type="text"
+                  type="number"
                   value={sendTokenAmount}
                   icon={
                     <Box pad="xsmall" direction="row" align="center" gap="small">
@@ -123,6 +161,8 @@ const Swap: FC<Props> = ({
                       <Text>{tokenSendedSymbol}</Text>
                     </Box>
                   }
+                  onFocus={() => setSendFocused(true)}
+                  onBlur={() => setSendFocused(false)}
                   style={{ textAlign: "right", padding: "20px 50px" }}
                   placeholder={`0`}
                   onChange={handleSendTokenInput}
@@ -140,11 +180,11 @@ const Swap: FC<Props> = ({
               icon={<Transaction color="white" />}
               onClick={() => setIsSendingToken(!isSendingToken)}
             />
-            <FormField label={`Receive`} readOnly>
+            <FormField label={`Receive`}>
               <Box width="medium">
                 <TextInput
-                  readOnly
                   id="formSwapReceive"
+                  type="number"
                   placeholder={`0 ${tokenReceivedSymbol}`}
                   icon={
                     <Box pad="xsmall" direction="row" align="center" gap="small">
@@ -152,8 +192,11 @@ const Swap: FC<Props> = ({
                       <Text>{tokenReceivedSymbol}</Text>
                     </Box>
                   }
+                  onFocus={() => setReceiveFocused(true)}
+                  onBlur={() => setReceiveFocused(false)}
                   style={{ textAlign: "right", padding: "20px 50px" }}
-                  value={utils.formatEther(calcOutGivenIn || "0")}
+                  onChange={handleReceiveTokenInput}
+                  value={receiveTokenAmount}
                 />
               </Box>
             </FormField>
@@ -183,7 +226,7 @@ const Swap: FC<Props> = ({
         show={showConfirm}
         onDismiss={() => setShowConfirm(false)}
         tokenSendedSymbol={tokenSendedSymbol}
-        sendTokenAmount={sendTokenAmount}
+        sendTokenAmount={calcInGivenOut}
         tokenReceivedSymbol={tokenReceivedSymbol}
         receiveTokenAmount={calcOutGivenIn}
         tokenSpotPrice={tokenSpotPrice}

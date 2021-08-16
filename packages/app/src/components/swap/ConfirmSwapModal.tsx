@@ -95,7 +95,13 @@ const ConfirmSwapModal: FC<Props> = ({
                   <Form>
                     <Box justify="around" align="center">
                       <FormField label={`Send ${tokenSendedSymbol}`}>
-                        <TextInput readOnly id="formSwapSend" type="number" value={sendTokenAmount} required={true} />
+                        <TextInput
+                          readOnly
+                          id="formSwapSend"
+                          type="number"
+                          value={utils.formatEther(sendTokenAmount || "0")}
+                          required={true}
+                        />
                       </FormField>
                       <FormField label={`Receive ${tokenReceivedSymbol}`}>
                         <TextInput
