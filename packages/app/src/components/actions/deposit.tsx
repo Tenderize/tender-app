@@ -86,8 +86,9 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
       <Box direction="row" justify="center" align="center">
         <Form validate="change">
           <Box align="center" justify="center">
-            <Box direction="row" gap="small">
+            <Box width="470px" gap="small" direction="column">
               <FormField
+                fill
                 label="Deposit Amount"
                 name="depositAmount"
                 validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
@@ -110,31 +111,35 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                   onClick={maxDeposit}
                 />
               </FormField>
-            </Box>
-            <Box width="435px" gap="small" direction="column">
-              <ApproveToken
-                symbol={symbol}
-                spender={addresses[name].controller}
-                token={contracts[name].token}
-                show={!isTokenApproved}
-              />
-              <Button
-                primary
-                disabled={
-                  !isTokenApproved || !depositInput || depositInput.toString() === "0" || depositTx.status === "Mining"
-                }
-                onClick={depositTokens}
-                label={
-                  depositTx.status === "Mining" ? (
-                    <Box direction="row" align="center" justify="center" gap="small">
-                      <ButtonSpinner />
-                      Depositing...
-                    </Box>
-                  ) : (
-                    "Deposit"
-                  )
-                }
-              />
+              <Box gap="small" direction="column" width="470px">
+                <ApproveToken
+                  symbol={symbol}
+                  spender={addresses[name].controller}
+                  token={contracts[name].token}
+                  show={!isTokenApproved}
+                />
+                <Button
+                  primary
+                  fill="horizontal"
+                  disabled={
+                    !isTokenApproved ||
+                    !depositInput ||
+                    depositInput.toString() === "0" ||
+                    depositTx.status === "Mining"
+                  }
+                  onClick={depositTokens}
+                  label={
+                    depositTx.status === "Mining" ? (
+                      <Box direction="row" align="center" justify="center" gap="small">
+                        <ButtonSpinner />
+                        Depositing...
+                      </Box>
+                    ) : (
+                      "Deposit"
+                    )
+                  }
+                />
+              </Box>
             </Box>
           </Box>
         </Form>

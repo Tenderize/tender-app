@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler } from "react";
-import { BigNumberish, constants, Contract } from "ethers";
+import { constants, Contract } from "ethers";
 import { useContractFunction } from "@usedapp/core";
 import { Box, Button, Tip, Text } from "grommet";
 import { ButtonSpinner } from "../ButtonSpinner";
@@ -9,10 +9,9 @@ type Props = {
   show: boolean;
   spender: string;
   token: Contract;
-  amount?: BigNumberish;
 };
 
-const ApproveToken: FC<Props> = ({ symbol, spender, show, token, amount }) => {
+const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
   const { state: approveTx, send: approveToken } = useContractFunction(token, "approve", {
     transactionName: `Approve ${symbol}`,
   });
@@ -21,7 +20,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token, amount }) => {
     e.preventDefault();
 
     if (show) {
-      await approveToken(spender, amount ?? constants.MaxUint256);
+      await approveToken(spender, constants.MaxUint256);
     }
   };
 
