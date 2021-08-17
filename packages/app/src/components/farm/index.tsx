@@ -8,7 +8,7 @@ import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
 import InfoCard from "../tenderizers/infocard";
-import {  GetUserDeployments} from "../../pages/token/queries";
+import { GetUserDeployments, UserDeploymentsType } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
@@ -42,12 +42,8 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
     args: [account],
   });
 
-  // const { data } = useQuery(GetDeployments, {
-  //   variables: { id: name },
-  // });
-
-  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1)
-  const { data: userData, refetch } = useQuery(GetUserDeployments, {
+  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1);
+  const { data: userData, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
 
@@ -60,7 +56,7 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
     <Box>
       <Box justify="around" direction="row" pad={{ bottom: "medium" }}>
         <Box>
-          <InfoCard 
+          <InfoCard
             title={"Pool Tokens Staked"}
             text={`${weiToEthWithDecimals(stakeOf?.toString() || "0", 3)} ${symbolFull}`}
             subText={`Balance: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 3)}`}
@@ -75,14 +71,17 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
         <Box>
           <InfoCard
             title={"Total Harvested"}
-            text={`${weiToEthWithDecimals(userData?.userDeployments?.[0]?.farmHarvest?.toString() || "0", 3)} tender${symbol}`}
+            text={`${weiToEthWithDecimals(
+              userData?.userDeployments?.[0]?.farmHarvest?.toString() || "0",
+              3
+            )} tender${symbol}`}
           />
         </Box>
       </Box>
       <Box flex justify="around" align="center" direction="row" pad={{ bottom: "large" }}>
-      <Farm name={name} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
-      <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
-      <Harvest name={name} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
+        <Farm name={name} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
+        <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
+        <Harvest name={name} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
       </Box>
       {/* <Box gap="large" justify="center" direction="row">
         <Box

@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useContractFunction, useEthers } from "@usedapp/core";
-import { BigNumberish, utils } from "ethers";
+import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import InfoCard from "../tenderizers/infocard";
-import { GetUserDeployments } from "../../pages/token/queries";
+import { GetUserDeployments, UserDeploymentsType } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
@@ -27,7 +27,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
   const { account } = useEthers();
 
   const subgraphName = name.charAt(0).toUpperCase() + name.slice(1);
-  const { data, refetch } = useQuery(GetUserDeployments, {
+  const { data, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
 
@@ -58,27 +58,28 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
 
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
+  const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
+  const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
+  const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
+  const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
   return (
     <>
       <Box gap="medium">
         <Box justify="around" direction="row">
           <Box>
             <InfoCard
-              title={`Available ${symbol}`}
-              text={`${weiToEthWithDecimals(tokenBalance ?? "0", 3)} ${symbol}`}
-            />
-          </Box>
-          <Box>
-            <InfoCard
-              title={`My Staked ${symbol}`}
+              title={`Staked ${symbol}`}
               text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 3)} ${symbol}`}
             />
           </Box>
           <Box>
             <InfoCard
-              title={"My TenderTokens"}
+              title={"Tender Token Balance"}
               text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} tender${symbol}`}
             />
+          </Box>
+          <Box>
+            <InfoCard title={`Rewards`} text={`${weiToEthWithDecimals(nonNegativeRewards ?? "0", 3)} ${symbol}`} />
           </Box>
         </Box>
       </Box>

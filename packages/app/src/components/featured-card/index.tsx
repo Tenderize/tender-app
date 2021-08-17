@@ -3,7 +3,7 @@ import { Box } from "grommet";
 
 import TokenCard from "../token-card";
 import stakers from "../../data/stakers";
-import { DPYResponseType, GetDPY } from "../../pages/token/queries";
+import { TenderizerDaysType, GetTenderizerDays } from "../../pages/token/queries";
 import { useQuery } from "@apollo/client";
 
 const FeaturedCards: FC = () => {
@@ -11,7 +11,7 @@ const FeaturedCards: FC = () => {
   let key: string;
 
   const monthAgo = getUnixTimestampMonthAgo();
-  const { data } = useQuery<DPYResponseType>(GetDPY, {
+  const { data } = useQuery<TenderizerDaysType>(GetTenderizerDays, {
     variables: { from: monthAgo },
   });
 
