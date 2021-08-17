@@ -26,7 +26,6 @@ const FeaturedCards: FC = () => {
 
       if (sumDPYInPoints !== 0) {
         const yearlyAvarageRate = (sumDPYInPoints / dpyData.length) * 365;
-        console.log("yearlyAvarageRate", yearlyAvarageRate);
         apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
       }
     }
