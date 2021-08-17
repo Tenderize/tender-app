@@ -4,7 +4,7 @@ import { Box, Text, Image } from "grommet";
 type Props = {
   url: string;
   info: CardInfo;
-  apy: number;
+  apy: string;
 };
 
 type CardInfo = {

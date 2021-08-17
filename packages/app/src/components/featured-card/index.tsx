@@ -16,18 +16,21 @@ const FeaturedCards: FC = () => {
   });
 
   for (key in stakers) {
-    let apy = 0;
+    let apyInPoints = 0;
     if (data != null) {
-      const deploymentDPYData = Array.from(data.tenderizerDays)
+      const dpyData = Array.from(data.tenderizerDays)
         .filter((item) => item.id.toLowerCase().includes(stakers[key].name))
         .slice(0, -1)
         .filter((item) => item.DPY !== "0");
-      const sumDPY = deploymentDPYData.reduce((seedValue, item) => seedValue + parseInt(item.DPY), 0);
+      const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0) / 100;
 
-      if (sumDPY !== 0) {
-        apy = (sumDPY / deploymentDPYData.length) * 365;
+      if (sumDPYInPoints !== 0) {
+        const yearlyAvarageRate = (sumDPYInPoints / dpyData.length) * 365;
+        console.log("yearlyAvarageRate", yearlyAvarageRate);
+        apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
       }
     }
+    const apy = (apyInPoints * 100).toFixed(2);
     cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
   }
   return (
