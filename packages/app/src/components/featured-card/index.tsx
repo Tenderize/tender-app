@@ -3,7 +3,7 @@ import { Box } from "grommet";
 
 import TokenCard from "../token-card";
 import stakers from "../../data/stakers";
-import { APYResponseType, GetAPY } from "../../pages/token/queries";
+import { DPYResponseType, GetDPY } from "../../pages/token/queries";
 import { useQuery } from "@apollo/client";
 
 const FeaturedCards: FC = () => {
@@ -11,20 +11,21 @@ const FeaturedCards: FC = () => {
   let key: string;
 
   const monthAgo = getUnixTimestampMonthAgo();
-  const { data } = useQuery<APYResponseType>(GetAPY, {
+  const { data } = useQuery<DPYResponseType>(GetDPY, {
     variables: { from: monthAgo },
   });
 
   for (key in stakers) {
     let apy = 0;
     if (data != null) {
-      const deploymentAPYData = Array.from(data.tenderizerDays)
+      const deploymentDPYData = Array.from(data.tenderizerDays)
         .filter((item) => item.id.toLowerCase().includes(stakers[key].name))
-        .filter((item) => item.APY !== "0");
-      const dailyApy = deploymentAPYData.reduce((seedValue, item) => seedValue + parseInt(item.APY), 0);
+        .slice(0, -1)
+        .filter((item) => item.DPY !== "0");
+      const sumDPY = deploymentDPYData.reduce((seedValue, item) => seedValue + parseInt(item.DPY), 0);
 
-      if (dailyApy !== 0) {
-        apy = (dailyApy / deploymentAPYData.length) * 365;
+      if (sumDPY !== 0) {
+        apy = (sumDPY / deploymentDPYData.length) * 365;
       }
     }
     cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);

@@ -21,20 +21,20 @@ export const GetDeployments = gql`
   }
 `;
 
-export type APYResponseType = {
+export type DPYResponseType = {
   tenderizerDays: {
     id: string;
     date: number;
-    APY: string;
+    DPY: string;
   }[];
 };
 
-export const GetAPY = gql`
-  query GetAPY($from: Int!) {
+export const GetDPY = gql`
+  query GetDPY($from: Int!) {
     tenderizerDays(where: { date_gt: $from }) {
       id
       date
-      APY
+      DPY
     }
   }
 `;
