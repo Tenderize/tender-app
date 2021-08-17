@@ -129,7 +129,7 @@ export function handleRewardsAddedEvent(rewardsAddedEvent: RewardsAdded): void {
   let day = loadOrCreateTenderFarmDay(rewardsAddedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
   if(day.startPrinciple.gt(ZERO_BD)){
-    day.APY = day.rewards.divDecimal(day.startPrinciple).times(BD_100)
+    day.DPY = day.rewards.divDecimal(day.startPrinciple)
   }
   day.save()
 

@@ -163,7 +163,7 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
     day.withdrawals = ZERO_BI
     day.rewards = ZERO_BI
     day.startPrinciple = tenderizer.currentPrincipal
-    day.APY = ZERO_BD
+    day.DPY = ZERO_BD
     day.shares = ZERO_BI
     day.supply = ZERO_BI
 
@@ -189,7 +189,7 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     day.withdrawals = ZERO_BI
     day.harvest = ZERO_BI
     day.rewards = ZERO_BI
-    day.APY = ZERO_BD
+    day.DPY = ZERO_BD
     day.startPrinciple = LPTokenToToken(tenderFarm.currentPrincipal.toBigDecimal(), protocol)
     day.save()
 

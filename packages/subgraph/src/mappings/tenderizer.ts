@@ -20,11 +20,9 @@ import {
   getProtocolIdByTenderizerAddress,
   loadOrCreateUserDeployment,
   loadOrCreateTernderizerDay,
-  ONE_BI,
   BI_18,
   exponentToBigDecimal,
   getUSDPrice,
-  BD_100,
   loadOrCreateUserDeploymentDay
  } from "./utils"
 import { TenderToken } from "../types/templates/Tenderizer/TenderToken"
@@ -170,7 +168,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
-  day.APY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal()).times(BD_100)
+  day.DPY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal())
   day.shares = tenderToken.getTotalShares()
   day.supply = tenderToken.getTotalPooledTokens()
   day.save()
