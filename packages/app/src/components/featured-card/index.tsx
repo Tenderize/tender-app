@@ -22,7 +22,7 @@ const FeaturedCards: FC = () => {
         .filter((item) => item.id.toLowerCase().includes(stakers[key].name))
         .slice(0, -1)
         .filter((item) => item.DPY !== "0");
-      const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0) / 100;
+      const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0);
 
       if (sumDPYInPoints !== 0) {
         const yearlyAvarageRate = (sumDPYInPoints / dpyData.length) * 365;
