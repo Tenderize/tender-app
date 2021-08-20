@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
-import { useContractFunction } from "@usedapp/core";
 import { contracts } from "@tender/contracts";
 import { Box, Button, Text, Heading, Layer, Card, CardHeader, CardBody } from "grommet";
 import { useLocation } from "react-router";
+import { useContractFunction } from "../../utils/useDappPatch";
 
 type props = {
   symbol: string;

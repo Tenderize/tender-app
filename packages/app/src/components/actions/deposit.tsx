@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
-import { useContractFunction, useEthers } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
@@ -12,6 +12,7 @@ import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
+import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
   name: string;

@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { useContractFunction } from "@usedapp/core";
 import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text } from "grommet";
 import { ButtonSpinner } from "../ButtonSpinner";
+import { useContractFunction } from "../../utils/useDappPatch";
 
 const harvestIcon = require("../../images/harvest.svg");
 
