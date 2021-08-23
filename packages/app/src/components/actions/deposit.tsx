@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
@@ -61,17 +61,8 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
 
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
-  const tenderTokenBalanceRef = useRef(tenderTokenBalance);
-  const [nonNegativeRewards, setNonNegativeRewards] = useState(BigNumber.from("0"));
-
-  useEffect(() => {
-    if (!BigNumber.from(tenderTokenBalance).eq(BigNumber.from(tenderTokenBalanceRef.current))) {
-      tenderTokenBalanceRef.current = tenderTokenBalance;
-      const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
-      setNonNegativeRewards(myRewards.isNegative() ? constants.Zero : myRewards);
-    }
-  }, [claimedRewards, data?.userDeployments, tenderTokenBalance, tenderizerStake]);
-
+  const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
+  const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
   return (
     <>
       <Box gap="medium">
