@@ -1,7 +1,6 @@
 import { FC, useCallback, useState } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { useContractFunction } from "@usedapp/core";
 import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -9,6 +8,7 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd } from "grommet-icons";
 import { ButtonSpinner } from "../ButtonSpinner";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
+import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
   name: string;

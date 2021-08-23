@@ -16,8 +16,8 @@ import {
   Text,
 } from "grommet";
 
-import { useContractFunction } from "@usedapp/core";
 import InfoCard from "../tenderizers/infocard";
+import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
   show: boolean;

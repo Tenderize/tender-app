@@ -1,7 +1,7 @@
 import { FC, useState, useCallback, ChangeEventHandler, MouseEventHandler } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
-import { useContractFunction, useContractCall } from "@usedapp/core";
+import { useContractCall } from "@usedapp/core";
 import {
   Image,
   Button,
@@ -27,6 +27,7 @@ import { ButtonSpinner } from "../ButtonSpinner";
 import { validateIsPositive, validateIsLargerThanMax } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
 import { useLocation } from "react-router";
+import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
   name: string;

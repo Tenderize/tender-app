@@ -3,25 +3,47 @@ import { Box } from "grommet";
 
 import TokenCard from "../token-card";
 import stakers from "../../data/stakers";
+import { TenderizerDaysType, GetTenderizerDays } from "../../pages/token/queries";
+import { useQuery } from "@apollo/client";
 
 const FeaturedCards: FC = () => {
   const cards = [];
   let key: string;
+
+  const monthAgo = getUnixTimestampMonthAgo();
+  const { data } = useQuery<TenderizerDaysType>(GetTenderizerDays, {
+    variables: { from: monthAgo },
+  });
+
   for (key in stakers) {
-    cards.push(
-      <TokenCard
-        // provider={{}}
-        info={stakers[key]}
-        url={key}
-        key={key}
-      />
-    );
+    let apyInPoints = 0;
+    if (data != null) {
+      const dpyData = Array.from(data.tenderizerDays)
+        .filter((item) => item.id.toLowerCase().includes(stakers[key].name))
+        .slice(0, -1)
+        .filter((item) => item.DPY !== "0");
+      const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0);
+
+      if (sumDPYInPoints !== 0) {
+        const yearlyAvarageRate = (sumDPYInPoints / dpyData.length) * 365;
+        apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
+      }
+    }
+    const apy = (apyInPoints * 100).toFixed(2);
+    cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
   }
   return (
     <Box direction="row" justify="around" align="center">
       {cards}
     </Box>
   );
+};
+
+const getUnixTimestampMonthAgo = () => {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 1);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime() / 1000;
 };
 
 export default FeaturedCards;

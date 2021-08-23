@@ -21,7 +21,8 @@
     "no-use-before-define": "off",
     "@typescript-eslint/no-var-requires": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "ignorePatterns": ["dist", "node_modules", "examples", "scripts"]
 }
