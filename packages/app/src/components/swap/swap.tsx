@@ -50,7 +50,7 @@ const Swap: FC<Props> = ({
   const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
 
   const [showConfirm, setShowConfirm] = useState(false);
-  const [isSendingToken, setIsSendingToken] = useState(true);
+  const [isSendingToken, setIsSendingToken] = useState(false);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
 
