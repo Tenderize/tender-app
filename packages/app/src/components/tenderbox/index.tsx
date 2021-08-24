@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Box, BoxExtendedProps } from "grommet";
 
 const BlurryBox = styled(Box)`
+  position: relative;
   background: rgba(38, 37, 40, 0.2);
   border-radius: 50px;
   box-shadow: inset 0px 64px 100px rgba(0, 0, 0, 0.05);
