@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler, useEffect, useState } from "react";
-import { utils, BigNumberish, BigNumber } from "ethers";
+import { utils, BigNumber } from "ethers";
 import { contracts } from "@tender/contracts";
 import {
   Button,
@@ -24,8 +24,8 @@ type Props = {
   onDismiss: () => void;
   tokenSendedSymbol: string;
   tokenReceivedSymbol: string;
-  sendTokenAmount: string;
-  receiveTokenAmount: BigNumberish;
+  sendTokenAmount: BigNumber;
+  receiveTokenAmount: BigNumber;
   tokenSpotPrice: BigNumber;
   tokenSendedAddress: string;
   tokenReceivedAddress: string;
@@ -53,16 +53,21 @@ const ConfirmSwapModal: FC<Props> = ({
     }
   }, [show]);
 
-  const { state: swapTx, send: swapExactAmountIn } = useContractFunction(
+  const { state: swapTx, send: swapExactAmountOut } = useContractFunction(
     contracts[protocolName].swap,
-    "swapExactAmountIn",
+    "swapExactAmountOut",
     { transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}` }
   );
 
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
-    const amount = utils.parseEther(sendTokenAmount || "0");
-    await swapExactAmountIn(tokenSendedAddress, amount, tokenReceivedAddress, receiveTokenAmount, tokenSpotPrice);
+    await swapExactAmountOut(
+      tokenSendedAddress,
+      sendTokenAmount,
+      tokenReceivedAddress,
+      receiveTokenAmount,
+      tokenSpotPrice
+    );
     onDismiss();
   };
 
@@ -125,8 +130,8 @@ const ConfirmSwapModal: FC<Props> = ({
                     Waiting For Confirmation...
                   </Text>
                   <Text>
-                    Swapping {sendTokenAmount} {tokenSendedSymbol} for {utils.formatEther(receiveTokenAmount || "0")}{" "}
-                    {tokenReceivedSymbol}
+                    Swapping {utils.formatEther(sendTokenAmount || "0")} {tokenSendedSymbol} for{" "}
+                    {utils.formatEther(receiveTokenAmount || "0")} {tokenReceivedSymbol}
                   </Text>
                   <Text>Confirm this transaction in your wallet.</Text>
                 </Box>
