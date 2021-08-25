@@ -34,11 +34,11 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
       gap="medium"
       fill="horizontal"
       onClick={handleApproval}
-      disabled={approveTx.status !== "None" && approveTx.status !== "Success"}
+      disabled={approveTx.status !== "None" && approveTx.status !== "Success" && approveTx.status !== "Exception"}
       label={
         <>
           <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
-            {approveTx.status !== "None" && approveTx.status !== "Success" && <ButtonSpinner />}
+            {approveTx.status === "Mining" && <ButtonSpinner />}
             <Text weight="normal">Allow Tenderize to spend {symbol}</Text>
             <Tip
               plain
