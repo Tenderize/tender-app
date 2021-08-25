@@ -88,7 +88,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
       <Box direction="row" justify="center" align="center">
         <Form validate="change">
           <Box align="center" justify="center">
-            <Box width="470px" gap="small" direction="column">
+            <Box width="490px" gap="small" direction="column">
               <FormField
                 fill
                 label="Deposit Amount"
@@ -113,7 +113,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                   onClick={maxDeposit}
                 />
               </FormField>
-              <Box gap="small" direction="column" width="470px">
+              <Box gap="small" direction="column">
                 <ApproveToken
                   symbol={symbol}
                   spender={addresses[name].controller}
