@@ -51,8 +51,8 @@ const stakers: Record<string, Staker> = {
     available: true,
     apy: 14.8,
     logo: "matic.svg",
-    bwLogo: "LPT.svg",
-    bwTenderLogo: "tenderLPT.svg",
+    bwLogo: "MATIC_token.svg",
+    bwTenderLogo: "tenderMATIC.svg",
     symbol: "MATIC",
   },
 };
