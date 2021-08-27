@@ -66,11 +66,10 @@ export const AccountButton: FC = () => {
           onClickOutside={handleCloseWalletPicker}
         >
           <Card flex={false} pad="medium" width="medium">
-            <CardHeader>
+            <CardHeader justify="center">
               <Text size="xlarge">Connect to a Wallet</Text>
             </CardHeader>
-            <Box gap="small" pad={{ top: "medium" }}>
-              <Text></Text>
+            <Box gap="small" pad={{ top: "medium", horizontal: "medium" }}>
               <Button
                 secondary
                 icon={
