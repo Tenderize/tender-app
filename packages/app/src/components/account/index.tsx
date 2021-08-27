@@ -71,9 +71,8 @@ export const AccountButton: FC = () => {
             </CardHeader>
             <Box gap="small" pad={{ top: "medium", horizontal: "medium" }}>
               <Button
-                secondary
                 icon={
-                  <Box direction="row" justify="between" align="center">
+                  <Box direction="row" justify="between" align="center" pad="small">
                     <Text>MetaMask</Text>
                     <Image src={metamask.default} width={50} height={50} alt="metamask" />
                   </Box>
@@ -84,9 +83,8 @@ export const AccountButton: FC = () => {
                 }}
               />
               <Button
-                secondary
                 icon={
-                  <Box direction="row" justify="between" align="center">
+                  <Box direction="row" justify="between" align="center" pad="small">
                     <Text>WalletConnect</Text>
                     <Image src={walletConnect.default} width={50} height={50} alt="walletconnect" />
                   </Box>
@@ -97,9 +95,8 @@ export const AccountButton: FC = () => {
                 }}
               />
               <Button
-                secondary
                 icon={
-                  <Box direction="row" justify="between" align="center">
+                  <Box direction="row" justify="between" align="center" pad="small">
                     <Text>Portis</Text>
                     <Image src={portis.default} width={50} height={50} alt="portis" />
                   </Box>
@@ -110,9 +107,8 @@ export const AccountButton: FC = () => {
                 }}
               />
               <Button
-                secondary
                 icon={
-                  <Box direction="row" justify="between" align="center">
+                  <Box direction="row" justify="between" align="center" pad="small">
                     <Text>Coinbase Wallet</Text>
                     <Image src={coinbase.default} width={50} height={50} alt="coinbase" />
                   </Box>
@@ -123,9 +119,8 @@ export const AccountButton: FC = () => {
                 }}
               />
               <Button
-                secondary
                 icon={
-                  <Box direction="row" justify="between" align="center">
+                  <Box direction="row" justify="between" align="center" pad="small">
                     <Text>Fortmatic</Text>
                     <Image src={fortmatic.default} width={50} height={50} alt="fortmatic" />
                   </Box>
