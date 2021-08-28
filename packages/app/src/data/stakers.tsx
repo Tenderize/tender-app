@@ -41,20 +41,20 @@ const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderGRT.svg",
     symbol: "GRT",
   },
-  // "/stakers/matic": {
-  //   name: "matic",
-  //   path: "/stakers/matic",
-  //   title: "Matic",
-  //   description:
-  //     "Matic Network brings massive scale to Ethereum using an adapted version of Plasma with PoS based side chains. The Matic team a decentralized platform using an adapted version of Plasma framework that provides a solution for faster and extremely low-cost transactions with finality on the main chain. The system ensures liveliness using PoS checkpoints which are pushed to the Ethereum mainchain. This enables a single Matic sidechain to theoretically achieve 2 16 transactions per block, and possibly millions of transactions on multiple chains in the future.",
-  //   stakerAddress: "",
-  //   available: false,
-  //   apy: 14.8,
-  //   logo: "matic.svg",
-  //   bwLogo: "LPT.svg",
-  //   bwTenderLogo: "tenderLPT.svg",
-  //   symbol: "MATIC",
-  // },
+  "/stakers/matic": {
+    name: "matic",
+    path: "/stakers/matic",
+    title: "Matic",
+    description:
+      "Matic Network brings massive scale to Ethereum using an adapted version of Plasma with PoS based side chains. The Matic team a decentralized platform using an adapted version of Plasma framework that provides a solution for faster and extremely low-cost transactions with finality on the main chain. The system ensures liveliness using PoS checkpoints which are pushed to the Ethereum mainchain. This enables a single Matic sidechain to theoretically achieve 2 16 transactions per block, and possibly millions of transactions on multiple chains in the future.",
+    stakerAddress: "",
+    available: true,
+    apy: 14.8,
+    logo: "matic.svg",
+    bwLogo: "MATIC_token.svg",
+    bwTenderLogo: "tenderMATIC.svg",
+    symbol: "MATIC",
+  },
 };
 
 export default stakers;
