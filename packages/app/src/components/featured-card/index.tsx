@@ -21,13 +21,12 @@ const FeaturedCards: FC = () => {
       const dpyData = Array.from(data.tenderizerDays)
         .filter((item) => item.id.toLowerCase().includes(stakers[key].name))
         .slice(0, -1)
-        .filter((item) => item.DPY !== "0");
+        // .filter((item) => item.DPY !== "0");
       const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0);
 
-      if (sumDPYInPoints !== 0) {
-        const yearlyAvarageRate = (sumDPYInPoints / dpyData.length) * 365;
-        apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
-      }
+      const yearlyAvarageRate = (sumDPYInPoints / dpyData.length) * 365;
+      apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
+      
     }
     const apy = (apyInPoints * 100).toFixed(2);
     cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
