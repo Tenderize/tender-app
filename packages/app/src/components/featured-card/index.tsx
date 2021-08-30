@@ -22,15 +22,18 @@ const FeaturedCards: FC = () => {
         .filter((item) => item.id.includes(stakers[key].subgraphId))
         .slice(0, -1)
 
-      const dayStart = parseInt(dpyData[0].id.split("_")[0])
-      const dayEnd = parseInt(dpyData[dpyData.length - 1].id.split("_")[0])
-      const daysElapsed = dayEnd - dayStart + 1
-
-      const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0);
-
-      const yearlyAvarageRate = (sumDPYInPoints / daysElapsed ) * 365;
-      apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
-      
+        if (dpyData.length === 0) {
+          apyInPoints = 0
+        } else {
+          const dayStart = parseInt(dpyData[0].id.split("_")[0])
+          const dayEnd = parseInt(dpyData[dpyData.length - 1].id.split("_")[0])
+          const daysElapsed = dayEnd - dayStart + 1
+    
+          const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0);
+    
+          const yearlyAvarageRate = (sumDPYInPoints / daysElapsed ) * 365;
+          apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
+        } 
     }
     const apy = (apyInPoints * 100).toFixed(2);
     cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
