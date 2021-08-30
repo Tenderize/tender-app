@@ -21,10 +21,14 @@ const FeaturedCards: FC = () => {
       const dpyData = Array.from(data.tenderizerDays)
         .filter((item) => item.id.toLowerCase().includes(stakers[key].name))
         .slice(0, -1)
-        // .filter((item) => item.DPY !== "0");
+
+      const dayStart = parseInt(dpyData[0].id.split("_")[0])
+      const dayEnd = parseInt(dpyData[dpyData.length - 1].id.split("_")[0])
+      const daysElapsed = dayEnd - dayStart + 1
+
       const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0);
 
-      const yearlyAvarageRate = (sumDPYInPoints / dpyData.length) * 365;
+      const yearlyAvarageRate = (sumDPYInPoints / daysElapsed ) * 365;
       apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
       
     }
