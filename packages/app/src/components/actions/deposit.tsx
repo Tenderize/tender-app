@@ -13,6 +13,7 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { ButtonSpinner } from "../ButtonSpinner";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction } from "../../utils/useDappPatch";
+import stakers from "../../data/stakers";
 
 type Props = {
   name: string;
@@ -27,7 +28,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
-  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1);
+  const subgraphName = stakers['/stakers/' + name].subgraphId;
   const { data, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });

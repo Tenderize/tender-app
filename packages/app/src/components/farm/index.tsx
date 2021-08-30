@@ -10,6 +10,7 @@ import Harvest from "./harvest";
 import InfoCard from "../tenderizers/infocard";
 import { GetUserDeployments, UserDeploymentsType } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
+import stakers from "../../data/stakers";
 
 type Props = {
   name: string;
@@ -42,7 +43,7 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
     args: [account],
   });
 
-  const subgraphName = name.charAt(0).toUpperCase() + name.slice(1);
+  const subgraphName = stakers['/stakers/' + name].subgraphId;
   const { data: userData, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });

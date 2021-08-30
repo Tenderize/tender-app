@@ -19,7 +19,7 @@ const FeaturedCards: FC = () => {
     let apyInPoints = 0;
     if (data != null) {
       const dpyData = Array.from(data.tenderizerDays)
-        .filter((item) => item.id.toLowerCase().includes(stakers[key].name))
+        .filter((item) => item.id.includes(stakers[key].subgraphId))
         .slice(0, -1)
         .filter((item) => item.DPY !== "0");
       const sumDPYInPoints = dpyData.reduce((seedValue, item) => seedValue + parseFloat(item.DPY), 0);
