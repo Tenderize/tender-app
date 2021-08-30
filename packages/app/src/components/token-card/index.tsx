@@ -24,26 +24,19 @@ const TokenCard: FC<Props> = (props) => {
   const logo = require("../../images/" + info.bwTenderLogo);
 
   return (
-    <Box pad="large" style={{ flex: "1" }}>
+    <Box pad="large" gap="small" style={{ flex: "1" }}>
       <Box align="center" margin={{ vertical: "small" }}>
         <Image src={logo.default} sizes="large" />
         <Text size="xlarge">{info.title}</Text>
       </Box>
-      <Box pad={{ horizontal: "large" }} gap="medium">
-        <Box direction="column" align="center">
-          <Text size="medium" color="light-3">
-            Stake
-          </Text>
-          <Box direction="row" align="center" gap="small">
-            <Text size="large" weight="bold">
-              {apy}
+          <Box direction="column" align="center" gap="small">
+          <Text size="medium" weight="normal" color="light-3">
+              APY
             </Text>
-            <Text size="small" weight="normal" color="light-3">
-              % APY
+            <Text size="large" weight="bold">
+              {apy} <Text size="medium">%</Text>
             </Text>
           </Box>
-        </Box>
-      </Box>
     </Box>
   );
 };
