@@ -8,7 +8,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { theme } from "./theme";
-import { RPC_URL } from "./config";
+import { CHAIN_URL_MAPPING } from "./config";
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize",
@@ -17,9 +17,7 @@ const client = new ApolloClient({
 
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Rinkeby,
-  readOnlyUrls: {
-    [ChainId.Rinkeby]: RPC_URL,
-  },
+  readOnlyUrls: CHAIN_URL_MAPPING,
 };
 
 ReactDOM.render(

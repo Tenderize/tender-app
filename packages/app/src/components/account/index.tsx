@@ -4,7 +4,7 @@ import { Box, Button, Card, CardHeader, Image, Layer, Text, ThemeType } from "gr
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { FORTMATIC_API_KEY, PORTIS_API_KEY, RPC_URL } from "../../config";
+import { CHAIN_URL_MAPPING, FORTMATIC_API_KEY, PORTIS_API_KEY, RPC_URL } from "../../config";
 import { WalletLinkConnector } from "@web3-react/walletlink-connector";
 import { FortmaticConnector } from "@web3-react/fortmatic-connector";
 
@@ -90,7 +90,7 @@ export const AccountButton: FC = () => {
                   </Box>
                 }
                 onClick={async () => {
-                  await activate(new WalletConnectConnector({ rpc: RPC_URL }));
+                  await activate(new WalletConnectConnector({ rpc: CHAIN_URL_MAPPING }));
                   handleCloseWalletPicker();
                 }}
               />
