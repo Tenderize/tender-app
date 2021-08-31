@@ -26,8 +26,6 @@ const Token: FC = () => {
   const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
   const lpTokenBal = useTokenBalance(addresses[name].liquidity, account) || constants.Zero;
 
-  const logo = require("../../images/" + info.logo).default;
-
   const onActive = useCallback((nextIndex: number) => {
     if (nextIndex === 0) {
       setTabIndex(1);
@@ -49,7 +47,7 @@ const Token: FC = () => {
           width="xlarge"
         >
           <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-            <Tab plain title={<TokenDropdown title={info.title} logo={logo} />} />
+            <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
             <Tab
               title={
                 <Tip
@@ -145,14 +143,12 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
       }}
       style={{ paddingTop: 30, paddingBottom: 30 }}
       label={
-        <Box focusIndicator={false} direction="row" justify="center" gap="small">
-          <Box direction="column" align="center" pad={{ bottom: "small" }}>
-            <Avatar size="medium" src={logo} />
-            <Box direction="row" gap="small">
-              <Text>{title}</Text>
-              <FormDown color="white" />
-            </Box>
+        <Box focusIndicator={false} direction="row" justify="center" align="center">
+          <Box direction="column" align="center" gap="small">
+            <Avatar size="medium" src={require("../../images/" + logo).default} />
+            <Text>{title}</Text>
           </Box>
+          <FormDown color="white" />
         </Box>
       }
       dropAlign={{ top: "bottom" }}
@@ -182,8 +178,8 @@ const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButton
     <Box border={{ side: "bottom" }} onClick={onClick}>
       <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
         <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
-          <Box direction="column" align="center" pad={{ bottom: "small" }}>
-            <Avatar size="medium" src={require("../../images/" + staker.logo).default} />
+          <Box direction="column" gap="small" align="center" pad={{ bottom: "small" }}>
+            <Avatar size="medium" src={require("../../images/" + staker.bwLogo).default} />
             <Text color="light-1">{staker.title}</Text>
           </Box>
         </Box>
