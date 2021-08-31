@@ -56,7 +56,7 @@ const Token: FC = () => {
                 >
                   <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
                     <Currency />
-                    <Paragraph style={{fontWeight:600}}>Stake</Paragraph>
+                    <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
                   </Box>
                 </Tip>
               }
@@ -85,7 +85,7 @@ const Token: FC = () => {
                 >
                   <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
                     <PhoneHorizontal />
-                    <Paragraph style={{fontWeight:600}}>Swap</Paragraph>
+                    <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
                   </Box>
                 </Tip>
               }
@@ -108,7 +108,7 @@ const Token: FC = () => {
                 >
                   <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
                     <Grow />
-                    <Paragraph style={{fontWeight:600}}>Farm</Paragraph>
+                    <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
                   </Box>
                 </Tip>
               }
@@ -151,9 +151,10 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
           <FormDown color="white" />
         </Box>
       }
+      dropProps={{ round: { corner: "bottom", size: "large" }, elevation: "none", background: "none" }}
       dropAlign={{ top: "bottom" }}
       dropContent={
-        <Box border={{ side: "right", size: "2px" }}>
+        <Box round={{ size: "large" }}>
           <DropdownBackground style={{ zIndex: 1 }} />
           <Box style={{ zIndex: 2 }}>
             {options.map((option) => (
@@ -174,8 +175,8 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
 };
 
 const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButtonElement> }> = ({ staker, onClick }) => (
-  <MaybeLink staker={staker}>
-    <Box border={{ side: "bottom" }} onClick={onClick}>
+  <DropdownOptionContainer border={{ side: "bottom" }} onClick={onClick}>
+    <MaybeLink staker={staker}>
       <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
         <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
           <Box direction="column" gap="small" align="center" pad={{ bottom: "small" }}>
@@ -184,8 +185,8 @@ const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButton
           </Box>
         </Box>
       </Button>
-    </Box>
-  </MaybeLink>
+    </MaybeLink>
+  </DropdownOptionContainer>
 );
 
 const MaybeLink: FC<{ staker: Staker }> = ({ staker, children }) => {
@@ -199,6 +200,12 @@ const MaybeLink: FC<{ staker: Staker }> = ({ staker, children }) => {
     return <>{children}</>;
   }
 };
+
+const DropdownOptionContainer = styled(Box)`
+  &:last-child {
+    border: unset;
+  }
+`;
 
 const DropdownBackground = styled.div`
   background-image: url("/background.svg");
