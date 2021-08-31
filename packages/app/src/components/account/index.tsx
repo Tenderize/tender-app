@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
-import { Box, Button, Card, CardHeader, Image, Layer, Text, ThemeType } from "grommet";
+import { Box, Button, Card, CardHeader, Image, Layer, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
@@ -26,7 +26,6 @@ export const AccountButton: FC = () => {
 
   const handleCloseWalletPicker = useCallback(() => setShowWalletPicker(false), []);
   const handleShowWalletPicker = useCallback(() => setShowWalletPicker(true), []);
-
   const [activateError, setActivateError] = useState("");
   const { error } = useEthers();
   useEffect(() => {
@@ -70,62 +69,42 @@ export const AccountButton: FC = () => {
               <Text size="xlarge">Connect to a Wallet</Text>
             </CardHeader>
             <Box gap="small" pad={{ top: "medium", horizontal: "medium" }}>
-              <Button
-                icon={
-                  <Box direction="row" justify="between" align="center" pad="small">
-                    <Text>MetaMask</Text>
-                    <Image src={metamask.default} width={50} height={50} alt="metamask" />
-                  </Box>
-                }
-                onClick={() => {
+              <ProviderButton
+                label="MetaMask"
+                image={metamask.default}
+                handleClick={async () => {
                   activateBrowserWallet();
                   handleCloseWalletPicker();
                 }}
               />
-              <Button
-                icon={
-                  <Box direction="row" justify="between" align="center" pad="small">
-                    <Text>WalletConnect</Text>
-                    <Image src={walletConnect.default} width={50} height={50} alt="walletconnect" />
-                  </Box>
-                }
-                onClick={async () => {
+              <ProviderButton
+                label="WalletConnect"
+                image={walletConnect.default}
+                handleClick={async () => {
                   await activate(new WalletConnectConnector({ rpc: CHAIN_URL_MAPPING }));
                   handleCloseWalletPicker();
                 }}
               />
-              <Button
-                icon={
-                  <Box direction="row" justify="between" align="center" pad="small">
-                    <Text>Portis</Text>
-                    <Image src={portis.default} width={50} height={50} alt="portis" />
-                  </Box>
-                }
-                onClick={async () => {
+              <ProviderButton
+                label="Portis"
+                image={portis.default}
+                handleClick={async () => {
                   await activate(new PortisConnector({ dAppId: PORTIS_API_KEY, networks: [4] }));
                   handleCloseWalletPicker();
                 }}
               />
-              <Button
-                icon={
-                  <Box direction="row" justify="between" align="center" pad="small">
-                    <Text>Coinbase Wallet</Text>
-                    <Image src={coinbase.default} width={50} height={50} alt="coinbase" />
-                  </Box>
-                }
-                onClick={async () => {
+              <ProviderButton
+                label="Coinbase Wallet"
+                image={coinbase.default}
+                handleClick={async () => {
                   await activate(new WalletLinkConnector({ appName: "Tenderize", url: RPC_URL }));
                   handleCloseWalletPicker();
                 }}
               />
-              <Button
-                icon={
-                  <Box direction="row" justify="between" align="center" pad="small">
-                    <Text>Fortmatic</Text>
-                    <Image src={fortmatic.default} width={50} height={50} alt="fortmatic" />
-                  </Box>
-                }
-                onClick={async () => {
+              <ProviderButton
+                label="Fortmatic"
+                image={fortmatic.default}
+                handleClick={async () => {
                   await activate(new FortmaticConnector({ apiKey: FORTMATIC_API_KEY, chainId: 4 }));
                   handleCloseWalletPicker();
                 }}
@@ -135,6 +114,35 @@ export const AccountButton: FC = () => {
         </Layer>
       )}
     </Account>
+  );
+};
+
+const ProviderButton: FC<{ handleClick: () => Promise<void>; label: string; image: any }> = ({
+  label,
+  image,
+  handleClick,
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  return (
+    <Button
+      icon={
+        <Box direction="row" justify="between" align="center" pad="small">
+          <Text>{label}</Text>
+          {isLoading ? (
+            <Box>
+              <Spinner size="medium" />
+            </Box>
+          ) : (
+            <Image src={image} width={50} height={50} alt={label} />
+          )}
+        </Box>
+      }
+      onClick={async () => {
+        setIsLoading(true);
+        await handleClick();
+        setIsLoading(false);
+      }}
+    />
   );
 };
 
