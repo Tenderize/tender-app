@@ -1,16 +1,31 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
-import { Button, ThemeType } from "grommet";
+import { Box, Button, Card, CardHeader, Image, Layer, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
+import { PortisConnector } from "@web3-react/portis-connector";
+import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
+import { CHAIN_URL_MAPPING, FORTMATIC_API_KEY, PORTIS_API_KEY, RPC_URL } from "../../config";
+import { WalletLinkConnector } from "@web3-react/walletlink-connector";
+import { FortmaticConnector } from "@web3-react/fortmatic-connector";
 
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "../../theme";
 
+const metamask = require("../../images/MetaMask_Fox.svg");
+const walletConnect = require("../../images/walletconnect-logo.svg");
+const portis = require("../../images/portis.svg");
+const coinbase = require("../../images/coinbaseWalletIcon.svg");
+const fortmatic = require("../../images/fortmatic.svg");
+
 export const AccountButton: FC = () => {
-  const { account, deactivate, activateBrowserWallet } = useEthers();
+  const { account, deactivate, activate, activateBrowserWallet } = useEthers();
   const ens = useLookupAddress();
-  const [showModal, setShowModal] = useState(false);
+  const [showAccountInfo, setShowAccountInfo] = useState(false);
+  const [showWalletPicker, setShowWalletPicker] = useState(false);
+
+  const handleCloseWalletPicker = useCallback(() => setShowWalletPicker(false), []);
+  const handleShowWalletPicker = useCallback(() => setShowWalletPicker(true), []);
 
   const [activateError, setActivateError] = useState("");
   const { error } = useEthers();
@@ -20,28 +35,104 @@ export const AccountButton: FC = () => {
     }
   }, [error]);
 
-  const activate = async () => {
+  const activateWallet = async () => {
+    handleShowWalletPicker();
     setActivateError("");
-    activateBrowserWallet();
   };
 
   return (
     <Account>
       <ErrorWrapper>{activateError}</ErrorWrapper>
-      <AccountModal showModal={showModal} setShowModal={setShowModal} />
+      <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
       {account ? (
         <>
           <AccountLabel
             primary
             color="light-2"
             style={{ color: normalizeColor("brand", theme) }}
-            onClick={() => setShowModal(!showModal)}
+            onClick={() => setShowAccountInfo(!showAccountInfo)}
             label={ens ?? shortenAddress(account)}
           />
           <DisconnectButton onClick={() => deactivate()} label="Disconnect" />
         </>
       ) : (
-        <ConnectButton primary color="light-2" onClick={activate} label="Connect" />
+        <ConnectButton primary color="light-2" onClick={activateWallet} label="Connect" />
+      )}
+      {showWalletPicker && (
+        <Layer
+          style={{ overflow: "auto" }}
+          animation="fadeIn"
+          onEsc={handleCloseWalletPicker}
+          onClickOutside={handleCloseWalletPicker}
+        >
+          <Card flex={false} pad="medium" width="medium">
+            <CardHeader justify="center">
+              <Text size="xlarge">Connect to a Wallet</Text>
+            </CardHeader>
+            <Box gap="small" pad={{ top: "medium", horizontal: "medium" }}>
+              <Button
+                icon={
+                  <Box direction="row" justify="between" align="center" pad="small">
+                    <Text>MetaMask</Text>
+                    <Image src={metamask.default} width={50} height={50} alt="metamask" />
+                  </Box>
+                }
+                onClick={() => {
+                  activateBrowserWallet();
+                  handleCloseWalletPicker();
+                }}
+              />
+              <Button
+                icon={
+                  <Box direction="row" justify="between" align="center" pad="small">
+                    <Text>WalletConnect</Text>
+                    <Image src={walletConnect.default} width={50} height={50} alt="walletconnect" />
+                  </Box>
+                }
+                onClick={async () => {
+                  await activate(new WalletConnectConnector({ rpc: CHAIN_URL_MAPPING }));
+                  handleCloseWalletPicker();
+                }}
+              />
+              <Button
+                icon={
+                  <Box direction="row" justify="between" align="center" pad="small">
+                    <Text>Portis</Text>
+                    <Image src={portis.default} width={50} height={50} alt="portis" />
+                  </Box>
+                }
+                onClick={async () => {
+                  await activate(new PortisConnector({ dAppId: PORTIS_API_KEY, networks: [4] }));
+                  handleCloseWalletPicker();
+                }}
+              />
+              <Button
+                icon={
+                  <Box direction="row" justify="between" align="center" pad="small">
+                    <Text>Coinbase Wallet</Text>
+                    <Image src={coinbase.default} width={50} height={50} alt="coinbase" />
+                  </Box>
+                }
+                onClick={async () => {
+                  await activate(new WalletLinkConnector({ appName: "Tenderize", url: RPC_URL }));
+                  handleCloseWalletPicker();
+                }}
+              />
+              <Button
+                icon={
+                  <Box direction="row" justify="between" align="center" pad="small">
+                    <Text>Fortmatic</Text>
+                    <Image src={fortmatic.default} width={50} height={50} alt="fortmatic" />
+                  </Box>
+                }
+                onClick={async () => {
+                  await activate(new FortmaticConnector({ apiKey: FORTMATIC_API_KEY, chainId: 4 }));
+                  handleCloseWalletPicker();
+                }}
+              />
+            </Box>
+          </Card>
+        </Layer>
       )}
     </Account>
   );

@@ -8,21 +8,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { theme } from "./theme";
+import { CHAIN_URL_MAPPING } from "./config";
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize",
   cache: new InMemoryCache(),
 });
 
-process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
-  ? process.env.ETHERSCAN_API_KEY
-  : "AYVQKI2AW5TZCHII5KIVB5N6QQIY1MM1Y9";
-
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Rinkeby,
-  readOnlyUrls: {
-    [ChainId.Rinkeby]: process.env.JSON_RPC || "https://rinkeby.infura.io/v3/42a353682886462f9f7b6b602f577a53",
-  },
+  readOnlyUrls: CHAIN_URL_MAPPING,
 };
 
 ReactDOM.render(
