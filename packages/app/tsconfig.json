@@ -20,12 +20,6 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "type": "module"
-
+  "exclude": ["node_modules", ".next", "out"],
+  "include": ["next-env.d.ts", "react-app/env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"]
 }
