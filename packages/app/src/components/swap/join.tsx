@@ -200,7 +200,8 @@ const JoinPool: FC<Props> = ({
     const lpSharesBN = BigNumber.from(lpShares);
     const tokenLpBalanceBN = BigNumber.from(tokenLpBalance);
 
-    return tokenInBN.mul(lpSharesBN.sub(1)).div(tokenLpBalanceBN.add(1)).sub(1000);
+    const buffer = utils.parseEther("0.001")
+    return tokenInBN.mul(lpSharesBN).div(tokenLpBalanceBN).sub(buffer);
   };
 
   const addLiquidity: MouseEventHandler<HTMLButtonElement> = async (e) => {
@@ -209,6 +210,7 @@ const JoinPool: FC<Props> = ({
     const tenderIn = utils.parseEther(tenderInput || "0");
     if (isMulti) {
       const poolTokensOut = calcPoolOutFromRatio();
+      console.log(utils.formatEther(poolTokensOut))
       // NOTE: Pool is currently tenderToken/Token
       joinPool(poolTokensOut, [tenderIn, tokenIn]);
     } else {
