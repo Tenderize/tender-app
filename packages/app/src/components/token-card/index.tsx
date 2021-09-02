@@ -42,7 +42,10 @@ const TokenCard: FC<Props> = (props) => {
                 </Text>
                 </>
               :
+              <>
               <Text size="medium">Coming Soon</Text>
+              <Text size="large" weight="bold">&nbsp;</Text>
+              </>
         }
         </Box>
     </Box>
