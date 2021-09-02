@@ -67,7 +67,7 @@ const stakers: Record<string, Staker> = {
     description:
       "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
     stakerAddress: "",
-    available: true,
+    available: false,
     apy: 14.8,
     logo: "AUDIO.svg",
     bwLogo: "AUDIO.svg",

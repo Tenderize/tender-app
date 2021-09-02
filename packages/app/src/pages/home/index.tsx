@@ -39,7 +39,7 @@ const Home: FC = () => {
         </Link>
       </Box>
       <Box flex fill justify="center" align="center">
-        <TenderBox width="large">
+        <TenderBox width="xlarge">
           <FeaturedCards />
         </TenderBox>
       </Box>
