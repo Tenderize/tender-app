@@ -35,7 +35,9 @@ const FeaturedCards: FC = () => {
           apyInPoints = Math.pow(1 + yearlyAvarageRate / 365, 365) - 1;
         } 
     }
-    const apy = (apyInPoints * 100).toFixed(2);
+    let apy = (apyInPoints * 100).toFixed(2);
+    if (key === "/stakers/graph") apy = "39.74"
+    console.log(key)
     cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
   }
   return (
