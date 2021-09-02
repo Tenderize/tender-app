@@ -27,6 +27,15 @@ const addresses = {
     swap: "0xa56aA9cC6b0Fc28753ceD7ff33f2c70b2cBdb414",
     liquidity: "0xCA44830efBE2956EE1aA45fe3e63be93A3c8e5f4",
     farm: "0xbDdF12D848308B2d0ce1b881c44C5471e6299121"
+  },
+  audius: {
+    faucet: "0x3591fB0F398747e0d7ffe4DD710c37ba717B5b77",
+    token: "0x10670D97328858BF432251F017A8Aa8ec66355E5",
+    controller: "0x5a73f8AF889dDbc07ff6Ac60b691188bd5D1e6c4",
+    tenderToken: "0xF53B5B5602c248ebd810295C96c2a89Eb327726E",
+    swap: "0xC4722fcE3eC7E9341aFfad43228Cd09861b6dBB6",
+    liquidity: "0xc92948D7F989C133D74332925ba9D42E352D8Af0",
+    farm: "0xcFc6D458401212C87cEf2c6024505DaE5d51c8DC"
   }
 };
 

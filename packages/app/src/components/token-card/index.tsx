@@ -29,14 +29,22 @@ const TokenCard: FC<Props> = (props) => {
         <Image src={logo.default} sizes="large" />
         <Text size="xlarge">{info.title}</Text>
       </Box>
-          <Box direction="column" align="center" gap="small">
-          <Text size="medium" weight="normal" color="light-3">
-              APY
-            </Text>
-            <Text size="large" weight="bold">
-              {apy} <Text size="medium">%</Text>
-            </Text>
-          </Box>
+        <Box direction="column" align="center" gap="small">
+
+        {
+              info.available ? 
+                <>
+              <Text size="medium" weight="normal" color="light-3">
+                  APY
+                </Text>
+                <Text size="large" weight="bold">
+                  {apy} <Text size="medium">%</Text>
+                </Text>
+                </>
+              :
+              <Text size="medium">Coming Soon</Text>
+        }
+        </Box>
     </Box>
   );
 };

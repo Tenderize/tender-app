@@ -59,6 +59,21 @@ const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderMATIC.svg",
     symbol: "MATIC",
   },
+  "/stakers/audius": {
+    name: "audius",
+    path: "/stakers/audius",
+    title: "Audius",
+    subgraphId: "Audius",
+    description:
+      "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
+    stakerAddress: "",
+    available: false,
+    apy: 14.8,
+    logo: "AUDIO.svg",
+    bwLogo: "AUDIO.svg",
+    bwTenderLogo: "tenderAUDIO.svg",
+    symbol: "AUDIO",
+  },
 };
 
 export default stakers;
