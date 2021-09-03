@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
+import { Button, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormSubtract } from "grommet-icons";
-import { ButtonSpinner } from "../ButtonSpinner";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction } from "../../utils/useDappPatch";
 
@@ -87,16 +87,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
                 secondary
                 disabled={!unfarmInput || unfarmInput.toString() === "0" || unfarmTx.status === "Mining"}
                 onClick={unfarmLpTokens}
-                label={
-                  unfarmTx.status === "Mining" ? (
-                    <Box direction="row" gap="small">
-                      <ButtonSpinner />
-                      Unfarming...
-                    </Box>
-                  ) : (
-                    "Unfarm"
-                  )
-                }
+                label={unfarmTx.status === "Mining" ? <LoadingButtonContent label="Unfarming..." /> : "Unfarm"}
               />
             </CardFooter>
           </Card>

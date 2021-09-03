@@ -23,7 +23,7 @@ import {
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { ButtonSpinner } from "../ButtonSpinner";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsPositive, validateIsLargerThanMax } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
 import { useLocation } from "react-router";
@@ -200,7 +200,7 @@ const JoinPool: FC<Props> = ({
     const lpSharesBN = BigNumber.from(lpShares);
     const tokenLpBalanceBN = BigNumber.from(tokenLpBalance);
 
-    const buffer = utils.parseEther("0.001")
+    const buffer = utils.parseEther("0.001");
     return tokenInBN.mul(lpSharesBN).div(tokenLpBalanceBN).sub(buffer);
   };
 
@@ -210,7 +210,7 @@ const JoinPool: FC<Props> = ({
     const tenderIn = utils.parseEther(tenderInput || "0");
     if (isMulti) {
       const poolTokensOut = calcPoolOutFromRatio();
-      console.log(utils.formatEther(poolTokensOut))
+      console.log(utils.formatEther(poolTokensOut));
       // NOTE: Pool is currently tenderToken/Token
       joinPool(poolTokensOut, [tenderIn, tokenIn]);
     } else {
@@ -388,10 +388,7 @@ const JoinPool: FC<Props> = ({
                   disabled={isButtonDisabled()}
                   label={
                     joinPoolTx.status === "Mining" || joinSwapExternAmountInTx.status === "Mining" ? (
-                      <Box direction="row" align="center" gap="small">
-                        <ButtonSpinner />
-                        Adding Liquidity...
-                      </Box>
+                      <LoadingButtonContent label="Adding Liquidity..." />
                     ) : (
                       "Add Liquidity"
                     )

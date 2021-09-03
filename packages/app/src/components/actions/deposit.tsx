@@ -10,7 +10,7 @@ import InfoCard from "../tenderizers/infocard";
 import { GetUserDeployments, UserDeploymentsType } from "../../pages/token/queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { ButtonSpinner } from "../ButtonSpinner";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction } from "../../utils/useDappPatch";
 import stakers from "../../data/stakers";
@@ -28,7 +28,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
-  const subgraphName = stakers['/stakers/' + name].subgraphId;
+  const subgraphName = stakers["/stakers/" + name].subgraphId;
   const { data, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
@@ -131,16 +131,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                     depositTx.status === "Mining"
                   }
                   onClick={depositTokens}
-                  label={
-                    depositTx.status === "Mining" ? (
-                      <Box direction="row" align="center" justify="center" gap="small">
-                        <ButtonSpinner />
-                        Depositing...
-                      </Box>
-                    ) : (
-                      "Deposit"
-                    )
-                  }
+                  label={depositTx.status === "Mining" ? <LoadingButtonContent label="Depositing..." /> : "Deposit"}
                 />
               </Box>
             </Box>
