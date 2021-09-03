@@ -6,7 +6,7 @@ import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd } from "grommet-icons";
-import { ButtonSpinner } from "../ButtonSpinner";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction } from "../../utils/useDappPatch";
 
@@ -86,16 +86,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                     !isTokenApproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"
                   }
                   onClick={farmLpTokens}
-                  label={
-                    farmTx.status === "Mining" ? (
-                      <Box direction="row" gap="small" align="center">
-                        <ButtonSpinner />
-                        Farming...
-                      </Box>
-                    ) : (
-                      "Farm"
-                    )
-                  }
+                  label={farmTx.status === "Mining" ? <LoadingButtonContent label="Farming..." /> : "Farm"}
                 />
               </Box>
             </CardFooter>

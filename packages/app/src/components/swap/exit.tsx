@@ -23,7 +23,7 @@ import {
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { ButtonSpinner } from "../ButtonSpinner";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
 import { useLocation } from "react-router";
@@ -305,10 +305,7 @@ const ExitPool: FC<Props> = ({
                   disabled={!hasValue(lpSharesInput) || !isLpSharesApproved}
                   label={
                     exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
-                      <Box direction="row" align="center" gap="small">
-                        <ButtonSpinner />
-                        Removing Liquidity...
-                      </Box>
+                      <LoadingButtonContent label="Removing Liquidity..." />
                     ) : (
                       "Remove Liquidity"
                     )

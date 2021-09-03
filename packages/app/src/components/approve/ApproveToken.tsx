@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler } from "react";
 import { constants, Contract } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
-import { ButtonSpinner } from "../ButtonSpinner";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
@@ -38,7 +38,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
       label={
         <>
           <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
-            {approveTx.status === "Mining" && <ButtonSpinner />}
+            {approveTx.status === "Mining" && <LoadingButtonContent />}
             <Text weight="normal">Allow Tenderize to spend {symbol}</Text>
             <Tip
               plain

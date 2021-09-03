@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text } from "grommet";
-import { ButtonSpinner } from "../ButtonSpinner";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "../../utils/useDappPatch";
 
 const harvestIcon = require("../../images/harvest.svg");
@@ -64,16 +64,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
                 primary
                 disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
                 onClick={harvestRewards}
-                label={
-                  harvestTx.status === "Mining" ? (
-                    <Box direction="row" gap="small" align="center">
-                      <ButtonSpinner />
-                      Harvesting...
-                    </Box>
-                  ) : (
-                    "Harvest"
-                  )
-                }
+                label={harvestTx.status === "Mining" ? <LoadingButtonContent label="Harvesting..." /> : "Harvest"}
               />
             </CardFooter>
           </Card>
