@@ -96,7 +96,6 @@ const Token: FC = () => {
                   symbol={info.symbol}
                   tokenBalance={tokenBalance}
                   tenderTokenBalance={tenderBalance}
-                  lpTokenBalance={lpTokenBal}
                 />
               </Box>
             </Tab>

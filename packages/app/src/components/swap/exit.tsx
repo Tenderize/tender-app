@@ -28,6 +28,7 @@ import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputVa
 import stakers from "../../data/stakers";
 import { useLocation } from "react-router";
 import { useContractFunction } from "../../utils/useDappPatch";
+import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
   name: string;
@@ -39,7 +40,6 @@ type Props = {
   tokenLpBalance: BigNumberish;
   tenderLpBalance: BigNumberish;
   lpShares: BigNumberish;
-  lpTokenBalance: BigNumberish;
 };
 
 const ExitPool: FC<Props> = ({
@@ -52,7 +52,6 @@ const ExitPool: FC<Props> = ({
   tokenLpBalance,
   tenderLpBalance,
   lpShares,
-  lpTokenBalance,
 }) => {
   const location = useLocation();
   const logo = require("../../images/" + stakers[location.pathname].bwLogo);
@@ -183,7 +182,7 @@ const ExitPool: FC<Props> = ({
                     <Form validate="change">
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
-                          lpTokenBalance={lpTokenBalance}
+                          lpShares={lpShares}
                           lpSharesInput={lpSharesInput}
                           setLpSharesInput={setLpSharesInput}
                           symbolFull={symbolFull}
@@ -237,7 +236,7 @@ const ExitPool: FC<Props> = ({
                     <Form>
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
-                          lpTokenBalance={lpTokenBalance}
+                          lpShares={lpShares}
                           lpSharesInput={lpSharesInput}
                           setLpSharesInput={setLpSharesInput}
                           symbolFull={symbolFull}
@@ -327,11 +326,11 @@ const LPTokensToRemoveInputField: FC<{
   lpSharesInput: string;
   setLpSharesInput: (value: string) => void;
   symbolFull: string;
-  lpTokenBalance: BigNumberish;
-}> = ({ lpSharesInput, setLpSharesInput, symbolFull, lpTokenBalance }) => {
+  lpShares: BigNumberish;
+}> = ({ lpSharesInput, setLpSharesInput, symbolFull, lpShares }) => {
   const maxDeposit = useCallback(() => {
-    setLpSharesInput(utils.formatEther(lpTokenBalance || "0"));
-  }, [lpTokenBalance, setLpSharesInput]);
+    setLpSharesInput(utils.formatEther(lpShares || "0"));
+  }, [lpShares, setLpSharesInput]);
 
   const handleLpSharesInputChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -346,7 +345,7 @@ const LPTokensToRemoveInputField: FC<{
     <FormField
       label="LP Tokens to remove"
       name="lpTokenToRemove"
-      validate={[validateIsPositive(lpSharesInput), validateIsLargerThanMax(lpSharesInput, lpTokenBalance)]}
+      validate={[validateIsPositive(lpSharesInput), validateIsLargerThanMax(lpSharesInput, lpShares)]}
     >
       <Box direction="row" align="center" gap="small">
         <TextInput
@@ -357,7 +356,7 @@ const LPTokensToRemoveInputField: FC<{
         />
       </Box>
       <AmountInputFooter
-        label={`Balance: ${utils.formatEther(lpTokenBalance?.toString() || "0")} ${symbolFull}`}
+        label={`Staked: ${weiToEthWithDecimals(lpShares?.toString() || "0", 2)} ${symbolFull}`}
         onClick={maxDeposit}
       />
     </FormField>
