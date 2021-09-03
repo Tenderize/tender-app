@@ -13,10 +13,9 @@ type Props = {
   symbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
-  lpTokenBalance: BigNumberish;
 };
 
-const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance, lpTokenBalance }) => {
+const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
   // Swap fee
   // Total weight
   // Token Weight
@@ -130,7 +129,6 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
             tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
             tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
             lpShares={lpShares ? lpShares[0] : "0"}
-            lpTokenBalance={lpTokenBalance}
           />
         </Box>
       </Box>
