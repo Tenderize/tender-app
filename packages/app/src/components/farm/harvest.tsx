@@ -66,7 +66,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
                 onClick={harvestRewards}
                 label={
                   harvestTx.status === "Mining" ? (
-                    <Box direction="row" gap="small">
+                    <Box direction="row" gap="small" align="center">
                       <ButtonSpinner />
                       Harvesting...
                     </Box>

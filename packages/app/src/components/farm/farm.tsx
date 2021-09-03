@@ -88,7 +88,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                   onClick={farmLpTokens}
                   label={
                     farmTx.status === "Mining" ? (
-                      <Box direction="row" gap="small">
+                      <Box direction="row" gap="small" align="center">
                         <ButtonSpinner />
                         Farming...
                       </Box>

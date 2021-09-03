@@ -89,7 +89,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
                 onClick={unfarmLpTokens}
                 label={
                   unfarmTx.status === "Mining" ? (
-                    <Box direction="row" gap="small">
+                    <Box direction="row" gap="small" align="center">
                       <ButtonSpinner />
                       Unfarming...
                     </Box>
