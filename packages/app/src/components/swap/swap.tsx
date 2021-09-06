@@ -135,7 +135,7 @@ const Swap: FC<Props> = ({
     } else if (receiveFocused) {
       setSendTokenAmount(utils.formatEther(calcInGivenOut || "0"));
     }
-  }, [calcInGivenOut, calcOutGivenIn, receiveFocused, receiveTokenAmount, sendFocused, sendTokenAmount]);
+  }, [calcInGivenOut, calcOutGivenIn, receiveFocused, sendFocused]);
 
   return (
     <Box>
