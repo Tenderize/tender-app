@@ -1,5 +1,5 @@
 import { ChangeEventHandler, FC, useCallback, useEffect, useState } from "react";
-import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
+import { Button, Box, Form, FormField, Image, Text, TextInput, Tip } from "grommet";
 import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
@@ -9,7 +9,7 @@ import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
-import { weiToEthWithDecimals } from "../../utils/amountFormat";
+import { ethWithDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { isLargerThanMax, isPositive, validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 
@@ -53,6 +53,16 @@ const Swap: FC<Props> = ({
   const [isSendingToken, setIsSendingToken] = useState(false);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
+  const [displayedSendAmount, setDisplayedSendAmount] = useState("");
+  const [displayedReceiveAmount, setDisplayedReceiveAmount] = useState("");
+
+  useEffect(() => {
+    setDisplayedSendAmount(ethWithDecimals(sendTokenAmount, 8));
+  }, [sendTokenAmount]);
+
+  useEffect(() => {
+    setDisplayedReceiveAmount(ethWithDecimals(receiveTokenAmount, 8));
+  }, [receiveTokenAmount]);
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -142,64 +152,100 @@ const Swap: FC<Props> = ({
       <Form validate="change">
         <Box align="center" justify="center">
           <Box direction="row" gap="small">
-            <FormField
-              name="sendAmount"
-              label={`Send`}
-              validate={[
-                validateIsPositive(sendTokenAmount),
-                validateIsLargerThanMax(sendTokenAmount, tokenSendedBalance),
-              ]}
+            <Tip
+              plain
+              dropProps={{
+                round: {
+                  size: "20px",
+                },
+                background: "rgba(0,0,0,0.4)",
+                elevation: "none",
+              }}
+              content={
+                !sendFocused && (
+                  <Box width="medium" elevation="none" pad="medium">
+                    <Text color="white">{sendTokenAmount}</Text>
+                  </Box>
+                )
+              }
             >
-              <Box width="medium">
-                <TextInput
-                  id="formSwapSend"
-                  type="number"
-                  value={sendTokenAmount}
-                  icon={
-                    <Box pad="xsmall" direction="row" align="center" gap="small">
-                      <Image height="35" src={tokenSendedLogo.default} />
-                      <Text>{tokenSendedSymbol}</Text>
-                    </Box>
-                  }
-                  onFocus={() => setSendFocused(true)}
-                  onBlur={() => setSendFocused(false)}
-                  style={{ textAlign: "right", padding: "20px 50px" }}
-                  placeholder={`0`}
-                  onChange={handleSendTokenInput}
-                  required={true}
-                />
-                <AmountInputFooter
-                  label={`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}
-                  onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
-                />
-              </Box>
-            </FormField>
+              <FormField
+                name="sendAmount"
+                label={`Send`}
+                validate={[
+                  validateIsPositive(sendTokenAmount),
+                  validateIsLargerThanMax(sendTokenAmount, tokenSendedBalance),
+                ]}
+              >
+                <Box width="medium">
+                  <TextInput
+                    id="formSwapSend"
+                    type="number"
+                    value={displayedSendAmount}
+                    icon={
+                      <Box pad="xsmall" direction="row" align="center" gap="small">
+                        <Image height="35" src={tokenSendedLogo.default} />
+                        <Text>{tokenSendedSymbol}</Text>
+                      </Box>
+                    }
+                    onFocus={() => setSendFocused(true)}
+                    onBlur={() => setSendFocused(false)}
+                    style={{ textAlign: "right", padding: "20px 50px" }}
+                    placeholder={`0`}
+                    onChange={handleSendTokenInput}
+                    required={true}
+                  />
+                  <AmountInputFooter
+                    label={`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}
+                    onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
+                  />
+                </Box>
+              </FormField>
+            </Tip>
             <Button
               plain
               color="none"
               icon={<Transaction color="white" />}
               onClick={() => setIsSendingToken(!isSendingToken)}
             />
-            <FormField label={`Receive`}>
-              <Box width="medium">
-                <TextInput
-                  id="formSwapReceive"
-                  type="number"
-                  placeholder={`0 ${tokenReceivedSymbol}`}
-                  icon={
-                    <Box pad="xsmall" direction="row" align="center" gap="small">
-                      <Image height="35" src={tokenReceivedLogo.default} />
-                      <Text>{tokenReceivedSymbol}</Text>
-                    </Box>
-                  }
-                  onFocus={() => setReceiveFocused(true)}
-                  onBlur={() => setReceiveFocused(false)}
-                  style={{ textAlign: "right", padding: "20px 50px" }}
-                  onChange={handleReceiveTokenInput}
-                  value={receiveTokenAmount}
-                />
-              </Box>
-            </FormField>
+            <Tip
+              plain
+              dropProps={{
+                round: {
+                  size: "20px",
+                },
+                background: "rgba(0,0,0,0.4)",
+                elevation: "none",
+              }}
+              content={
+                !receiveFocused && (
+                  <Box width="medium" elevation="none" pad="medium">
+                    <Text color="white">{receiveTokenAmount}</Text>
+                  </Box>
+                )
+              }
+            >
+              <FormField label={`Receive`}>
+                <Box width="medium">
+                  <TextInput
+                    id="formSwapReceive"
+                    type="number"
+                    placeholder={`0 ${tokenReceivedSymbol}`}
+                    icon={
+                      <Box pad="xsmall" direction="row" align="center" gap="small">
+                        <Image height="35" src={tokenReceivedLogo.default} />
+                        <Text>{tokenReceivedSymbol}</Text>
+                      </Box>
+                    }
+                    onFocus={() => setReceiveFocused(true)}
+                    onBlur={() => setReceiveFocused(false)}
+                    style={{ textAlign: "right", padding: "20px 50px" }}
+                    onChange={handleReceiveTokenInput}
+                    value={displayedReceiveAmount}
+                  />
+                </Box>
+              </FormField>
+            </Tip>
           </Box>
           <Box width="490px" direction="column" gap="small">
             <ApproveToken
