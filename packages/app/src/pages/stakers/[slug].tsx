@@ -1,11 +1,13 @@
 import { FC, MouseEventHandler, useCallback, useState } from "react";
 import { Box, Tabs, Tab, Text, Paragraph, Avatar, DropButton, Button, Tip } from "grommet";
 import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { constants } from "ethers";
 import { useEthers, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import styled from "styled-components";
+
 import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
@@ -15,9 +17,9 @@ import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
 
 const Token: FC = () => {
-  const location = useLocation();
-  const info = stakers[location.pathname];
-  const name = location.pathname.split("/")[2];
+  const router = useRouter();
+  const name = (router.query.slug as string) ?? "livepeer";
+  const info = stakers[name];
   const [tabIndex, setTabIndex] = useState(1);
 
   let { account } = useEthers();
@@ -123,7 +125,7 @@ const Token: FC = () => {
   );
 };
 
-const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
+const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => {
   const options = Object.values(stakers).filter((option) => option.title !== title);
   const [open, setOpen] = useState(false);
 
@@ -144,8 +146,8 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
       label={
         <Box focusIndicator={false} direction="row" justify="center" align="center">
           <Box direction="column" align="center" gap="small">
-            <Avatar size="medium" src={`${logo}`} />
-            <Text>{title}</Text>
+            <Avatar size="medium" src={`/${logo}`} />
+            <Text color="white">{title}</Text>
           </Box>
           <FormDown color="white" />
         </Box>
@@ -173,28 +175,26 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
   );
 };
 
-const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButtonElement> }> = ({ staker, onClick }) => (
-  <DropdownOptionContainer border={{ side: "bottom" }} onClick={onClick}>
-    <MaybeLink staker={staker}>
-      <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
-        <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
-          <Box direction="column" gap="small" align="center" pad={{ bottom: "small" }}>
-            <Avatar size="medium" src={`${staker.bwLogo}`} />
-            <Text color="light-1">{staker.title}</Text>
+const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButtonElement> }> = ({ staker, onClick }) => {
+  return (
+    <DropdownOptionContainer border={{ side: "bottom" }} onClick={onClick}>
+      <MaybeLink staker={staker}>
+        <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
+          <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
+            <Box direction="column" gap="small" align="center" pad={{ bottom: "small" }}>
+              <Avatar size="medium" src={`/${staker.bwLogo}`} />
+              <Text color="light-1">{staker.title}</Text>
+            </Box>
           </Box>
-        </Box>
-      </Button>
-    </MaybeLink>
-  </DropdownOptionContainer>
-);
+        </Button>
+      </MaybeLink>
+    </DropdownOptionContainer>
+  );
+};
 
 const MaybeLink: FC<{ staker: Staker }> = ({ staker, children }) => {
   if (staker.available) {
-    return (
-      <Link to={staker.path} style={{ textDecoration: "none" }}>
-        {children}
-      </Link>
-    );
+    return <Link href={staker.path}>{children}</Link>;
   } else {
     return <>{children}</>;
   }

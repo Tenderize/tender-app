@@ -1,6 +1,6 @@
 import { Header, Nav, Image, Box } from "grommet";
 import { FC, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import { AccountButton } from "../account";
 import TestnetBanner from "../testnet-banner";
@@ -32,7 +32,7 @@ const Navbar: FC<props> = (props) => {
     <Box>
       <TestnetBanner />
       <Header justify="around" pad="xsmall">
-        <Link to="/">
+        <Link href="/">
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
         <Box direction="row" align="center" gap="medium">

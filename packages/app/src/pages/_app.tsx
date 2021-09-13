@@ -4,19 +4,13 @@ import { useRouter } from "next/router";
 import { FC, useEffect } from "react";
 import { Grommet } from "grommet";
 import { ChainId, DAppProvider, Config } from "@usedapp/core";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Head from "next/head";
+import { ApolloProvider } from "@apollo/client";
 
 import { theme } from "../theme";
+import { apolloClient, CHAIN_URL_MAPPING } from "../config";
 import * as gtag from "../lib/gtag";
-import { CHAIN_URL_MAPPING } from "../config";
-
 import "./index.css";
-
-const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize",
-  cache: new InMemoryCache(),
-});
 
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Rinkeby,
@@ -40,7 +34,7 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
       <Head>
         <meta name="description" content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi" />
       </Head>
-      <ApolloProvider client={client}>
+      <ApolloProvider client={apolloClient}>
         {/* Global Site Tag (gtag.js) - Google Analytics */}
         <Script
           strategy="afterInteractive"

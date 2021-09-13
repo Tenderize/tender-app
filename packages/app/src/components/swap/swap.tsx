@@ -46,8 +46,8 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
-  const logo = `/${stakers[location.pathname].bwLogo}`;
-  const tenderLogo = `/${stakers[location.pathname].bwTenderLogo}`;
+  const logo = `/${stakers[protocolName].bwLogo}`;
+  const tenderLogo = `/${stakers[protocolName].bwTenderLogo}`;
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(false);

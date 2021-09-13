@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { usePromiseTransaction } from "@usedapp/core/dist/esm/src/hooks/usePromiseTransaction";
+import { usePromiseTransaction } from "@usedapp/core/dist/cjs/src/hooks/usePromiseTransaction";
 import { TransactionOptions, useEthers } from "@usedapp/core";
 import { Contract, ethers } from "ethers";
 

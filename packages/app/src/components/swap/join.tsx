@@ -20,13 +20,13 @@ import {
   Tab,
   Paragraph,
 } from "grommet";
+import { useRouter } from "next/router";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsPositive, validateIsLargerThanMax } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
-import { useLocation } from "react-router";
 import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
@@ -56,7 +56,11 @@ const JoinPool: FC<Props> = ({
   tenderLpBalance,
   lpShares,
 }) => {
-  const location = useLocation();
+  const router = useRouter();
+  const slug = router.query.slug as string;
+  const staker = stakers[slug];
+  const bwLogo = require(`../../../public/${staker.bwLogo}`);
+  const bwTenderLogo = require(`../../../public/${staker.bwTenderLogo}`);
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -273,7 +277,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={`/${stakers[location.pathname].bwLogo}`} />
+                                    <Image height="35" src={bwLogo} />
                                     <Text>{symbol}</Text>
                                   </Box>
                                 }
@@ -304,7 +308,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={`/${stakers[location.pathname].bwTenderLogo}`} />
+                                    <Image height="35" src={bwTenderLogo} />
                                     <Text>t{symbol}</Text>
                                   </Box>
                                 }
@@ -337,8 +341,8 @@ const JoinPool: FC<Props> = ({
                         balance={tokenBalance}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
-                        logo={`/${stakers[location.pathname].bwLogo}`}
-                        tenderLogo={`/${stakers[location.pathname].bwTenderLogo}`}
+                        logo={bwLogo}
+                        tenderLogo={bwTenderLogo}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     ) : (
@@ -348,8 +352,8 @@ const JoinPool: FC<Props> = ({
                         balance={tenderTokenBalance}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
-                        logo={`/${stakers[location.pathname].bwLogo}`}
-                        tenderLogo={`/${stakers[location.pathname].bwTenderLogo}`}
+                        logo={bwLogo}
+                        tenderLogo={bwTenderLogo}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     )}

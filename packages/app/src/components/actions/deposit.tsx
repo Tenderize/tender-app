@@ -7,7 +7,7 @@ import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import InfoCard from "../tenderizers/infocard";
-import { GetUserDeployments, UserDeploymentsType } from "../../pages/token/queries";
+import { GetUserDeployments, UserDeploymentsType } from "../../queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
@@ -27,7 +27,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
-  const subgraphName = stakers['/stakers/' + name].subgraphId;
+  const subgraphName = stakers[name].subgraphId;
   const { data, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
