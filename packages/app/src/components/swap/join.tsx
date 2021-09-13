@@ -57,11 +57,7 @@ const JoinPool: FC<Props> = ({
   lpShares,
 }) => {
   const location = useLocation();
-  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
-  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
-
   const [show, setShow] = useState(false);
-
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleClose = () => setShow(false);
@@ -277,7 +273,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={logo.default} />
+                                    <Image height="35" src={`/${stakers[location.pathname].bwLogo}`} />
                                     <Text>{symbol}</Text>
                                   </Box>
                                 }
@@ -308,7 +304,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={tenderLogo.default} />
+                                    <Image height="35" src={`/${stakers[location.pathname].bwTenderLogo}`} />
                                     <Text>t{symbol}</Text>
                                   </Box>
                                 }
@@ -341,8 +337,8 @@ const JoinPool: FC<Props> = ({
                         balance={tokenBalance}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
-                        logo={logo}
-                        tenderLogo={tenderLogo}
+                        logo={`/${stakers[location.pathname].bwLogo}`}
+                        tenderLogo={`/${stakers[location.pathname].bwTenderLogo}`}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     ) : (
@@ -352,8 +348,8 @@ const JoinPool: FC<Props> = ({
                         balance={tenderTokenBalance}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
-                        logo={logo}
-                        tenderLogo={tenderLogo}
+                        logo={`/${stakers[location.pathname].bwLogo}`}
+                        tenderLogo={`/${stakers[location.pathname].bwTenderLogo}`}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     )}
@@ -437,13 +433,13 @@ const SingleAssetTokenInputForm: FC<BodyProps> = ({
               value={
                 // TODO padding workaround, select is a button internally and can't take up available space easily
                 <Box fill direction="row" gap="small" align="center" pad="7px">
-                  <img height={30} width={30} src={logo.default} alt="token logo" />
+                  <img height={30} width={30} src={logo} alt="token logo" />
                   {symbol}
                 </Box>
               }
               options={[
                 <Box fill direction="row" gap="small" align="center">
-                  <img height={30} width={30} src={tenderLogo.default} alt="token logo" />
+                  <img height={30} width={30} src={tenderLogo} alt="token logo" />
                   {`t${symbol}`}
                 </Box>,
               ]}
@@ -486,13 +482,13 @@ const SingleAssetTenderInputForm: FC<BodyProps> = ({
               value={
                 // TODO padding workaround, select is a button internally and can't take up available space easily
                 <Box direction="row" gap="small" align="center" pad="8px">
-                  <img height={30} width={30} src={tenderLogo.default} alt="token logo" />
+                  <img height={30} width={30} src={tenderLogo} alt="token logo" />
                   {`t${symbol}`}
                 </Box>
               }
               options={[
                 <Box direction="row" gap="small" align="center">
-                  <img height={30} width={30} src={logo.default} alt="token logo" />
+                  <img height={30} width={30} src={logo} alt="token logo" />
                   {symbol}
                 </Box>,
               ]}

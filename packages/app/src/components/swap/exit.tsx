@@ -54,9 +54,6 @@ const ExitPool: FC<Props> = ({
   lpShares,
 }) => {
   const location = useLocation();
-  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
-  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
-
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -197,7 +194,7 @@ const ExitPool: FC<Props> = ({
                                 placeholder={`0 ${symbol}`}
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={logo.default} />
+                                    <Image height="35" src={`/${stakers[location.pathname].bwLogo}`} />
                                     <Text>{symbol}</Text>
                                   </Box>
                                 }
@@ -211,7 +208,7 @@ const ExitPool: FC<Props> = ({
                                 placeholder={`0 t${symbol}`}
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={tenderLogo.default} />
+                                    <Image height="35" src={`/${stakers[location.pathname].bwTenderLogo}`} />
                                     <Text>t{symbol}</Text>
                                   </Box>
                                 }
@@ -250,7 +247,7 @@ const ExitPool: FC<Props> = ({
                                     <img
                                       height={30}
                                       width={30}
-                                      src={selectedToken === symbol ? logo.default : tenderLogo.default}
+                                      src={selectedToken === symbol ? `/${stakers[location.pathname].bwLogo}` : `/${stakers[location.pathname].bwTenderLogo}`}
                                       alt="token logo"
                                     />
                                     {selectedToken}
@@ -261,7 +258,7 @@ const ExitPool: FC<Props> = ({
                                     <img
                                       height={30}
                                       width={30}
-                                      src={selectedToken === symbol ? tenderLogo.default : logo.default}
+                                      src={selectedToken === symbol ? `/${stakers[location.pathname].bwTenderLogo}` : `/${stakers[location.pathname].bwLogo}`}
                                       alt="token logo"
                                     />
                                     {selectedToken === symbol ? `t${symbol}` : symbol}

@@ -1,11 +1,12 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
-import FeaturedCards from "../../components/featured-card/";
+import FeaturedCards from "../components/featured-card";
 import { Box, Heading, Text } from "grommet";
-import TenderBox from "../../components/tenderbox";
-import { XLButton } from "../../components/base";
+import Link from "next/link";
+
+import TenderBox from "../components/tenderbox";
+import { XLButton } from "../components/base";
 import { normalizeColor } from "grommet/utils";
-import { theme } from "../../theme";
+import { theme } from "../theme";
 
 const Home: FC = () => {
   return (
@@ -28,7 +29,7 @@ const Home: FC = () => {
             {"Tenderize first "}
           </span>
         </Text>
-        <Link to="/stakers/livepeer">
+        <Link href="/stakers/livepeer">
           <XLButton
             primary
             size="large"

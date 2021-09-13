@@ -144,7 +144,7 @@ const TokenDropdown: FC<{ logo: any; title: string }> = ({ logo, title }) => {
       label={
         <Box focusIndicator={false} direction="row" justify="center" align="center">
           <Box direction="column" align="center" gap="small">
-            <Avatar size="medium" src={require("../../images/" + logo).default} />
+            <Avatar size="medium" src={`${logo}`} />
             <Text>{title}</Text>
           </Box>
           <FormDown color="white" />
@@ -179,7 +179,7 @@ const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButton
       <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
         <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
           <Box direction="column" gap="small" align="center" pad={{ bottom: "small" }}>
-            <Avatar size="medium" src={require("../../images/" + staker.bwLogo).default} />
+            <Avatar size="medium" src={`${staker.bwLogo}`} />
             <Text color="light-1">{staker.title}</Text>
           </Box>
         </Box>

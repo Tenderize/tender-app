@@ -5,8 +5,6 @@ import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text } from
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "../../utils/useDappPatch";
 
-const harvestIcon = require("../../images/harvest.svg");
-
 type Props = {
   name: string;
   symbol: string;
@@ -39,7 +37,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         label={
           <Box direction="row" align="center" justify="center" gap="small">
             <Text>Harvest</Text>
-            <img height={18} width={8.69} src={harvestIcon.default} alt="" />
+            <img height={18} width={8.69} src={"/harvest.svg"} alt="" />
           </Box>
         }
         style={{ color: "#4E66DE" }}

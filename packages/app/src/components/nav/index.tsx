@@ -11,8 +11,6 @@ type props = {
   name: string;
 };
 const Navbar: FC<props> = (props) => {
-  const logo = require("../../images/tenderizeLogo.svg").default;
-
   const [navBackground, setNavBackground] = useState(false);
   const navRef = useRef<boolean>(false);
   navRef.current = navBackground;
@@ -35,7 +33,7 @@ const Navbar: FC<props> = (props) => {
       <TestnetBanner />
       <Header justify="around" pad="xsmall">
         <Link to="/">
-          <Image width="150px" src={logo} alt="header logo" />
+          <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
         <Box direction="row" align="center" gap="medium">
           <Faucet {...props} />
