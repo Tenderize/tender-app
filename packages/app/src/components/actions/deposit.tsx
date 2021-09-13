@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
 import { useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
@@ -33,37 +33,62 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
 
-  // update my stake when tokenBalance changes
-  useEffect(() => {
-    refetch();
-  }, [refetch, tokenBalance]);
-
-  const maxDeposit = () => {
+  const maxDeposit = useCallback(() => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
-  };
+  }, [tokenBalance]);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = useCallback((e: any) => {
     const val = e.target.value;
     if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
     setDepositInput(val);
-  };
+  }, []);
 
   const { state: depositTx, send: deposit } = useContractFunction(contracts[name].controller, "deposit", {
     transactionName: `Deposit ${symbol}`,
   });
 
-  const depositTokens = async (e: any) => {
-    e.preventDefault();
-    await deposit(utils.parseEther(depositInput || "0"));
-    setDepositInput("");
-  };
+  const depositTokens = useCallback(
+    async (e: any) => {
+      e.preventDefault();
+      await deposit(utils.parseEther(depositInput || "0"));
+      setDepositInput("");
+    },
+    [deposit, depositInput]
+  );
 
   const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
 
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
+  const tenderizerStakeRef = useRef(BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0"));
   const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
-  const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
+  const [nonNegativeRewards, setNonNegativeRewards] = useState(
+    BigNumber.from(myRewards.isNegative() ? constants.Zero : myRewards)
+  );
+
+  // the following effects are a workaround the update the state
+  // when different data sources change (graph and contract data)
+  const tokenBalanceStr = tokenBalance.toString();
+  const tenderTokenBalanceStr = tenderTokenBalance.toString();
+  const tenderizerStakeStr = tenderizerStake.toString();
+  const myRewardsStr = myRewards.toString();
+
+  console.log("claimedRewards", claimedRewards.toString());
+  console.log("tenderTokenBalance", tenderTokenBalance.toString());
+  console.log("tenderizerStake", tenderizerStake.toString());
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, tokenBalanceStr, tenderTokenBalanceStr, tenderizerStakeStr]);
+
+  useEffect(() => {
+    if (!tenderizerStake.eq(tenderizerStakeRef.current) || tenderizerStake.eq(constants.Zero)) {
+      tenderizerStakeRef.current = tenderizerStake;
+      const myRewardsLocal = BigNumber.from(myRewardsStr);
+      setNonNegativeRewards(myRewardsLocal.isNegative() ? constants.Zero : myRewardsLocal);
+    }
+  }, [myRewardsStr, tenderizerStake]);
+
   return (
     <>
       <Box gap="medium">
