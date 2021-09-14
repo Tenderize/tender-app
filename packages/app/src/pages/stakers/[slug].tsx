@@ -1,7 +1,8 @@
 import { FC, MouseEventHandler, useCallback, useState } from "react";
-import { Box, Tabs, Tab, Text, Paragraph, Avatar, DropButton, Button, Tip } from "grommet";
+import { Box, Tabs, Tab, Text, Paragraph, DropButton, Button, Tip } from "grommet";
 import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
 import { useEthers, useTokenBalance } from "@usedapp/core";
@@ -146,7 +147,7 @@ const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => 
       label={
         <Box focusIndicator={false} direction="row" justify="center" align="center">
           <Box direction="column" align="center" gap="small">
-            <Avatar size="medium" src={`/${logo}`} />
+            <Image width={48} height={48} src={`/${logo}`} />
             <Text color="white">{title}</Text>
           </Box>
           <FormDown color="white" />
@@ -182,7 +183,7 @@ const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButton
         <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
           <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
             <Box direction="column" gap="small" align="center" pad={{ bottom: "small" }}>
-              <Avatar size="medium" src={`/${staker.bwLogo}`} />
+              <Image width={48} height={48} src={`/${staker.bwLogo}`} />
               <Text color="light-1">{staker.title}</Text>
             </Box>
           </Box>
