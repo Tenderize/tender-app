@@ -51,7 +51,9 @@ const Home: FC<{ data: TenderizerDaysType | null }> = ({ data }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  res.setHeader("Cache-Control", `public, s-maxage=${60 * 60}, stale-while-revalidate=${60 * 60 * 2}`);
+
   const monthAgo = getUnixTimestampMonthAgo();
   const { data } = await apolloClient.query({
     query: GetTenderizerDays,
