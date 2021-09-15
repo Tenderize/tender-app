@@ -3,17 +3,11 @@ import { Box } from "grommet";
 
 import TokenCard from "../token-card";
 import stakers from "../../data/stakers";
-import { TenderizerDaysType, GetTenderizerDays } from "../../queries";
-import { useQuery } from "@apollo/client";
+import { TenderizerDaysType } from "../../queries";
 
-const FeaturedCards: FC = () => {
+const FeaturedCards: FC<{ data: TenderizerDaysType | null }> = ({ data }) => {
   const cards = [];
   let key: string;
-
-  const monthAgo = getUnixTimestampMonthAgo();
-  const { data } = useQuery<TenderizerDaysType>(GetTenderizerDays, {
-    variables: { from: monthAgo },
-  });
 
   for (key in stakers) {
     let apyInPoints = 0;
@@ -36,7 +30,7 @@ const FeaturedCards: FC = () => {
       }
     }
     let apy = (apyInPoints * 100).toFixed(2);
-    if (key === "/stakers/graph") apy = "39.74"
+    if (key === "/stakers/graph") apy = "39.74";
     cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
   }
   return (
@@ -44,13 +38,6 @@ const FeaturedCards: FC = () => {
       {cards}
     </Box>
   );
-};
-
-const getUnixTimestampMonthAgo = () => {
-  const d = new Date();
-  d.setMonth(d.getMonth() - 1);
-  d.setHours(0, 0, 0, 0);
-  return d.getTime() / 1000;
 };
 
 export default FeaturedCards;

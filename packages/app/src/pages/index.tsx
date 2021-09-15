@@ -1,14 +1,17 @@
 import { FC } from "react";
-import FeaturedCards from "../components/featured-card";
 import { Box, Heading, Text } from "grommet";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
 
+import FeaturedCards from "../components/featured-card";
 import TenderBox from "../components/tenderbox";
 import { XLButton } from "../components/base";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "../theme";
+import { TenderizerDaysType, GetTenderizerDays } from "../queries";
+import { apolloClient } from "../config";
 
-const Home: FC = () => {
+const Home: FC<{ data: TenderizerDaysType | null }> = ({ data }) => {
   return (
     <Box>
       <Box justify="center" align="center" gap="medium">
@@ -41,11 +44,32 @@ const Home: FC = () => {
       </Box>
       <Box flex fill justify="center" align="center">
         <TenderBox width="xlarge">
-          <FeaturedCards />
+          <FeaturedCards data={data} />
         </TenderBox>
       </Box>
     </Box>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const monthAgo = getUnixTimestampMonthAgo();
+  const { data } = await apolloClient.query({
+    query: GetTenderizerDays,
+    variables: { from: monthAgo },
+  });
+
+  return {
+    props: {
+      data,
+    },
+  };
+};
+
+const getUnixTimestampMonthAgo = () => {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 1);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime() / 1000;
 };
 
 export default Home;
