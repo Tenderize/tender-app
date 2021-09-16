@@ -4,8 +4,15 @@ import { Box } from "grommet";
 import TokenCard from "../token-card";
 import stakers from "../../data/stakers";
 import { TenderizerDaysType } from "../../queries";
+import useSWR from "swr";
 
-const FeaturedCards: FC<{ data: TenderizerDaysType | null }> = ({ data }) => {
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+const FeaturedCards: FC = () => {
+  const { data, error } = useSWR<TenderizerDaysType>("/api/apy", fetcher);
+
+  console.log("data", data);
+  console.log("error", error);
   const cards = [];
   let key: string;
 
