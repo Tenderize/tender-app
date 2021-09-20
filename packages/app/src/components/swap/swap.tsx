@@ -147,6 +147,7 @@ const Swap: FC<Props> = ({
     }
   }, [calcInGivenOut, calcOutGivenIn, receiveFocused, sendFocused]);
 
+  console.log("sendTokenAMoutn", sendTokenAmount);
   return (
     <Box>
       <Form validate="change">
@@ -155,14 +156,18 @@ const Swap: FC<Props> = ({
             <Tip
               plain
               dropProps={{
+                stretch: "align",
+                align: { bottom: "top" },
                 round: {
                   size: "20px",
                 },
-                background: "rgba(0,0,0,0.4)",
+                margin: "none",
+                background: "rgba(0,0,0,0.6)",
                 elevation: "none",
               }}
               content={
-                !sendFocused && (
+                !sendFocused &&
+                hasValue(sendTokenAmount) && (
                   <Box width="medium" elevation="none" pad="medium">
                     <Text color="white">{sendTokenAmount}</Text>
                   </Box>
@@ -211,14 +216,18 @@ const Swap: FC<Props> = ({
             <Tip
               plain
               dropProps={{
+                stretch: "align",
+                align: { bottom: "top" },
                 round: {
                   size: "20px",
                 },
-                background: "rgba(0,0,0,0.4)",
+                margin: "none",
+                background: "rgba(0,0,0,0.6)",
                 elevation: "none",
               }}
               content={
-                !receiveFocused && (
+                !receiveFocused &&
+                hasValue(sendTokenAmount) && (
                   <Box width="medium" elevation="none" pad="medium">
                     <Text color="white">{receiveTokenAmount}</Text>
                   </Box>
