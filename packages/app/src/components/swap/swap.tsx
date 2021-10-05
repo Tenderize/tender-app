@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from "react";
 import { Button, Box, Form, FormField, Image, Text, TextInput, Tip } from "grommet";
 import { BigNumberish, utils, BigNumber } from "ethers";
 import { useContractCall } from "@usedapp/core";
@@ -86,6 +86,7 @@ const Swap: FC<Props> = ({
 
   const [sendFocused, setSendFocused] = useState(false);
   const [receiveFocused, setReceiveFocused] = useState(false);
+  const sendInputRef = useRef<HTMLInputElement | null>(null);
 
   const [calcOutGivenIn] =
     useContractCall(
@@ -184,6 +185,7 @@ const Swap: FC<Props> = ({
               >
                 <Box width="medium">
                   <TextInput
+                    ref={sendInputRef}
                     id="formSwapSend"
                     type="number"
                     value={displayedSendAmount}
@@ -202,7 +204,10 @@ const Swap: FC<Props> = ({
                   />
                   <AmountInputFooter
                     label={`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}
-                    onClick={() => setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"))}
+                    onClick={() => {
+                      setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"));
+                      sendInputRef.current?.focus();
+                    }}
                   />
                 </Box>
               </FormField>
