@@ -58,7 +58,8 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
             themeMode="dark"
             full={true}
             style={{
-              background: "url('/background.svg')",
+              //   background: "url('/background.svg')",
+              background: "#0B0C0F",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
               backgroundAttachment: "fixed",
