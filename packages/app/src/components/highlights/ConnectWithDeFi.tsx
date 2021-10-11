@@ -12,7 +12,6 @@ export const ConnectWithDeFi: FC = () => {
         backgroundSize: "contain",
       }}
     >
-      {" "}
       <Box
         style={{
           backgroundImage: "url('/redesign/noise.png')",
