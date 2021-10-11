@@ -7,14 +7,31 @@ export const Intro: FC = () => {
       style={{
         width: "100vw",
         height: (1055 / 2) * 2,
-        backgroundImage: "url('/redesign/1.svg')",
+        backgroundImage: "url('/redesign/shad-0.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
       }}
     >
-      <Box style={{ position: "relative", left: "52%", top: "25%" }}>
-        <Heading>Tenderize</Heading>
-        <Paragraph margin="none">The tastiest liquid stake farming money can buy.</Paragraph>
+      <Box
+        style={{
+          backgroundImage: "url('/redesign/noise.png')",
+          backgroundRepeat: "repeat",
+        }}
+      >
+        <Box
+          style={{
+            width: "100vw",
+            height: (1055 / 2) * 2,
+            backgroundImage: "url('/redesign/01_rewards.svg')",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+          }}
+        >
+          <Box style={{ position: "relative", marginLeft: "15%", marginTop: "18%" /* left: "52%", top: "25%" */ }}>
+            <Heading>Tenderize</Heading>
+            <Paragraph margin="none">The tastiest liquid stake farming money can buy.</Paragraph>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

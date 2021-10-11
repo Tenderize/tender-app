@@ -3,7 +3,7 @@ import { Box } from "grommet";
 import { Intro } from "../components/highlights/Intro";
 import { AutomaticRewards } from "../components/highlights/AutomaticRewards";
 import { ConnectWithDeFi } from "../components/highlights/ConnectWithDeFi";
-import { NoLockups } from "../components/highlights/NoLockUps";
+import { NoLockups } from "../components/highlights/NoLockups";
 import { EasyStaking } from "../components/highlights/EasyStaking";
 
 const Home: FC = () => {
