@@ -6,8 +6,8 @@ export const NoLockups: FC = () => {
     <Box
       style={{
         width: "100vw",
-        height: (1055 / 2) * 2,
-        backgroundImage: "url('/redesign/shad-4.jpg')",
+        aspectRatio: "3496/2318",
+        backgroundImage: "url('/redesign/shad-5.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
       }}
@@ -21,7 +21,7 @@ export const NoLockups: FC = () => {
         <Box
           style={{
             width: "100vw",
-            height: (1055 / 2) * 2,
+            aspectRatio: "3496/2318",
             backgroundImage: "url('/redesign/03_lockup.svg')",
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",

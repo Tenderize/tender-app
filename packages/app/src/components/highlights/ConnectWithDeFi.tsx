@@ -6,7 +6,7 @@ export const ConnectWithDeFi: FC = () => {
     <Box
       style={{
         width: "100vw",
-        height: (1055 / 2) * 2,
+        aspectRatio: "3496/2318",
         backgroundImage: "url('/redesign/shad-3.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
@@ -21,7 +21,7 @@ export const ConnectWithDeFi: FC = () => {
         <Box
           style={{
             width: "100vw",
-            height: (1055 / 2) * 2,
+            aspectRatio: "3496/2318",
             backgroundImage: "url('/redesign/02_defi.svg')",
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",

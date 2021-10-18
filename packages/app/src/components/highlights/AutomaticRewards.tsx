@@ -6,9 +6,8 @@ export const AutomaticRewards: FC = () => {
     <Box
       style={{
         width: "100vw",
-        height: (1055 / 2) * 2,
+        aspectRatio: "3496/2318",
         backgroundImage: "url('/redesign/shad-2.jpg')",
-        // background: "white",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
       }}
@@ -22,7 +21,7 @@ export const AutomaticRewards: FC = () => {
         <Box
           style={{
             width: "100vw",
-            height: (1055 / 2) * 2,
+            aspectRatio: "3496/2318",
             backgroundImage: "url('/redesign/01_rewards.svg')",
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",

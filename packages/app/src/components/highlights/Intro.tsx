@@ -1,12 +1,13 @@
 import { FC } from "react";
 import { Box, Heading, Paragraph } from "grommet";
 
+// 3496 x 2318
 export const Intro: FC = () => {
   return (
     <Box
       style={{
         width: "100vw",
-        height: (1055 / 2) * 2,
+        aspectRatio: "3496/2318",
         backgroundImage: "url('/redesign/shad-0.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
@@ -21,7 +22,7 @@ export const Intro: FC = () => {
         <Box
           style={{
             width: "100vw",
-            height: (1055 / 2) * 2,
+            aspectRatio: "3496/2318",
             backgroundImage: "url('/redesign/01_rewards.svg')",
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",
