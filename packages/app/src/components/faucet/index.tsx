@@ -1,20 +1,18 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { Box, Button, Text, Heading, Layer, Card, CardHeader, CardBody } from "grommet";
-import { useRouter } from "next/router";
 import { useContractFunction } from "../../utils/useDappPatch";
 
 type props = {
   symbol: string;
+  name: string;
 };
 
-const Faucet: FC<props> = ({ symbol }) => {
+const Faucet: FC<props> = ({ symbol, name }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const router = useRouter();
-  const name = (router.query.slug as string) ?? "livepeer";
 
   const { send } = useContractFunction(contracts[name].faucet, "request");
 
