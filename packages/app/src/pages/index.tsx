@@ -11,11 +11,13 @@ const Home: FC = () => {
   return (
     <Box>
       <Navbar />
-      <Intro />
-      <AutomaticRewards />
-      <ConnectWithDeFi />
-      <NoLockups />
-      <EasyStaking />
+      <div style={{ height: "100vh", flexDirection: "column", scrollSnapType: "y mandatory", overflowY: "auto" }}>
+        <Intro />
+        <AutomaticRewards />
+        <ConnectWithDeFi />
+        <NoLockups />
+        <EasyStaking />
+      </div>
     </Box>
   );
 };

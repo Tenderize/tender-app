@@ -12,6 +12,7 @@ export const Intro: FC = () => {
         backgroundImage: "url('/redesign/shad-0.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
+        scrollSnapAlign: "start",
       }}
     >
       <Box

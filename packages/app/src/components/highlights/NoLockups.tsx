@@ -10,6 +10,7 @@ export const NoLockups: FC = () => {
         backgroundImage: "url('/redesign/shad-5.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
+        scrollSnapAlign: "start",
       }}
     >
       <Box

@@ -10,6 +10,7 @@ export const AutomaticRewards: FC = () => {
         backgroundImage: "url('/redesign/shad-2.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
+        scrollSnapAlign: "start",
       }}
     >
       <Box

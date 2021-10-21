@@ -10,6 +10,7 @@ export const EasyStaking: FC = () => {
         backgroundImage: "url('/redesign/shad-4.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
+        scrollSnapAlign: "start",
       }}
     >
       <Box

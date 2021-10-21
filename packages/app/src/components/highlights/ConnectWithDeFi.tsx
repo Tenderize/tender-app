@@ -10,6 +10,7 @@ export const ConnectWithDeFi: FC = () => {
         backgroundImage: "url('/redesign/shad-3.jpg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
+        scrollSnapAlign: "start",
       }}
     >
       <Box
