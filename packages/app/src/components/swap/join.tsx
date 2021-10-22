@@ -24,7 +24,7 @@ import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsPositive, validateIsLargerThanMax } from "../../utils/inputValidation";
+import { validateIsPositive, validateIsLargerThanMax, hasValue } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
 import { useLocation } from "react-router";
 import { useContractFunction } from "../../utils/useDappPatch";
@@ -125,10 +125,6 @@ const JoinPool: FC<Props> = ({
 
   const tokenSelected = selectedToken === symbol;
 
-  const hasValue = (val: string) => {
-    return val && val !== "0";
-  };
-
   const isButtonDisabled = () => {
     if (isMulti) {
       return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved);
@@ -143,9 +139,6 @@ const JoinPool: FC<Props> = ({
 
   // Contract Functions
   const useCalcSinglePoolOut = () => {
-    const hasValue = (val: BigNumberish) => {
-      return val != null && val !== "0";
-    };
     let tokenIn: BigNumberish = 0;
     let tokenInBal: BigNumberish = 0;
     let weight: BigNumberish = 0;

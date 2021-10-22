@@ -16,3 +16,5 @@ export const validateIsLargerThanMax =
   (val: string, max: BigNumberish): ValidateFunction =>
   () =>
     isLargerThanMax(val, max) ? { message: "Amount exceeds available balance", status: "error" } : undefined;
+
+export const hasValue = (val: BigNumberish) => val != null && val !== "0";

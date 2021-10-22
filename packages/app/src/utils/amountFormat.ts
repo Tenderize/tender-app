@@ -6,9 +6,13 @@ export const weiToEth = (amount: BigNumberish): string => {
 
 export const weiToEthWithDecimals = (amount: BigNumberish, numberOfDecimals: number): string => {
   const str = weiToEth(amount);
-  if (str.includes(".")) {
-    const parts = str.split(".");
+  return ethWithDecimals(str, numberOfDecimals);
+};
+
+export const ethWithDecimals = (amount: string, numberOfDecimals: number): string => {
+  if (amount.includes(".")) {
+    const parts = amount.split(".");
     return parts[0] + "." + parts[1].slice(0, numberOfDecimals);
   }
-  return str;
+  return amount;
 };
