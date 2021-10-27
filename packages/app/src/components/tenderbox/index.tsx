@@ -6,9 +6,9 @@ import { Box, BoxExtendedProps } from "grommet";
 const BlurryBox = styled(Box)`
   position: relative;
   background: rgba(38, 37, 40, 0.2);
-  border-radius: 50px;
-  box-shadow: inset 0px 64px 100px rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(10px);
+  border-radius: 5rem;
+  box-shadow: inset 0rem 6.4rem 10rem rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(1rem);
   /* Note: backdrop-filter has minimal browser support */
 `;
 

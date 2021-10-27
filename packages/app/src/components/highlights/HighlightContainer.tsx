@@ -15,13 +15,16 @@ export const HighlightContainer: FC<{ count: number }> = ({ children, count }) =
     >
       <Box
         style={{
+          display: "flex",
+          flex: 1,
           backgroundImage: "url('/landing/noise.png')",
           backgroundRepeat: "repeat",
+          paddingLeft: "3.5rem",
+          paddingRight: "3.5rem",
         }}
       >
         <Box
           style={{
-            width: "100vw",
             aspectRatio: "3496/2318",
             backgroundImage: `url('/landing/img-${count}.svg')`,
             backgroundRepeat: "no-repeat",

@@ -150,8 +150,8 @@ const ProviderButton: FC<{ handleClick: (onError: () => void) => Promise<void>; 
 
 const ErrorWrapper = styled.div`
   color: #ff3960;
-  margin-right: 40px;
-  margin-left: 40px;
+  margin-right: 4rem;
+  margin-left: 4rem;
   overflow: auto;
 `;
 
@@ -164,12 +164,12 @@ const AccountLabel = styled(Button)`
   ${({ theme }: { theme: ThemeType }) => css`
     color: ${normalizeColor("brand", theme)};
   `}
-  border-radius: 18px;
-  margin-right: -20px;
-  padding-right: 40px;
-  padding-left: 8px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  border-radius: 1.8rem;
+  margin-right: -2rem;
+  padding-right: 4rem;
+  padding-left: 0.8rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,13 +179,13 @@ const ConnectButton = styled(Button)`
   ${({ theme }: { theme: ThemeType }) => css`
     color: ${normalizeColor("brand", theme)};
   `}
-  border-radius: 18px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  border-radius: 1.8rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 `;
 
 const DisconnectButton = styled(Button)`
-  border-radius: 18px;
+  border-radius: 1.8rem;
 `;

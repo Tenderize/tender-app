@@ -4,8 +4,8 @@ import { Button as GrommetButton } from "grommet";
 export const Link = styled.a`
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
+  gap: 0.4rem;
+  font-size: 1.2rem;
   text-decoration: underline;
   color: #f2f2f2;
   cursor: pointer;
