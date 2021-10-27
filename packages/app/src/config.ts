@@ -1,4 +1,5 @@
 import { ChainId } from "@usedapp/core";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
   ? process.env.ETHERSCAN_API_KEY
@@ -11,3 +12,8 @@ export const PORTIS_API_KEY = process.env.PORTIS_API_KEY || "5c66f40b-9133-45cd-
 export const CHAIN_URL_MAPPING = {
   [ChainId.Rinkeby]: RPC_URL,
 };
+
+export const apolloClient = new ApolloClient({
+  uri: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize",
+  cache: new InMemoryCache(),
+});

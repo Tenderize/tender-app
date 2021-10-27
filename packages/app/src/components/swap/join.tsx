@@ -20,13 +20,13 @@ import {
   Tab,
   Paragraph,
 } from "grommet";
+import { useRouter } from "next/router";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsPositive, validateIsLargerThanMax, hasValue } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
-import { useLocation } from "react-router";
 import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
@@ -56,12 +56,12 @@ const JoinPool: FC<Props> = ({
   tenderLpBalance,
   lpShares,
 }) => {
-  const location = useLocation();
-  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
-  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
-
+  const router = useRouter();
+  const slug = router.query.slug as string;
+  const staker = stakers[slug];
+  const bwLogo = require(`../../../public/${staker.bwLogo}`);
+  const bwTenderLogo = require(`../../../public/${staker.bwTenderLogo}`);
   const [show, setShow] = useState(false);
-
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleClose = () => setShow(false);
@@ -270,7 +270,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={logo.default} />
+                                    <Image height="35" src={bwLogo} />
                                     <Text>{symbol}</Text>
                                   </Box>
                                 }
@@ -301,7 +301,7 @@ const JoinPool: FC<Props> = ({
                                 type="text"
                                 icon={
                                   <Box pad="xsmall" direction="row" align="center" gap="small">
-                                    <Image height="35" src={tenderLogo.default} />
+                                    <Image height="35" src={bwTenderLogo} />
                                     <Text>t{symbol}</Text>
                                   </Box>
                                 }
@@ -334,8 +334,8 @@ const JoinPool: FC<Props> = ({
                         balance={tokenBalance}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
-                        logo={logo}
-                        tenderLogo={tenderLogo}
+                        logo={bwLogo}
+                        tenderLogo={bwTenderLogo}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     ) : (
@@ -345,8 +345,8 @@ const JoinPool: FC<Props> = ({
                         balance={tenderTokenBalance}
                         handleSelectToken={handleSelectToken}
                         handleInputChange={handleTokenInputChange}
-                        logo={logo}
-                        tenderLogo={tenderLogo}
+                        logo={bwLogo}
+                        tenderLogo={bwTenderLogo}
                         setInputToMax={maxTenderTokenDeposit}
                       />
                     )}
@@ -430,13 +430,13 @@ const SingleAssetTokenInputForm: FC<BodyProps> = ({
               value={
                 // TODO padding workaround, select is a button internally and can't take up available space easily
                 <Box fill direction="row" gap="small" align="center" pad="7px">
-                  <img height={30} width={30} src={logo.default} alt="token logo" />
+                  <img height={30} width={30} src={logo} alt="token logo" />
                   {symbol}
                 </Box>
               }
               options={[
                 <Box fill direction="row" gap="small" align="center">
-                  <img height={30} width={30} src={tenderLogo.default} alt="token logo" />
+                  <img height={30} width={30} src={tenderLogo} alt="token logo" />
                   {`t${symbol}`}
                 </Box>,
               ]}
@@ -479,13 +479,13 @@ const SingleAssetTenderInputForm: FC<BodyProps> = ({
               value={
                 // TODO padding workaround, select is a button internally and can't take up available space easily
                 <Box direction="row" gap="small" align="center" pad="8px">
-                  <img height={30} width={30} src={tenderLogo.default} alt="token logo" />
+                  <img height={30} width={30} src={tenderLogo} alt="token logo" />
                   {`t${symbol}`}
                 </Box>
               }
               options={[
                 <Box direction="row" gap="small" align="center">
-                  <img height={30} width={30} src={logo.default} alt="token logo" />
+                  <img height={30} width={30} src={logo} alt="token logo" />
                   {symbol}
                 </Box>,
               ]}

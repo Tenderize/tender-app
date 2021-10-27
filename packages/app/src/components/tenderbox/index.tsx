@@ -12,15 +12,12 @@ const BlurryBox = styled(Box)`
   /* Note: backdrop-filter has minimal browser support */
 `;
 
-const meat = require("../../images/meat.svg");
-const hammer = require("../../images/hammer2.svg");
-
 const TenderBox: FC<BoxExtendedProps> = (props) => {
   return (
     <BlurryBox {...props}>
       <img
         alt="hammer logo"
-        src={hammer.default}
+        src={"/hammer2.svg"}
         style={{
           position: "absolute",
           top: "-100px",
@@ -31,7 +28,7 @@ const TenderBox: FC<BoxExtendedProps> = (props) => {
       />
       <img
         alt="steak logo"
-        src={meat.default}
+        src={"/meat.svg"}
         style={{
           position: "absolute",
           right: "-100px",

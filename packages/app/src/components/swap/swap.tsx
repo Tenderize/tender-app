@@ -46,8 +46,8 @@ const Swap: FC<Props> = ({
   tenderTokenWeight,
   spotPrice,
 }) => {
-  const logo = require("../../images/" + stakers[location.pathname].bwLogo);
-  const tenderLogo = require("../../images/" + stakers[location.pathname].bwTenderLogo);
+  const logo = `/${stakers[protocolName].bwLogo}`;
+  const tenderLogo = `/${stakers[protocolName].bwTenderLogo}`;
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(false);
@@ -191,7 +191,7 @@ const Swap: FC<Props> = ({
                     value={displayedSendAmount}
                     icon={
                       <Box pad="xsmall" direction="row" align="center" gap="small">
-                        <Image height="35" src={tokenSendedLogo.default} />
+                        <Image height="35" src={tokenSendedLogo} />
                         <Text>{tokenSendedSymbol}</Text>
                       </Box>
                     }
@@ -247,7 +247,7 @@ const Swap: FC<Props> = ({
                     placeholder={`0 ${tokenReceivedSymbol}`}
                     icon={
                       <Box pad="xsmall" direction="row" align="center" gap="small">
-                        <Image height="35" src={tokenReceivedLogo.default} />
+                        <Image height="35" src={tokenReceivedLogo} />
                         <Text>{tokenReceivedSymbol}</Text>
                       </Box>
                     }

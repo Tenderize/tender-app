@@ -7,7 +7,7 @@ import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import InfoCard from "../tenderizers/infocard";
-import { GetUserDeployments, UserDeploymentsType } from "../../pages/token/queries";
+import { GetUserDeployments, UserDeploymentsType } from "../../queries";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
@@ -24,11 +24,10 @@ type Props = {
 };
 
 const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalance }) => {
-  const logoImg = require("../../images/" + logo);
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
-  const subgraphName = stakers["/stakers/" + name].subgraphId;
+  const subgraphName = stakers[name].subgraphId;
   const { data, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
@@ -101,7 +100,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                   type="text"
                   icon={
                     <Box pad="xsmall" direction="row" align="center" gap="small">
-                      <Image height="35" src={logoImg.default} />
+                      <Image height="35" src={`/${logo}`} />
                       <Text>{symbol}</Text>
                     </Box>
                   }

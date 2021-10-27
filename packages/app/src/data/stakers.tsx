@@ -14,7 +14,7 @@ export type Staker = {
 };
 
 const stakers: Record<string, Staker> = {
-  "/stakers/livepeer": {
+  livepeer: {
     name: "livepeer",
     path: "/stakers/livepeer",
     title: "Livepeer",
@@ -29,7 +29,7 @@ const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderLPT.svg",
     symbol: "LPT",
   },
-  "/stakers/graph": {
+  graph: {
     name: "graph",
     path: "/stakers/graph",
     title: "The Graph",
@@ -44,7 +44,7 @@ const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderGRT.svg",
     symbol: "GRT",
   },
-  "/stakers/matic": {
+  matic: {
     name: "matic",
     path: "/stakers/matic",
     title: "Polygon",

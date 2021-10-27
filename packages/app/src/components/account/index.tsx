@@ -12,12 +12,6 @@ import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "../../theme";
 
-const metamask = require("../../images/MetaMask_Fox.svg");
-const walletConnect = require("../../images/walletconnect-logo.svg");
-const portis = require("../../images/portis.svg");
-const coinbase = require("../../images/coinbaseWalletIcon.svg");
-const fortmatic = require("../../images/fortmatic.svg");
-
 export const AccountButton: FC = () => {
   const { account, deactivate, activate, activateBrowserWallet } = useEthers();
   const ens = useLookupAddress();
@@ -71,7 +65,7 @@ export const AccountButton: FC = () => {
             <Box gap="small" pad={{ top: "medium", horizontal: "medium" }}>
               <ProviderButton
                 label="MetaMask"
-                image={metamask.default}
+                image={"/MetaMask_Fox.svg"}
                 handleClick={async (onError: () => void) => {
                   activateBrowserWallet(onError);
                   handleCloseWalletPicker();
@@ -79,7 +73,7 @@ export const AccountButton: FC = () => {
               />
               <ProviderButton
                 label="WalletConnect"
-                image={walletConnect.default}
+                image={"/walletconnect-logo.svg"}
                 handleClick={async (onError: () => void) => {
                   const walletConnector = new WalletConnectConnector({ rpc: CHAIN_URL_MAPPING });
                   walletConnector.addListener("Web3ReactError", onError);
@@ -89,7 +83,7 @@ export const AccountButton: FC = () => {
               />
               <ProviderButton
                 label="Portis"
-                image={portis.default}
+                image={"/portis.svg"}
                 handleClick={async (onError: () => void) => {
                   const walletConnector = new PortisConnector({ dAppId: PORTIS_API_KEY, networks: [4] });
                   walletConnector.addListener("Web3ReactError", onError);
@@ -99,7 +93,7 @@ export const AccountButton: FC = () => {
               />
               <ProviderButton
                 label="Coinbase Wallet"
-                image={coinbase.default}
+                image={"/coinbaseWalletIcon.svg"}
                 handleClick={async (onError: () => void) => {
                   const walletConnector = new WalletLinkConnector({ appName: "Tenderize", url: RPC_URL });
                   walletConnector.addListener("Web3ReactError", onError);
@@ -109,11 +103,11 @@ export const AccountButton: FC = () => {
               />
               <ProviderButton
                 label="Fortmatic"
-                image={fortmatic.default}
+                image={"/fortmatic.svg"}
                 handleClick={async (onError: () => void) => {
                   const walletConnector = new FortmaticConnector({ apiKey: FORTMATIC_API_KEY, chainId: 4 });
                   walletConnector.addListener("Web3ReactError", onError);
-                  await activate(fortmatic, onError);
+                  await activate(walletConnector, onError);
                   handleCloseWalletPicker();
                 }}
               />
