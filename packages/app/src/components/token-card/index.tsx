@@ -23,30 +23,43 @@ const TokenCard: FC<Props> = (props) => {
   const { info, apy } = props;
 
   return (
-    <Box pad="large" gap="small" style={{ flex: "1" }}>
-      <Box align="center" margin={{ vertical: "small" }}>
-        <Image src={`/${info.bwTenderLogo}`} sizes="large" />
-        <Text size="xlarge">{info.title}</Text>
+    <Box
+      pad={{ vertical: "large", horizontal: "medium" }}
+      gap="small"
+      style={{
+        background: "rgba(15, 15, 15, 0.7)",
+        borderRadius: "5rem",
+      }}
+    >
+      <Box height="xsmall" width="xsmall">
+        <Image src={`/${info.bwTenderLogo}`} fit="contain" />
       </Box>
-        <Box direction="column" align="center" gap="small">
-
-        {
-              info.available ? 
-                <>
-              <Text size="medium" weight="normal" color="light-3">
-                  APY
-                </Text>
-                <Text size="large" weight="bold">
-                  {apy} <Text size="medium">%</Text>
-                </Text>
-                </>
-              :
-              <>
-              <Text size="medium">Coming Soon</Text>
-              <Text size="large" weight="bold">&nbsp;</Text>
-              </>
-        }
-        </Box>
+      <Text style={{ opacity: 0.5 }} size="large">
+        {info.symbol}
+      </Text>
+      <Text style={{ opacity: 0.5 }} size="large">
+        {info.title}
+      </Text>
+      <Box direction="column" align="center" gap="small">
+        {info.available ? (
+          <>
+            <Text size="large" weight="bold">
+              <Text size="xxlarge">{apy}</Text>
+              <Text size="medium">%</Text>
+              <Text style={{ opacity: 0.5 }} size="small">
+                &nbsp;projected APY
+              </Text>
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text size="medium">Coming Soon</Text>
+            <Text size="large" weight="bold">
+              &nbsp;
+            </Text>
+          </>
+        )}
+      </Box>
     </Box>
   );
 };

@@ -9,10 +9,8 @@ import useSWR from "swr";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const FeaturedCards: FC = () => {
-  const { data, error } = useSWR<TenderizerDaysType>("/api/apy", fetcher);
+  const { data } = useSWR<TenderizerDaysType>("/api/apy", fetcher);
 
-  console.log("data", data);
-  console.log("error", error);
   const cards = [];
   let key: string;
 
@@ -41,7 +39,7 @@ const FeaturedCards: FC = () => {
     cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
   }
   return (
-    <Box direction="row" justify="around" align="center">
+    <Box direction="row" gap="medium" justify="around" align="center">
       {cards}
     </Box>
   );

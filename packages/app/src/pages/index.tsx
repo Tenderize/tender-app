@@ -6,6 +6,7 @@ import { ConnectWithDeFi } from "../components/highlights/ConnectWithDeFi";
 import { NoLockups } from "../components/highlights/NoLockups";
 import { EasyStaking } from "../components/highlights/EasyStaking";
 import Navbar from "../components/nav";
+import { Deployments } from "../components/highlights/Deployments";
 
 const Home: FC = () => {
   return (
@@ -13,6 +14,7 @@ const Home: FC = () => {
       <Navbar />
       <div style={{ height: "100vh", flexDirection: "column", scrollSnapType: "y mandatory", overflowY: "auto" }}>
         <Intro />
+        <Deployments />
         <AutomaticRewards />
         <ConnectWithDeFi />
         <NoLockups />
