@@ -2,15 +2,14 @@ import { AppProps } from "next/app";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { FC, useEffect } from "react";
-import { Grommet } from "grommet";
 import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 
-import { theme } from "../theme";
 import { apolloClient, CHAIN_URL_MAPPING } from "../config";
 import * as gtag from "../lib/gtag";
 import "./index.css";
+import { GrommetWrapper } from "../components/GrommetWrapper";
 
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Rinkeby,
@@ -54,20 +53,13 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
           }}
         />
         <DAppProvider config={dappConfig}>
-          <Grommet
-            themeMode="dark"
-            full={true}
+          <GrommetWrapper
             style={{
-              //   background: "url('/background.svg')",
-              background: "#0B0C0F",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundAttachment: "fixed",
+              background: "url('/background.svg')",
             }}
-            theme={theme}
           >
             <Component {...pageProps} />
-          </Grommet>
+          </GrommetWrapper>
         </DAppProvider>
       </ApolloProvider>
     </>
