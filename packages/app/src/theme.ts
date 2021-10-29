@@ -32,6 +32,12 @@ const overrideDefaultTheme: ThemeType = {
       family: "IBM Plex Mono",
     },
   },
+  heading: {
+    font: {
+      family: "IBM Plex Serif",
+    },
+    weight: 400,
+  },
   button: {
     border: {
       color: "brand",
@@ -128,7 +134,7 @@ const overrideDefaultTheme: ThemeType = {
   textInput: {
     extend: `
       height: inherit:
-    `
-  }
+    `,
+  },
 };
 export const theme = deepMerge(grommet, overrideDefaultTheme);

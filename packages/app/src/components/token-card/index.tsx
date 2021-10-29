@@ -28,6 +28,7 @@ const TokenCard: FC<Props> = (props) => {
       gap="small"
       style={{
         background: "rgba(15, 15, 15, 0.7)",
+        backdropFilter: "blur(25px)",
         borderRadius: "5rem",
       }}
     >
