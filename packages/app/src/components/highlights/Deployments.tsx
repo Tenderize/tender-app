@@ -5,7 +5,7 @@ import FeaturedCards from "../featured-card";
 
 export const Deployments: FC = () => {
   return (
-    <HighlightContainer count={5}>
+    <HighlightContainer item="deployments">
       <Box align="center" gap="medium" style={{ position: "relative", marginTop: "14%" }}>
         <Heading
           style={{

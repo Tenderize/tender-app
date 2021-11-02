@@ -4,7 +4,7 @@ import { HighlightContainer } from "./HighlightContainer";
 
 export const EasyStaking: FC = () => {
   return (
-    <HighlightContainer count={4}>
+    <HighlightContainer item="staking">
       <Box style={{ position: "relative", marginLeft: "52%", marginTop: "16%" }}>
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Easy Staking</Heading>
         <Paragraph margin="none">

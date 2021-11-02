@@ -4,7 +4,7 @@ import { HighlightContainer } from "./HighlightContainer";
 
 export const NoLockups: FC = () => {
   return (
-    <HighlightContainer count={3}>
+    <HighlightContainer item="lockups">
       <Box style={{ position: "relative", marginLeft: "15%", marginTop: "14%" }}>
         <Heading style={{ textShadow: "0px 0px 8px rgba(237, 19, 32, 0.94)" }}>No Lockups</Heading>
         <Paragraph margin="none">

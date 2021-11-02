@@ -4,7 +4,7 @@ import { HighlightContainer } from "./HighlightContainer";
 
 export const AutomaticRewards: FC = () => {
   return (
-    <HighlightContainer count={1}>
+    <HighlightContainer item="rewards">
       <Box style={{ position: "relative", marginLeft: "15%", marginTop: "14%" }}>
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Automatic Rewards</Heading>
         <Paragraph margin="none">

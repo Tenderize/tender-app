@@ -6,7 +6,7 @@ import { HighlightContainer } from "./HighlightContainer";
 
 export const Intro: FC = () => {
   return (
-    <HighlightContainer count={0}>
+    <HighlightContainer item="intro">
       <Box style={{ position: "relative", marginLeft: "52%", marginTop: "15%" }}>
         <Heading style={{ textShadow: "0px 0px 17px #AD01FF" }}>Tenderize</Heading>
         <Paragraph margin="none">The tastiest liquid stake farming money can buy.</Paragraph>

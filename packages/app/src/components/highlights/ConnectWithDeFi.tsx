@@ -4,7 +4,7 @@ import { HighlightContainer } from "./HighlightContainer";
 
 export const ConnectWithDeFi: FC = () => {
   return (
-    <HighlightContainer count={2}>
+    <HighlightContainer item="defi">
       <Box style={{ position: "relative", marginLeft: "52%", marginTop: "18%" }}>
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Connect with DeFi</Heading>
         <Paragraph margin="none">

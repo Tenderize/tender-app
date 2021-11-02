@@ -1,39 +1,41 @@
 import { FC } from "react";
 import { Box } from "grommet";
 
-export const HighlightContainer: FC<{ count: number }> = ({ children, count }) => {
+export const HighlightContainer: FC<{ item: string }> = ({ children, item }) => {
   return (
-    <Box
-      style={{
-        width: "100vw",
-        aspectRatio: "3496/2318",
-        backgroundImage: `url('/landing/shad-${count}.jpg')`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "contain",
-        scrollSnapAlign: "start",
-      }}
-    >
+    <div id={item}>
       <Box
         style={{
-          display: "flex",
-          flex: 1,
-          backgroundImage: "url('/landing/noise.png')",
-          backgroundRepeat: "repeat",
-          paddingLeft: "3.5rem",
-          paddingRight: "3.5rem",
+          width: "100vw",
+          aspectRatio: "3496/2318",
+          backgroundImage: `url('/landing/shad-${item}.jpg')`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "contain",
+          scrollSnapAlign: "start",
         }}
       >
         <Box
           style={{
-            aspectRatio: "3496/2318",
-            backgroundImage: `url('/landing/img-${count}.svg')`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
+            display: "flex",
+            flex: 1,
+            backgroundImage: "url('/landing/noise.png')",
+            backgroundRepeat: "repeat",
+            paddingLeft: "3.5rem",
+            paddingRight: "3.5rem",
           }}
         >
-          {children}
+          <Box
+            style={{
+              aspectRatio: "3496/2318",
+              backgroundImage: `url('/landing/img-${item}.svg')`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "contain",
+            }}
+          >
+            {children}
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </div>
   );
 };
