@@ -16,7 +16,6 @@ export const HighlightContainer: FC<{ item: string }> = ({ children, item }) => 
       <Box
         style={{
           width: "100vw",
-          height: "100vh",
           maxWidth: 1200,
           aspectRatio: "3496/2318",
           backgroundImage: `url('/landing/shad-${item}.jpg')`,
