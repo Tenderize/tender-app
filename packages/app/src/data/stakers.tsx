@@ -9,6 +9,7 @@ export type Staker = {
   logo: string;
   bwLogo: string;
   bwTenderLogo: string;
+  neonLogo: string;
   path: string;
   symbol: string;
 };
@@ -27,6 +28,7 @@ const stakers: Record<string, Staker> = {
     logo: "livepeer.svg",
     bwLogo: "LPT.svg",
     bwTenderLogo: "tenderLPT.svg",
+    neonLogo: "landing/neon-lpt.svg",
     symbol: "LPT",
   },
   graph: {
@@ -42,6 +44,7 @@ const stakers: Record<string, Staker> = {
     logo: "graph.svg",
     bwLogo: "GRT.svg",
     bwTenderLogo: "tenderGRT.svg",
+    neonLogo: "landing/neon-grt.svg",
     symbol: "GRT",
   },
   matic: {
@@ -57,6 +60,7 @@ const stakers: Record<string, Staker> = {
     logo: "maticLogo.svg",
     bwLogo: "MATIC.svg",
     bwTenderLogo: "tenderMATIC.svg",
+    neonLogo: "landing/neon-matic.svg",
     symbol: "MATIC",
   },
   "/stakers/audius": {
@@ -64,14 +68,14 @@ const stakers: Record<string, Staker> = {
     path: "/stakers/audius",
     title: "Audius",
     subgraphId: "Audius2",
-    description:
-      "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
+    description: "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
     stakerAddress: "",
     available: true,
     apy: 14.8,
     logo: "AUDIO.svg",
     bwLogo: "AUDIO.svg",
     bwTenderLogo: "tenderAUDIO.svg",
+    neonLogo: "landing/neon-audio.svg",
     symbol: "AUDIO",
   },
 };

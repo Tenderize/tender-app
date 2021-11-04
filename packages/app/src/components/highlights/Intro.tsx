@@ -7,7 +7,7 @@ import { HighlightContainer } from "./HighlightContainer";
 export const Intro: FC = () => {
   return (
     <HighlightContainer item="intro">
-      <Box style={{ position: "relative", marginLeft: "52%", marginTop: "15%" }}>
+      <Box style={{ position: "relative", marginLeft: "48%", marginTop: "12%" }}>
         <Heading style={{ textShadow: "0px 0px 17px #AD01FF" }}>Tenderize</Heading>
         <Paragraph margin="none">The tastiest liquid stake farming money can buy.</Paragraph>
         <Box direction="row" gap="medium" pad={{ top: "large" }}>
@@ -22,7 +22,6 @@ export const Intro: FC = () => {
           <Link href="/stakers/livepeer">
             <XLButton
               secondary
-              border="0"
               size="large"
               label="Learn more"
               style={{

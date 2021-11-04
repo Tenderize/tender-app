@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Button as GrommetButton } from "grommet";
+import { Button as GrommetButton, ButtonExtendedProps, Text, TextExtendedProps } from "grommet";
+import { FC } from "react";
 
 export const Link = styled.a`
   display: flex;
@@ -16,8 +17,12 @@ export const Link = styled.a`
   }
 `;
 
-export const XLButton = styled(GrommetButton)`
+export const XLButton: FC<ButtonExtendedProps> = styled(GrommetButton)`
   width: 270px;
   height: 70px;
   margin-bottom: 50px;
+`;
+
+export const TextHeading: FC<TextExtendedProps> = styled(Text)`
+  font-family: "IBM Plex Serif";
 `;

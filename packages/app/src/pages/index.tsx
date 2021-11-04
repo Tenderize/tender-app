@@ -17,8 +17,18 @@ const Home: FC = () => {
       }}
     >
       <Box>
-        <Navbar />
-        <div style={{ height: "100vh", flexDirection: "column", scrollSnapType: "y mandatory", overflowY: "auto" }}>
+        <div
+          style={{
+            height: "100vh",
+            flexDirection: "column",
+            scrollSnapType: "y mandatory",
+            alignItems: "center",
+            overflowY: "auto",
+          }}
+        >
+          <Box style={{ position: "absolute" }}>
+            <Navbar />
+          </Box>
           <Intro />
           <Deployments />
           <AutomaticRewards />

@@ -2,53 +2,51 @@ import { FC } from "react";
 import { Box, Text, Image } from "grommet";
 
 type Props = {
-  url: string;
-  info: CardInfo;
-  apy: string;
-};
-
-type CardInfo = {
   description: string;
   stakerAddress: string;
   title: string;
   available: boolean;
-  apy: number;
+  apy: string;
   logo: string;
   bwLogo: string;
-  bwTenderLogo: string;
+  neonLogo: string;
   symbol: string;
 };
 
-const TokenCard: FC<Props> = (props) => {
-  const { info, apy } = props;
+const TokenCard: FC<Props> = ({ neonLogo, symbol, title, available, apy }) => {
+  const [apyWhole, apyFraction] = apy.split(".");
 
   return (
     <Box
-      pad={{ vertical: "large", horizontal: "medium" }}
+      pad={{ vertical: "medium", horizontal: "none" }}
       gap="small"
       style={{
         background: "rgba(15, 15, 15, 0.7)",
         backdropFilter: "blur(25px)",
-        borderRadius: "5rem",
+        borderRadius: "3rem",
+        minWidth: "11rem",
       }}
     >
-      <Box height="xsmall" width="xsmall">
-        <Image src={`/${info.bwTenderLogo}`} fit="contain" />
+      <Box width="xsmall">
+        <Image src={`/${neonLogo}`} fit="contain" />
       </Box>
-      <Text style={{ opacity: 0.5 }} size="large">
-        {info.symbol}
-      </Text>
-      <Text style={{ opacity: 0.5 }} size="large">
-        {info.title}
-      </Text>
-      <Box direction="column" align="center" gap="small">
-        {info.available ? (
+      <Box pad={{ horizontal: "medium" }}>
+        <Text margin="none" style={{ opacity: 0.5 }} size="medium">
+          {symbol}
+        </Text>
+        <Text margin="none" style={{ opacity: 0.5, fontStyle: "italic" }} size="medium">
+          {title}
+        </Text>
+      </Box>
+      <Box pad={{ horizontal: "medium" }} direction="column" align="left" gap="small">
+        {available ? (
           <>
             <Text size="large" weight="bold">
-              <Text size="xxlarge">{apy}</Text>
+              <Text size="xxlarge">{apyWhole}</Text>
+              <Text size="medium">.{apyFraction}</Text>
               <Text size="medium">%</Text>
               <Text style={{ opacity: 0.5 }} size="small">
-                &nbsp;projected APY
+                &nbsp;APY
               </Text>
             </Text>
           </>
