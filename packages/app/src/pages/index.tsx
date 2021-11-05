@@ -24,6 +24,7 @@ const Home: FC = () => {
             scrollSnapType: "y mandatory",
             alignItems: "center",
             overflowY: "auto",
+            scrollBehavior: "smooth",
           }}
         >
           <Box style={{ position: "absolute" }}>

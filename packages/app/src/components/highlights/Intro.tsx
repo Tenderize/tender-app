@@ -19,7 +19,7 @@ export const Intro: FC = () => {
               style={{ color: "white", borderColor: "white", borderRadius: 4 }}
             />
           </Link>
-          <Link href="/stakers/livepeer">
+          <Link href="#deployments">
             <XLButton
               secondary
               size="large"
