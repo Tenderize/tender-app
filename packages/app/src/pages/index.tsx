@@ -31,10 +31,10 @@ const Home: FC = () => {
           </Box>
           <Intro />
           <Deployments />
-          <AutomaticRewards />
-          <ConnectWithDeFi />
-          <NoLockups />
           <EasyStaking />
+          <ConnectWithDeFi />
+          <AutomaticRewards />
+          <NoLockups />
         </div>
       </Box>
     </GrommetWrapper>
