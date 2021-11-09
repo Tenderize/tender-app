@@ -49,7 +49,8 @@ const Home: FC = () => {
                   >
                     <Box
                       style={{
-                        aspectRatio: "3496/2318",
+                        width: 462,
+                        height: 698,
                         backgroundImage: `url('/landing/mobile-rewards.svg')`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "contain",
