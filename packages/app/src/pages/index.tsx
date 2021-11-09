@@ -1,12 +1,6 @@
 import { FC } from "react";
 import { Box, ResponsiveContext } from "grommet";
-import { Intro } from "../components/highlights/Intro";
-import { AutomaticRewards } from "../components/highlights/AutomaticRewards";
-import { ConnectWithDeFi } from "../components/highlights/ConnectWithDeFi";
-import { NoLockups } from "../components/highlights/NoLockups";
-import { EasyStaking } from "../components/highlights/EasyStaking";
 import Navbar from "../components/nav";
-import { Deployments } from "../components/highlights/Deployments";
 import { GrommetWrapper } from "../components/GrommetWrapper";
 
 const Home: FC = () => {
@@ -31,34 +25,38 @@ const Home: FC = () => {
             <Navbar />
           </Box>
           <ResponsiveContext.Consumer>
-            {(size) => (
+            {() => (
               <>
-                <Intro
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  screenSize={size}
-                />
-                <Deployments
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  screenSize={size}
-                />
-                <EasyStaking
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  screenSize={size}
-                />
-                <ConnectWithDeFi
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  screenSize={size}
-                />
-                <AutomaticRewards />
-                <NoLockups
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  screenSize={size}
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundImage: "url('/landing/noise.png')",
+                    backgroundRepeat: "repeat",
+                  }}
+                >
+                  <Box
+                    style={{
+                      display: "flex",
+                      flex: 1,
+                      backgroundImage: "url('/landing/noise.png')",
+                      backgroundRepeat: "repeat",
+                      paddingLeft: "3.5rem",
+                      paddingRight: "3.5rem",
+                      paddingTop: "5rem",
+                    }}
+                  >
+                    <Box
+                      style={{
+                        aspectRatio: "3496/2318",
+                        backgroundImage: `url('/landing/mobile-rewards.svg')`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "contain",
+                      }}
+                    ></Box>
+                  </Box>
+                </div>
               </>
             )}
           </ResponsiveContext.Consumer>
