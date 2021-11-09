@@ -28,7 +28,7 @@ const stakers: Record<string, Staker> = {
     logo: "livepeer.svg",
     bwLogo: "LPT.svg",
     bwTenderLogo: "tenderLPT.svg",
-    neonLogo: "landing/neon-lpt.svg",
+    neonLogo: "landing/neon-lpt.png",
     symbol: "LPT",
   },
   graph: {
@@ -44,7 +44,7 @@ const stakers: Record<string, Staker> = {
     logo: "graph.svg",
     bwLogo: "GRT.svg",
     bwTenderLogo: "tenderGRT.svg",
-    neonLogo: "landing/neon-grt.svg",
+    neonLogo: "landing/neon-grt.png",
     symbol: "GRT",
   },
   matic: {
@@ -60,7 +60,7 @@ const stakers: Record<string, Staker> = {
     logo: "maticLogo.svg",
     bwLogo: "MATIC.svg",
     bwTenderLogo: "tenderMATIC.svg",
-    neonLogo: "landing/neon-matic.svg",
+    neonLogo: "landing/neon-matic.png",
     symbol: "MATIC",
   },
   "/stakers/audius": {
@@ -75,7 +75,7 @@ const stakers: Record<string, Staker> = {
     logo: "AUDIO.svg",
     bwLogo: "AUDIO.svg",
     bwTenderLogo: "tenderAUDIO.svg",
-    neonLogo: "landing/neon-audio.svg",
+    neonLogo: "landing/neon-audio.png",
     symbol: "AUDIO",
   },
 };
