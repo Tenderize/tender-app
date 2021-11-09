@@ -3,6 +3,26 @@ import { deepMerge } from "grommet/utils";
 
 const overrideDefaultTheme: ThemeType = {
   global: {
+    breakpoints: {
+      xxsmall: {
+        value: 350,
+      },
+      xsmall: {
+        value: 375,
+      },
+      small: {
+        value: 568,
+      },
+      medium: {
+        value: 768,
+      },
+      large: {
+        value: 1000,
+      },
+      xlarge: {
+        value: 1000,
+      },
+    },
     colors: {
       brand: "#4E66DE",
       text: "#FFFFFF",

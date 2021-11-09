@@ -5,10 +5,11 @@ import useSWR from "swr";
 import { TenderizerDaysType } from "../../queries";
 import stakers from "../../data/stakers";
 import TokenCard from "../token-card";
+import { ScreenSize, screenToFontSize } from "./helper";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export const Deployments: FC = () => {
+export const Deployments: FC<{ screenSize: ScreenSize }> = ({ screenSize }) => {
   const { data } = useSWR<TenderizerDaysType>("/api/apy", fetcher);
 
   const stakersWithAPY = Object.values(stakers).map((staker) => {
@@ -43,7 +44,7 @@ export const Deployments: FC = () => {
 
   return (
     <HighlightContainer item="deployments">
-      <Box align="center" gap="medium" style={{ position: "relative", marginTop: "10%" }}>
+      <Box align="center" gap="medium" style={{ position: "relative", marginTop: "10%", minHeight: 650 }}>
         <Box
           style={{
             position: "relative",
@@ -106,6 +107,7 @@ export const Deployments: FC = () => {
               width: 300,
               textShadow: "0px 0px 17px rgba(63, 19, 237, 0.88)",
             }}
+            size={screenToFontSize(screenSize)}
           >
             Tender APYs
           </Heading>

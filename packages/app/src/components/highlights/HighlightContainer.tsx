@@ -9,6 +9,7 @@ export const HighlightContainer: FC<{ item: string }> = ({ children, item }) => 
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        minHeight: 700,
         backgroundImage: "url('/landing/noise.png')",
         backgroundRepeat: "repeat",
       }}
