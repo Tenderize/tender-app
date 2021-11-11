@@ -31,7 +31,7 @@ p {
   scroll-snap-align: start;
   flex-shrink: 0;
   width: 100vw;
-  height: 50vh;
+  height: calc(100vh - 80px);
   background-image: url("/landing/shad-defi.jpg");
   background-repeat: no-repeat;
   background-size: contain;
