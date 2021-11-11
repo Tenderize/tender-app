@@ -2,7 +2,6 @@ import { FC } from "react";
 import { Box, ResponsiveContext } from "grommet";
 import Navbar from "../components/nav";
 import { GrommetWrapper } from "../components/GrommetWrapper";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "../components/carousel/Carousel";
 
 const Home: FC = () => {
