@@ -1,20 +1,47 @@
 import Link from "next/link";
-import Image from "next/dist/client/image";
 
 export const Carousel = () => (
   <div className="slider">
     <div className="slides">
       <div id="slide-1">
-        <Image layout="fill" src="/landing/mobile-rewards.svg" />
+        <img
+          style={{
+            height: "400%",
+            transformOrigin: "topLeft",
+            transform: "scale(0.25)",
+          }}
+          src="/landing/mobile-rewards.svg"
+        />
       </div>
       <div id="slide-2">
-        <Image layout="fill" src="/landing/mobile-defi.svg" />
+        <img
+          style={{
+            height: "400%",
+            transformOrigin: "topLeft",
+            transform: "scale(0.25)",
+          }}
+          src="/landing/mobile-defi.svg"
+        />
       </div>
       <div id="slide-3">
-        <Image layout="fill" src="/landing/mobile-lockup.svg" />
+        <img
+          style={{
+            height: "400%",
+            transformOrigin: "topLeft",
+            transform: "scale(0.25)",
+          }}
+          src="/landing/mobile-lockup.svg"
+        />
       </div>
-      <div id="slide-4">
-        <Image layout="fill" src="/landing/mobile-staking.svg" />
+      <div
+        style={{
+          height: "400%",
+          transformOrigin: "topLeft",
+          transform: "scale(0.25)",
+        }}
+        id="slide-4"
+      >
+        <img src="/landing/mobile-staking.svg" />
       </div>
     </div>
     <Link href="#slide-1" scroll={false}>
