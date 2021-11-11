@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Box, ResponsiveContext } from "grommet";
 import Navbar from "../components/nav";
 import { GrommetWrapper } from "../components/GrommetWrapper";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "../components/carousel/Carousel";
 
 const Home: FC = () => {
   return (
@@ -11,23 +13,14 @@ const Home: FC = () => {
       }}
     >
       <Box>
-        <div
-          style={{
-            height: "100vh",
-            flexDirection: "column",
-            scrollSnapType: "y mandatory",
-            alignItems: "center",
-            overflowY: "auto",
-            scrollBehavior: "smooth",
-          }}
-        >
-          <Box style={{ position: "absolute" }}>
-            <Navbar />
-          </Box>
-          <ResponsiveContext.Consumer>
-            {() => (
-              <>
-                <div
+        <Box style={{ position: "absolute" }}>
+          <Navbar />
+        </Box>
+        <ResponsiveContext.Consumer>
+          {() => (
+            <div style={{ display: "flex", flex: 1 }}>
+              <Carousel />
+              {/* <div
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -57,11 +50,10 @@ const Home: FC = () => {
                       }}
                     ></Box>
                   </Box>
-                </div>
-              </>
-            )}
-          </ResponsiveContext.Consumer>
-        </div>
+                </div> */}
+            </div>
+          )}
+        </ResponsiveContext.Consumer>
       </Box>
     </GrommetWrapper>
   );
