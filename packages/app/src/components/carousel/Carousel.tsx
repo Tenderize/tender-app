@@ -4,44 +4,84 @@ export const Carousel = () => (
   <div className="slider">
     <div className="slides">
       <div id="slide-1">
-        <img
+        <div
           style={{
-            height: "400%",
-            transformOrigin: "topLeft",
-            transform: "scale(0.25)",
+            height: "30vh",
+            flexShrink: 0,
+            position: "relative",
+            justifyContent: "flex-start",
+            alignItems: "center",
           }}
-          src="/landing/mobile-rewards.svg"
-        />
+        >
+          <img
+            style={{
+              height: "400%",
+              transformOrigin: "top",
+              transform: "scale(0.25)",
+            }}
+            src="/landing/mobile-rewards.svg"
+          />
+        </div>
       </div>
       <div id="slide-2">
-        <img
+        <div
           style={{
-            height: "400%",
-            transformOrigin: "topLeft",
-            transform: "scale(0.25)",
+            height: "30vh",
+            position: "relative",
+            flexShrink: 0,
+            justifyContent: "flex-start",
+            alignItems: "center",
           }}
-          src="/landing/mobile-defi.svg"
-        />
+        >
+          <img
+            style={{
+              height: "400%",
+              transformOrigin: "top",
+              transform: "scale(0.25)",
+            }}
+            src="/landing/mobile-defi.svg"
+          />
+        </div>
       </div>
       <div id="slide-3">
-        <img
+        <div
           style={{
-            height: "400%",
-            transformOrigin: "topLeft",
-            transform: "scale(0.25)",
+            height: "30vh",
+            position: "relative",
+            flexShrink: 0,
+            justifyContent: "flex-start",
+            alignItems: "center",
           }}
-          src="/landing/mobile-lockup.svg"
-        />
+        >
+          <img
+            style={{
+              height: "400%",
+              transformOrigin: "top",
+              transform: "scale(0.25)",
+            }}
+            src="/landing/mobile-lockup.svg"
+          />
+        </div>
       </div>
-      <div
-        style={{
-          height: "400%",
-          transformOrigin: "topLeft",
-          transform: "scale(0.25)",
-        }}
-        id="slide-4"
-      >
-        <img src="/landing/mobile-staking.svg" />
+      <div id="slide-4">
+        <div
+          style={{
+            height: "30vh",
+            position: "relative",
+            flexShrink: 0,
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <img
+            style={{
+              height: "400%",
+              transformOrigin: "top",
+              transform: "scale(0.25)",
+            }}
+            src="/landing/mobile-staking.svg"
+          />
+        </div>
       </div>
     </div>
     <Link href="#slide-1" scroll={false}>
@@ -54,9 +94,6 @@ export const Carousel = () => (
       <a />
     </Link>
     <Link href="#slide-4" scroll={false}>
-      <a />
-    </Link>
-    <Link href="#slide-5" scroll={false}>
       <a />
     </Link>
   </div>
