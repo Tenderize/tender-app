@@ -7,7 +7,6 @@ export const Carousel = () => (
         <div
           style={{
             height: "30vh",
-            flexShrink: 0,
             position: "relative",
             justifyContent: "flex-start",
             alignItems: "center",
@@ -28,7 +27,6 @@ export const Carousel = () => (
           style={{
             height: "30vh",
             position: "relative",
-            flexShrink: 0,
             justifyContent: "flex-start",
             alignItems: "center",
           }}
@@ -48,7 +46,6 @@ export const Carousel = () => (
           style={{
             height: "30vh",
             position: "relative",
-            flexShrink: 0,
             justifyContent: "flex-start",
             alignItems: "center",
           }}
@@ -68,7 +65,6 @@ export const Carousel = () => (
           style={{
             height: "30vh",
             position: "relative",
-            flexShrink: 0,
             justifyContent: "flex-start",
             alignItems: "center",
           }}
