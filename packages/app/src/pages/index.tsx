@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Box, Heading, Paragraph, ResponsiveContext } from "grommet";
+import { Box, ResponsiveContext } from "grommet";
 import { GrommetWrapper } from "../components/GrommetWrapper";
 import { Carousel } from "../components/highlights/carousel/Carousel";
 import { IntroMobile } from "../components/highlights/IntroMobile";
