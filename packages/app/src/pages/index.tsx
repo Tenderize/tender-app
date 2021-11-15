@@ -1,8 +1,8 @@
 import { FC } from "react";
+
 import { Box, ResponsiveContext } from "grommet";
-import Navbar from "../components/nav";
 import { GrommetWrapper } from "../components/GrommetWrapper";
-import { Carousel } from "../components/carousel/Carousel";
+import { Carousel } from "../components/highlights/carousel/Carousel";
 
 const Home: FC = () => {
   return (
@@ -12,9 +12,6 @@ const Home: FC = () => {
       }}
     >
       <Box>
-        <Box style={{ position: "absolute" }}>
-          <Navbar />
-        </Box>
         <ResponsiveContext.Consumer>
           {() => (
             <div style={{ display: "flex", flex: 1 }}>
