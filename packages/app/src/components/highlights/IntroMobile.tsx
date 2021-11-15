@@ -9,10 +9,10 @@ export const IntroMobile: FC = () => {
         flexShrink: 0,
         width: "100vw",
         height: "100vh",
-        backgroundImage: `url("/landing/shad-intro.jpg"), url('/landing/noise.png')`,
-        backgroundBlendMode: "darken",
-        backgroundRepeat: "no-repeat, repeat",
-        backgroundSize: "contain, 50px 50px",
+        backgroundImage: `url("/landing/shad-intro.jpg")`,
+        // backgroundBlendMode: "darken",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "contain",
         backgroundPosition: "center",
         position: "relative",
         display: "flex",
@@ -29,14 +29,14 @@ export const IntroMobile: FC = () => {
           alignItems: "center",
         }}
       >
-        <img
+        {/* <img
           style={{
             height: "400%",
             transformOrigin: "top",
             transform: "scale(0.25)",
           }}
           src={`/landing/mobile-intro.svg`}
-        />
+        /> */}
       </div>
       <Heading style={{ textShadow: "0px 0px 17px #AD01FF" }}>Tenderize</Heading>
       <Paragraph margin="small">The tastiest</Paragraph>
