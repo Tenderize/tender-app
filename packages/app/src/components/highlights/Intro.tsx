@@ -6,7 +6,6 @@ import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
 
 export const Intro: FC<{ screenSize: ScreenSize }> = ({ screenSize }) => {
-  console.log("screensize", screenSize);
   return (
     <HighlightContainer item="intro">
       <Box style={{ position: "relative", marginLeft: "48%", marginTop: "12%" }}>

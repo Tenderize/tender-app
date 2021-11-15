@@ -9,6 +9,7 @@ export const Carousel = () => (
       width: "100vw",
       textAlign: "center",
       overflow: "hidden",
+      position: "relative",
     }}
   >
     <Slides>
@@ -43,7 +44,7 @@ export const Carousel = () => (
         actual process of winning."
       />
     </Slides>
-    <div style={{ position: "absolute", bottom: 0, left: "calc(50vw - 2.875rem)" }}>
+    <div style={{ position: "absolute", bottom: 0, left: "calc(50vw - 1.8rem)" }}>
       <Link href="#slide-1" scroll={false}>
         <Bubble />
       </Link>

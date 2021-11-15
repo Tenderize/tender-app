@@ -1,8 +1,10 @@
 import { FC } from "react";
 
-import { Box, ResponsiveContext } from "grommet";
+import { Box, Heading, Paragraph, ResponsiveContext } from "grommet";
 import { GrommetWrapper } from "../components/GrommetWrapper";
 import { Carousel } from "../components/highlights/carousel/Carousel";
+import { IntroMobile } from "../components/highlights/IntroMobile";
+import { DeploymentsMobile } from "../components/highlights/DeploymentsMobile";
 
 const Home: FC = () => {
   return (
@@ -14,7 +16,9 @@ const Home: FC = () => {
       <Box>
         <ResponsiveContext.Consumer>
           {() => (
-            <div style={{ display: "flex", flex: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+              <IntroMobile />
+              <DeploymentsMobile />
               <Carousel />
               {/* <div
                   style={{
