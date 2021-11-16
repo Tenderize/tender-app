@@ -37,14 +37,14 @@ export const DeploymentsMobile: FC = () => {
           <Heading style={{ position: "relative", textShadow: "0px 0px 17px #AD01FF", zIndex: 1 }}>Tender APYs</Heading>
         </div>
         <div style={{ position: "absolute", top: 0, left: -50, zIndex: 0 }}>
-          {/* <img
+          <img
             style={{
               height: "200%",
               transformOrigin: "top",
               transform: "scale(0.7)",
             }}
             src={`/landing/hammer.svg`}
-          /> */}
+          />
         </div>
       </div>
       <Box direction="column" gap="medium">
