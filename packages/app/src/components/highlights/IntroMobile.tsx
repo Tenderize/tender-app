@@ -29,14 +29,14 @@ export const IntroMobile: FC = () => {
           alignItems: "center",
         }}
       >
-        <img
+        {/* <img
           style={{
             height: "400%",
             transformOrigin: "top",
             transform: "scale(0.25)",
           }}
           src={`/landing/mobile-intro.svg`}
-        />
+        /> */}
       </div>
       <Heading style={{ textShadow: "0px 0px 17px #AD01FF" }}>Tenderize</Heading>
       <Paragraph margin="small">The tastiest</Paragraph>
