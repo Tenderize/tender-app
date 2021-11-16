@@ -35,14 +35,14 @@ export const Slide: FC<{ name: string; index: number; heading: ReactNode; body: 
         alignItems: "center",
       }}
     >
-      {/* <img
+      <img
         style={{
           height: "400%",
           transformOrigin: "top",
           transform: "scale(0.25)",
         }}
         src={`/landing/mobile-${name}.svg`}
-      /> */}
+      />
     </div>
     <Paragraph>{body}</Paragraph>
   </div>
