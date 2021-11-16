@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { Box, Image, Text } from "grommet";
-
+import { Box, Text } from "grommet";
+import Image from "next/image";
 type Props = {
   description: string;
   stakerAddress: string;
@@ -28,8 +28,8 @@ const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy }) => {
         minWidth: "11rem",
       }}
     >
-      <Box width="xsmall">
-        <Image src={`/${neonLogo}`} fit="contain" />
+      <Box width="xxsmall">
+        <Image src={`/${neonLogo}`} width={45} height={45} />
       </Box>
       <Box>
         <Box direction="row" gap="small">
