@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Text } from "grommet";
+import { Box, Image, Text } from "grommet";
 
 type Props = {
   description: string;
@@ -12,7 +12,7 @@ type Props = {
   symbol: string;
 };
 
-const TokenCardMobile: FC<Props> = ({ symbol, title, apy }) => {
+const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy }) => {
   const [apyWhole, apyFraction] = apy.split(".");
 
   return (
@@ -28,7 +28,9 @@ const TokenCardMobile: FC<Props> = ({ symbol, title, apy }) => {
         minWidth: "11rem",
       }}
     >
-      <Box width="xsmall">{/* <Image src={`/${neonLogo}`} fit="contain" /> */}</Box>
+      <Box width="xsmall">
+        <Image src={`/${neonLogo}`} fit="contain" />
+      </Box>
       <Box>
         <Box direction="row" gap="small">
           <Text style={{ opacity: 0.5 }} size="medium">
