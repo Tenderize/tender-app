@@ -16,7 +16,14 @@ const Home: FC = () => {
       <Box>
         <ResponsiveContext.Consumer>
           {() => (
-            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                flexDirection: "column",
+                overflowX: "hidden",
+              }}
+            >
               <IntroMobile />
               <DeploymentsMobile />
               <Carousel />
