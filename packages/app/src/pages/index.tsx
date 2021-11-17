@@ -1,67 +1,20 @@
-import { FC } from "react";
-
-import { Box, ResponsiveContext } from "grommet";
+import { FC, lazy, Suspense } from "react";
 import { GrommetWrapper } from "../components/GrommetWrapper";
-import { Carousel } from "../components/highlights/carousel/Carousel";
-import { IntroMobile } from "../components/highlights/IntroMobile";
-import { DeploymentsMobile } from "../components/highlights/DeploymentsMobile";
+import { useIsTouchDevice } from "../utils/useIsTouchDevice";
+
+const MobileComponent = lazy(() => import("./MobileLandingContainer"));
+const DesktopComponent = lazy(() => import("./DesktopLandingContainer"));
 
 const Home: FC = () => {
+  const isTouchDevice = useIsTouchDevice();
+
   return (
     <GrommetWrapper
       style={{
         background: "#0B0C0F",
       }}
     >
-      <Box>
-        <ResponsiveContext.Consumer>
-          {() => (
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                flexDirection: "column",
-                overflowX: "hidden",
-              }}
-            >
-              <IntroMobile />
-              <DeploymentsMobile />
-              <Carousel />
-              {/* <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundImage: "url('/landing/noise.png')",
-                    backgroundRepeat: "repeat",
-                  }}
-                >
-                  <Box
-                    style={{
-                      display: "flex",
-                      flex: 1,
-                      backgroundImage: "url('/landing/noise.png')",
-                      backgroundRepeat: "repeat",
-                      paddingLeft: "3.5rem",
-                      paddingRight: "3.5rem",
-                      paddingTop: "5rem",
-                    }}
-                  >
-                    <Box
-                      style={{
-                        width: 462,
-                        height: 698,
-                        backgroundImage: `url('/landing/mobile-rewards.svg')`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "contain",
-                      }}
-                    ></Box>
-                  </Box>
-                </div> */}
-            </div>
-          )}
-        </ResponsiveContext.Consumer>
-      </Box>
+      <Suspense fallback={<div>Loading...</div>}>{isTouchDevice ? <MobileComponent /> : <DesktopComponent />}</Suspense>
     </GrommetWrapper>
   );
 };
