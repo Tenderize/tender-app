@@ -16,6 +16,7 @@ import stakers, { Staker } from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
+import Foot from "../../components/footer";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -122,6 +123,7 @@ const Token: FC = () => {
           </Tabs>
         </TenderBox>
       </Box>
+      <Foot />
     </Box>
   );
 };

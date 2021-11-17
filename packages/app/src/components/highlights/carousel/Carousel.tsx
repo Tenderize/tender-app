@@ -1,6 +1,7 @@
 import { Heading } from "grommet";
 import Link from "next/link";
 import styled from "styled-components";
+import Foot from "../../footer";
 import { Slide } from "./Slide";
 
 export const Carousel = () => (
@@ -44,7 +45,7 @@ export const Carousel = () => (
         actual process of winning."
       />
     </Slides>
-    <div style={{ position: "absolute", bottom: 0, left: "calc(50vw - 1.8rem)" }}>
+    <div style={{ position: "absolute", bottom: 90, left: "calc(50vw - 1.8rem)" }}>
       <Link href="#slide-1" scroll={false}>
         <Bubble />
       </Link>
@@ -58,6 +59,7 @@ export const Carousel = () => (
         <Bubble />
       </Link>
     </div>
+    <Foot />
   </div>
 );
 

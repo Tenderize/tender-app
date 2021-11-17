@@ -2,13 +2,17 @@ import { FC } from "react";
 import { Box, Text, Anchor, Footer } from "grommet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { useIsTouchDevice } from "../../utils/useIsTouchDevice";
 
 const Foot: FC = () => {
+  const isTouchDevice = useIsTouchDevice();
   return (
-    <Footer pad={{ horizontal: "100px", vertical: "5px" }}>
-      <Box align="end" direction="row" gap="xsmall">
-        <img width="120" height="34.97" src={"/tenderizeLogo.svg"} alt="footer logo" />
-      </Box>
+    <Footer pad={{ horizontal: isTouchDevice ? "50px" : "100px", vertical: "5px" }} margin={{ top: "small" }}>
+      {!isTouchDevice && (
+        <Box align="end" direction="row" gap="xsmall">
+          <img width="120" height="34.97" src={"/tenderizeLogo.svg"} alt="footer logo" />
+        </Box>
+      )}
       <Text alignSelf="center" textAlign="center" size="xsmall" color="white">
         © Tenderize Me, inc. 2021
       </Text>
@@ -27,7 +31,7 @@ const Foot: FC = () => {
           icon={<FontAwesomeIcon icon={faTwitter} />}
           target="_blank"
         />
-        <Anchor color="white" as="div" a11yTitle="Built on Tenderizer" href="#" label="Docs"></Anchor>
+        {/* <Anchor color="white" as="div" a11yTitle="Built on Tenderizer" href="#" label="Docs"></Anchor> */}
       </Box>
     </Footer>
   );
