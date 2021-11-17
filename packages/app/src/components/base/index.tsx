@@ -20,7 +20,6 @@ export const Link = styled.a`
 export const XLButton: FC<ButtonExtendedProps> = styled(GrommetButton)`
   width: 270px;
   height: 70px;
-  margin-bottom: 50px;
 `;
 
 export const TextHeading: FC<TextExtendedProps> = styled(Text)`
