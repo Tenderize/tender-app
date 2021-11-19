@@ -5,11 +5,15 @@ import TokenCard from "../token-card";
 import { ScreenSize, screenToFontSize } from "./helper";
 import { useAPYData } from "./useAPYData";
 
-export const Deployments: FC<{ screenSize: ScreenSize }> = ({ screenSize }) => {
+export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
+  screenSize,
+  setVisibleIndex,
+  index,
+}) => {
   const { stakersWithAPY } = useAPYData();
 
   return (
-    <HighlightContainer item="deployments">
+    <HighlightContainer item="deployments" setVisibleIndex={setVisibleIndex} index={index}>
       <Box align="center" gap="medium" style={{ position: "relative", marginTop: "10%", minHeight: 650 }}>
         <Box
           style={{

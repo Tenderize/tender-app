@@ -53,7 +53,7 @@ export const Carousel: FC = () => {
         actual process of winning."
         />
       </Slides>
-      <ScrollIndicator count={4} active={visibleIndex} />
+      <ScrollIndicator count={4} active={visibleIndex} direction="row" />
       <Foot />
     </div>
   );

@@ -7,9 +7,13 @@ import { XLButton } from "../base";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
 
-export const Intro: FC<{ screenSize: ScreenSize }> = ({ screenSize }) => {
+export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
+  screenSize,
+  setVisibleIndex,
+  index,
+}) => {
   return (
-    <HighlightContainer item="intro">
+    <HighlightContainer item="intro" setVisibleIndex={setVisibleIndex} index={index}>
       <Box style={{ position: "relative", marginLeft: "48%", marginTop: "12%" }}>
         <Heading style={{ textShadow: "0px 0px 17px #AD01FF" }} size={screenToFontSize(screenSize)}>
           Tenderize

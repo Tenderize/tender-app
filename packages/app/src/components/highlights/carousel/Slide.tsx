@@ -1,29 +1,6 @@
 import { Paragraph } from "grommet";
-import { FC, ReactNode, useEffect, useRef, useState } from "react";
-
-const useElementOnScreen = (options: IntersectionObserverInit) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  const callbackFunction = (entries: any) => {
-    const [entry] = entries;
-    setIsVisible(entry.isIntersecting);
-  };
-
-  useEffect(() => {
-    const currentRef = containerRef.current;
-    const observer = new IntersectionObserver(callbackFunction, options);
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) observer.unobserve(currentRef);
-    };
-  }, [containerRef, options]);
-
-  return { containerRef, isVisible };
-};
+import { FC, ReactNode, useEffect } from "react";
+import { useElementOnScreen } from "../../../utils/useElementOnScreen";
 
 export const Slide: FC<{
   name: string;

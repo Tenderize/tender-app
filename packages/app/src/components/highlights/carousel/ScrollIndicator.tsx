@@ -1,24 +1,38 @@
 import { FC, useCallback } from "react";
-import Link from "next/link";
 import styled from "styled-components";
 
 export const ScrollIndicator: FC<{
   count: number;
   active: number;
-}> = ({ count, active }) => {
+  direction: "row" | "column";
+}> = ({ count, active, direction }) => {
   const renderDots = useCallback(() => {
     return Array(count)
       .fill(0)
       .map((_v, index) => {
         const isActive = index === active;
         return (
-          <Link key={index} href={`slide-${index}`} scroll={false}>
+          <div key={index}>
             <Bubble style={{ background: isActive ? "black" : "grey" }} />
-          </Link>
+          </div>
         );
       });
   }, [count, active]);
-  return <div style={{ position: "absolute", bottom: 90, left: "calc(50vw - 1.8rem)" }}>{renderDots()}</div>;
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: direction,
+        position: "absolute",
+        bottom: 90,
+        left: direction === "row" ? "calc(50vw - 1.8rem)" : undefined,
+        right: direction === "column" ? "2rem" : undefined,
+        top: direction === "column" ? "40%" : undefined,
+      }}
+    >
+      {renderDots()}
+    </div>
+  );
 };
 
 const Bubble = styled.a`

@@ -1,9 +1,32 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Box } from "grommet";
+import { useElementOnScreen } from "../../utils/useElementOnScreen";
 
-export const HighlightContainer: FC<{ item: string }> = ({ children, item }) => {
+export const HighlightContainer: FC<{ item: string; setVisibleIndex: (v: number) => void; index: number }> = ({
+  children,
+  item,
+  setVisibleIndex,
+  index,
+}) => {
+  const { containerRef, isVisible } = useElementOnScreen({
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.5,
+  });
+
+  useEffect(() => {
+    if (isVisible) {
+      setVisibleIndex(index);
+    }
+  }, [isVisible, index, setVisibleIndex]);
+
+  if (containerRef == null) {
+    return null;
+  }
+
   return (
     <div
+      ref={containerRef}
       id={item}
       style={{
         display: "flex",
