@@ -13,7 +13,9 @@ export const ScrollIndicator: FC<{
         const isActive = index === active;
         return (
           <div key={index}>
-            <Bubble style={{ background: isActive ? "black" : "grey" }} />
+            <Bubble
+              style={{ background: isActive ? "transparent" : "grey", borderColor: isActive ? "grey" : "transparent" }}
+            />
           </div>
         );
       });
@@ -43,4 +45,6 @@ const Bubble = styled.a`
   border-radius: 50%;
   margin: 0.2rem;
   position: relative;
+  border-width: 1px;
+  border-style: solid;
 `;
