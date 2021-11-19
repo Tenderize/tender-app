@@ -14,7 +14,7 @@ const Home: FC = () => {
         background: "#0B0C0F",
       }}
     >
-      <Suspense fallback={<div>Loading...</div>}>{isTouchDevice ? <MobileComponent /> : <DesktopComponent />}</Suspense>
+      <Suspense fallback={null}>{isTouchDevice ? <MobileComponent /> : <DesktopComponent />}</Suspense>
     </GrommetWrapper>
   );
 };
