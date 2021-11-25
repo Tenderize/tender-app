@@ -1,4 +1,4 @@
-import { Box, ResponsiveContext } from "grommet";
+import { ResponsiveContext } from "grommet";
 import { FC, useState } from "react";
 import { AutomaticRewards } from "../components/highlights/AutomaticRewards";
 import { ScrollIndicator } from "../components/highlights/carousel/ScrollIndicator";
@@ -8,7 +8,7 @@ import { EasyStaking } from "../components/highlights/EasyStaking";
 import { ScreenSize } from "../components/highlights/helper";
 import { Intro } from "../components/highlights/Intro";
 import { NoLockups } from "../components/highlights/NoLockups";
-import Navbar from "../components/nav";
+// import Navbar from "../components/nav";
 
 const DesktopLandingContainer: FC = () => {
   const [visibleIndex, setVisibleIndex] = useState(0);
