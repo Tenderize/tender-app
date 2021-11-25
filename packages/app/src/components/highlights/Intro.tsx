@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { XLButton } from "../base";
 import { HighlightContainer } from "./HighlightContainer";
-import { ScreenSize, screenToFontSize } from "./helper";
+import { ScreenSize } from "./helper";
 
 export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
