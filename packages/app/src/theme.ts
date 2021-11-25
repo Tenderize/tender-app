@@ -49,14 +49,15 @@ const overrideDefaultTheme: ThemeType = {
       },
     },
     font: {
-      family: "IBM Plex Mono",
+      family: "IBM Plex Sans",
+      weight: 400
     },
   },
   heading: {
     font: {
-      family: "IBM Plex Serif",
+      family: "IBM Plex Mono",
     },
-    weight: 400,
+    weight: 500,
   },
   button: {
     border: {
@@ -78,6 +79,9 @@ const overrideDefaultTheme: ThemeType = {
       },
     },
     secondary: {
+      font: {
+        weight: 500
+      },
       background: "transparent",
       border: {
         color: "brand",

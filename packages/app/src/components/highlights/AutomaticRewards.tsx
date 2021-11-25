@@ -14,10 +14,8 @@ export const AutomaticRewards: FC<{ screenSize: ScreenSize; setVisibleIndex: (v:
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }} size={screenToFontSize(screenSize)}>
           Automatic Rewards
         </Heading>
-        <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          In the contemporary world, rewards for better performance and success matter more than the actual achievement
-          itself. Indeed, as the global financial crisis showed, rewards were everything for the bankers as they strove
-          for more reckless bets and increasing risk taking.
+        <Paragraph margin="none" size={"large"}>
+          Tenderize automatically compounds rewards on a regular basis and manages stake delegations to nodes according to profitability and long-term growth of the supported networks.
         </Paragraph>
       </Box>
     </HighlightContainer>

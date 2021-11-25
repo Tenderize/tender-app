@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Heading } from "grommet";
+import { Grid, Box, Heading, Paragraph } from "grommet";
 import { HighlightContainer } from "./HighlightContainer";
 import TokenCard from "../token-card";
 import { ScreenSize, screenToFontSize } from "./helper";
@@ -14,7 +14,10 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
 
   return (
     <HighlightContainer item="deployments" setVisibleIndex={setVisibleIndex} index={index}>
-      <Box align="center" gap="medium" style={{ position: "relative", marginTop: "10%", minHeight: 650 }}>
+      <Grid
+        columns={['1/2', '1/2']}
+      >
+      <Box align="center" gap="medium" style={{ position: "relative", marginTop: "10%", marginLeft: "175", minHeight: 650 }}>
         <Box
           style={{
             position: "relative",
@@ -69,20 +72,29 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
               backgroundSize: "contain",
             }}
           />
-          <Heading
+        </Box>
+      </Box>
+      <Box align="start" justify="center">
+      <Heading
             style={{
-              position: "absolute",
-              top: 280,
-              left: 270,
-              width: 300,
+              position: "relative",
               textShadow: "0px 0px 17px rgba(63, 19, 237, 0.88)",
             }}
             size={screenToFontSize(screenSize)}
           >
-            Tender APYs
+            Tender Tokens
           </Heading>
-        </Box>
+          <Paragraph margin={{top: "medium"}} size={"large"} style={{fontWeight:500}}>
+            Liquid staking derivatives pegged 1:1 to your staked assets
+        </Paragraph>
+        <Paragraph margin={{top: "small"}} size={"medium"}>
+         Your TenderToken balance will increase as Tenderize earns staking rewards so you earn yield simply by holding them.
+        </Paragraph>
+        <Paragraph margin={{top: "small"}} size={"medium"}>
+          With them you can make free use of your yield-generating stake within the DeFi ecosystem or elsewhere.
+        </Paragraph>
       </Box>
+      </Grid>
     </HighlightContainer>
   );
 };

@@ -14,9 +14,8 @@ export const EasyStaking: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }} size={screenToFontSize(screenSize)}>
           Easy Staking
         </Heading>
-        <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          Because of the system of flawed incentives, rewards were seen to the ultimate prize that was greater than the
-          actual process of winning.
+        <Paragraph margin="none" size={"large"}>
+          Tenderize creates a care-free staking experience. Simply deposit your tokens to earn rewards and watch your balance increase, allocations are managed by the Tenderize protocol. 
         </Paragraph>
       </Box>
     </HighlightContainer>

@@ -24,9 +24,9 @@ const DesktopLandingContainer: FC = () => {
           scrollBehavior: "smooth",
         }}
       >
-        <Box style={{ position: "absolute" }}>
+        {/* <Box style={{ position: "absolute" }}>
           <Navbar />
-        </Box>
+        </Box> */}
         <ResponsiveContext.Consumer>
           {(size: string) => (
             <>

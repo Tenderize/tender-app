@@ -14,10 +14,8 @@ export const ConnectWithDeFi: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: 
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }} size={screenToFontSize(screenSize)}>
           Connect with DeFi
         </Heading>
-        <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          What we mean by this is that it is okay to reward a high performer for his or her stellar performance but not
-          to the point where in the pursuit of rewards, the individual throws caution to the winds and indulges in
-          unethical behavior.
+        <Paragraph margin="none" size={"large"}>
+          TenderTokens unleashes the combination of staked assets for use in DeFi protocols and lets you earn yield on top of yield. They provide a new financial primitive that unlocks a wide array of new use cases for your staked web3 tokens.
         </Paragraph>
       </Box>
     </HighlightContainer>
