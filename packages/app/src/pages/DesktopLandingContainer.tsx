@@ -8,6 +8,7 @@ import { EasyStaking } from "../components/highlights/EasyStaking";
 import { ScreenSize } from "../components/highlights/helper";
 import { Intro } from "../components/highlights/Intro";
 import { NoLockups } from "../components/highlights/NoLockups";
+import { BlogContainer } from "../components/medium/BlogContainer";
 import Navbar from "../components/nav";
 
 const DesktopLandingContainer: FC = () => {
@@ -36,6 +37,7 @@ const DesktopLandingContainer: FC = () => {
               <ConnectWithDeFi screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={3} />
               <AutomaticRewards screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={4} />
               <NoLockups screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={5} />
+              <BlogContainer screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={6} />
             </>
           )}
         </ResponsiveContext.Consumer>
@@ -47,7 +49,7 @@ const DesktopLandingContainer: FC = () => {
           justifyContent: "flex-end",
         }}
       >
-        <ScrollIndicator count={6} active={visibleIndex} direction="column" />
+        <ScrollIndicator count={7} active={visibleIndex} direction="column" />
       </div>
     </>
   );

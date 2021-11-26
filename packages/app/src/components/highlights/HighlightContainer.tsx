@@ -2,12 +2,12 @@ import { FC, useEffect } from "react";
 import { Box } from "grommet";
 import { useElementOnScreen } from "../../utils/useElementOnScreen";
 
-export const HighlightContainer: FC<{ item: string; setVisibleIndex: (v: number) => void; index: number }> = ({
-  children,
-  item,
-  setVisibleIndex,
-  index,
-}) => {
+export const HighlightContainer: FC<{
+  item: string;
+  setVisibleIndex: (v: number) => void;
+  index: number;
+  showImage?: boolean;
+}> = ({ children, item, setVisibleIndex, index, showImage = true }) => {
   const { containerRef, isVisible } = useElementOnScreen({
     root: null,
     rootMargin: "0px",
@@ -62,7 +62,7 @@ export const HighlightContainer: FC<{ item: string; setVisibleIndex: (v: number)
           <Box
             style={{
               aspectRatio: "3496/2318",
-              backgroundImage: `url('/landing/img-${item}.svg')`,
+              backgroundImage: showImage ? `url('/landing/img-${item}.svg')` : undefined,
               backgroundRepeat: "no-repeat",
               backgroundSize: "contain",
             }}
