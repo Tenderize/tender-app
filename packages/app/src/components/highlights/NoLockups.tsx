@@ -2,7 +2,6 @@ import { FC } from "react";
 import { Box, Heading, Paragraph } from "grommet";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
-import Foot from "../footer";
 
 export const NoLockups: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
