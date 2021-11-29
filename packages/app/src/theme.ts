@@ -1,6 +1,10 @@
 import { grommet, ThemeType } from "grommet";
 import { deepMerge } from "grommet/utils";
 
+const baseFontSize = 18;
+const fontScale = 4;
+const fontSizing = (factor: number) => ({ size: `${baseFontSize + factor * fontScale}px` });
+
 const overrideDefaultTheme: ThemeType = {
   global: {
     breakpoints: {
@@ -49,14 +53,59 @@ const overrideDefaultTheme: ThemeType = {
       },
     },
     font: {
-      family: "IBM Plex Mono",
+      family: "IBM Plex Sans",
     },
   },
   heading: {
     font: {
-      family: "IBM Plex Serif",
+      family: "IBM Plex Mono",
     },
-    weight: 400,
+    level: {
+      1: {
+        small: { ...fontSizing(6) },
+        medium: { ...fontSizing(8) },
+        large: { ...fontSizing(14) },
+        xlarge: { ...fontSizing(36) },
+      },
+      2: {
+        small: { ...fontSizing(2) },
+        medium: { ...fontSizing(4) },
+        large: { ...fontSizing(8) },
+        xlarge: { ...fontSizing(12) },
+      },
+      3: {
+        small: { ...fontSizing(1) },
+        medium: { ...fontSizing(2) },
+        large: { ...fontSizing(4) },
+        xlarge: { ...fontSizing(6) },
+      },
+      4: {
+        small: { ...fontSizing(0) },
+        medium: { ...fontSizing(0) },
+        large: { ...fontSizing(0) },
+        xlarge: { ...fontSizing(0) },
+      },
+      5: {
+        small: { ...fontSizing(-0.5) },
+        medium: { ...fontSizing(-0.5) },
+        large: { ...fontSizing(-0.5) },
+        xlarge: { ...fontSizing(-0.5) },
+      },
+      6: {
+        small: { ...fontSizing(-1) },
+        medium: { ...fontSizing(-1) },
+        large: { ...fontSizing(-1) },
+        xlarge: { ...fontSizing(-1) },
+      },
+    },
+    weight: 500,
+  },
+  paragraph: {
+    small: { ...fontSizing(0) },
+    medium: { ...fontSizing(1) },
+    large: { ...fontSizing(2) },
+    xlarge: { ...fontSizing(4) },
+    xxlarge: { ...fontSizing(8) },
   },
   button: {
     border: {
@@ -78,6 +127,9 @@ const overrideDefaultTheme: ThemeType = {
       },
     },
     secondary: {
+      font: {
+        weight: 500,
+      },
       background: "transparent",
       border: {
         color: "brand",

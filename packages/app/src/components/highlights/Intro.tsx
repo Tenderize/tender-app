@@ -14,12 +14,12 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
 }) => {
   return (
     <HighlightContainer item="intro" setVisibleIndex={setVisibleIndex} index={index}>
-      <Box style={{ position: "relative", marginLeft: "48%", marginTop: "12%" }}>
-        <Heading style={{ textShadow: "0px 0px 17px #AD01FF" }} size={screenToFontSize(screenSize)}>
+      <Box style={{ position: "relative", marginLeft: "46%", marginTop: "11.5%" }}>
+        <Heading style={{ textShadow: "0px 0px 17px #AD01FF" }} size={"large"}>
           Tenderize
         </Heading>
         <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          The tastiest liquid stake farming money can buy.
+          Connecting Web3 with DeFi through <span style={{ fontWeight: 500 }}>Liquid Staking</span>
         </Paragraph>
         <Box>
           <Box direction="row" gap={screenToFontSize(screenSize)} pad={{ top: "medium" }} margin={{ bottom: "small" }}>

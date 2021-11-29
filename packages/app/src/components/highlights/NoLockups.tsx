@@ -15,8 +15,8 @@ export const NoLockups: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number
           No Lockups
         </Heading>
         <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          Hence, rewards management has to be seen in the context of what are proper and just rewards and what are
-          disproportionate rewards. The point here is that rewards ought to justify the performance and not exceed them.
+          Easily unlock your staked assets without going through long waiting periods. Simply Swap your TenderTokens for
+          underlying assets using TenderSwap liquidity pools.
         </Paragraph>
       </Box>
     </HighlightContainer>
