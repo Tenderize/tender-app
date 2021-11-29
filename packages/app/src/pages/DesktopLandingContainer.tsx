@@ -1,4 +1,4 @@
-import { Box, ResponsiveContext } from "grommet";
+import { ResponsiveContext } from "grommet";
 import { FC, useState } from "react";
 import { AutomaticRewards } from "../components/highlights/AutomaticRewards";
 import { ScrollIndicator } from "../components/highlights/carousel/ScrollIndicator";
@@ -9,7 +9,6 @@ import { ScreenSize } from "../components/highlights/helper";
 import { Intro } from "../components/highlights/Intro";
 import { NoLockups } from "../components/highlights/NoLockups";
 import { BlogContainer } from "../components/medium/BlogContainer";
-import Navbar from "../components/nav";
 
 const DesktopLandingContainer: FC = () => {
   const [visibleIndex, setVisibleIndex] = useState(0);
@@ -25,9 +24,6 @@ const DesktopLandingContainer: FC = () => {
           scrollBehavior: "smooth",
         }}
       >
-        <Box style={{ position: "absolute" }}>
-          <Navbar />
-        </Box>
         <ResponsiveContext.Consumer>
           {(size: string) => (
             <>
