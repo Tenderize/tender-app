@@ -69,9 +69,11 @@ export const IntroMobile: FC = () => {
           <Heading margin="small" style={{ textShadow: "0px 0px 17px #AD01FF" }}>
             Tenderize
           </Heading>
-          <Paragraph margin="small">The tastiest</Paragraph>
-          <Paragraph margin="none"> liquid staking farming</Paragraph>
-          <Paragraph margin="small"> money can buy.</Paragraph>
+          <Paragraph margin="small">Connecting Web3 with</Paragraph>
+          <Paragraph margin="none"> DeFi through</Paragraph>
+          <Paragraph margin="small" style={{ fontWeight: 500 }}>
+            Liquid Staking
+          </Paragraph>
         </div>
       </div>
     </>

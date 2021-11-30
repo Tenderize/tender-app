@@ -34,7 +34,9 @@ export const DeploymentsMobile: FC = () => {
         }}
       >
         <div style={{ paddingTop: "7rem" }}>
-          <Heading style={{ position: "relative", textShadow: "0px 0px 17px #AD01FF", zIndex: 1 }}>Tender APYs</Heading>
+          <Heading style={{ position: "relative", textShadow: "0px 0px 17px #AD01FF", zIndex: 1 }}>
+            Tender Tokens
+          </Heading>
         </div>
         <div style={{ position: "absolute", top: 0, left: -50, zIndex: 0 }}>
           <img

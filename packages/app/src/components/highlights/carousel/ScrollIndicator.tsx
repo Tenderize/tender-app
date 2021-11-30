@@ -26,7 +26,7 @@ export const ScrollIndicator: FC<{
         display: "flex",
         flexDirection: direction,
         position: "absolute",
-        bottom: 90,
+        bottom: 40,
         left: direction === "row" ? "calc(50vw - 1.8rem)" : undefined,
         right: direction === "column" ? "2rem" : undefined,
         top: direction === "column" ? "40%" : undefined,
