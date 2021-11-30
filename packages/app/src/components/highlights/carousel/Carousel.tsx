@@ -1,7 +1,6 @@
 import { Heading } from "grommet";
 import { FC, useRef, useState } from "react";
 import styled from "styled-components";
-import Foot from "../../footer";
 import { ScrollIndicator } from "./ScrollIndicator";
 import { Slide } from "./Slide";
 
@@ -54,7 +53,6 @@ export const Carousel: FC = () => {
         />
       </Slides>
       <ScrollIndicator count={4} active={visibleIndex} direction="row" />
-      <Foot />
     </div>
   );
 };
