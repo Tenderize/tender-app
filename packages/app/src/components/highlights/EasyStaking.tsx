@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Box, Heading, Paragraph } from "grommet";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
+import { Copy } from "./constants";
 
 export const EasyStaking: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
@@ -15,8 +16,7 @@ export const EasyStaking: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
           Easy Staking
         </Heading>
         <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          Tenderize creates a care-free staking experience. Simply deposit your tokens to earn rewards and watch your
-          balance increase, allocations are managed by the Tenderize protocol.
+          {Copy.STAKING}
         </Paragraph>
       </Box>
     </HighlightContainer>

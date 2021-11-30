@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Box, Heading, Paragraph } from "grommet";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
+import { Copy } from "./constants";
 
 export const NoLockups: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
@@ -15,8 +16,7 @@ export const NoLockups: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number
           No Lockups
         </Heading>
         <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          Easily unlock your staked assets without going through long waiting periods. Simply Swap your TenderTokens for
-          underlying assets using TenderSwap liquidity pools.
+          {Copy.LOCKUPS}
         </Paragraph>
       </Box>
     </HighlightContainer>
