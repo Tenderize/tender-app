@@ -60,7 +60,7 @@ export const MobileBlogContainer: FC = () => {
       }}
     >
       <Box gap="small">
-        <Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Learn more</Heading>
+        <Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Blog</Heading>
         <Box height="medium" direction="row" gap="large">
           {blog.isLoading ? "Loading..." : renderPosts()}
         </Box>
