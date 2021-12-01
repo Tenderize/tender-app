@@ -13,11 +13,16 @@
     "subgraph:codegen": "yarn workspace @tender/subgraph codegen",
     "subgraph:build": "yarn workspace @tender/subgraph build",
     "subgraph:deploy": "yarn workspace @tender/subgraph deploy",
-    "app:build": "yarn workspace @tender/app build",
+    "landing:build": "yarn workspace @tender/landing build",
     "react-app:eject": "yarn workspace @tender/app eject",
     "react-app:ipfs": "yarn workspace @tender/app ipfs",
     "react-app:start": "yarn workspace @tender/app start",
-    "react-app:test": "yarn workspace @tender/app test"
+    "react-app:test": "yarn workspace @tender/app test",
+    "app:build": "yarn workspace @tender/landing build",
+    "react-landing:eject": "yarn workspace @tender/landing eject",
+    "react-landing:ipfs": "yarn workspace @tender/landing ipfs",
+    "react-landing:start": "yarn workspace @tender/landing start",
+    "react-landing:test": "yarn workspace @tender/landing test"
   },
   "workspaces": {
     "nohoist": [
