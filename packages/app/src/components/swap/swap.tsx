@@ -148,7 +148,6 @@ const Swap: FC<Props> = ({
     }
   }, [calcInGivenOut, calcOutGivenIn, receiveFocused, sendFocused]);
 
-  console.log("sendTokenAMoutn", sendTokenAmount);
   return (
     <Box>
       <Form validate="change">

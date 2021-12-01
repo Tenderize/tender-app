@@ -1,26 +1,17 @@
-import { FC } from "react";
-import { Box } from "grommet";
-
-import TokenCard from "../token-card";
+import useSWR from "swr";
 import stakers from "../../data/stakers";
 import { TenderizerDaysType } from "../../queries";
-import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const FeaturedCards: FC = () => {
-  const { data, error } = useSWR<TenderizerDaysType>("/api/apy", fetcher);
+export const useAPYData = () => {
+  const { data } = useSWR<TenderizerDaysType>("/api/apy", fetcher);
 
-  console.log("data", data);
-  console.log("error", error);
-  const cards = [];
-  let key: string;
-
-  for (key in stakers) {
+  const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;
     if (data != null) {
       const dpyData = Array.from(data.tenderizerDays)
-        .filter((item) => item.id.includes(stakers[key].subgraphId))
+        .filter((item) => item.id.includes(staker.subgraphId))
         .slice(0, -1);
 
       if (dpyData.length === 0) {
@@ -37,14 +28,14 @@ const FeaturedCards: FC = () => {
       }
     }
     let apy = (apyInPoints * 100).toFixed(2);
-    if (key === "/stakers/graph") apy = "39.74";
-    cards.push(<TokenCard key={key} info={stakers[key]} url={key} apy={apy} />);
-  }
-  return (
-    <Box direction="row" justify="around" align="center">
-      {cards}
-    </Box>
-  );
-};
+    if (staker.path === "/stakers/graph") {
+      apy = "39.74";
+    }
+    return {
+      ...staker,
+      apy,
+    };
+  });
 
-export default FeaturedCards;
+  return { stakersWithAPY };
+};

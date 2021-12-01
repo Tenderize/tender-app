@@ -72,6 +72,6 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
 };
 
 const LinkIconWrapper = styled.div`
-  width: 12px;
-  height: 12px;
+  width: 1.2rem;
+  height: 1.2rem;
 `;

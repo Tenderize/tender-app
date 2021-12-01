@@ -7,8 +7,8 @@ import TestnetBanner from "../testnet-banner";
 import Faucet from "../faucet";
 
 type props = {
-  symbol: string;
-  name: string;
+  symbol?: string;
+  name?: string;
 };
 const Navbar: FC<props> = (props) => {
   const [navBackground, setNavBackground] = useState(false);
@@ -30,17 +30,19 @@ const Navbar: FC<props> = (props) => {
 
   return (
     <Box>
-      <TestnetBanner />
-      <Header justify="around" pad="xsmall">
+      {props.symbol != null && props.name != null && <TestnetBanner />}
+      <Header justify="between" pad={{ horizontal: "xlarge", vertical: "xsmall" }}>
         <Link href="/">
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
-        <Box direction="row" align="center" gap="medium">
-          <Faucet {...props} />
-          <Nav direction="row">
-            <AccountButton />
-          </Nav>
-        </Box>
+        {props.symbol != null && props.name != null && (
+          <Box direction="row" align="center" gap="medium">
+            <Faucet symbol={props.symbol} name={props.name} />
+            <Nav direction="row">
+              <AccountButton />
+            </Nav>
+          </Box>
+        )}
       </Header>
     </Box>
   );
