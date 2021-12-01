@@ -23,7 +23,7 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
         </Paragraph>
         <Box>
           <Box direction="row" gap={screenToFontSize(screenSize)} pad={{ top: "medium" }} margin={{ bottom: "small" }}>
-            <Link href="https://app.tenderize.me">
+            <Link href="https://rinkeby.tenderize.me">
               <XLButton
                 secondary
                 size={screenToFontSize(screenSize)}
