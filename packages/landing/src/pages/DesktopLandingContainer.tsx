@@ -57,8 +57,8 @@ const DesktopLandingContainer: FC = () => {
             <>
               <Intro screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={0} />
               <Deployments screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={1} />
-              <ConnectWithDeFi screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={3} />
-              <EasyStaking screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={2} />
+              <ConnectWithDeFi screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={2} />
+              <EasyStaking screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={3} />
               <AutomaticRewards screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={4} />
               <NoLockups screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={5} />
               <BlogContainer screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={6} />
