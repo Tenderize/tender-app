@@ -16,7 +16,10 @@ export const NoLockups: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number
           No Lockups
         </Heading>
         <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          {Copy.LOCKUPS}
+          {Copy.LOCKUPS_1}
+        </Paragraph>
+        <Paragraph margin={{ top: "small" }} size={screenToFontSize(screenSize)}>
+          {Copy.LOCKUPS_2}
         </Paragraph>
       </Box>
     </HighlightContainer>

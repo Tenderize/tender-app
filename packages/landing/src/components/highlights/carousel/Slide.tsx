@@ -1,4 +1,3 @@
-import { Paragraph } from "grommet";
 import { FC, ReactNode, useEffect } from "react";
 import { useElementOnScreen } from "../../../utils/useElementOnScreen";
 
@@ -6,7 +5,7 @@ export const Slide: FC<{
   name: string;
   index: number;
   heading: ReactNode;
-  body: string;
+  body: ReactNode;
   setVisibleIndex: (v: number) => void;
 }> = ({ name, index, heading, body, setVisibleIndex }) => {
   const { containerRef, isVisible } = useElementOnScreen({
@@ -62,7 +61,7 @@ export const Slide: FC<{
           src={`/landing/mobile-${name}.svg`}
         />
       </div>
-      <Paragraph>{body}</Paragraph>
+      {body}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Heading } from "grommet";
+import { Heading, Paragraph } from "grommet";
 import { FC, useRef, useState } from "react";
 import styled from "styled-components";
 import { Copy } from "../constants";
@@ -23,30 +23,49 @@ export const Carousel: FC = () => {
           name="defi"
           index={0}
           heading={<Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Connect with DeFi</Heading>}
-          body={Copy.DEFI}
+          body={
+            <>
+              <Paragraph margin="none">{Copy.DEFI_1}</Paragraph>
+              <Paragraph margin={{ top: "small" }}>{Copy.DEFI_2}</Paragraph>
+            </>
+          }
         />
         <Slide
           setVisibleIndex={setVisibleIndex}
           name="staking"
           index={1}
           heading={<Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Easy Staking</Heading>}
-          body={Copy.STAKING}
+          body={
+            <>
+              <Paragraph margin="none">{Copy.STAKING_1}</Paragraph>
+              <Paragraph margin={{ top: "small" }}>{Copy.STAKING_2}</Paragraph>
+            </>
+          }
         />
         <Slide
           setVisibleIndex={setVisibleIndex}
           name="rewards"
           index={2}
           heading={<Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Automatic Rewards</Heading>}
-          body={Copy.REWARDS}
+          body={
+            <>
+              <Paragraph margin="none">{Copy.REWARDS_1}</Paragraph>
+              <Paragraph margin={{ top: "small" }}>{Copy.REWARDS_2}</Paragraph>
+            </>
+          }
         />
         <Slide
           setVisibleIndex={setVisibleIndex}
           name="lockups"
           index={3}
           heading={<Heading style={{ textShadow: "0px 0px 8px rgba(237, 19, 32, 0.94)" }}>No Lockups</Heading>}
-          body={Copy.LOCKUPS}
+          body={
+            <>
+              <Paragraph margin="none">{Copy.LOCKUPS_1}</Paragraph>
+              <Paragraph margin={{ top: "small" }}>{Copy.LOCKUPS_2}</Paragraph>
+            </>
+          }
         />
-
       </Slides>
       <ScrollIndicator count={4} active={visibleIndex} direction="row" />
     </div>

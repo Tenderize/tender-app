@@ -16,7 +16,10 @@ export const EasyStaking: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
           Easy Staking
         </Heading>
         <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          {Copy.STAKING}
+          {Copy.STAKING_1}
+        </Paragraph>
+        <Paragraph margin={{ top: "small" }} size={screenToFontSize(screenSize)}>
+          {Copy.STAKING_2}
         </Paragraph>
       </Box>
     </HighlightContainer>
