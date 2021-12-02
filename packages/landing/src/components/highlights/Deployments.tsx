@@ -93,9 +93,6 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
             Your TenderToken balance will increase as Tenderize earns staking rewards so you earn yield simply by
             holding them.
           </Paragraph>
-          <Paragraph margin={{ top: "small" }} size={"medium"}>
-            With them you can make free use of your yield-generating stake within the DeFi ecosystem or elsewhere.
-          </Paragraph>
         </Box>
       </Grid>
     </HighlightContainer>

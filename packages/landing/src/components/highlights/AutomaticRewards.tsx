@@ -16,7 +16,10 @@ export const AutomaticRewards: FC<{ screenSize: ScreenSize; setVisibleIndex: (v:
           Automatic Rewards
         </Heading>
         <Paragraph margin="none" size={screenToFontSize(screenSize)}>
-          {Copy.REWARDS}
+          {Copy.REWARDS_1}
+        </Paragraph>
+        <Paragraph margin={{ top: "small" }} size={screenToFontSize(screenSize)}>
+          {Copy.REWARDS_2}
         </Paragraph>
       </Box>
     </HighlightContainer>
