@@ -6,5 +6,5 @@ export enum Copy {
   REWARDS_1 = "Tenderize automatically compounds rewards on a regular basis.",
   REWARDS_2 = "Stake delegations to nodes are managed according to their profitability, reliability and performance.",
   DEFI_1 = "TenderTokens unleash the composability between DeFi and staked assest, allowing you to earn yield on top of yield.",
-  DEFI_2 = "They provide a new financial primitive that unlocks a wide array of new use cases for your staked web3 tokens.",
+  DEFI_2 = "TenderTokens provide a new financial primitive that unlocks a wide array of new use cases for your staked web3 tokens.",
 }
