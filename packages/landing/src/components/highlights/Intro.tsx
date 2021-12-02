@@ -1,8 +1,6 @@
 import { FC } from "react";
-import { Anchor, Box, Heading, Paragraph } from "grommet";
+import { Box, Heading, Paragraph } from "grommet";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { XLButton } from "../base";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
@@ -44,25 +42,6 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
                 }}
               />
             </Link>
-          </Box>
-          <Box direction="row" gap="small" align="center">
-            <Anchor
-              size="large"
-              color="white"
-              a11yTitle="Chat with us on Discord"
-              href="https://discord.gg/WXR5VBttP5"
-              icon={<FontAwesomeIcon icon={faDiscord} />}
-              target="_blank"
-              style={{ paddingLeft: 0 }}
-            />
-            <Anchor
-              size="large"
-              color="white"
-              a11yTitle="Follow us on Twitter"
-              href="https://twitter.com/tenderize_me"
-              icon={<FontAwesomeIcon icon={faTwitter} />}
-              target="_blank"
-            />
           </Box>
         </Box>
       </Box>
