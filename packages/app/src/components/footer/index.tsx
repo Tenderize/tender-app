@@ -14,7 +14,7 @@ const Foot: FC = () => {
         </Box>
       )}
       <Text alignSelf="center" textAlign="center" size="xsmall" color="white">
-        © Tenderize Me, inc. 2021
+        © Tenderize Labs Ltd. 2021
       </Text>
       <Box direction="row" gap="xxsmall" justify="center" align="center">
         <Anchor

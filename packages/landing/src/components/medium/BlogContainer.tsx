@@ -49,7 +49,7 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
   };
 
   return (
-    <HighlightContainer index={index} item={"staking"} setVisibleIndex={setVisibleIndex} showImage={false}>
+    <HighlightContainer index={index} item="blog" setVisibleIndex={setVisibleIndex} showImage={false}>
       <div style={{ position: "relative", display: "flex", flexDirection: "column", flex: 1 }}>
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }} size={screenToFontSize(screenSize)}>
           Blog
