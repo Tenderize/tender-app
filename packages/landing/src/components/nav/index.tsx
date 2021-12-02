@@ -1,5 +1,6 @@
 import { Anchor, Button, Header, Image, Box } from "grommet";
 import { FC, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
@@ -29,35 +30,29 @@ const Navbar: FC = () => {
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
         <Box direction="row" gap="medium" align="center">
-          <Anchor
+          <NavAnchor
             label="TenderTokens"
             href="#deployments"
             size="small"
             color="white"
-            style={{textDecorationLine: "none"}}
+            style={{ textDecorationLine: "none" }}
           />
-          <Anchor
+          <NavAnchor
             label="Learn More"
             href="#defi"
-            size="small" 
+            size="small"
             color="white"
-            style={{textDecorationLine: "none"}}
+            style={{ textDecorationLine: "none" }}
           />
-          <Anchor 
-            label="Blog"
-            href="#blog"
-            size="small" 
-            color="white"
-            style={{textDecorationLine: "none"}}
-          />
-          <Anchor
+          <NavAnchor label="Blog" href="#blog" size="small" color="white" style={{ textDecorationLine: "none" }} />
+          <NavAnchor
             color="white"
             a11yTitle="Chat with us on Discord"
             href="https://discord.gg/WXR5VBttP5"
             icon={<FontAwesomeIcon icon={faDiscord} />}
             target="_blank"
           />
-          <Anchor
+          <NavAnchor
             color="white"
             a11yTitle="Follow us on Twitter"
             href="https://twitter.com/tenderize_me"
@@ -65,18 +60,24 @@ const Navbar: FC = () => {
             target="_blank"
             style={{ paddingLeft: 0 }}
           />
-            <a href="https://rinkeby.tenderize.me" target="_blank">
-              <Button
-                primary
-                size="small"
-                label="Open App"
-                style={{ padding: "7px 10px", color: "white", borderColor: "white", borderRadius: 4 }}
-              />
-            </a>
+          <a href="https://rinkeby.tenderize.me" target="_blank">
+            <Button
+              primary
+              size="small"
+              label="Open App"
+              style={{ padding: "7px 10px", color: "white", borderColor: "white", borderRadius: 4 }}
+            />
+          </a>
         </Box>
       </Header>
     </Box>
   );
 };
+
+const NavAnchor = styled(Anchor)`
+  &:hover {
+    text-shadow: 0px 0px 8px #ad01ff;
+  }
+`;
 
 export default Navbar;
