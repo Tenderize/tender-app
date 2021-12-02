@@ -18,7 +18,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
         <Box
           align="center"
           gap="medium"
-          style={{ position: "relative", marginTop: "10%", marginLeft: "175", minHeight: 650 }}
+          style={{ position: "relative", marginTop: "12%", marginLeft: "175", minHeight: 650 }}
         >
           <Box
             style={{
