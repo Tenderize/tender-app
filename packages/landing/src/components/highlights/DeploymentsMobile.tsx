@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Heading } from "grommet";
+import { Box, Heading, Paragraph } from "grommet";
 import { useAPYData } from "./useAPYData";
 import TokenCardMobile from "../token-card/TokenCardMobile";
 
@@ -18,38 +18,26 @@ export const DeploymentsMobile: FC = () => {
         backgroundRepeat: "no-repeat, repeat",
         backgroundSize: "contain, 50px 50px",
         backgroundPosition: "center",
-        position: "relative",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <div
-        style={{
-          height: "50vh",
-          position: "relative",
-          justifyContent: "flex-start",
-          alignItems: "center",
-        }}
+      <Heading style={{ textShadow: "0px 0px 17px #AD01FF", zIndex: 1 }}>Tender Tokens</Heading>
+      <Paragraph
+        textAlign="center"
+        margin={{ vertical: "small", horizontal: "medium" }}
+        size="medium"
+        style={{ fontWeight: 500 }}
       >
-        <div style={{ paddingTop: "7rem" }}>
-          <Heading style={{ position: "relative", textShadow: "0px 0px 17px #AD01FF", zIndex: 1 }}>
-            Tender Tokens
-          </Heading>
-        </div>
-        <div style={{ position: "absolute", top: 0, left: -50, zIndex: 0 }}>
-          <img
-            style={{
-              height: "200%",
-              transformOrigin: "top",
-              transform: "scale(0.7)",
-            }}
-            src={`/landing/hammer.svg`}
-          />
-        </div>
-      </div>
-      <Box direction="column" gap="medium">
+        Liquid staking derivatives pegged 1:1 to your staked assets
+      </Paragraph>
+      <Paragraph textAlign="center" margin={{ vertical: "small", horizontal: "medium" }} size="medium">
+        Your TenderToken balance will increase as Tenderize earns staking rewards so you earn yield simply by holding
+        them.
+      </Paragraph>
+      <Box direction="column" pad={{ top: "large" }} gap="medium">
         <TokenCardMobile key={stakersWithAPY[1].path} {...stakersWithAPY[1]} />
         <TokenCardMobile key={stakersWithAPY[0].path} {...stakersWithAPY[0]} />
         <TokenCardMobile key={stakersWithAPY[3].path} {...stakersWithAPY[3]} />
