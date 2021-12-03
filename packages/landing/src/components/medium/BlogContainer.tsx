@@ -22,7 +22,7 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
         <Box
           key={index}
           style={{
-            background: "rgba(15, 15, 15, 0.7)",
+            background: "rgba(15, 15, 15, 0.3)",
             backdropFilter: "blur(25px)",
             borderRadius: "3rem",
             width: "25rem",
