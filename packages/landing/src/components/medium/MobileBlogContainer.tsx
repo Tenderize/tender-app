@@ -33,8 +33,8 @@ export const MobileBlogContainer: FC = () => {
             }}
           />
           <Box style={{width: "18rem", flexGrow: 2}} pad={{ vertical: "small", horizontal: "medium" }}>
-            <Paragraph>{post.title}</Paragraph>
-            <Text>{`${ToText(post.description.substring(0, 350))}...`}</Text>
+            <Paragraph style={{fontSize: "0.85rem", lineHeight: "1.1"}}>{post.title}</Paragraph>
+            <Text style={{fontSize: "0.6rem", lineHeight: "1.1", padding: "0px 5px", color: "#eaeaea"}}>{`${ToText(post.description.substring(0, 350))}...`}</Text>
           </Box>
         </Box>
       </a>
@@ -44,7 +44,6 @@ export const MobileBlogContainer: FC = () => {
   return (
     <div
       style={{
-        marginBottom: "15rem",
         scrollSnapAlign: "start",
         flexShrink: 0,
         width: "100vw",
