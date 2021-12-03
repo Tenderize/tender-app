@@ -10,29 +10,29 @@ export const MobileBlogContainer: FC = () => {
     if (blog.posts.length === 0) {
       return null;
     }
-
-    return blog.posts.slice(0, 1).map((post, index) => (
+    return blog.posts.slice(0, 3).map((post, index) => (
       <a style={{ textDecoration: "none", color: "white" }} href={post.link} rel="noreferrer" target="_blank">
         <Box
           key={index}
-          pad={{ vertical: "medium" }}
           style={{
+            flexDirection: "row",
             background: "rgba(15, 15, 15, 0.3)",
             backdropFilter: "blur(25px)",
             borderRadius: "3rem",
-            width: "300px",
+            width: "75vw"
           }}
         >
-          <div
+          <Box
             style={{
-              display: "flex",
               backgroundImage: `url(${post.thumbnail})`,
               backgroundSize: "cover",
               borderTopLeftRadius: "3rem",
-              borderTopRightRadius: "3rem",
+              borderBottomLeftRadius: "3rem",
+              flexGrow: 1,
+              width: "12rem"
             }}
           />
-          <Box pad={{ vertical: "small", horizontal: "medium" }}>
+          <Box style={{width: "18rem", flexGrow: 2}} pad={{ vertical: "small", horizontal: "medium" }}>
             <Paragraph>{post.title}</Paragraph>
             <Text>{`${ToText(post.description.substring(0, 350))}...`}</Text>
           </Box>
@@ -44,10 +44,11 @@ export const MobileBlogContainer: FC = () => {
   return (
     <div
       style={{
+        marginBottom: "15rem",
         scrollSnapAlign: "start",
         flexShrink: 0,
         width: "100vw",
-        backgroundImage: `url("/landing/shad-staking.jpg"), url('/landing/noise.png')`,
+        backgroundImage: `url("/landing/shad-intro.jpg"), url('/landing/noise.png')`,
         backgroundBlendMode: "darken",
         backgroundRepeat: "no-repeat, repeat",
         backgroundSize: "contain, 50px 50px",
@@ -61,7 +62,7 @@ export const MobileBlogContainer: FC = () => {
     >
       <Box gap="small">
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }}>Blog</Heading>
-        <Box height="medium" direction="row" gap="large">
+        <Box height="medium" direction="column" gap="large">
           {blog.isLoading ? "Loading..." : renderPosts()}
         </Box>
       </Box>

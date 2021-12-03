@@ -1,5 +1,6 @@
-import { Box, Heading, Paragraph } from "grommet";
+import { Box, BoxExtendedProps, Heading, Paragraph } from "grommet";
 import { FC } from "react";
+import styled from 'styled-components'
 import Foot from "../footer";
 import { ScreenSize, screenToFontSize } from "../highlights/helper";
 import { HighlightContainer } from "../highlights/HighlightContainer";
@@ -17,16 +18,16 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
       return null;
     }
 
-    return blog.posts.slice(0, 2).map((post, index) => (
+    return blog.posts.slice(0, 3).map((post, index) => (
       <a style={{ textDecoration: "none", color: "white" }} href={post.link} rel="noreferrer" target="_blank">
-        <Box
+        <BlogBox
           key={index}
           style={{
             background: "rgba(15, 15, 15, 0.3)",
-            backdropFilter: "blur(25px)",
+            backdropFilter: "blur(35px)",
             borderRadius: "3rem",
             width: "25rem",
-            height: "33rem",
+            height: "28rem",
           }}
         >
           <div
@@ -36,14 +37,16 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
               backgroundSize: "cover",
               borderTopLeftRadius: "3rem",
               borderTopRightRadius: "3rem",
-              height: "7rem",
+              height: "10rem",
             }}
           />
           <Box pad={{ vertical: "small", horizontal: "medium" }}>
-            <Heading size="small">{post.title}</Heading>
-            <Paragraph margin={{ top: "none" }}>{`${ToText(post.description.substring(0, 300))}...`}</Paragraph>
+            <Heading style={{fontSize: "1.5rem", lineHeight: "1.1"}}>{post.title}</Heading>
+            <Paragraph margin={{ top: "none" }} style={{fontSize: "1rem", padding: "0px 5px", color: "#eaeaea"}}>{`${ToText(
+              post.description.substring(0, 330)
+            )}...`}</Paragraph>
           </Box>
-        </Box>
+        </BlogBox>
       </a>
     ));
   };
@@ -77,3 +80,10 @@ const ToText = (node: any) => {
   node = tag.innerText;
   return node;
 };
+
+export const BlogBox: FC<BoxExtendedProps & { border?: boolean }> = styled(Box)`
+  &:hover {
+    text-shadow: 0px 0px 12px #ad01ff;
+    border-color: ${(props: any) => (props.border ? "#d98aff" : undefined)};
+  }
+`;
