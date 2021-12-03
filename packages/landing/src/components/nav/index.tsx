@@ -26,7 +26,7 @@ const Navbar: FC = () => {
   return (
     <Box>
       <Header justify="between" pad={{ horizontal: "xlarge", vertical: "xsmall" }}>
-        <Link href="/">
+        <Link href="#intro">
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
         <Box direction="row" gap="medium" align="center">
