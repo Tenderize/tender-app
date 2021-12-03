@@ -22,7 +22,7 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
         <Box
           key={index}
           style={{
-            background: "rgba(15, 15, 15, 0.7)",
+            background: "rgba(15, 15, 15, 0.3)",
             backdropFilter: "blur(25px)",
             borderRadius: "3rem",
             width: "25rem",
@@ -41,7 +41,7 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
           />
           <Box pad={{ vertical: "small", horizontal: "medium" }}>
             <Heading size="small">{post.title}</Heading>
-            <Paragraph>{`${ToText(post.description.substring(0, 300))}...`}</Paragraph>
+            <Paragraph margin={{ top: "none" }}>{`${ToText(post.description.substring(0, 300))}...`}</Paragraph>
           </Box>
         </Box>
       </a>
@@ -49,7 +49,7 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
   };
 
   return (
-    <HighlightContainer index={index} item={"staking"} setVisibleIndex={setVisibleIndex} showImage={false}>
+    <HighlightContainer index={index} item="intro" id="blog" setVisibleIndex={setVisibleIndex} showImage={false}>
       <div style={{ position: "relative", display: "flex", flexDirection: "column", flex: 1 }}>
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }} size={screenToFontSize(screenSize)}>
           Blog

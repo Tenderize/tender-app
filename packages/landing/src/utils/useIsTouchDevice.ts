@@ -18,20 +18,6 @@ export const useIsTouchDevice = () => {
   const [isTouch, setIsTouch] = useState(false);
   useEffect(() => {
     const { isAndroid, isIPad13, isIPhone13, isWinPhone, isMobileSafari, isTablet } = require("react-device-detect");
-    console.log(
-      "isAndroid",
-      isAndroid,
-      "isIPad13",
-      isIPad13,
-      "isIPhone13",
-      isIPhone13,
-      "isWinPhone",
-      isWinPhone,
-      "isMobileSafari",
-      isMobileSafari,
-      "isTablet",
-      isTablet
-    );
     setIsTouch(
       (prevIsTouch) =>
         prevIsTouch ||

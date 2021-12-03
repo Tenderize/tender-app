@@ -4,10 +4,11 @@ import { useElementOnScreen } from "../../utils/useElementOnScreen";
 
 export const HighlightContainer: FC<{
   item: string;
+  id?: string;
   setVisibleIndex: (v: number) => void;
   index: number;
   showImage?: boolean;
-}> = ({ children, item, setVisibleIndex, index, showImage = true }) => {
+}> = ({ children, item = "", id, setVisibleIndex, index, showImage = true }) => {
   const { containerRef, isVisible } = useElementOnScreen({
     root: null,
     rootMargin: "0px",
@@ -27,7 +28,7 @@ export const HighlightContainer: FC<{
   return (
     <div
       ref={containerRef}
-      id={item}
+      id={id || item}
       style={{
         display: "flex",
         justifyContent: "center",

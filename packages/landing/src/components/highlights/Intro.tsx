@@ -25,7 +25,7 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
               <XLButton secondary size={screenToFontSize(screenSize)} label="Open App" border />
             </a>
 
-            <Link href="#deployments">
+            <Link href="#defi">
               <XLButton
                 secondary
                 size={screenToFontSize(screenSize)}

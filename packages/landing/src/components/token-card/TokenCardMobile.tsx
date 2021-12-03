@@ -25,7 +25,7 @@ const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy }) => {
         background: "rgba(15, 15, 15, 0.7)",
         backdropFilter: "blur(25px)",
         borderRadius: "1.5rem",
-        minWidth: "11rem",
+        minWidth: "14rem",
       }}
     >
       <Box width="xxsmall">
