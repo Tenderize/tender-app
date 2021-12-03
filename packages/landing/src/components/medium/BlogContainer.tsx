@@ -36,12 +36,14 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
               backgroundSize: "cover",
               borderTopLeftRadius: "3rem",
               borderTopRightRadius: "3rem",
-              height: "7rem",
+              height: "10rem",
             }}
           />
           <Box pad={{ vertical: "small", horizontal: "medium" }}>
-            <Heading size="small">{post.title}</Heading>
-            <Paragraph margin={{ top: "none" }}>{`${ToText(post.description.substring(0, 300))}...`}</Paragraph>
+            <Heading size="xsmall">{post.title}</Heading>
+            <Paragraph size="small" margin={{ top: "none" }}>{`${ToText(
+              post.description.substring(0, 480)
+            )}...`}</Paragraph>
           </Box>
         </Box>
       </a>
