@@ -2,16 +2,27 @@ import { FC } from "react";
 import { Box, Button, ButtonExtendedProps, Heading, Paragraph } from "grommet";
 import Link from "next/link";
 import styled from "styled-components";
+import Lottie from "react-lottie";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
+import animationData from "../../lotties/hero_anim.json";
 
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
   setVisibleIndex,
   index,
 }) => {
   return (
-    <HighlightContainer item="intro" setVisibleIndex={setVisibleIndex} index={index}>
+    <HighlightContainer showImage={false} item="intro" setVisibleIndex={setVisibleIndex} index={index}>
+      <Lottie options={defaultOptions} height={400} width={400} />
       <Box style={{ position: "relative", marginLeft: "45%", marginTop: "11.5%" }}>
         <Heading margin={{ bottom: "medium" }} style={{ textShadow: "0px 0px 17px #AD01FF" }} size={"large"}>
           Tenderize
