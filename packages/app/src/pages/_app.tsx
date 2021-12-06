@@ -31,11 +31,8 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
-        <meta
-          title="Tenderize"
-          name="description"
-          content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi"
-        />
+        <title>Tenderize</title>
+        <meta name="description" content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi" />
       </Head>
       <ApolloProvider client={apolloClient}>
         {/* Global Site Tag (gtag.js) - Google Analytics */}
