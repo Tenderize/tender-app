@@ -21,8 +21,8 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
   index,
 }) => {
   return (
-    <HighlightContainer showImage={false} item="intro" setVisibleIndex={setVisibleIndex} index={index}>
-      <Lottie options={defaultOptions} height={400} width={400} />
+    <HighlightContainer showImage={true} item="intro" setVisibleIndex={setVisibleIndex} index={index}>
+      <Lottie options={defaultOptions} height={1500} width={400} />
       <Box style={{ position: "relative", marginLeft: "45%", marginTop: "11.5%" }}>
         <Heading margin={{ bottom: "medium" }} style={{ textShadow: "0px 0px 17px #AD01FF" }} size={"large"}>
           Tenderize
