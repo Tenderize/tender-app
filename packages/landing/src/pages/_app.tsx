@@ -25,7 +25,7 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
-        <title>Tenderize</title>
+        <title>Tenderize - Connecting Web3 with DeFi through Liquid Staking</title>
         <meta name="description" content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi" />
       </Head>
       <ApolloProvider client={apolloClient}>
