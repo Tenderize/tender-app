@@ -31,6 +31,9 @@ export const useAPYData = () => {
     if (staker.path === "/stakers/graph") {
       apy = "39.74";
     }
+    if (staker.path === "/stakers/matic") {
+      apy = "15.37";
+    }
     return {
       ...staker,
       apy,
