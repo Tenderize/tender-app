@@ -63,7 +63,7 @@ const stakers: Record<string, Staker> = {
     neonLogo: "landing/neon-matic.png",
     symbol: "MATIC",
   },
-  "/stakers/audius": {
+  audius: {
     name: "audius",
     path: "/stakers/audius",
     title: "Audius",

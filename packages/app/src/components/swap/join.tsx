@@ -20,7 +20,6 @@ import {
   Tab,
   Paragraph,
 } from "grommet";
-import { useRouter } from "next/router";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
@@ -56,11 +55,9 @@ const JoinPool: FC<Props> = ({
   tenderLpBalance,
   lpShares,
 }) => {
-  const router = useRouter();
-  const slug = router.query.slug as string;
-  const staker = stakers[slug];
-  const bwLogo = require(`../../../public/${staker.bwLogo}`);
-  const bwTenderLogo = require(`../../../public/${staker.bwTenderLogo}`);
+  const staker = stakers[name];
+  const bwLogo = `/${staker.bwLogo}`;
+  const bwTenderLogo = `/${staker.bwTenderLogo}`;
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
