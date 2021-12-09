@@ -7,7 +7,7 @@ import { ApolloProvider } from "@apollo/client";
 
 import { apolloClient } from "../config";
 import * as gtag from "../lib/gtag";
-import { GrommetWrapper } from "../../../shared/src/index";
+import { GrommetWrapper } from "@tender/shared/src/index";
 import "./index.css";
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
