@@ -1,5 +1,5 @@
 import { FC, lazy, Suspense } from "react";
-import { GrommetWrapper } from "../../../shared/src/index";
+import { GrommetWrapper } from "@tender/shared/src/index";
 import { useIsTouchDevice } from "../utils/useIsTouchDevice";
 
 const MobileComponent = lazy(() => import("./MobileLandingContainer"));

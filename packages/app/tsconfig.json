@@ -1,16 +1,17 @@
 {
   "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@tender/shared/*": ["../shared/src/*"]
+    }
+  },
   "include": [
     "next-env.d.ts",
     "react-app/env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.js"
-  ],
-  "references": [
-    {
-      "path": "../shared"
-    }
   ],
   "exclude": [
     "node_modules"
