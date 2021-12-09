@@ -8,7 +8,7 @@ import { ApolloProvider } from "@apollo/client";
 
 import { apolloClient, CHAIN_URL_MAPPING } from "../config";
 import * as gtag from "../lib/gtag";
-import { GrommetWrapper } from "../components/GrommetWrapper";
+import { GrommetWrapper } from "../../../shared/dist/src/index";
 import "./index.css";
 
 const dappConfig: Config = {
@@ -41,6 +41,7 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
           src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
         />
         <Script
+          id="gtag"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
