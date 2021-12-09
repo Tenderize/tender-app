@@ -10,7 +10,7 @@ import { FortmaticConnector } from "@web3-react/fortmatic-connector";
 
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
-import { theme } from "../../theme";
+import { theme } from "@tender/shared/src/index";
 
 export const AccountButton: FC = () => {
   const { account, deactivate, activate, activateBrowserWallet } = useEthers();

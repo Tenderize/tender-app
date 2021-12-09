@@ -1,11 +1,14 @@
 {
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "extends": [
     "eslint:recommended",
     "standard",
     "prettier",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@next/next/recommended"
+    "plugin:react-hooks/recommended"
   ],
   "plugins": ["@typescript-eslint"],
   "env": {
