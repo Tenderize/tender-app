@@ -8,7 +8,7 @@ import { ApolloProvider } from "@apollo/client";
 
 import { apolloClient, CHAIN_URL_MAPPING } from "../config";
 import * as gtag from "../lib/gtag";
-import { GrommetWrapper } from "../../../shared/dist/src/index";
+import { GrommetWrapper } from "../../../shared/src/index";
 import "./index.css";
 
 const dappConfig: Config = {
