@@ -2,9 +2,9 @@ import { FC } from "react";
 
 type props = {
   fill: string;
-}
+};
 
-export const ShareIcon: FC<props> = ({fill}) => (
+export const ShareIcon: FC<props> = ({ fill }) => (
   <svg viewBox="0 0 10 11" fill={fill} color="currentColor">
     <path
       fill={fill}

@@ -17,10 +17,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
     transactionName: `Approve ${symbol}`,
   });
 
-  const {
-    rinkebyForcedFunction: handleApproval,
-    renderError,
-  } = useForceRinkebyFunction(async (e) => {
+  const { rinkebyForcedFunction: handleApproval, renderError } = useForceRinkebyFunction(async (e) => {
     e.preventDefault();
 
     if (show) {

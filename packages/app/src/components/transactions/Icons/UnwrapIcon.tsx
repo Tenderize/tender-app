@@ -2,10 +2,9 @@ import { FC } from "react";
 
 type props = {
   fill: string;
-}
+};
 
-
-export const UnwrapIcon: FC<props> = ({fill}) => (
+export const UnwrapIcon: FC<props> = ({ fill }) => (
   <svg fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fillRule="evenodd"
