@@ -1,6 +1,6 @@
 import { Box, Heading, Paragraph, Text } from "grommet";
 import { FC } from "react";
-import Foot from "../footer";
+import { Foot } from "@tender/shared/src/index";
 import { ToText, useMedium } from "./helper";
 
 export const MobileBlogContainer: FC = () => {
@@ -19,7 +19,7 @@ export const MobileBlogContainer: FC = () => {
             background: "rgba(15, 15, 15, 0.3)",
             backdropFilter: "blur(25px)",
             borderRadius: "3rem",
-            width: "75vw"
+            width: "75vw",
           }}
         >
           <Box
@@ -29,12 +29,14 @@ export const MobileBlogContainer: FC = () => {
               borderTopLeftRadius: "3rem",
               borderBottomLeftRadius: "3rem",
               flexGrow: 1,
-              width: "12rem"
+              width: "12rem",
             }}
           />
-          <Box style={{width: "18rem", flexGrow: 2}} pad={{ vertical: "small", horizontal: "medium" }}>
-            <Paragraph style={{fontSize: "0.85rem", lineHeight: "1.1"}}>{post.title}</Paragraph>
-            <Text style={{fontSize: "0.6rem", lineHeight: "1.1", padding: "0px 5px", color: "#eaeaea"}}>{`${ToText(post.description.substring(0, 350))}...`}</Text>
+          <Box style={{ width: "18rem", flexGrow: 2 }} pad={{ vertical: "small", horizontal: "medium" }}>
+            <Paragraph style={{ fontSize: "0.85rem", lineHeight: "1.1" }}>{post.title}</Paragraph>
+            <Text style={{ fontSize: "0.6rem", lineHeight: "1.1", padding: "0px 5px", color: "#eaeaea" }}>{`${ToText(
+              post.description.substring(0, 350)
+            )}...`}</Text>
           </Box>
         </Box>
       </a>

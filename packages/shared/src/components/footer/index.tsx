@@ -2,9 +2,9 @@ import { FC } from "react";
 import { Box, Text, Anchor, Footer } from "grommet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { useIsTouchDevice } from "../../utils/useIsTouchDevice";
+import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 
-const Foot: FC = () => {
+export const Foot: FC = () => {
   const isTouchDevice = useIsTouchDevice();
   return (
     <Footer pad={{ horizontal: isTouchDevice ? "50px" : "100px", vertical: "5px" }} margin={{ top: "small" }}>
@@ -36,5 +36,3 @@ const Foot: FC = () => {
     </Footer>
   );
 };
-
-export default Foot;

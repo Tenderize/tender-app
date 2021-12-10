@@ -27,7 +27,7 @@ const Decimals = styled(Text)`
   color: #ffffff;
 `;
 
-const Statistic: FC<TextExtendedProps> = (props) => {
+export const Statistic: FC<TextExtendedProps> = (props) => {
   const val = props.children?.toString().split(" ") || "";
   const symbol = val[1];
   const floatString = val[0].split(".");
@@ -41,5 +41,3 @@ const Statistic: FC<TextExtendedProps> = (props) => {
     </Text>
   );
 };
-
-export default Statistic;

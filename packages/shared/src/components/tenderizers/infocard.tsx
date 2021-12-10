@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { Box, Card, CardHeader, CardBody, CardFooter, Text} from "grommet";
-import Statistic from "./statistic";
+import { Box, Card, CardHeader, CardBody, CardFooter, Text } from "grommet";
+import { Statistic } from "./statistic";
 
 type Props = {
   title: string;
@@ -8,7 +8,7 @@ type Props = {
   subText?: string;
 };
 
-const InfoCard: FC<Props> = ({ title = "", text = "", subText = "" }) => {
+export const InfoCard: FC<Props> = ({ title = "", text = "", subText = "" }) => {
   return (
     <Box fill="horizontal">
       <Card align="baseline" elevation="none" round="none">
@@ -28,11 +28,11 @@ const InfoCard: FC<Props> = ({ title = "", text = "", subText = "" }) => {
           <Statistic>{text}</Statistic>
         </CardBody>
         <CardFooter>
-          <Text color="dark-4" size="small">{subText}</Text>
+          <Text color="dark-4" size="small">
+            {subText}
+          </Text>
         </CardFooter>
       </Card>
     </Box>
   );
 };
-
-export default InfoCard;

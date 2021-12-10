@@ -4,13 +4,11 @@ import { Box, Button, Card, CardHeader, Image, Layer, Spinner, Text, ThemeType }
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { CHAIN_URL_MAPPING, FORTMATIC_API_KEY, PORTIS_API_KEY, RPC_URL } from "../../config";
 import { WalletLinkConnector } from "@web3-react/walletlink-connector";
 import { FortmaticConnector } from "@web3-react/fortmatic-connector";
-
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
-import { theme } from "@tender/shared/src/index";
+import { Config, theme } from "@tender/shared/src/index";
 
 export const AccountButton: FC = () => {
   const { account, deactivate, activate, activateBrowserWallet } = useEthers();
@@ -75,7 +73,7 @@ export const AccountButton: FC = () => {
                 label="WalletConnect"
                 image={"/walletconnect-logo.svg"}
                 handleClick={async (onError: () => void) => {
-                  const walletConnector = new WalletConnectConnector({ rpc: CHAIN_URL_MAPPING });
+                  const walletConnector = new WalletConnectConnector({ rpc: Config.CHAIN_URL_MAPPING });
                   walletConnector.addListener("Web3ReactError", onError);
                   await activate(walletConnector, onError);
                   handleCloseWalletPicker();
@@ -85,7 +83,7 @@ export const AccountButton: FC = () => {
                 label="Portis"
                 image={"/portis.svg"}
                 handleClick={async (onError: () => void) => {
-                  const walletConnector = new PortisConnector({ dAppId: PORTIS_API_KEY, networks: [4] });
+                  const walletConnector = new PortisConnector({ dAppId: Config.PORTIS_API_KEY, networks: [4] });
                   walletConnector.addListener("Web3ReactError", onError);
                   await activate(walletConnector, onError);
                   handleCloseWalletPicker();
@@ -95,7 +93,7 @@ export const AccountButton: FC = () => {
                 label="Coinbase Wallet"
                 image={"/coinbaseWalletIcon.svg"}
                 handleClick={async (onError: () => void) => {
-                  const walletConnector = new WalletLinkConnector({ appName: "Tenderize", url: RPC_URL });
+                  const walletConnector = new WalletLinkConnector({ appName: "Tenderize", url: Config.RPC_URL });
                   walletConnector.addListener("Web3ReactError", onError);
                   await activate(walletConnector, onError);
                   handleCloseWalletPicker();
@@ -105,7 +103,7 @@ export const AccountButton: FC = () => {
                 label="Fortmatic"
                 image={"/fortmatic.svg"}
                 handleClick={async (onError: () => void) => {
-                  const walletConnector = new FortmaticConnector({ apiKey: FORTMATIC_API_KEY, chainId: 4 });
+                  const walletConnector = new FortmaticConnector({ apiKey: Config.FORTMATIC_API_KEY, chainId: 4 });
                   walletConnector.addListener("Web3ReactError", onError);
                   await activate(walletConnector, onError);
                   handleCloseWalletPicker();

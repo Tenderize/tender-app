@@ -16,7 +16,7 @@ import stakers, { Staker } from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
-import Foot from "../../components/footer";
+import { Foot } from "@tender/shared/src/index";
 
 const Token: FC = () => {
   const router = useRouter();

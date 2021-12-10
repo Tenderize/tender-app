@@ -5,9 +5,8 @@ import { FC, useEffect } from "react";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 
-import { apolloClient } from "../config";
 import * as gtag from "../lib/gtag";
-import { GrommetWrapper } from "@tender/shared/src/index";
+import { apolloClient, GrommetWrapper } from "@tender/shared/src/index";
 import "./index.css";
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
