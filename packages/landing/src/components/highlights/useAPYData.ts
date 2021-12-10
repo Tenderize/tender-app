@@ -1,11 +1,11 @@
 import useSWR from "swr";
+import { Queries } from "@tender/shared/src/index";
 import stakers from "../../data/stakers";
-import { TenderizerDaysType } from "../../queries";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export const useAPYData = () => {
-  const { data } = useSWR<TenderizerDaysType>("/api/apy", fetcher);
+  const { data } = useSWR<Queries.TenderizerDaysType>("/api/apy", fetcher);
 
   const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;

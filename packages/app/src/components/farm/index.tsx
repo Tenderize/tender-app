@@ -7,8 +7,7 @@ import { Box } from "grommet";
 import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
-import InfoCard from "../tenderizers/infocard";
-import { GetUserDeployments, UserDeploymentsType } from "../../queries";
+import { InfoCard, Queries } from "@tender/shared/src/index";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import stakers from "../../data/stakers";
 
@@ -44,7 +43,7 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
   });
 
   const subgraphName = stakers[name].subgraphId;
-  const { data: userData, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
+  const { data: userData, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
 

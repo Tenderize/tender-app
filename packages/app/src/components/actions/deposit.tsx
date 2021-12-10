@@ -6,8 +6,7 @@ import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
-import InfoCard from "../tenderizers/infocard";
-import { GetUserDeployments, UserDeploymentsType } from "../../queries";
+import { InfoCard, Queries } from "@tender/shared/src/index";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
@@ -28,7 +27,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
   const { account } = useEthers();
 
   const subgraphName = stakers[name].subgraphId;
-  const { data, refetch } = useQuery<UserDeploymentsType>(GetUserDeployments, {
+  const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
 

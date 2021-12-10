@@ -6,15 +6,14 @@ import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 
-import { apolloClient, CHAIN_URL_MAPPING } from "../config";
 import * as gtag from "../lib/gtag";
-import { GrommetWrapper } from "@tender/shared/src/index";
+import { Config as TenderizeConfig, GrommetWrapper, apolloClient } from "@tender/shared/src/index";
 
 import "./index.css";
 
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Rinkeby,
-  readOnlyUrls: CHAIN_URL_MAPPING,
+  readOnlyUrls: TenderizeConfig.CHAIN_URL_MAPPING,
 };
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {

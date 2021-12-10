@@ -1,7 +1,7 @@
 import { Box, Heading, Paragraph } from "grommet";
 import { FC } from "react";
 import styled from "styled-components";
-import Foot from "../footer";
+import { Foot } from "@tender/shared/src/index";
 import { ScreenSize, screenToFontSize } from "../highlights/helper";
 import { HighlightContainer } from "../highlights/HighlightContainer";
 import { useMedium } from "./helper";

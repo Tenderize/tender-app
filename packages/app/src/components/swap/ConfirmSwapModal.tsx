@@ -16,7 +16,7 @@ import {
   Text,
 } from "grommet";
 
-import InfoCard from "../tenderizers/infocard";
+import { InfoCard } from "@tender/shared/src/index";
 import { useContractFunction } from "../../utils/useDappPatch";
 
 type Props = {
