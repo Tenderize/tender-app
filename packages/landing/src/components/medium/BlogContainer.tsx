@@ -1,6 +1,6 @@
-import { Box, BoxExtendedProps, Heading, Paragraph } from "grommet";
+import { Box, Heading, Paragraph } from "grommet";
 import { FC } from "react";
-import styled from 'styled-components'
+import styled from "styled-components";
 import Foot from "../footer";
 import { ScreenSize, screenToFontSize } from "../highlights/helper";
 import { HighlightContainer } from "../highlights/HighlightContainer";
@@ -41,10 +41,11 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
             }}
           />
           <Box pad={{ vertical: "small", horizontal: "medium" }}>
-            <Heading style={{fontSize: "1.5rem", lineHeight: "1.1"}}>{post.title}</Heading>
-            <Paragraph margin={{ top: "none" }} style={{fontSize: "1rem", padding: "0px 5px", color: "#eaeaea"}}>{`${ToText(
-              post.description.substring(0, 330)
-            )}...`}</Paragraph>
+            <Heading style={{ fontSize: "1.5rem", lineHeight: "1.1" }}>{post.title}</Heading>
+            <Paragraph
+              margin={{ top: "none" }}
+              style={{ fontSize: "1rem", padding: "0px 5px", color: "#eaeaea" }}
+            >{`${ToText(post.description.substring(0, 330))}...`}</Paragraph>
           </Box>
         </BlogBox>
       </a>
@@ -81,9 +82,9 @@ const ToText = (node: any) => {
   return node;
 };
 
-export const BlogBox: FC<BoxExtendedProps & { border?: boolean }> = styled(Box)`
+export const BlogBox = styled(Box)<{ border?: boolean }>`
   &:hover {
     text-shadow: 0px 0px 12px #ad01ff;
-    border-color: ${(props: any) => (props.border ? "#d98aff" : undefined)};
+    border-color: ${(props) => (props.border ? "#d98aff" : undefined)};
   }
 `;

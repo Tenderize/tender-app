@@ -6,7 +6,7 @@ import { ScrollIndicator } from "./ScrollIndicator";
 import { Slide } from "./Slide";
 
 export const Carousel: FC = () => {
-  const target = useRef<HTMLDivElement>();
+  const target = useRef<HTMLDivElement | null>(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
   return (
     <div
