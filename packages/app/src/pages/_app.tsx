@@ -14,6 +14,7 @@ import "./index.css";
 const dappConfig: Config = {
   readOnlyChainId: ChainId.Rinkeby,
   readOnlyUrls: TenderizeConfig.CHAIN_URL_MAPPING,
+
 };
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
