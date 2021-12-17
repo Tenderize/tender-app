@@ -5,11 +5,17 @@
 
 const { withSentryConfig } = require('@sentry/nextjs');
 
+const SENTRY_DSN = process.env.SENTRY_DSN;
+
 const moduleExports = {
   reactStrictMode: true,
   experimental: {
     externalDir: true,
   },
+  sentry: {
+    disableServerWebpackPlugin: SENTRY_DSN == null,
+    disableClientWebpackPlugin: SENTRY_DSN == null,
+  }
 };
 
 const sentryWebpackPluginOptions = {
