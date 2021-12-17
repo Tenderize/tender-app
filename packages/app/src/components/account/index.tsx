@@ -29,8 +29,16 @@ export const AccountButton: FC = () => {
   useEffect(() => {
     const fetchNetworkName = async () => {
       const network = await library?.getNetwork();
-
-      setNetworkName(network?.name);
+      let nameToSet = "";
+      if (chainId === 1) {
+        nameToSet = "Ethereum";
+      } else {
+        if (network?.name != null) {
+          const [initial, ...rest] = network.name;
+          nameToSet = [initial.toUpperCase(), ...rest].join("");
+        }
+      }
+      setNetworkName(nameToSet);
     };
 
     fetchNetworkName();
