@@ -11,20 +11,30 @@ import { normalizeColor } from "grommet/utils";
 import { Config, theme } from "@tender/shared/src/index";
 
 export const AccountButton: FC = () => {
-  const { account, deactivate, activate, activateBrowserWallet } = useEthers();
+  const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();
   const ens = useLookupAddress();
   const [showAccountInfo, setShowAccountInfo] = useState(false);
   const [showWalletPicker, setShowWalletPicker] = useState(false);
-
+  const [networkName, setNetworkName] = useState<string | undefined>();
   const handleCloseWalletPicker = useCallback(() => setShowWalletPicker(false), []);
   const handleShowWalletPicker = useCallback(() => setShowWalletPicker(true), []);
   const [activateError, setActivateError] = useState("");
-  const { error } = useEthers();
+
   useEffect(() => {
     if (error) {
       setActivateError(error.message);
     }
   }, [error]);
+
+  useEffect(() => {
+    const fetchNetworkName = async () => {
+      const network = await library?.getNetwork();
+
+      setNetworkName(network?.name);
+    };
+
+    fetchNetworkName();
+  }, [chainId, library]);
 
   const activateWallet = async () => {
     handleShowWalletPicker();
@@ -37,14 +47,14 @@ export const AccountButton: FC = () => {
       <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
       {account ? (
         <>
+          <NetworkLabel color="light-2" style={{ color: normalizeColor("brand", theme) }} label={networkName} />
           <AccountLabel
-            primary
             color="light-2"
             style={{ color: normalizeColor("brand", theme) }}
             onClick={() => setShowAccountInfo(!showAccountInfo)}
             label={ens ?? shortenAddress(account)}
           />
-          <DisconnectButton onClick={() => deactivate()} label="Disconnect" />
+          <Button onClick={() => deactivate()} label="Disconnect" />
         </>
       ) : (
         <ConnectButton primary color="light-2" onClick={activateWallet} label="Connect" />
@@ -158,32 +168,28 @@ const Account = styled.div`
   align-items: center;
 `;
 
+const NetworkLabel = styled(Button)`
+  ${({ theme }: { theme: ThemeType }) => css`
+    color: ${normalizeColor("brand", theme)};
+  `}
+  margin-right: 1rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+`;
+
 const AccountLabel = styled(Button)`
   ${({ theme }: { theme: ThemeType }) => css`
     color: ${normalizeColor("brand", theme)};
   `}
-  border-radius: 1.8rem;
+  border-bottom-right-radius: 0rem;
+  border-top-right-radius: 0rem;
   margin-right: -1.1rem;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const ConnectButton = styled(Button)`
   ${({ theme }: { theme: ThemeType }) => css`
     color: ${normalizeColor("brand", theme)};
   `}
-  border-radius: 1.8rem;
   padding-left: 2rem;
   padding-right: 2rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-`;
-
-const DisconnectButton = styled(Button)`
-  border-radius: 1.8rem;
 `;
