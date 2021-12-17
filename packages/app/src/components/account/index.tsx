@@ -163,9 +163,9 @@ const AccountLabel = styled(Button)`
     color: ${normalizeColor("brand", theme)};
   `}
   border-radius: 1.8rem;
-  margin-right: -2rem;
-  padding-right: 4rem;
-  padding-left: 0.8rem;
+  margin-right: -1.1rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
   display: flex;
