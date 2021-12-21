@@ -2,7 +2,7 @@ import { FC, ReactElement, ReactNode } from "react";
 import { Box, Table, TableHeader, TableBody, Text } from "grommet";
 import type { TransactionResponse } from "@ethersproject/providers";
 import {
-  getExplorerTransactionLink,
+  Rinkeby,
   Notification,
   useNotifications,
   useTransactions,
@@ -70,11 +70,7 @@ interface TransactionLinkProps {
 const TransactionLink = ({ transaction }: TransactionLinkProps) => (
   <>
     {transaction && (
-      <Link
-        href={getExplorerTransactionLink(transaction.hash, transaction.chainId)}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link href={Rinkeby.getExplorerTransactionLink(transaction.hash)} target="_blank" rel="noopener noreferrer">
         View on Etherscan
         <LinkIconWrapper>
           <ShareIcon fill="#FFFFFF" />
