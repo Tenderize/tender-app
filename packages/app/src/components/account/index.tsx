@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
+import { useEthers, shortenAddress, useLookupAddress, ChainId } from "@usedapp/core";
 import { Box, Button, Card, CardHeader, Image, Layer, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
@@ -9,6 +9,7 @@ import { FortmaticConnector } from "@web3-react/fortmatic-connector";
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { Config, theme } from "@tender/shared/src/index";
+import { SwitchNetwork } from "./SwitchNetwork";
 
 export const AccountButton: FC = () => {
   const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();
@@ -55,6 +56,7 @@ export const AccountButton: FC = () => {
       <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
       {account ? (
         <>
+          {chainId !== ChainId.Rinkeby && <SwitchNetwork />}
           <NetworkLabel color="light-2" style={{ color: normalizeColor("brand", theme) }} label={networkName} />
           <AccountLabel
             color="light-2"
@@ -181,6 +183,7 @@ const NetworkLabel = styled(Button)`
     color: ${normalizeColor("brand", theme)};
   `}
   margin-right: 1rem;
+  margin-left: 1rem;
   padding-right: 1rem;
   padding-left: 1rem;
 `;
