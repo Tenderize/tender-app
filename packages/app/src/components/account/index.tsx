@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { useEthers, shortenAddress, useLookupAddress, ChainId } from "@usedapp/core";
+import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
 import { Box, Button, Card, CardHeader, Image, Layer, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
