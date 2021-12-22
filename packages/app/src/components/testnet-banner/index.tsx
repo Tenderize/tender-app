@@ -10,14 +10,14 @@ const TestnetBanner: FC = () => {
     return null;
   }
 
-  const message = "Please switch to Rinkeby to use Tenderize.me";
+  const message = "to use Tenderize.me";
 
   return (
-    <Box background="#FFE8B9" height="40px" justify="center" align="center" gap="small" direction="row">
+    <Box background="#FFE8B9" height="40px" justify="center" align="center" gap="xsmall" direction="row">
+      <SwitchNetwork />
       <Text color="gray" size="small">
         {message}
       </Text>
-      <SwitchNetwork />
     </Box>
   );
 };
