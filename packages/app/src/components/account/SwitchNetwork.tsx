@@ -1,5 +1,8 @@
 import { FC, useState } from "react";
-import { Button } from "grommet";
+import { Button, ThemeType } from "grommet";
+import styled, { css } from "styled-components";
+import { normalizeColor } from "grommet/utils";
+import { theme } from "@tender/shared/src";
 
 export const addNetwork = async () => {
   let isNetworkAdded = false;
@@ -21,7 +24,9 @@ export const SwitchNetwork: FC = () => {
     return null;
   }
   return (
-    <Button
+    <SwitchButton
+      color="light-2"
+      style={{ color: normalizeColor("brand", theme) }}
       onClick={async (e) => {
         e.preventDefault();
         const isAdded = await addNetwork();
@@ -31,3 +36,9 @@ export const SwitchNetwork: FC = () => {
     />
   );
 };
+
+const SwitchButton = styled(Button)`
+  ${({ theme }: { theme: ThemeType }) => css`
+    color: ${normalizeColor("brand", theme)};
+  `}
+`;
