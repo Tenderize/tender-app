@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { useEthers, getExplorerAddressLink, useEtherBalance } from "@usedapp/core";
+import { useEthers, useEtherBalance, Rinkeby } from "@usedapp/core";
 import { TransactionsList } from "../transactions";
 import { formatEther } from "@ethersproject/units";
 import { BigNumber } from "ethers";
@@ -45,7 +45,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                   </Text>
                 </Box>
                 <Box direction="row" justify="between">
-                  <Link href={getExplorerAddressLink(account, chainId)} target="_blank" rel="noopener noreferrer">
+                  <Link href={Rinkeby.getExplorerAddressLink("account")} target="_blank" rel="noopener noreferrer">
                     Show on etherscan
                     <LinkIconWrapper>
                       <ShareIcon fill="#FFFFFF" />

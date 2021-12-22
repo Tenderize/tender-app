@@ -6,6 +6,7 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
 const SENTRY_DSN = process.env.SENTRY_DSN;
+const USE_SOURCEMAPS = process.env.USE_SOURCEMAPS;
 
 const moduleExports = {
   reactStrictMode: true,
@@ -15,7 +16,8 @@ const moduleExports = {
   sentry: {
     disableServerWebpackPlugin: SENTRY_DSN == null,
     disableClientWebpackPlugin: SENTRY_DSN == null,
-  }
+  },
+  productionBrowserSourceMaps: USE_SOURCEMAPS
 };
 
 const sentryWebpackPluginOptions = {
