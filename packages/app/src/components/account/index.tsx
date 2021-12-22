@@ -9,7 +9,6 @@ import { FortmaticConnector } from "@web3-react/fortmatic-connector";
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { Config, theme } from "@tender/shared/src/index";
-import { SwitchNetwork } from "./SwitchNetwork";
 
 export const AccountButton: FC = () => {
   const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();
@@ -56,7 +55,6 @@ export const AccountButton: FC = () => {
       <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
       {account ? (
         <>
-          {chainId !== ChainId.Rinkeby && <SwitchNetwork />}
           <NetworkLabel color="light-2" style={{ color: normalizeColor("brand", theme) }} label={networkName} />
           <AccountLabel
             color="light-2"
@@ -185,7 +183,6 @@ const NetworkLabel = styled(Button)`
   margin-right: 1rem;
   margin-left: 1rem;
   padding-right: 1rem;
-  padding-left: 1rem;
 `;
 
 const AccountLabel = styled(Button)`
