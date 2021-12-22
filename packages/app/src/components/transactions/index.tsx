@@ -88,24 +88,26 @@ const notificationContent: { [key in Notification["type"]]: { title: string; ico
 };
 
 interface ListElementProps {
-  icon: ReactElement;
+  icon: ReactNode;
   title: string | undefined;
   transaction?: TransactionResponse;
-  date: number;
+  date?: number;
   type: Notification["type"];
 }
 
-const ListElement: FC<ListElementProps> = ({ transaction, icon, title, date }) => {
+export const TransactionListElement: FC<Omit<ListElementProps, "type">> = ({ transaction, icon, title, date }) => {
   return (
     <ListElementWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-      <ListIconContainer>
-        <Text color="white">{icon}</Text>
-      </ListIconContainer>
+      {icon != null && (
+        <ListIconContainer>
+          <Text color="white">{icon}</Text>
+        </ListIconContainer>
+      )}
       <ListDetailsWrapper>
         <TextBold>{title}</TextBold>
         <TransactionLink transaction={transaction} />
       </ListDetailsWrapper>
-      <NotificationDate date={date} />
+      {date != null && <NotificationDate date={date} />}
     </ListElementWrapper>
   );
 };
@@ -130,13 +132,12 @@ export const TransactionsList: FC = () => {
     <TableWrapper title="Transactions history">
       <AnimatePresence initial={false}>
         {transactions.map((transaction) => (
-          <ListElement
+          <TransactionListElement
             transaction={transaction.transaction}
             title={transaction.transactionName}
             icon={TransactionIcon(transaction)}
             key={transaction.transaction.hash}
             date={transaction.submittedAt}
-            type={"transactionSucceed"}
           />
         ))}
       </AnimatePresence>

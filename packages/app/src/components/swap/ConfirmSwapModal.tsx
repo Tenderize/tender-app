@@ -18,6 +18,7 @@ import {
 
 import { InfoCard } from "@tender/shared/src/index";
 import { useContractFunction } from "../../utils/useDappPatch";
+import { TransactionListElement } from "components/transactions";
 
 type Props = {
   show: boolean;
@@ -44,7 +45,7 @@ const ConfirmSwapModal: FC<Props> = ({
   tokenReceivedAddress,
   protocolName,
 }) => {
-  const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted">("None");
+  const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted" | "Success">("None");
 
   // reset to initial state
   useEffect(() => {
@@ -75,6 +76,8 @@ const ConfirmSwapModal: FC<Props> = ({
     console.log("swapState", swapTx);
     if (swapTx.status === "Mining") {
       setConfirmStatus("Submitted");
+    } else if (swapTx.status === "Success") {
+      setConfirmStatus("Success");
     }
   }, [swapTx]);
 
@@ -141,8 +144,27 @@ const ConfirmSwapModal: FC<Props> = ({
                   <Text size="large" textAlign="center">
                     Transaction is being processed...
                   </Text>
+                  <TransactionListElement
+                    transaction={swapTx.transaction}
+                    title={`Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}
+                    icon={undefined}
+                  />
                   {swapTx.status !== "Success" && <Spinner size="medium" color="brand" />}
                   <Button primary onClick={onDismiss} label="Dismiss" />
+                </Box>
+              )}
+              {confirmStatus === "Success" && (
+                <Box justify="center" align="center" gap="medium">
+                  <Text size="large" textAlign="center">
+                    Transaction was successful!
+                  </Text>
+                  <TransactionListElement
+                    transaction={swapTx.transaction}
+                    title={`Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}
+                    icon={undefined}
+                  />
+                  {swapTx.status !== "Success" && <Spinner size="medium" color="brand" />}
+                  <Button primary onClick={onDismiss} label="Done" />
                 </Box>
               )}
             </CardBody>
