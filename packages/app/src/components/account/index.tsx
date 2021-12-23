@@ -181,8 +181,8 @@ const NetworkLabel = styled(Button)`
     color: ${normalizeColor("brand", theme)};
   `}
   margin-right: 1rem;
+  margin-left: 1rem;
   padding-right: 1rem;
-  padding-left: 1rem;
 `;
 
 const AccountLabel = styled(Button)`
