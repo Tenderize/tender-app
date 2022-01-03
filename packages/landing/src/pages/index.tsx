@@ -1,8 +1,9 @@
-import { FC, lazy, Suspense } from "react";
+import { FC } from "react";
 import { GrommetWrapper, useIsTouchDevice } from "@tender/shared/src/index";
+import dynamic from "next/dynamic";
 
-const MobileComponent = lazy(() => import("./MobileLandingContainer"));
-const DesktopComponent = lazy(() => import("./DesktopLandingContainer"));
+const MobileComponent = dynamic(() => import("./MobileLandingContainer"));
+const DesktopComponent = dynamic(() => import("./DesktopLandingContainer"));
 
 const Home: FC = () => {
   const isTouchDevice = useIsTouchDevice();
@@ -13,7 +14,7 @@ const Home: FC = () => {
         background: "#0B0C0F",
       }}
     >
-      <Suspense fallback={null}>{isTouchDevice ? <MobileComponent /> : <DesktopComponent />}</Suspense>
+      {isTouchDevice ? <MobileComponent /> : <DesktopComponent />}
     </GrommetWrapper>
   );
 };

@@ -1,5 +1,5 @@
-import { FC, MouseEventHandler, useCallback, useState } from "react";
-import { Box, Tabs, Tab, Text, Paragraph, DropButton, Button, Tip } from "grommet";
+import { FC, MouseEventHandler, useCallback, useRef, useState } from "react";
+import { Box, Tabs, Tab, Text, Paragraph, Drop, Button, Tip } from "grommet";
 import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,6 +17,7 @@ import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
 import { Foot } from "@tender/shared/src/index";
+import { useHover } from "utils/useHover";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -130,23 +131,21 @@ const Token: FC = () => {
 
 const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => {
   const options = Object.values(stakers).filter((option) => option.title !== title);
+  const targetRef = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
+  const { style, ...rest } = useHover({ backgroundColor: "rgba(0, 0, 0, 0.1)" });
 
   return (
-    <DropButton
-      plain
-      hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }}
-      open={open}
-      onClose={(e) => {
-        e.stopPropagation();
-        setOpen(false);
-      }}
-      onOpen={(e) => {
-        e.stopPropagation();
-        setOpen(true);
-      }}
-      style={{ paddingTop: 30, paddingBottom: 30 }}
-      label={
+    <>
+      <Box
+        ref={targetRef}
+        style={{ paddingTop: 33, paddingBottom: 33, boxShadow: "none", ...style }}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((v) => !v);
+        }}
+        {...rest}
+      >
         <Box focusIndicator={false} direction="row" justify="center" align="center">
           <Box direction="column" align="center" gap="small">
             <Image width={48} height={48} src={`/${logo}`} />
@@ -154,27 +153,32 @@ const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => 
           </Box>
           <FormDown color="white" />
         </Box>
-      }
-      dropProps={{ round: { corner: "bottom", size: "large" }, elevation: "none", background: "none" }}
-      dropAlign={{ top: "bottom" }}
-      dropContent={
-        <Box round={{ size: "large" }}>
-          <DropdownBackground style={{ zIndex: 1 }} />
-          <Box style={{ zIndex: 2 }}>
-            {options.map((option) => (
-              <DropdownOption
-                key={option.title}
-                staker={option}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpen(false);
-                }}
-              />
-            ))}
+      </Box>
+      {targetRef.current && open && (
+        <Drop
+          background="transparent"
+          target={targetRef.current}
+          align={{ top: "bottom", left: "left" }}
+          style={{ borderBottomRightRadius: 50, borderBottomLeftRadius: 50 }}
+        >
+          <Box round={{ size: "large" }}>
+            <DropdownBackground style={{ zIndex: 1 }} />
+            <Box style={{ zIndex: 2 }}>
+              {options.map((option) => (
+                <DropdownOption
+                  key={option.title}
+                  staker={option}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(false);
+                  }}
+                />
+              ))}
+            </Box>
           </Box>
-        </Box>
-      }
-    />
+        </Drop>
+      )}
+    </>
   );
 };
 

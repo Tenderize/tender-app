@@ -194,7 +194,7 @@ const JoinPool: FC<Props> = ({
     return tokenInBN.mul(lpSharesBN).div(tokenLpBalanceBN).sub(buffer);
   };
 
-  const addLiquidity: MouseEventHandler<HTMLButtonElement> = async (e) => {
+  const addLiquidity: MouseEventHandler<HTMLButtonElement & HTMLAnchorElement> = async (e) => {
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
