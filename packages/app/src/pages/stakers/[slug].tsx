@@ -214,8 +214,8 @@ const DropdownOptionContainer = styled(Box)`
 `;
 
 const DropdownBackground = styled.div`
-  background-image: url("/background.svg");
-  background-position: -50px -300px;
+  background-image: url("/shad-defi.jpg");
+  background-position: -550px -800px;
   filter: blur(2px);
   position: absolute;
   overflow: hidden;

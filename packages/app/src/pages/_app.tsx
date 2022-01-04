@@ -57,7 +57,7 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
         <DAppProvider config={dappConfig}>
           <GrommetWrapper
             style={{
-              background: "url('/background.svg')",
+              background: "url('/shad-defi.jpg')",
             }}
           >
             <Component {...pageProps} />
