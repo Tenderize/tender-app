@@ -2,12 +2,8 @@ import { FC } from "react";
 import { Box, Text } from "grommet";
 import Image from "next/image";
 type Props = {
-  description: string;
-  stakerAddress: string;
   title: string;
   apy: string;
-  logo: string;
-  bwLogo: string;
   neonLogo: string;
   symbol: string;
 };
