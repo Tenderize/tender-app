@@ -252,11 +252,13 @@ export function getUSDPrice(protocol: string): BigDecimal {
 
 export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {
   let config = Config.load(protocol)
-  let bPool = BPool.bind(Address.fromString(config.bpool))
-  let esp = ElasticSupplyPool.bind(Address.fromString(config.esp))
-  let totalSupply = esp.totalSupply().toBigDecimal()
-  let steakTokens = bPool.getBalance(Address.fromString(config.steak)).toBigDecimal()
-  let tenderTokens = bPool.getBalance(Address.fromString(config.tenderToken)).toBigDecimal()
+  let tenderSwap = TenderSwap.bind(Address.fromString(config.tenderSwap))
+  const tenderSwapAddr = tenderSwap.liquidityPoolToken()
+  let lpToken = LiquidityPoolToken.bind(Address.fromString(tenderSwapAddr))
+  let totalSupply = lpToken.totalSupply().toBigDecimal()
+  let tenderTokens = tenderSwap.getToken0Balance().toBigDecimal()
+  let steakTokens = tenderSwap.getToken1Balance().toBigDecimal()
+  
   return amount.div(totalSupply).times(steakTokens.plus(tenderTokens))
 }
 
@@ -269,8 +271,7 @@ export function tokensToShares(amount: BigInt, protocol: string): BigInt {
 export function addressIsContract(config: Config, address: Address): Boolean {
   let addressString = address.toHex()
   return (
-  addressString.includes(config.esp) ||
-  addressString.includes(config.bpool) ||
+  addressString.includes(config.tenderSwap) ||
   addressString.includes(config.tenderFarm) ||
   addressString.includes(config.tenderizer)
   ) as Boolean

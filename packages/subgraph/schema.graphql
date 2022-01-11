@@ -9,18 +9,14 @@ type TenderizeGlobal @entity { # Global Values/ TODO: better name?
 type Config @entity{
   "Name of the protocol eg. 'livepeer'"
   id: ID!
-  "Address of the Controller"
-  controller: String!
   "Address of the ERC20 token for integration"
   steak: String!
   "Address of Tenderizer"
   tenderizer: String!
   "Address of ERC20 Tender Token"
   tenderToken: String!
-  "Address of Elastic Supply Pool"
-  esp: String!
-  "Address of liquidity pool for pair"
-  bpool: String!
+  "Address of the TenderSwap pool for this Tenderizerr"
+  tenderSwap: String!
   "Address of TenderFarm contract"
   tenderFarm: String!
 }
@@ -178,12 +174,10 @@ type UserDeploymentDay @entity {
 type TenderizerCreatedEvent @entity {
   id: ID!
   name: String!
-  controller: String!
   steak: String!
   tenderizer: String!
   tenderToken: String!
-  esp: String!
-  bpool: String!
+  tenderSwap: String!
   tenderFarm: String!
   timestamp: BigInt!
 }
