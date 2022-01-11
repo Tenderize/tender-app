@@ -1,5 +1,3 @@
-// This address points to a dummy ERC20 contract deployed on Ethereum Mainnet,
-// Goerli, Kovan, Rinkeby and Ropsten. Replace it with your smart contracts.
 const addresses = {
   livepeer: {
     faucet: "0x648E6AEc099ca299ee70132299aA1349D4e48adE",
@@ -11,13 +9,13 @@ const addresses = {
     farm: "0xea1ED77f083e04087d7909AD3ca682FD44974098"
   },
   graph: {
-    faucet: "0x720EF0180E50668D42e5F92a5Ec137E8b6C055Dd",
-    token: "0x083d006007d65f86e81373a1f8a1972141e63ce2",
-    controller: "0x31BE723bC769308BeB45DbBCA1832A335e8B5fa8",
-    tenderToken: "0x31caC38113B1f0F5BDf4a8fdC09B2eDA1979c35B",
-    swap: "0xb5a8d92af3537fa95d125c6bf91a84cf9ca6fd91",
-    liquidity: "0xf56497CC1489C50840314EE479cE705d25c4235b",
-    farm: "0x089D0bB23ca09ea31944e535C02423EF0D1ffA95"
+    faucet: "0xd8fA4Cc6Ae7049EeC08c0B49c0Bd7a80629d71B5",
+    token: "0xefC13c267B84A3Dc3e5032303bECafC84840936C",
+    controller: "0x3b77b5f497b9c3555ba71C3958aF940905B2936a",
+    tenderToken: "0xc262593B0aC5f6989473A3edD22eAfe78070E817",
+    swap: "0xE52ae3D80A5C9aF1fFBdc13aA96F19AAEd31A6E6",
+    liquidity: "0xef19822811254E66388464D41DD75D32a934ec89",
+    farm: "0x86DB5f6021c2EfBFeC011EB0939253Dc1686B4fB"
   },
   matic: {
     faucet: "0x754Ab83a304e0Cba50FfC18E8F83AB19cAdF5f87",
@@ -29,14 +27,22 @@ const addresses = {
     farm: "0xbDdF12D848308B2d0ce1b881c44C5471e6299121"
   },
   audius: {
-    faucet: "0xc6202eb0a43041eaA801447FEa136095A7E81bEd",
+    faucet: "0xa5b5F8B5a0aB8db94d037C9014D904BF38eC252b",
     token: "0xF1A3373f54aC74C579d489289077E714273341eA",
-    controller: "0x4279B2e1D16492Ee55C02Cf7165DF419cbEF16Fa",
-    tenderToken: "0x21D74b4797e41f96076b0969F5fBa09a32e3DC8b",
-    swap: "0x1C79f17eadeAEf71c127E1fc39A404558167f88F",
-    liquidity: "0xC7027748d1ff005f7C72a7784B060cde024eaE89",
-    farm: "0xb01A225b6e128Cb1497fA92e9Ba86d10363a3e39"
+    controller: "0x5a3D26D3D155cCEcf4BD7188FE96e6d44AdBf28b",
+    tenderToken: "0x3a1b23be08e058C4503b33A842722f3842C66aE8",
+    swap: "0x1a1a4B672AdC08891c09fa6c03ca5DC9e7896A5e",
+    liquidity: "0x4358BE6e29727abeC0553052931CA6f99c107622",
+    farm: "0x97a62EdF2e2B3A934D3206C8b1f26D44981c0ba2"
   }
 };
+
+  // faucet: "0xB4A9F253bFe6ac5BC5Cf3b9a366a50cD18260290",
+    // token: "0xefC13c267B84A3Dc3e5032303bECafC84840936C",
+    // controller: "0x976ef2933A75D9aAB636B5Ce0D45947868FBb16c",
+    // tenderToken: "0x99B449A7127Ce02Fb7B3931C7d549aaC444a8fF2",
+    // swap: "0x80898cC537570eA3FC3D346d0235D9C7fA6d253A",
+    // liquidity: "0xfBB706709ECe4bf3420564F983FaC14513e62C53",
+    // farm: "0xDC6477667F83Bb89b072D85711b68F6B5a06d830"
 
 export default addresses;

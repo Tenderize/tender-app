@@ -14,7 +14,7 @@ const CHAIN_URL_MAPPING = {
 };
 
 export const apolloClient = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize",
+  uri: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize-staging",
   cache: new InMemoryCache(),
 });
 
