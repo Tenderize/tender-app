@@ -160,7 +160,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
 export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): void {
   let tenderizerAddress = rewardsClaimedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
-  let amount = rewardsClaimedEvent.params.rewards
+  let amount = rewardsClaimedEvent.params.stakeDiff
   let usdPrice = getUSDPrice(protocolId)
   let config = Config.load(protocolId)
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
@@ -184,7 +184,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   // Save raw event
   let event = new RewardsClaimedEvent(rewardsClaimedEvent.transaction.hash.toHex());
   event.tenderizer = tenderizerAddress
-  event.rewards = rewardsClaimedEvent.params.rewards
+  event.rewards = rewardsClaimedEvent.params.stakeDiff
   event.currentPrincipal = rewardsClaimedEvent.params.currentPrincipal
   event.oldPrincipal = rewardsClaimedEvent.params.oldPrincipal
   event.timestamp = rewardsClaimedEvent.block.timestamp

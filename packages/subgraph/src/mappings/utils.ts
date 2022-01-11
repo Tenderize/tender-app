@@ -2,9 +2,10 @@ import { BigDecimal, BigInt, Address, dataSource } from "@graphprotocol/graph-ts
 import { Deployment, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserDeployment, UserDeploymentDay, TenderFarmDay, TenderFarm, Config } from "../types/schema";
 import { OneInch } from "../types/templates/Tenderizer/OneInch"
 import * as config from "./config"
-import { BPool } from "../types/templates/TenderFarm/BPool"
-import { ElasticSupplyPool } from "../types/templates/TenderFarm/ElasticSupplyPool"
+import { TenderSwap } from "../types/templates/TenderSwap/TenderSwap"
+import { LiquidityPoolToken } from "../types/templates/TenderFarm/LiquidityPoolToken"
 import { TenderToken } from "../types/templates/TenderFarm/TenderToken"
+import { ERC20 } from "../types/templates/TenderFarm/ERC20"
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
@@ -252,11 +253,11 @@ export function getUSDPrice(protocol: string): BigDecimal {
 
 export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {
   let config = Config.load(protocol)
-  let bPool = BPool.bind(Address.fromString(config.bpool))
-  let esp = ElasticSupplyPool.bind(Address.fromString(config.esp))
-  let totalSupply = esp.totalSupply().toBigDecimal()
-  let steakTokens = bPool.getBalance(Address.fromString(config.steak)).toBigDecimal()
-  let tenderTokens = bPool.getBalance(Address.fromString(config.tenderToken)).toBigDecimal()
+  let tenderSwap = TenderSwap.bind(Address.fromString(config.tenderSwap))
+  let lpToken = LiquidityPoolToken.bind(tenderSwap.lpToken())
+  let totalSupply = lpToken.totalSupply().toBigDecimal()
+  let tenderTokens = tenderSwap.getToken0Balance().toBigDecimal()
+  let steakTokens = tenderSwap.getToken1Balance().toBigDecimal()
   return amount.div(totalSupply).times(steakTokens.plus(tenderTokens))
 }
 
@@ -269,8 +270,9 @@ export function tokensToShares(amount: BigInt, protocol: string): BigInt {
 export function addressIsContract(config: Config, address: Address): Boolean {
   let addressString = address.toHex()
   return (
-  addressString.includes(config.esp) ||
-  addressString.includes(config.bpool) ||
+  addressString.includes(config.tenderToken) ||
+  addressString.includes(config.lpToken) ||
+  addressString.includes(config.tenderSwap) ||
   addressString.includes(config.tenderFarm) ||
   addressString.includes(config.tenderizer)
   ) as Boolean
