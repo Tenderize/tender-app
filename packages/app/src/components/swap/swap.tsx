@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from "react";
 import { Button, Box, Form, FormField, Image, Text, TextInput, Tip } from "grommet";
-import { BigNumberish, utils, BigNumber } from "ethers";
+import { BigNumberish, utils } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 import stakers from "../../data/stakers";
@@ -39,12 +39,6 @@ const Swap: FC<Props> = ({
   tokenBalance,
   tenderTokenBalance,
   protocolName,
-  swapFee,
-  tokenLpBalance,
-  tokenWeight,
-  tenderLpBalance,
-  tenderTokenWeight,
-  spotPrice,
 }) => {
   const logo = `/${stakers[protocolName].bwLogo}`;
   const tenderLogo = `/${stakers[protocolName].bwTenderLogo}`;
@@ -70,17 +64,8 @@ const Swap: FC<Props> = ({
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
   const tokenReceivedLogo = isSendingToken ? tenderLogo : logo;
   const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
-  const tokenSendedLpBalance = isSendingToken ? tokenLpBalance : tenderLpBalance;
-  const tokenSendedWeight = isSendingToken ? tokenWeight : tenderTokenWeight;
   const tokenSendedAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
-  const tokenReceivedAddress = isSendingToken ? addresses[protocolName].tenderToken : addresses[protocolName].token;
-  const tokenReceivedLpBalance = isSendingToken ? tenderLpBalance : tokenLpBalance;
-  const tokenReceivedWeight = isSendingToken ? tenderTokenWeight : tokenWeight;
-  const tokenSpotPrice = (
-    isSendingToken ? ONE.mul(ONE).div(hasValue(spotPrice) ? spotPrice : ONE) : BigNumber.from(spotPrice.toString())
-  )
-    .mul(11)
-    .div(10);
+  const tokenReceivedAddress = !isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
 
   const isTokenApproved = useIsTokenApproved(tokenSendedAddress, addresses[protocolName].swap, sendTokenAmount);
 
@@ -88,49 +73,39 @@ const Swap: FC<Props> = ({
   const [receiveFocused, setReceiveFocused] = useState(false);
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [calcOutGivenIn] =
-    useContractCall(
-      hasValue(tokenSendedLpBalance) &&
-        hasValue(tokenSendedWeight) &&
-        hasValue(tokenReceivedLpBalance) &&
-        hasValue(tokenReceivedWeight) &&
-        hasValue(sendTokenAmount) &&
-        hasValue(swapFee) && {
-          abi: contracts[protocolName].swap.interface,
-          address: addresses[protocolName].swap,
-          method: "calcOutGivenIn",
-          args: [
-            tokenSendedLpBalance || "0",
-            tokenSendedWeight || "0",
-            tokenReceivedLpBalance || "0",
-            tokenReceivedWeight || utils.parseEther("1"),
-            utils.parseEther(sendTokenAmount || "0"),
-            swapFee || "0",
-          ],
-        }
-    ) ?? [];
+ const  isTenderToken = (address: string) => {
+  return address === addresses[protocolName].tenderToken;
+ };
 
-  const [calcInGivenOut] =
-    useContractCall(
-      hasValue(tokenSendedLpBalance) &&
-        hasValue(tokenSendedWeight) &&
-        hasValue(tokenReceivedLpBalance) &&
-        hasValue(tokenReceivedWeight) &&
-        hasValue(receiveTokenAmount) &&
-        hasValue(swapFee) && {
-          abi: contracts[protocolName].swap.interface,
-          address: addresses[protocolName].swap,
-          method: "calcInGivenOut",
-          args: [
-            tokenSendedLpBalance || "0",
-            tokenSendedWeight || "0",
-            tokenReceivedLpBalance || "0",
-            tokenReceivedWeight || utils.parseEther("1"),
-            utils.parseEther(receiveTokenAmount || "0"),
-            swapFee || "0",
-          ],
-        }
-    ) ?? [];
+  const [tokenSpotPrice] = useContractCall({
+    abi: contracts[protocolName].swap.interface,
+    address: addresses[protocolName].swap,
+    method: "calculateTokenAmount",
+    args: [
+      isTenderToken(tokenSendedAddress) ? [ONE, 0] : [0, ONE],
+      true
+    ],
+  }) ?? [];
+
+  const [calcOutGivenIn] = useContractCall({
+    abi: contracts[protocolName].swap.interface,
+    address: addresses[protocolName].swap,
+    method: "calculateTokenAmount",
+    args: [
+      isTenderToken(tokenSendedAddress) ? [sendTokenAmount, 0] : [0, sendTokenAmount],
+      true
+    ],
+  }) ?? [];
+
+  const [calcInGivenOut] = useContractCall({
+    abi: contracts[protocolName].swap.interface,
+    address: addresses[protocolName].swap,
+    method: "calculateTokenAmount",
+    args: [
+      isTenderToken(tokenReceivedAddress) ? [receiveTokenAmount, 0] : [0, receiveTokenAmount],
+      true
+    ],
+  }) ?? [];
 
   const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setSendTokenAmount(e.target.value);
@@ -285,12 +260,11 @@ const Swap: FC<Props> = ({
         show={showConfirm}
         onDismiss={() => setShowConfirm(false)}
         tokenSendedSymbol={tokenSendedSymbol}
-        sendTokenAmount={calcInGivenOut}
+        tokenAmount={calcInGivenOut}
+        tokenReceiveAmount={calcOutGivenIn}
         tokenReceivedSymbol={tokenReceivedSymbol}
-        receiveTokenAmount={calcOutGivenIn}
+        tokenAddress={tokenSendedAddress}
         tokenSpotPrice={tokenSpotPrice}
-        tokenSendedAddress={tokenSendedAddress}
-        tokenReceivedAddress={tokenReceivedAddress}
         protocolName={protocolName}
       />
     </Box>
