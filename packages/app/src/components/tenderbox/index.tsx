@@ -17,23 +17,23 @@ const TenderBox: FC<BoxExtendedProps> = (props) => {
     <BlurryBox {...props}>
       <img
         alt="hammer logo"
-        src={"/hammer2.svg"}
+        src={"/hammer-neon.svg"}
         style={{
           position: "absolute",
           top: "-100px",
-          left: "-80px",
+          left: "-60px",
           height: "300px",
-          transform: "rotate(20deg)",
+          transform: "rotate(35deg)",
         }}
       />
       <img
         alt="steak logo"
-        src={"/meat.svg"}
+        src={"/meat-neon.svg"}
         style={{
           position: "absolute",
-          right: "-100px",
-          bottom: "-50px",
-          width: "220px",
+          right: "-80px",
+          bottom: "-30px",
+          width: "200px",
         }}
       />
       <Box
