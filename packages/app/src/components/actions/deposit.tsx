@@ -46,7 +46,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
     setDepositInput(val);
   };
 
-  const { state: depositTx, send: deposit } = useContractFunction(contracts[name].controller, "deposit", {
+  const { state: depositTx, send: deposit } = useContractFunction(contracts[name].tenderizer, "deposit", {
     transactionName: `Deposit ${symbol}`,
   });
 
@@ -56,7 +56,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
     setDepositInput("");
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].controller, depositInput);
+  const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].tenderizer, depositInput);
 
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
@@ -114,7 +114,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
               <Box gap="small" direction="column">
                 <ApproveToken
                   symbol={symbol}
-                  spender={addresses[name].controller}
+                  spender={addresses[name].tenderizer}
                   token={contracts[name].token}
                   show={!isTokenApproved}
                 />

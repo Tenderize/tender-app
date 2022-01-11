@@ -33,10 +33,10 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput);
+  const isTokenApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].tenderFarm, farmInput);
 
   // Contract Functions
-  const { state: farmTx, send: farm } = useContractFunction(contracts[name].farm, "farm", {
+  const { state: farmTx, send: farm } = useContractFunction(contracts[name].tenderFarm, "farm", {
     transactionName: `Farm ${symbol}`,
   });
 
@@ -76,7 +76,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
               <Box justify="center" gap="small">
                 <ApproveToken
                   symbol={symbol}
-                  spender={addresses[name].farm}
+                  spender={addresses[name].tenderFarm}
                   token={contracts[name].liquidity}
                   show={!isTokenApproved}
                 />

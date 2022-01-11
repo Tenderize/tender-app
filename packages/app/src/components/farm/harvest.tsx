@@ -20,7 +20,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
   const handleShow = () => setShow(true);
 
   // Contract Functions
-  const { state: harvestTx, send: harvest } = useContractFunction(contracts[name].farm, "harvest", {
+  const { state: harvestTx, send: harvest } = useContractFunction(contracts[name].tenderFarm, "harvest", {
     transactionName: `Harvest ${symbol}`,
   });
   const harvestRewards = (e: any) => {
