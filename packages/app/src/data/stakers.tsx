@@ -33,7 +33,7 @@ const stakers: Record<string, Staker> = {
     name: "graph",
     path: "/stakers/graph",
     title: "The Graph",
-    subgraphId: "Graph3",
+    subgraphId: "Graph",
     description:
       "The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible.",
     available: true,
