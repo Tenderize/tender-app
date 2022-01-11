@@ -34,7 +34,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
 
   // Contract Functions
 
-  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].farm, "unfarm", {
+  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].tenderFarm, "unfarm", {
     transactionName: `Unfarm ${symbol}`,
   });
   const unfarmLpTokens = async (e: any) => {

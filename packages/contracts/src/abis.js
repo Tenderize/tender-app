@@ -1,21 +1,20 @@
-import erc20Abi from "./abis/erc20.json";
-import ownableAbi from "./abis/ownable.json";
+import ERC20 from "./abis/erc20.json";
+import Ownable from "./abis/ownable.json";
 import Faucet from "./abis/Faucet.json"
-import Controller from "./abis/Controller.json"
+import Tenderizer from "./abis/Tenderizer.json"
 import TenderToken from "./abis/TenderToken.json"
-import Swap from "./abis/Swap.json"
+import TenderSwap from "./abis/TenderSwap.json"
 import TenderFarm from "./abis/TenderFarm.json"
-import Esp from "./abis/ESP.json"
 
 const abis = {
-  token: erc20Abi,
-  ownable: ownableAbi,
+  token: ERC20,
+  ownable: Ownablee,
   faucet: Faucet,
-  controller: Controller,
+  tenderizer: Tenderizer,
   tenderToken: TenderToken,
-  swap: Swap,
-  liquidity: Esp,
-  farm: TenderFarm
+  tenderSwap: TenderSwap,
+  lpToken: ERC20,
+  tenderFarm: TenderFarm
 };
 
 export default abis;
