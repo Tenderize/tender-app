@@ -8,7 +8,7 @@ import TenderFarm from "./abis/TenderFarm.json"
 
 const abis = {
   token: ERC20,
-  ownable: Ownablee,
+  ownable: Ownable,
   faucet: Faucet,
   tenderizer: Tenderizer,
   tenderToken: TenderToken,
