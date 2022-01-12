@@ -63,7 +63,7 @@ const stakers: Record<string, Staker> = {
     name: "audius",
     path: "/stakers/audius",
     title: "Audius",
-    subgraphId: "Audius2",
+    subgraphId: "Audius",
     description: "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
     available: true,
     apy: 14.8,
