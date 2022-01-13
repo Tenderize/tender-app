@@ -18,13 +18,13 @@ const addresses = {
     tenderFarm: "0x86DB5f6021c2EfBFeC011EB0939253Dc1686B4fB"
   },
   matic: {
-    faucet: "0x754Ab83a304e0Cba50FfC18E8F83AB19cAdF5f87",
+    faucet: "0x64c2Aa0Fb0A0130d3A2a5Ffec03c61206CE94403",
     token: "0x0e6C08D9e15C60941722fF9699463Bf1d098f5DF",
-    tenderizer: "0x35920D2eA5a146Ca68C16Fe72FEbaBdC3007a11C",
-    tenderToken: "0x06Df3C8cB28eA12e32B5Fe92F3cCc3EBC650cf58",
-    tenderSwap: "0xa56aA9cC6b0Fc28753ceD7ff33f2c70b2cBdb414",
-    lpToken: "0xCA44830efBE2956EE1aA45fe3e63be93A3c8e5f4",
-    tenderFarm: "0xbDdF12D848308B2d0ce1b881c44C5471e6299121"
+    tenderizer: "0xdB2CEE12a3963121B1D5cC0407ad6BB0661f49d8",
+    tenderToken: "0xd3B09E403b702d3947ee8b6baF200Bc3D7361634",
+    tenderSwap: "0x30d58315a033a4965a0486FbC3f4Ea4e902A9502",
+    lpToken: "0x81d882782c5c88b9C61eC64afD651d3333AeE09c",
+    tenderFarm: "0xE270194fa9F643e6E2a23ec8074881c8b00d844a"
   },
   audius: {
     faucet: "0xa5b5F8B5a0aB8db94d037C9014D904BF38eC252b",
