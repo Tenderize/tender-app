@@ -54,25 +54,18 @@ const ConfirmSwapModal: FC<Props> = ({
     }
   }, [show]);
 
-  const { state: swapTx, send: swap } = useContractFunction(
-    contracts[protocolName].tenderSwap,
-    "swap",
-    { transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}` }
-  );
+  const { state: swapTx, send: swap } = useContractFunction(contracts[protocolName].tenderSwap, "swap", {
+    transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`,
+  });
 
   const minAmount = tokenReceiveAmount.mul(98).div(100);
 
-  const deadlineMS = (new Date()).getTime() + DEADLINE_MINUTES * 60000
+  const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;
   const deadline = deadlineMS / 1000;
 
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
-    await swap(
-      tokenAddress,
-      tokenAmount,
-      minAmount,
-      deadline
-    );
+    await swap(tokenAddress, tokenAmount, minAmount, deadline);
     onDismiss();
   };
 

@@ -90,8 +90,8 @@ const ExitPool: FC<Props> = ({
           hasValue(totalWeight) &&
           hasValue(lpSharesInput) &&
           hasValue(swapFee) && {
-            abi: contracts[name].swap.interface,
-            address: addresses[name].swap,
+            abi: contracts[name].tenderSwap.interface,
+            address: addresses[name].tenderSwap,
             method: "calcSingleOutGivenPoolIn",
             args: [tokenBalOut, tokenWeightOut, lpShares, totalWeight, utils.parseEther(lpSharesInput), swapFee],
           }
