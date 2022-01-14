@@ -26,9 +26,9 @@ type Props = {
   show: boolean;
   tokenAddress: string;
   tokenAmount: BigNumber;
-  tokenReceiveAmount: BigNumber;
-  tokenSendedSymbol: string;
-  tokenReceivedSymbol: string;
+  receiveTokenAmount: BigNumber;
+  sendTokenSymbol: string;
+  receiveTokenSymbol: string;
   tokenSpotPrice: BigNumber;
   protocolName: string;
   onDismiss: () => void;
@@ -38,9 +38,9 @@ const ConfirmSwapModal: FC<Props> = ({
   show,
   tokenAddress,
   tokenAmount,
-  tokenReceiveAmount,
-  tokenSendedSymbol,
-  tokenReceivedSymbol,
+  receiveTokenAmount,
+  sendTokenSymbol,
+  receiveTokenSymbol,
   tokenSpotPrice,
   protocolName,
   onDismiss,
@@ -55,10 +55,10 @@ const ConfirmSwapModal: FC<Props> = ({
   }, [show]);
 
   const { state: swapTx, send: swap } = useContractFunction(contracts[protocolName].tenderSwap, "swap", {
-    transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`,
+    transactionName: `Swap ${sendTokenSymbol} for ${receiveTokenSymbol}`,
   });
 
-  const minAmount = tokenReceiveAmount.mul(98).div(100);
+  const minAmount = receiveTokenAmount.mul(98).div(100);
 
   const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;
   const deadline = deadlineMS / 1000;
@@ -93,13 +93,13 @@ const ConfirmSwapModal: FC<Props> = ({
             <CardHeader
               justify="center"
               pad={{ bottom: "small" }}
-            >{`Confirm Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}</CardHeader>
+            >{`Confirm Swap ${sendTokenSymbol} for ${receiveTokenSymbol}`}</CardHeader>
             <CardBody justify="center" align="center">
               {confirmStatus === "None" && (
                 <>
                   <Form>
                     <Box justify="around" align="center">
-                      <FormField label={`Send ${tokenSendedSymbol}`}>
+                      <FormField label={`Send ${sendTokenSymbol}`}>
                         <TextInput
                           readOnly
                           id="formSwapSend"
@@ -108,18 +108,18 @@ const ConfirmSwapModal: FC<Props> = ({
                           required={true}
                         />
                       </FormField>
-                      <FormField label={`Receive ${tokenReceivedSymbol}`}>
+                      <FormField label={`Receive ${receiveTokenSymbol}`}>
                         <TextInput
                           readOnly
                           id="formSwapReceive"
                           placeholder={"0"}
-                          value={utils.formatEther(tokenReceiveAmount || "0")}
+                          value={utils.formatEther(sendTokenSymbol || "0")}
                         />
                       </FormField>
                     </Box>
                   </Form>
                   <Box>
-                    <InfoCard title="Price" text={`${utils.formatEther(tokenSpotPrice)} ${tokenSendedSymbol}`} />
+                    <InfoCard title="Price" text={`${utils.formatEther(tokenSpotPrice)} ${sendTokenSymbol}`} />
                   </Box>
                 </>
               )}
@@ -130,8 +130,8 @@ const ConfirmSwapModal: FC<Props> = ({
                     Waiting For Confirmation...
                   </Text>
                   <Text>
-                    Swapping {utils.formatEther(tokenAmount || "0")} {tokenSendedSymbol} for{" "}
-                    {utils.formatEther(tokenReceiveAmount || "0")} {tokenReceivedSymbol}
+                    Swapping {utils.formatEther(tokenAmount || "0")} {sendTokenSymbol} for{" "}
+                    {utils.formatEther(receiveTokenAmount || "0")} {receiveTokenSymbol}
                   </Text>
                   <Text>Confirm this transaction in your wallet.</Text>
                 </Box>
@@ -143,7 +143,7 @@ const ConfirmSwapModal: FC<Props> = ({
                   </Text>
                   <TransactionListElement
                     transaction={swapTx.transaction}
-                    title={`Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}
+                    title={`Swap ${sendTokenSymbol} for ${receiveTokenSymbol}`}
                     icon={undefined}
                   />
                   {swapTx.status !== "Success" && <Spinner size="medium" color="brand" />}
@@ -157,7 +157,7 @@ const ConfirmSwapModal: FC<Props> = ({
                   </Text>
                   <TransactionListElement
                     transaction={swapTx.transaction}
-                    title={`Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}
+                    title={`Swap ${sendTokenSymbol} for ${receiveTokenSymbol}`}
                     icon={undefined}
                   />
                   {swapTx.status !== "Success" && <Spinner size="medium" color="brand" />}

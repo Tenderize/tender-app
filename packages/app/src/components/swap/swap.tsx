@@ -58,6 +58,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     setSendTokenAmount(e.target.value);
   }, []);
 
+  console.log("spot price", tokenSpotPrice.toString())
   console.log("@@@ calcOutGivenIn", calcOutGivenIn);
   useEffect(() => {
     setReceiveTokenAmount(utils.formatEther(calcOutGivenIn || "0"));
