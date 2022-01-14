@@ -1,6 +1,6 @@
 import { FC, useState, useCallback, ChangeEventHandler } from "react";
 import { addresses, contracts } from "@tender/contracts";
-import { BigNumberish, utils } from "ethers";
+import { BigNumberish, BigNumber, utils } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import {
   Image,
@@ -32,26 +32,10 @@ import { weiToEthWithDecimals } from "../../utils/amountFormat";
 type Props = {
   name: string;
   symbol: string;
-  tokenWeight: BigNumberish;
-  tenderTokenWeight: BigNumberish;
-  totalWeight: BigNumberish;
-  swapFee: BigNumberish;
-  tokenLpBalance: BigNumberish;
-  tenderLpBalance: BigNumberish;
-  lpShares: BigNumberish;
+  lpTokenBalance: BigNumber;
 };
 
-const ExitPool: FC<Props> = ({
-  name,
-  symbol,
-  tokenWeight,
-  tenderTokenWeight,
-  totalWeight,
-  swapFee,
-  tokenLpBalance,
-  tenderLpBalance,
-  lpShares,
-}) => {
+const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const staker = stakers[name];
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);

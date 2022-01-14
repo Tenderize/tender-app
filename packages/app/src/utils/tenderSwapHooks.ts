@@ -23,3 +23,9 @@ export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNum
     }) ?? [constants.Zero]
   );
 };
+
+export const getDeadline = () => {
+  const DEADLINE_MINUTES = 10;
+  const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;
+  return deadlineMS / 1000;
+};
