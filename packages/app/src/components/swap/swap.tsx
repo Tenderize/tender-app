@@ -177,7 +177,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         tokenAmount={(() => {
           return utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount);
         })()}
-        tokenReceiveAmount={calcOutGivenIn}
+        receiveTokenAmount={calcOutGivenIn}
         receiveTokenSymbol={receiveTokenSymbol}
         tokenAddress={sendTokenAddress}
         tokenSpotPrice={tokenSpotPrice}
