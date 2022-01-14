@@ -17,14 +17,6 @@ type Props = {
   tokenSymbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
-
-  swapFee: BigNumberish;
-  tokenLpBalance: BigNumberish;
-  tokenWeight: BigNumberish;
-  tenderLpBalance: BigNumberish;
-  tenderTokenWeight: BigNumberish;
-  totalWeight: BigNumberish;
-  spotPrice: BigNumberish;
 };
 
 const hasValue = (val: any) => {
@@ -180,10 +172,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         show={showConfirm}
         onDismiss={() => setShowConfirm(false)}
         tokenSendedSymbol={sendTokenSymbol}
-        tokenAmount={(() => {
-          console.log("sendTokenAmount", sendTokenAmount);
-          return utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount);
-        })()}
+        tokenAmount={utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount)}
         tokenReceiveAmount={calcOutGivenIn}
         tokenReceivedSymbol={tokenReceivedSymbol}
         tokenAddress={sendTokenAddress}

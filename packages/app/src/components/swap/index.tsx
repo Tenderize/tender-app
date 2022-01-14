@@ -28,7 +28,6 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
     tokenLpBalance,
     tenderLpBalance,
     lpShares,
-    spotPrice,
   ] = useContractCalls([
     {
       abi: contracts[name].tenderSwap.interface,
@@ -72,12 +71,6 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
       method: "totalSupply",
       args: [],
     },
-    {
-      abi: contracts[name].tenderSwap.interface,
-      address: addresses[name].tenderSwap,
-      method: "getSpotPrice",
-      args: [addresses[name].tenderToken, addresses[name].token],
-    },
   ]);
 
   return (
@@ -87,13 +80,6 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         tokenSymbol={symbol}
         tokenBalance={tokenBalance}
         tenderTokenBalance={tenderTokenBalance}
-        tokenWeight={tokenDenormWeight ? tokenDenormWeight[0] : "0"}
-        tenderTokenWeight={tenderTokenDenormWeight ? tenderTokenDenormWeight[0] : "0"}
-        totalWeight={totalDenormWeight ? totalDenormWeight[0] : "0"}
-        swapFee={swapFee ? swapFee[0] : "0"}
-        tokenLpBalance={tokenLpBalance ? tokenLpBalance[0] : "0"}
-        tenderLpBalance={tenderLpBalance ? tenderLpBalance[0] : "0"}
-        spotPrice={spotPrice ? spotPrice[0] : "0"}
       />
       <Box
         border={{ side: "top" }}
