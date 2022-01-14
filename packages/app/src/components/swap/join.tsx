@@ -156,8 +156,8 @@ const JoinPool: FC<Props> = ({
           hasValue(totalWeight) &&
           hasValue(tokenIn) &&
           hasValue(swapFee) && {
-            abi: contracts[name].swap.interface,
-            address: addresses[name].swap,
+            abi: contracts[name].tenderSwap.interface,
+            address: addresses[name].tenderSwap,
             method: "calcPoolOutGivenSingleIn",
             args: [tokenInBal, weight, lpShares || "1", totalWeight || "1", tokenIn, swapFee || "0"],
           }
