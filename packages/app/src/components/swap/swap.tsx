@@ -1,9 +1,9 @@
 import { ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from "react";
 import { Button, Box, Form, FormField, Image, Text, TextInput, Tip } from "grommet";
-import { BigNumberish, utils } from "ethers";
-import { useContractCall } from "@usedapp/core";
+import { BigNumberish, utils, constants } from "ethers";
 import { contracts, addresses } from "@tender/contracts";
 import stakers from "../../data/stakers";
+import {calculateSwap, calculateTokenAmount} from "./util"
 
 import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
@@ -12,28 +12,18 @@ import { Transaction } from "grommet-icons";
 import { ethWithDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { isLargerThanMax, isPositive, validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
-
 type Props = {
   protocolName: string;
   tokenSymbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
-
-  swapFee: BigNumberish;
-  tokenLpBalance: BigNumberish;
-  tokenWeight: BigNumberish;
-  tenderLpBalance: BigNumberish;
-  tenderTokenWeight: BigNumberish;
-  totalWeight: BigNumberish;
-  spotPrice: BigNumberish;
 };
 
 const hasValue = (val: any) => {
   return val && val !== "0";
 };
 
-const ZERO = utils.parseEther("0.0");
-const ONE = utils.parseEther("1.0");
+const ONE = utils.parseEther("1");
 
 const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protocolName }) => {
   const logo = `/${stakers[protocolName].bwLogo}`;
@@ -41,18 +31,18 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(false);
-  const [sendTokenAmount, setSendTokenAmount] = useState("1.0");
+  const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
-  const tokenSendedSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
-  const tokenSendedLogo = isSendingToken ? logo : tenderLogo;
-  const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
-  const tokenReceivedLogo = isSendingToken ? tenderLogo : logo;
-  const tokenSendedBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
-  const tokenSendedAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
+  const sendTokenSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
+  const sendTokenLogo = isSendingToken ? logo : tenderLogo;
+  const receiveTokenSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;
+  const receiveTokenLogo = isSendingToken ? tenderLogo : logo;
+  const sendTokenBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
+  const sendTokenAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
 
-  const isTokenApproved = useIsTokenApproved(tokenSendedAddress, addresses[protocolName].tenderSwap, sendTokenAmount);
+  const isTokenApproved = useIsTokenApproved(sendTokenAddress, addresses[protocolName].tenderSwap, sendTokenAmount);
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -60,21 +50,10 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   //   return address === addresses[protocolName].tenderToken;
   //  };
 
-  const [tokenSpotPrice] =
-    useContractCall({
-      abi: contracts[protocolName].tenderSwap.interface,
-      address: addresses[protocolName].tenderSwap,
-      method: "calculateSwap",
-      args: [tokenSendedAddress, ONE],
-    }) ?? [];
+  const [tokenSpotPrice] = calculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE) ?? [constants.Zero]
 
-  const [calcOutGivenIn] = useContractCall({
-    abi: contracts[protocolName].tenderSwap.interface,
-    address: addresses[protocolName].tenderSwap,
-    method: "calculateSwap",
-    args: [tokenSendedAddress, sendTokenAmount],
-  }) ?? [ZERO];
-
+  const [calcOutGivenIn] = calculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, utils.parseEther(sendTokenAmount || "0")) ?? [constants.Zero]
+  
   const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setSendTokenAmount(e.target.value);
   }, []);
@@ -94,7 +73,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
               label={`Send`}
               validate={[
                 validateIsPositive(sendTokenAmount),
-                validateIsLargerThanMax(sendTokenAmount, tokenSendedBalance),
+                validateIsLargerThanMax(sendTokenAmount, sendTokenBalance),
               ]}
             >
               <Box width="medium">
@@ -104,8 +83,8 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                   type="number"
                   icon={
                     <Box pad="xsmall" direction="row" align="center" gap="small">
-                      <Image height="35" src={tokenSendedLogo} />
-                      <Text>{tokenSendedSymbol}</Text>
+                      <Image height="35" src={sendTokenLogo} />
+                      <Text>{sendTokenSymbol}</Text>
                     </Box>
                   }
                   value={sendTokenAmount}
@@ -115,9 +94,9 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                   required={true}
                 />
                 <AmountInputFooter
-                  label={`Balance: ${weiToEthWithDecimals(tokenSendedBalance, 4)} ${tokenSendedSymbol}`}
+                  label={`Balance: ${weiToEthWithDecimals(sendTokenBalance, 4)} ${sendTokenSymbol}`}
                   onClick={() => {
-                    setSendTokenAmount(utils.formatEther(tokenSendedBalance.toString() ?? "0"));
+                    setSendTokenAmount(utils.formatEther(sendTokenBalance.toString() ?? "0"));
                     sendInputRef.current?.focus();
                   }}
                 />
@@ -154,11 +133,11 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                   <TextInput
                     id="formSwapReceive"
                     type="number"
-                    placeholder={`0 ${tokenReceivedSymbol}`}
+                    placeholder={`0 ${receiveTokenSymbol}`}
                     icon={
                       <Box pad="xsmall" direction="row" align="center" gap="small">
-                        <Image height="35" src={tokenReceivedLogo} />
-                        <Text>{tokenReceivedSymbol}</Text>
+                        <Image height="35" src={receiveTokenLogo} />
+                        <Text>{receiveTokenSymbol}</Text>
                       </Box>
                     }
                     disabled
@@ -171,7 +150,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
           </Box>
           <Box width="490px" direction="column" gap="small">
             <ApproveToken
-              symbol={tokenSendedSymbol}
+              symbol={sendTokenSymbol}
               spender={addresses[protocolName].tenderSwap}
               token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
               show={!isTokenApproved}
@@ -181,7 +160,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
               disabled={
                 !isTokenApproved ||
                 !isPositive(sendTokenAmount) ||
-                isLargerThanMax(sendTokenAmount, tokenSendedBalance) ||
+                isLargerThanMax(sendTokenAmount, sendTokenBalance) ||
                 utils.parseEther(sendTokenAmount).isZero()
               }
               onClick={() => setShowConfirm(true)}
@@ -193,14 +172,13 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
       <ConfirmSwapModal
         show={showConfirm}
         onDismiss={() => setShowConfirm(false)}
-        tokenSendedSymbol={tokenSendedSymbol}
+        sendTokenSymbol={sendTokenSymbol}
         tokenAmount={(() => {
-          console.log("sendTokenAmount", sendTokenAmount);
           return utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount);
         })()}
         tokenReceiveAmount={calcOutGivenIn}
-        tokenReceivedSymbol={tokenReceivedSymbol}
-        tokenAddress={tokenSendedAddress}
+        receiveTokenSymbol={receiveTokenSymbol}
+        tokenAddress={sendTokenAddress}
         tokenSpotPrice={tokenSpotPrice}
         protocolName={protocolName}
       />
