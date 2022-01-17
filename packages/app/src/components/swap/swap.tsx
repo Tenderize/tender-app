@@ -31,7 +31,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(false);
-  const [sendTokenAmount, setSendTokenAmount] = useState("0");
+  const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
@@ -51,7 +51,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   const [calcOutGivenIn] = useCalculateSwap(
     addresses[protocolName].tenderSwap,
     sendTokenAddress,
-    utils.parseEther(sendTokenAmount)
+    utils.parseEther(sendTokenAmount !== "" ? sendTokenAmount : "0")
   );
 
   const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
@@ -88,7 +88,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                   }
                   value={sendTokenAmount}
                   style={{ textAlign: "right", padding: "20px 50px" }}
-                  placeholder={`0`}
+                  placeholder={"0"}
                   onChange={handleSendTokenInput}
                   required={true}
                 />

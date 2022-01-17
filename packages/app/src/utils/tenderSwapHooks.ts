@@ -27,5 +27,5 @@ export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNum
 export const getDeadline = () => {
   const DEADLINE_MINUTES = 10;
   const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;
-  return deadlineMS / 1000;
+  return Math.floor(deadlineMS / 1000);
 };

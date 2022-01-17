@@ -19,8 +19,7 @@ import {
 import { InfoCard } from "@tender/shared/src/index";
 import { useContractFunction } from "../../utils/useDappPatch";
 import { TransactionListElement } from "components/transactions";
-
-const DEADLINE_MINUTES = 10;
+import { getDeadline } from "utils/tenderSwapHooks";
 
 type Props = {
   show: boolean;
@@ -60,12 +59,9 @@ const ConfirmSwapModal: FC<Props> = ({
 
   const minAmount = tokenReceiveAmount.mul(98).div(100);
 
-  const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;
-  const deadline = deadlineMS / 1000;
-
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
-    await swap(tokenAddress, tokenAmount, minAmount, deadline);
+    await swap(tokenAddress, tokenAmount, minAmount, getDeadline());
     onDismiss();
   };
 
