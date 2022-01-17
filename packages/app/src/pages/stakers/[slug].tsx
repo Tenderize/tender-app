@@ -8,7 +8,6 @@ import { constants } from "ethers";
 import { useEthers, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import styled from "styled-components";
-
 import { Deposit } from "../../components/actions";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
@@ -18,8 +17,9 @@ import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
 import { Foot } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
+import { TenderizeConfig } from "types";
 
-const Token: FC = () => {
+const Token: FC<{ config: TenderizeConfig }> = (props) => {
   const router = useRouter();
   const name = (router.query.slug as string) ?? "livepeer";
   const info = stakers[name];
@@ -42,7 +42,7 @@ const Token: FC = () => {
   return (
     <Box>
       <NotificationsList />
-      <Navbar symbol={info.symbol} name={name} />
+      <Navbar symbol={info.symbol} name={name} config={props.config} />
       <Box width="100vw" align="center" alignSelf="start">
         <TenderBox
           margin={{

@@ -2,19 +2,13 @@ import { AppProps } from "next/app";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { FC, useEffect } from "react";
-import { ChainId, DAppProvider, Config } from "@usedapp/core";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 
 import * as gtag from "../lib/gtag";
-import { Config as TenderizeConfig, GrommetWrapper, apolloClient } from "@tender/shared/src/index";
+import { GrommetWrapper, apolloClient } from "@tender/shared/src/index";
 
 import "./index.css";
-
-const dappConfig: Config = {
-  readOnlyChainId: ChainId.Rinkeby,
-  readOnlyUrls: TenderizeConfig.CHAIN_URL_MAPPING,
-};
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -54,15 +48,13 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
           `,
           }}
         />
-        <DAppProvider config={dappConfig}>
-          <GrommetWrapper
-            style={{
-              background: "url('/shad-defi.jpg')",
-            }}
-          >
-            <Component {...pageProps} />
-          </GrommetWrapper>
-        </DAppProvider>
+        <GrommetWrapper
+          style={{
+            background: "url('/shad-defi.jpg')",
+          }}
+        >
+          <Component {...pageProps} />
+        </GrommetWrapper>
       </ApolloProvider>
     </>
   );
