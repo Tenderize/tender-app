@@ -1,4 +1,3 @@
-import { ChainId } from "@usedapp/core";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 process.env.ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
