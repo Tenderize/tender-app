@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { BigNumberish } from "ethers";
+import { BigNumber, BigNumberish } from "ethers";
 import { useContractCalls } from "@usedapp/core";
 import { addresses, contracts } from "@tender/contracts";
 
@@ -13,18 +13,10 @@ type Props = {
   symbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
+  lpTokenBalance: BigNumber;
 };
 
-const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance }) => {
-  const [lpTokenBalance] = useContractCalls([
-    {
-      abi: contracts[name].lpToken.interface,
-      address: addresses[name].lpToken,
-      method: "totalSupply",
-      args: [],
-    },
-  ]);
-
+const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance, lpTokenBalance }) => {
   return (
     <Box justify="start" align="center">
       <Swap
@@ -45,7 +37,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         <Text>Provide Liquidity</Text>
         <Box direction="row" gap="large" justify="center" align="center">
           <JoinPool name={name} symbol={symbol} tokenBalance={tokenBalance} tenderTokenBalance={tenderTokenBalance} />
-          {/* <ExitPool name={name} symbol={symbol} lpTokenBalance={lpTokenBalance} /> */}
+          <ExitPool name={name} symbol={symbol} lpTokenBalance={lpTokenBalance} />
         </Box>
       </Box>
     </Box>

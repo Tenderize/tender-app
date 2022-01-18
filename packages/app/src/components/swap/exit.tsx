@@ -34,10 +34,10 @@ type Props = {
   symbol: string;
   tokenLpBalance: BigNumberish;
   tenderLpBalance: BigNumberish;
-  lpShares: BigNumberish;
+  lpTokenBalance: BigNumberish;
 };
 
-const ExitPool: FC<Props> = ({ name, symbol, lpShares }) => {
+const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const staker = stakers[name];
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
@@ -70,18 +70,19 @@ const ExitPool: FC<Props> = ({ name, symbol, lpShares }) => {
 
   const singleTokenOutAddress = selectedToken === symbol ? addresses[name].token : addresses[name].tenderToken;
 
-  const singleOut = useCalculateRemoveLiquidityOneToken(
+  const [singleOut] = useCalculateRemoveLiquidityOneToken(
     addresses[name].lpToken,
-    utils.parseEther(lpSharesInput),
+    utils.parseEther(lpSharesInput || "0"),
     singleTokenOutAddress
   );
-  const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(addresses[name].lpToken, utils.parseEther(lpSharesInput));
+
+  const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(addresses[name].lpToken, utils.parseEther(lpSharesInput || "0"));
 
   const handleRemoveLiquidity = async (e: any) => {
     e.preventDefault();
     const poolIn = utils.parseEther(lpSharesInput || "0");
     if (isMulti) {
-      // NOTE: Pool is currently tenderToken/Token
+      // NOTE: Pool cardinality is tenderToken/Token
       await removeLiquidity(poolIn, [tenderOut, tokenOut], getDeadline());
     } else {
       await removeLiquidityOneToken(poolIn, singleTokenOutAddress, singleOut, getDeadline());
@@ -127,7 +128,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpShares }) => {
                     <Form validate="change">
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
-                          lpShares={lpShares}
+                          lpTokenBalance={lpTokenBalance}
                           lpSharesInput={lpSharesInput}
                           setLpSharesInput={setLpSharesInput}
                           symbolFull={symbolFull}
@@ -181,7 +182,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpShares }) => {
                     <Form>
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
-                          lpShares={lpShares}
+                          lpTokenBalance={lpTokenBalance}
                           lpSharesInput={lpSharesInput}
                           setLpSharesInput={setLpSharesInput}
                           symbolFull={symbolFull}
@@ -224,7 +225,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpShares }) => {
                                 disabled
                                 id="exitMultiReceive"
                                 placeholder={"0"}
-                                value={utils.formatEther(singleOut || "0")}
+                                value={utils.formatEther(singleOut)}
                               />
                             </Box>
                           </FormField>
@@ -268,11 +269,11 @@ const LPTokensToRemoveInputField: FC<{
   lpSharesInput: string;
   setLpSharesInput: (value: string) => void;
   symbolFull: string;
-  lpShares: BigNumberish;
-}> = ({ lpSharesInput, setLpSharesInput, symbolFull, lpShares }) => {
+  lpTokenBalance: BigNumberish;
+}> = ({ lpSharesInput, setLpSharesInput, symbolFull, lpTokenBalance }) => {
   const maxDeposit = useCallback(() => {
-    setLpSharesInput(utils.formatEther(lpShares || "0"));
-  }, [lpShares, setLpSharesInput]);
+    setLpSharesInput(utils.formatEther(lpTokenBalance || "0"));
+  }, [lpTokenBalance, setLpSharesInput]);
 
   const handleLpSharesInputChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -287,7 +288,7 @@ const LPTokensToRemoveInputField: FC<{
     <FormField
       label="LP Tokens to remove"
       name="lpTokenToRemove"
-      validate={[validateIsPositive(lpSharesInput), validateIsLargerThanMax(lpSharesInput, lpShares)]}
+      validate={[validateIsPositive(lpSharesInput), validateIsLargerThanMax(lpSharesInput, lpTokenBalance)]}
     >
       <Box direction="row" align="center" gap="small">
         <TextInput
@@ -298,7 +299,7 @@ const LPTokensToRemoveInputField: FC<{
         />
       </Box>
       <AmountInputFooter
-        label={`Staked: ${weiToEthWithDecimals(lpShares?.toString() || "0", 2)} ${symbolFull}`}
+        label={`Staked: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 2)} ${symbolFull}`}
         onClick={maxDeposit}
       />
     </FormField>

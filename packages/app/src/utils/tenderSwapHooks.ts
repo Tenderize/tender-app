@@ -20,7 +20,7 @@ export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber) => 
       address: pool,
       method: "calculateRemoveLiquidity",
       args: [amount],
-    }) ?? [constants.Zero]
+    }) ?? [constants.Zero, constants.Zero]
   );
 };
 
