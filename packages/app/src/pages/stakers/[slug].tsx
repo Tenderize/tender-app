@@ -32,9 +32,10 @@ const Token: FC<{ config?: TenderizeConfig }> = (props) => {
 
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
+  // TODO: USE MULTICALL FOR THESE
   const tokenBalance = useTokenBalance(addresses[name].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
-  const lpTokenBal = useTokenBalance(addresses[name].lpToken, account) || constants.Zero;
+  const lpTokenBalance = useTokenBalance(addresses[name].lpToken, account) || constants.Zero;
 
   const onActive = useCallback((nextIndex: number) => {
     if (nextIndex === 0) {
@@ -79,59 +80,60 @@ const Token: FC<{ config?: TenderizeConfig }> = (props) => {
                     top: "medium",
                   }}
                 >
-                  <Deposit
-                    name={name}
-                    symbol={info.symbol}
-                    logo={info.bwLogo}
-                    tokenBalance={tokenBalance}
-                    tenderTokenBalance={tenderBalance}
-                  />
-                </Box>
-              </Tab>
-              <Tab
-                title={
-                  <Tip
-                    dropProps={{ align: { bottom: "top" } }}
-                    content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
-                  >
-                    <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                      <PhoneHorizontal />
-                      <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
-                    </Box>
-                  </Tip>
-                }
-              >
-                <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                  <LiquidityPool
-                    name={name}
-                    symbol={info.symbol}
-                    tokenBalance={tokenBalance}
-                    tenderTokenBalance={tenderBalance}
-                  />
-                </Box>
-              </Tab>
-              <Tab
-                title={
-                  <Tip
-                    dropProps={{ align: { bottom: "top" } }}
-                    content={`Farm your liquidity pool tokens for more rewards`}
-                  >
-                    <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                      <Grow />
-                      <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
-                    </Box>
-                  </Tip>
-                }
-              >
-                <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                  <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
-                </Box>
-              </Tab>
-            </Tabs>
-          </TenderBox>
+                <Deposit
+                  name={name}
+                  symbol={info.symbol}
+                  logo={info.bwLogo}
+                  tokenBalance={tokenBalance}
+                  tenderTokenBalance={tenderBalance}
+                />
+              </Box>
+            </Tab>
+            <Tab
+              title={
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
+                >
+                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                    <PhoneHorizontal />
+                    <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
+                  </Box>
+                </Tip>
+              }
+            >
+              <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                <LiquidityPool
+                  name={name}
+                  symbol={info.symbol}
+                  tokenBalance={tokenBalance}
+                  tenderTokenBalance={tenderBalance}
+                  lpTokenBalance={lpTokenBalance}
+                />
+              </Box>
+            </Tab>
+            <Tab
+              title={
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Farm your liquidity pool tokens for more rewards`}
+                >
+                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                    <Grow />
+                    <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
+                  </Box>
+                </Tip>
+              }
+            >
+              <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBalance} />
+              </Box>
+            </Tab>
+          </Tabs>
+        </TenderBox>
         </Box>
-        <Foot />
       </Box>
+      <Foot />
     </DAppProvider>
   );
 };
