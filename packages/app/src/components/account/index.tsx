@@ -84,7 +84,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 label="MetaMask"
                 image={"/MetaMask_Fox.svg"}
                 handleClick={async (onError: () => void) => {
-                  activateBrowserWallet(onError);
+                  await activateBrowserWallet(onError);
                   handleCloseWalletPicker();
                 }}
               />
@@ -158,8 +158,7 @@ const ProviderButton: FC<{ handleClick: (onError: () => void) => Promise<void>; 
       }
       onClick={async () => {
         setIsLoading(true);
-        await handleClick(() => setIsLoading(false));
-        setIsLoading(false);
+        await handleClick();
       }}
     />
   );
