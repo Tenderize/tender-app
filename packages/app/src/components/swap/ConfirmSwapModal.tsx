@@ -66,7 +66,6 @@ const ConfirmSwapModal: FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log("swapState", swapTx);
     if (swapTx.status === "Mining") {
       setConfirmStatus("Submitted");
     } else if (swapTx.status === "Success") {

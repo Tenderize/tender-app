@@ -32,8 +32,6 @@ import { getDeadline, useCalculateRemoveLiquidity, useCalculateRemoveLiquidityOn
 type Props = {
   name: string;
   symbol: string;
-  tokenLpBalance: BigNumberish;
-  tenderLpBalance: BigNumberish;
   lpTokenBalance: BigNumberish;
 };
 

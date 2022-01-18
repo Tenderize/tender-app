@@ -1,7 +1,5 @@
 import { FC } from "react";
 import { BigNumber, BigNumberish } from "ethers";
-import { useContractCalls } from "@usedapp/core";
-import { addresses, contracts } from "@tender/contracts";
 
 import Swap from "./swap";
 import JoinPool from "./join";
@@ -37,7 +35,7 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
         <Text>Provide Liquidity</Text>
         <Box direction="row" gap="large" justify="center" align="center">
           <JoinPool name={name} symbol={symbol} tokenBalance={tokenBalance} tenderTokenBalance={tenderTokenBalance} />
-          <ExitPool name={name} symbol={symbol} lpTokenBalance={lpTokenBalance} />
+          {/* <ExitPool name={name} symbol={symbol} lpTokenBalance={lpTokenBalance} /> */}
         </Box>
       </Box>
     </Box>

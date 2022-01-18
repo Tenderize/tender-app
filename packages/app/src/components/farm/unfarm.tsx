@@ -28,7 +28,6 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
   };
 
   const maxUnfarm = () => {
-    console.log(stake);
     setUnfarmInput(utils.formatEther(stake.toString() || "0"));
   };
 
