@@ -34,7 +34,7 @@ const Token: FC<{ config?: TenderizeConfig }> = (props) => {
   account = account ?? constants.AddressZero;
   const tokenBalance = useTokenBalance(addresses[name].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
-  const lpTokenBal = useTokenBalance(addresses[name].liquidity, account) || constants.Zero;
+  const lpTokenBal = useTokenBalance(addresses[name].lpToken, account) || constants.Zero;
 
   const onActive = useCallback((nextIndex: number) => {
     if (nextIndex === 0) {

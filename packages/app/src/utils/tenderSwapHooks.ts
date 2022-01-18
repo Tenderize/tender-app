@@ -13,6 +13,28 @@ export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], de
   );
 };
 
+export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber) => {
+  return (
+    useContractCall({
+      abi: new utils.Interface(abis.tenderSwap),
+      address: pool,
+      method: "calculateRemoveLiquidity",
+      args: [amount],
+    }) ?? [constants.Zero]
+  );
+};
+
+export const useCalculateRemoveLiquidityOneToken = (pool: string, amount: BigNumber, tokenReceive: string) => {
+  return (
+    useContractCall({
+      abi: new utils.Interface(abis.tenderSwap),
+      address: pool,
+      method: "calculateRemoveLiquidityOneToken",
+      args: [amount, tokenReceive],
+    }) ?? [constants.Zero]
+  );
+};
+
 export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNumber) => {
   return (
     useContractCall({
