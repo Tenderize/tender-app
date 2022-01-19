@@ -40,7 +40,6 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
     }
   }, []);
 
-  console.log("config", props.config);
   return (
     <Box>
       <NotificationsList />
