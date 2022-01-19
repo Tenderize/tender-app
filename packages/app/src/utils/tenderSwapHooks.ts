@@ -4,7 +4,8 @@ import { BigNumber, constants, utils } from "ethers";
 
 export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], deposit: boolean) => {
   return (
-    useContractCall({
+    useContractCall(
+      pool && amounts.length === 2 && amounts[0] && amounts[1] && {
       abi: new utils.Interface(abis.tenderSwap),
       address: pool,
       method: "calculateTokenAmount",
@@ -15,7 +16,8 @@ export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], de
 
 export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber) => {
   return (
-    useContractCall({
+    useContractCall(
+      pool && amount && !amount.isZero && {
       abi: new utils.Interface(abis.tenderSwap),
       address: pool,
       method: "calculateRemoveLiquidity",
@@ -26,7 +28,7 @@ export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber) => 
 
 export const useCalculateRemoveLiquidityOneToken = (pool: string, amount: BigNumber, tokenReceive: string) => {
   return (
-    useContractCall({
+    useContractCall( pool && amount && !amount.isZero && tokenReceive && {
       abi: new utils.Interface(abis.tenderSwap),
       address: pool,
       method: "calculateRemoveLiquidityOneToken",
@@ -37,7 +39,8 @@ export const useCalculateRemoveLiquidityOneToken = (pool: string, amount: BigNum
 
 export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNumber) => {
   return (
-    useContractCall({
+    useContractCall(
+      pool && tokenFrom && amount && !amount.isZero() && {
       abi: new utils.Interface(abis.tenderSwap),
       address: pool,
       method: "calculateSwap",
