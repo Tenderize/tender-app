@@ -19,14 +19,9 @@ import { Foot } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
 
-const Token: FC<{ config?: TenderizeConfig }> = (props) => {
-  const dappConfig: Config = {
-    readOnlyChainId: ChainId.Rinkeby,
-    readOnlyUrls: props.config?.chainUrlMapping,
-  };
-
+const Token: FC<{ config: TenderizeConfig }> = (props) => {
   const router = useRouter();
-  const name = (router.query.slug as string) ?? "matic";
+  const name = router.query.slug as string;
   const info = stakers[name];
   const [tabIndex, setTabIndex] = useState(1);
 
@@ -45,41 +40,41 @@ const Token: FC<{ config?: TenderizeConfig }> = (props) => {
     }
   }, []);
 
+  console.log("config", props.config);
   return (
-    <DAppProvider config={dappConfig}>
-      <Box>
-        <NotificationsList />
-        <Navbar symbol={info.symbol} name={name} config={props.config} />
-        <Box width="100vw" align="center" alignSelf="start">
-          <TenderBox
-            margin={{
-              top: "xlarge",
-            }}
-            pad={{ bottom: "xlarge" }}
-            width="xlarge"
-          >
-            <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-              <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
-              <Tab
-                title={
-                  <Tip
-                    dropProps={{ align: { bottom: "top" } }}
-                    content={`Stake your ${info.symbol} and earn staking rewards`}
-                  >
-                    <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                      <Currency />
-                      <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
-                    </Box>
-                  </Tip>
-                }
-              >
-                <Box
-                  round={{ corner: "bottom" }}
-                  border="top"
-                  pad={{
-                    top: "medium",
-                  }}
+    <Box>
+      <NotificationsList />
+      <Navbar symbol={info.symbol} name={name} config={props.config} />
+      <Box width="100vw" align="center" alignSelf="start">
+        <TenderBox
+          margin={{
+            top: "xlarge",
+          }}
+          pad={{ bottom: "xlarge" }}
+          width="xlarge"
+        >
+          <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+            <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
+            <Tab
+              title={
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Stake your ${info.symbol} and earn staking rewards`}
                 >
+                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                    <Currency />
+                    <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
+                  </Box>
+                </Tip>
+              }
+            >
+              <Box
+                round={{ corner: "bottom" }}
+                border="top"
+                pad={{
+                  top: "medium",
+                }}
+              >
                 <Deposit
                   name={name}
                   symbol={info.symbol}
@@ -131,10 +126,9 @@ const Token: FC<{ config?: TenderizeConfig }> = (props) => {
             </Tab>
           </Tabs>
         </TenderBox>
-        </Box>
       </Box>
       <Foot />
-    </DAppProvider>
+    </Box>
   );
 };
 
@@ -232,6 +226,21 @@ const DropdownBackground = styled.div`
   height: 100%;
 `;
 
+const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
+  const dappConfig: Config = {
+    readOnlyChainId: ChainId.Rinkeby,
+    readOnlyUrls: props.config?.chainUrlMapping,
+  };
+
+  if (props.config == null) return null;
+
+  return (
+    <DAppProvider config={dappConfig}>
+      <Token config={props.config} />
+    </DAppProvider>
+  );
+};
+
 export const getStaticProps = async () => {
   const rpcUrl = process.env.JSON_RPC ?? "";
   const CHAIN_URL_MAPPING = {
@@ -259,4 +268,4 @@ export const getStaticPaths = async () => {
   };
 };
 
-export default Token;
+export default TokenWrapper;

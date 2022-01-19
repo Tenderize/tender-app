@@ -9,7 +9,7 @@ import { TenderizeConfig } from "types";
 type props = {
   symbol?: string;
   name?: string;
-  config?: TenderizeConfig;
+  config: TenderizeConfig;
 };
 const Navbar: FC<props> = (props) => {
   const [navBackground, setNavBackground] = useState(false);
