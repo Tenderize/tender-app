@@ -22,7 +22,7 @@ const moduleExports = {
     return [
       {
         source: '/',
-        destination: '/stakers/livepeer',
+        destination: '/stakers/matic',
         permanent: true,
       },
     ]
