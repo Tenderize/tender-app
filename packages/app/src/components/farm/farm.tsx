@@ -9,6 +9,7 @@ import { FormAdd } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction } from "../../utils/useDappPatch";
+import { useEthers } from "@usedapp/core";
 
 type Props = {
   name: string;
@@ -18,6 +19,7 @@ type Props = {
 
 const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
   const [show, setShow] = useState(false);
+  const { account } = useEthers();
 
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback(() => setShow(true), []);
@@ -33,7 +35,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].lpToken, addresses[name].tenderFarm, farmInput);
+  const isTokenApproved = useIsTokenApproved(addresses[name].lpToken, account || "", addresses[name].tenderFarm, farmInput);
 
   // Contract Functions
   const { state: farmTx, send: farm } = useContractFunction(contracts[name].tenderFarm, "farm", {

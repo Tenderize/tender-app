@@ -17,13 +17,18 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
     transactionName: `Approve ${symbol}`,
   });
 
-  const { rinkebyForcedFunction: handleApproval, renderError } = useForceRinkebyFunction(async (e) => {
-    e.preventDefault();
+  // const { rinkebyForcedFunction: handleApproval, renderError } = useForceRinkebyFunction(async (e) => {
+  //   e.preventDefault();
 
-    if (show) {
-      await approveToken(spender, constants.MaxUint256);
-    }
-  });
+  //   if (show) {
+  //     await approveToken(spender, constants.MaxUint256);
+  //   }
+  // });
+
+  const handleApproval = async (e: any) => {
+    e.preventDefault();
+    await approveToken(spender, constants.MaxUint256);
+  };
 
   if (!show) {
     return <></>;
@@ -70,7 +75,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
           </>
         }
       />
-      {renderError()}
+      {/* {renderError()} */}
     </>
   );
 };

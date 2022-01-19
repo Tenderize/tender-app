@@ -28,6 +28,7 @@ import stakers from "../../data/stakers";
 import { useContractFunction } from "../../utils/useDappPatch";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { getDeadline, useCalculateRemoveLiquidity, useCalculateRemoveLiquidityOneToken } from "utils/tenderSwapHooks";
+import { useEthers } from "@usedapp/core";
 
 type Props = {
   name: string;
@@ -47,8 +48,9 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const [lpSharesInput, setLpSharesInput] = useState("");
 
   const [selectedToken, setSelectedToken] = useState(symbol);
+  const { account } = useEthers();
 
-  const isLpSharesApproved = useIsTokenApproved(addresses[name].lpToken, addresses[name].lpToken, lpSharesInput);
+  const isLpSharesApproved = useIsTokenApproved(addresses[name].lpToken, account || "", addresses[name].lpToken, lpSharesInput);
 
   const hasValue = (val: any) => {
     return val && val !== "0";

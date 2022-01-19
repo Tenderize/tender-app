@@ -11,6 +11,7 @@ import { ethWithDecimals, weiToEthWithDecimals } from "../../utils/amountFormat"
 import { AmountInputFooter } from "../AmountInputFooter";
 import { isLargerThanMax, isPositive, validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useCalculateSwap } from "../../utils/tenderSwapHooks";
+import { useEthers } from "@usedapp/core";
 
 type Props = {
   protocolName: string;
@@ -23,7 +24,7 @@ const hasValue = (val: any) => {
   return val && val !== "0";
 };
 
-const ONE = utils.parseEther("1.0");
+const ONE = utils.parseEther("1");
 
 const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protocolName }) => {
   const logo = `/${stakers[protocolName].bwLogo}`;
@@ -33,6 +34,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   const [isSendingToken, setIsSendingToken] = useState(false);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
+  const { account } = useEthers();
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
   const sendTokenSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
@@ -42,16 +44,16 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   const sendTokenBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
   const sendTokenAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
 
-  const isTokenApproved = useIsTokenApproved(sendTokenAddress, addresses[protocolName].tenderSwap, sendTokenAmount);
+  const isTokenApproved = useIsTokenApproved(sendTokenAddress, account || "", addresses[protocolName].tenderSwap, sendTokenAmount);
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [tokenSpotPrice] = useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
+  const [tokenSpotPrice] =  useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
 
   const [calcOutGivenIn] = useCalculateSwap(
     addresses[protocolName].tenderSwap,
     sendTokenAddress,
-    utils.parseEther(sendTokenAmount !== "" ? sendTokenAmount : "0")
+    utils.parseEther(sendTokenAmount || "0")
   );
 
   const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {

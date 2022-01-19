@@ -23,6 +23,7 @@ import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsPositive, validateIsLargerThanMax, hasValue } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
 import { useContractFunction } from "../../utils/useDappPatch";
+import { useEthers } from "@usedapp/core";
 
 type Props = {
   name: string;
@@ -36,6 +37,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
   const bwLogo = `/${staker.bwLogo}`;
   const bwTenderLogo = `/${staker.bwTenderLogo}`;
   const [show, setShow] = useState(false);
+  const { account } = useEthers();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -64,8 +66,8 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
     setTenderInput(utils.formatEther(tenderTokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].token, addresses[name].tenderSwap, tokenInput);
-  const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, addresses[name].tenderSwap, tenderInput);
+  const isTokenApproved = useIsTokenApproved(addresses[name].token, account || "", addresses[name].tenderSwap, tokenInput);
+  const isTenderApproved = useIsTokenApproved(addresses[name].tenderToken, account || "", addresses[name].tenderSwap, tenderInput);
 
   const isButtonDisabled = () => {
     return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved);
@@ -79,7 +81,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
 
   const [lpTokenAmount] = useCalculateLpTokenAmount(
     addresses[name].tenderSwap,
-    [utils.parseEther(tokenInput), utils.parseEther(tenderInput)],
+    [utils.parseEther(tokenInput || "0"), utils.parseEther(tenderInput || "0")],
     true
   );
 
