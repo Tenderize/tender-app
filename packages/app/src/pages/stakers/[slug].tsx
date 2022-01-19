@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
-import { useEthers, useTokenBalance } from "@usedapp/core";
+import { ChainId, Config, DAppProvider, useEthers, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import styled from "styled-components";
 import { Deposit } from "../../components/actions";
@@ -19,7 +19,12 @@ import { Foot } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
 
-const Token: FC<{ config: TenderizeConfig }> = (props) => {
+const Token: FC<{ config?: TenderizeConfig }> = (props) => {
+  const dappConfig: Config = {
+    readOnlyChainId: ChainId.Rinkeby,
+    readOnlyUrls: props.config?.chainUrlMapping,
+  };
+
   const router = useRouter();
   const name = (router.query.slug as string) ?? "livepeer";
   const info = stakers[name];
@@ -40,92 +45,94 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
   }, []);
 
   return (
-    <Box>
-      <NotificationsList />
-      <Navbar symbol={info.symbol} name={name} config={props.config} />
-      <Box width="100vw" align="center" alignSelf="start">
-        <TenderBox
-          margin={{
-            top: "xlarge",
-          }}
-          pad={{ bottom: "xlarge" }}
-          width="xlarge"
-        >
-          <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-            <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Stake your ${info.symbol} and earn staking rewards`}
-                >
-                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                    <Currency />
-                    <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box
-                round={{ corner: "bottom" }}
-                border="top"
-                pad={{
-                  top: "medium",
-                }}
+    <DAppProvider config={dappConfig}>
+      <Box>
+        <NotificationsList />
+        <Navbar symbol={info.symbol} name={name} config={props.config} />
+        <Box width="100vw" align="center" alignSelf="start">
+          <TenderBox
+            margin={{
+              top: "xlarge",
+            }}
+            pad={{ bottom: "xlarge" }}
+            width="xlarge"
+          >
+            <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+              <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
+              <Tab
+                title={
+                  <Tip
+                    dropProps={{ align: { bottom: "top" } }}
+                    content={`Stake your ${info.symbol} and earn staking rewards`}
+                  >
+                    <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                      <Currency />
+                      <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
+                    </Box>
+                  </Tip>
+                }
               >
-                <Deposit
-                  name={name}
-                  symbol={info.symbol}
-                  logo={info.bwLogo}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
+                <Box
+                  round={{ corner: "bottom" }}
+                  border="top"
+                  pad={{
+                    top: "medium",
+                  }}
                 >
-                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                    <PhoneHorizontal />
-                    <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <LiquidityPool
-                  name={name}
-                  symbol={info.symbol}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Farm your liquidity pool tokens for more rewards`}
-                >
-                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                    <Grow />
-                    <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
-              </Box>
-            </Tab>
-          </Tabs>
-        </TenderBox>
+                  <Deposit
+                    name={name}
+                    symbol={info.symbol}
+                    logo={info.bwLogo}
+                    tokenBalance={tokenBalance}
+                    tenderTokenBalance={tenderBalance}
+                  />
+                </Box>
+              </Tab>
+              <Tab
+                title={
+                  <Tip
+                    dropProps={{ align: { bottom: "top" } }}
+                    content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
+                  >
+                    <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                      <PhoneHorizontal />
+                      <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
+                    </Box>
+                  </Tip>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                  <LiquidityPool
+                    name={name}
+                    symbol={info.symbol}
+                    tokenBalance={tokenBalance}
+                    tenderTokenBalance={tenderBalance}
+                  />
+                </Box>
+              </Tab>
+              <Tab
+                title={
+                  <Tip
+                    dropProps={{ align: { bottom: "top" } }}
+                    content={`Farm your liquidity pool tokens for more rewards`}
+                  >
+                    <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
+                      <Grow />
+                      <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
+                    </Box>
+                  </Tip>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                  <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+                </Box>
+              </Tab>
+            </Tabs>
+          </TenderBox>
+        </Box>
+        <Foot />
       </Box>
-      <Foot />
-    </Box>
+    </DAppProvider>
   );
 };
 
@@ -222,5 +229,32 @@ const DropdownBackground = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+export const getStaticProps = async () => {
+  const rpcUrl = process.env.JSON_RPC ?? "";
+  const CHAIN_URL_MAPPING = {
+    [ChainId.Rinkeby]: rpcUrl,
+  };
+
+  const config: TenderizeConfig = {
+    rpcUrl,
+    fortmaticApiKey: process.env.FORTMATIC_API_KEY ?? "",
+    portisApiKey: process.env.PORTIS_API_KEY ?? "",
+    chainUrlMapping: CHAIN_URL_MAPPING ?? "",
+  };
+
+  return {
+    props: {
+      config,
+    },
+  };
+};
+
+export const getStaticPaths = async () => {
+  return {
+    paths: Object.values(stakers).map((staker) => ({ params: { slug: staker.name } })),
+    fallback: false,
+  };
+};
 
 export default Token;
