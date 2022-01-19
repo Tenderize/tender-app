@@ -14,21 +14,21 @@ export type Staker = {
 };
 
 const stakers: Record<string, Staker> = {
-  livepeer: {
-    name: "livepeer",
-    path: "/stakers/livepeer",
-    title: "Livepeer",
-    subgraphId: "Livepeer",
-    description:
-      "The Livepeer project aims to deliver a live video streaming network protocol that is fully decentralized, highly scalable, crypto token incentivized, and results in a solution which can serve as the live media layer in the decentralized development (web3) stack. In addition, Livepeer is meant to provide an economically efficient alternative to centralized broadcasting solutions for any existing broadcaster. In this document we describe the Livepeer Protocol - a delegated stake based protocol for incentivizing participants in a live video broadcast network in a game-theoretically secure way.",
-    available: true,
-    apy: 23.3,
-    logo: "livepeer.svg",
-    bwLogo: "LPT.svg",
-    bwTenderLogo: "tenderLPT.svg",
-    neonLogo: "landing/neon-lpt.png",
-    symbol: "LPT",
-  },
+  // livepeer: {
+  //   name: "livepeer",
+  //   path: "/stakers/livepeer",
+  //   title: "Livepeer",
+  //   subgraphId: "Livepeer",
+  //   description:
+  //     "The Livepeer project aims to deliver a live video streaming network protocol that is fully decentralized, highly scalable, crypto token incentivized, and results in a solution which can serve as the live media layer in the decentralized development (web3) stack. In addition, Livepeer is meant to provide an economically efficient alternative to centralized broadcasting solutions for any existing broadcaster. In this document we describe the Livepeer Protocol - a delegated stake based protocol for incentivizing participants in a live video broadcast network in a game-theoretically secure way.",
+  //   available: true,
+  //   apy: 23.3,
+  //   logo: "livepeer.svg",
+  //   bwLogo: "LPT.svg",
+  //   bwTenderLogo: "tenderLPT.svg",
+  //   neonLogo: "landing/neon-lpt.png",
+  //   symbol: "LPT",
+  // },
   graph: {
     name: "graph",
     path: "/stakers/graph",

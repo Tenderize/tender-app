@@ -26,7 +26,7 @@ const Token: FC<{ config?: TenderizeConfig }> = (props) => {
   };
 
   const router = useRouter();
-  const name = (router.query.slug as string) ?? "livepeer";
+  const name = (router.query.slug as string) ?? "matic";
   const info = stakers[name];
   const [tabIndex, setTabIndex] = useState(1);
 
