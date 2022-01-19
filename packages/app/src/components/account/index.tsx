@@ -83,48 +83,44 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
               <ProviderButton
                 label="MetaMask"
                 image={"/MetaMask_Fox.svg"}
-                handleClick={async (onError: () => void) => {
-                  activateBrowserWallet(onError);
+                handleClick={async () => {
+                  await activateBrowserWallet();
                   handleCloseWalletPicker();
                 }}
               />
               <ProviderButton
                 label="WalletConnect"
                 image={"/walletconnect-logo.svg"}
-                handleClick={async (onError: () => void) => {
+                handleClick={async () => {
                   const walletConnector = new WalletConnectConnector({ rpc: config.chainUrlMapping });
-                  walletConnector.addListener("Web3ReactError", onError);
-                  await activate(walletConnector, onError);
+                  await activate(walletConnector);
                   handleCloseWalletPicker();
                 }}
               />
               <ProviderButton
                 label="Portis"
                 image={"/portis.svg"}
-                handleClick={async (onError: () => void) => {
+                handleClick={async () => {
                   const walletConnector = new PortisConnector({ dAppId: config.portisApiKey, networks: [4] });
-                  walletConnector.addListener("Web3ReactError", onError);
-                  await activate(walletConnector, onError);
+                  await activate(walletConnector);
                   handleCloseWalletPicker();
                 }}
               />
               <ProviderButton
                 label="Coinbase Wallet"
                 image={"/coinbaseWalletIcon.svg"}
-                handleClick={async (onError: () => void) => {
+                handleClick={async () => {
                   const walletConnector = new WalletLinkConnector({ appName: "Tenderize", url: config.rpcUrl });
-                  walletConnector.addListener("Web3ReactError", onError);
-                  await activate(walletConnector, onError);
+                  await activate(walletConnector);
                   handleCloseWalletPicker();
                 }}
               />
               <ProviderButton
                 label="Fortmatic"
                 image={"/fortmatic.svg"}
-                handleClick={async (onError: () => void) => {
+                handleClick={async () => {
                   const walletConnector = new FortmaticConnector({ apiKey: config.fortmaticApiKey, chainId: 4 });
-                  walletConnector.addListener("Web3ReactError", onError);
-                  await activate(walletConnector, onError);
+                  await activate(walletConnector);
                   handleCloseWalletPicker();
                 }}
               />
@@ -136,7 +132,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   );
 };
 
-const ProviderButton: FC<{ handleClick: (onError: () => void) => Promise<void>; label: string; image: any }> = ({
+const ProviderButton: FC<{ handleClick: () => Promise<void>; label: string; image: any }> = ({
   label,
   image,
   handleClick,
@@ -158,8 +154,7 @@ const ProviderButton: FC<{ handleClick: (onError: () => void) => Promise<void>; 
       }
       onClick={async () => {
         setIsLoading(true);
-        await handleClick(() => setIsLoading(false));
-        setIsLoading(false);
+        await handleClick();
       }}
     />
   );
