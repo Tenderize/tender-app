@@ -48,9 +48,9 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [tokenSpotPrice] =  useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
+  const tokenSpotPrice =  useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
 
-  const [calcOutGivenIn] = useCalculateSwap(
+  const calcOutGivenIn = useCalculateSwap(
     addresses[protocolName].tenderSwap,
     sendTokenAddress,
     utils.parseEther(sendTokenAmount || "0")

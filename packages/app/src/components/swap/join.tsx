@@ -79,17 +79,19 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
     { transactionName: `Add t${symbol}/${symbol} Liquidity` }
   );
 
-  const [lpTokenAmount] = useCalculateLpTokenAmount(
+  const lpTokenAmount = useCalculateLpTokenAmount(
     addresses[name].tenderSwap,
     [utils.parseEther(tokenInput || "0"), utils.parseEther(tenderInput || "0")],
     true
   );
 
+  console.log(utils.formatEther(lpTokenAmount || "0"))
+
   const handleAddLiquidity: MouseEventHandler<HTMLButtonElement & HTMLAnchorElement> = async (e) => {
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
-    addLiquidity([tokenIn, tenderIn], lpTokenAmount, getDeadline());
+    addLiquidity([tokenIn, tenderIn], lpTokenAmount.sub(1), getDeadline());
   };
 
   return (
