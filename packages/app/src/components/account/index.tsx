@@ -11,7 +11,7 @@ import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
 
-export const AccountButton: FC<{ config?: TenderizeConfig }> = ({ config }) => {
+export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();
   const ens = useLookupAddress();
   const [showAccountInfo, setShowAccountInfo] = useState(false);
@@ -49,8 +49,6 @@ export const AccountButton: FC<{ config?: TenderizeConfig }> = ({ config }) => {
     handleShowWalletPicker();
     setActivateError("");
   };
-
-  if (config == null) return null;
 
   return (
     <Account>
