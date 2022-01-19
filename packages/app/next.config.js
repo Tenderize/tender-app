@@ -17,7 +17,16 @@ const moduleExports = {
     disableServerWebpackPlugin: SENTRY_DSN == null,
     disableClientWebpackPlugin: SENTRY_DSN == null,
   },
-  productionBrowserSourceMaps: USE_SOURCEMAPS
+  productionBrowserSourceMaps: USE_SOURCEMAPS,
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/stakers/livepeer',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 const sentryWebpackPluginOptions = {
