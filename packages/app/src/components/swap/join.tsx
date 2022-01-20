@@ -68,13 +68,13 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
 
   const isTokenApproved = useIsTokenApproved(
     addresses[name].token,
-    account || "",
+    account,
     addresses[name].tenderSwap,
     tokenInput
   );
   const isTenderApproved = useIsTokenApproved(
     addresses[name].tenderToken,
-    account || "",
+    account,
     addresses[name].tenderSwap,
     tenderInput
   );

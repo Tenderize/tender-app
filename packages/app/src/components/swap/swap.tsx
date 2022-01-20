@@ -46,7 +46,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const isTokenApproved = useIsTokenApproved(
     sendTokenAddress,
-    account || "",
+    account,
     addresses[protocolName].tenderSwap,
     sendTokenAmount
   );

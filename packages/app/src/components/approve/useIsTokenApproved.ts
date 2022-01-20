@@ -4,7 +4,7 @@ import { abis } from "@tender/contracts";
 
 export const useIsTokenApproved = (
   tokenAddress: string,
-  ownerAddress: string,
+  ownerAddress: string | null | undefined,
   spenderAddress: string,
   amount: string
 ): boolean => {

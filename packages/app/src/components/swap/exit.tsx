@@ -53,7 +53,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
 
   const isLpSharesApproved = useIsTokenApproved(
     addresses[name].lpToken,
-    account || "",
+    account,
     addresses[name].tenderSwap,
     lpSharesInput
   );
