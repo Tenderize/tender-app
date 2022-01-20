@@ -24,6 +24,7 @@ import { validateIsPositive, validateIsLargerThanMax, hasValue } from "../../uti
 import stakers from "../../data/stakers";
 import { useContractFunction } from "../../utils/useDappPatch";
 import { useEthers } from "@usedapp/core";
+import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {
   name: string;
@@ -45,6 +46,8 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
   const [tokenInput, setTokenInput] = useState("");
 
   const [tenderInput, setTenderInput] = useState("");
+
+  const lpTokenSymbol = `t${symbol}-${symbol}-SWAP`;
 
   const handleTenderInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const val = e.target.value;
@@ -170,6 +173,15 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                     </FormField>
                   </Box>
                 </Form>
+                <Text>
+                  {lpTokenAmount && !lpTokenAmount.isZero() ? (
+                    <>
+                      You will receive {weiToEthWithDecimals(lpTokenAmount, 6)} {lpTokenSymbol}
+                    </>
+                  ) : (
+                    <>&nbsp;</>
+                  )}
+                </Text>
               </Box>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>

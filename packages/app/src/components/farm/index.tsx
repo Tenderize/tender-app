@@ -19,7 +19,7 @@ type Props = {
 };
 
 const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
-  const symbolFull = `POOL-t${symbol}-${symbol}`;
+  const symbolFull = `t${symbol}-${symbol}-SWAP`;
 
   const stakeOf = useContractCall({
     abi: contracts[name].tenderFarm.interface,
