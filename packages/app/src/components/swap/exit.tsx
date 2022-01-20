@@ -45,7 +45,9 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const handleShow = () => setShow(true);
 
   const [isMulti, setIsMulti] = useState(true);
-  const [lpSharesInput, setLpSharesInput] = useState("");
+  const [lpSharesInputMulti, setLpSharesInputMulti] = useState("");
+  const [lpSharesInputSingle, setLpSharesInputSingle] = useState("");
+
   const [tokenOutput, setTokenOutput] = useState("");
   const [tenderOutput, setTenderOutput] = useState("");
   const [selectedToken, setSelectedToken] = useState(symbol);
@@ -55,7 +57,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
     addresses[name].lpToken,
     account,
     addresses[name].tenderSwap,
-    lpSharesInput
+    lpSharesInputMulti || lpSharesInputSingle
   );
   const hasValue = (val: any) => {
     return val && val !== "0";
@@ -81,13 +83,13 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
 
   const singleOut = useCalculateRemoveLiquidityOneToken(
     addresses[name].tenderSwap,
-    utils.parseEther(lpSharesInput || "0"),
+    utils.parseEther(lpSharesInputSingle || "0"),
     singleTokenOutAddress
   );
 
   const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(
     addresses[name].tenderSwap,
-    utils.parseEther(lpSharesInput || "0")
+    utils.parseEther(lpSharesInputMulti || "0")
   );
 
   useEffect(() => {
@@ -97,12 +99,11 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
 
   const handleRemoveLiquidity = async (e: any) => {
     e.preventDefault();
-    const poolIn = utils.parseEther(lpSharesInput || "0");
     if (isMulti) {
       // NOTE: Pool cardinality is tenderToken/Token
-      await removeLiquidity(poolIn, [tenderOut, tokenOut], getDeadline());
+      await removeLiquidity(utils.parseEther(lpSharesInputMulti || "0"), [tenderOut, tokenOut], getDeadline());
     } else {
-      await removeLiquidityOneToken(poolIn, singleTokenOutAddress, singleOut, getDeadline());
+      await removeLiquidityOneToken(utils.parseEther(lpSharesInputSingle || "0"), singleTokenOutAddress, singleOut, getDeadline());
     }
   };
 
@@ -146,8 +147,8 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
                           lpTokenBalance={lpTokenBalance}
-                          lpSharesInput={lpSharesInput}
-                          setLpSharesInput={setLpSharesInput}
+                          lpSharesInput={lpSharesInputMulti}
+                          setLpSharesInput={setLpSharesInputMulti}
                           symbolFull={symbolFull}
                         />
                         <FormField label="You will receive">
@@ -200,8 +201,8 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
                           lpTokenBalance={lpTokenBalance}
-                          lpSharesInput={lpSharesInput}
-                          setLpSharesInput={setLpSharesInput}
+                          lpSharesInput={lpSharesInputSingle}
+                          setLpSharesInput={setLpSharesInputSingle}
                           symbolFull={symbolFull}
                         />
                         <Box>
@@ -264,7 +265,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
                 <Button
                   primary
                   onClick={handleRemoveLiquidity}
-                  disabled={!hasValue(lpSharesInput) || !isLpSharesApproved}
+                  disabled={!hasValue(lpSharesInputSingle || lpSharesInputMulti) || !isLpSharesApproved}
                   label={
                     exitPoolSingleTx.status === "Mining" || exitPoolTx.status === "Mining" ? (
                       <LoadingButtonContent label="Removing Liquidity..." />
