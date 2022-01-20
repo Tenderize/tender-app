@@ -25,10 +25,9 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction, useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { getDeadline, useCalculateRemoveLiquidity, useCalculateRemoveLiquidityOneToken } from "utils/tenderSwapHooks";
-import { useEthers } from "@usedapp/core";
 
 type Props = {
   name: string;

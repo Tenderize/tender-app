@@ -17,7 +17,7 @@ import {
 } from "grommet";
 
 import { InfoCard } from "@tender/shared/src/index";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction } from "@usedapp/core";
 import { TransactionListElement } from "components/transactions";
 import { getDeadline } from "utils/tenderSwapHooks";
 

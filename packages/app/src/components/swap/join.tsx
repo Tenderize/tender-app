@@ -22,8 +22,7 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsPositive, validateIsLargerThanMax, hasValue } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
-import { useContractFunction } from "../../utils/useDappPatch";
-import { useEthers } from "@usedapp/core";
+import { useContractFunction, useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 
 type Props = {

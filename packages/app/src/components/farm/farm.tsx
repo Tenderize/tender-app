@@ -8,8 +8,7 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
-import { useContractFunction } from "../../utils/useDappPatch";
-import { useEthers } from "@usedapp/core";
+import { useContractFunction, useEthers } from "@usedapp/core";
 
 type Props = {
   name: string;

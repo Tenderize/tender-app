@@ -3,7 +3,7 @@ import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text } from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction } from "@usedapp/core";
 
 type Props = {
   name: string;

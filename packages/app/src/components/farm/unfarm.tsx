@@ -6,7 +6,7 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { FormSubtract } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction } from "@usedapp/core";
 
 type Props = {
   name: string;
