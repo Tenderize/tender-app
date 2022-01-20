@@ -94,7 +94,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
-    addLiquidity([tokenIn, tenderIn], lpTokenAmount.sub(1), getDeadline());
+    addLiquidity([tenderIn, tokenIn], lpTokenAmount.sub(1), getDeadline());
   };
 
   return (
