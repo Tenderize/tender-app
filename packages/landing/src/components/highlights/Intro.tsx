@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Box, Button, ButtonExtendedProps, Heading, Paragraph } from "grommet";
 import Link from "next/link";
+import Image from "next/image";
 import styled from "styled-components";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
@@ -12,6 +13,7 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
 }) => {
   return (
     <HighlightContainer item="intro" setVisibleIndex={setVisibleIndex} index={index}>
+      {/* <Image src="/landing/animated-hero.png" width={392} height={600} /> */}
       <Box style={{ position: "relative", marginLeft: "45%", marginTop: "11.5%" }}>
         <Heading margin={{ bottom: "medium" }} style={{ textShadow: "0px 0px 17px #AD01FF" }} size={"large"}>
           Tenderize

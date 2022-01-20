@@ -63,7 +63,11 @@ export const HighlightContainer: FC<{
           <Box
             style={{
               aspectRatio: "3496/2318",
-              backgroundImage: showImage ? `url('/landing/img-${item}.svg')` : undefined,
+              backgroundImage: showImage
+                ? item === "intro"
+                  ? `url('/landing/animated-hero.png'), url('/landing/img-${item}.svg')`
+                  : `url('/landing/img-${item}.svg')`
+                : undefined,
               backgroundRepeat: "no-repeat",
               backgroundSize: "contain",
             }}
