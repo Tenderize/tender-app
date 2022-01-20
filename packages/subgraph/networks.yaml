@@ -8,5 +8,5 @@ rinkeby:
   networkName: rinkeby
   contracts:
     registry:
-      address: "A5bB1c2952717C156813Eadc8a6D30EBD594f741"
+      address: "a4b3F2677607120aA37623CA9D2D0092037711E6"
       startBlock: 9972106
