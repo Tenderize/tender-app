@@ -66,12 +66,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
     setTenderInput(utils.formatEther(tenderTokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(
-    addresses[name].token,
-    account,
-    addresses[name].tenderSwap,
-    tokenInput
-  );
+  const isTokenApproved = useIsTokenApproved(addresses[name].token, account, addresses[name].tenderSwap, tokenInput);
   const isTenderApproved = useIsTokenApproved(
     addresses[name].tenderToken,
     account,
