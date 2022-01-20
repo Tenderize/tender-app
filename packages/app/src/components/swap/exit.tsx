@@ -103,7 +103,12 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
       // NOTE: Pool cardinality is tenderToken/Token
       await removeLiquidity(utils.parseEther(lpSharesInputMulti || "0"), [tenderOut, tokenOut], getDeadline());
     } else {
-      await removeLiquidityOneToken(utils.parseEther(lpSharesInputSingle || "0"), singleTokenOutAddress, singleOut, getDeadline());
+      await removeLiquidityOneToken(
+        utils.parseEther(lpSharesInputSingle || "0"),
+        singleTokenOutAddress,
+        singleOut,
+        getDeadline()
+      );
     }
   };
 
