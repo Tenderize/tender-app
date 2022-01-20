@@ -52,13 +52,12 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const { account } = useEthers();
 
   const isLpSharesApproved = useIsTokenApproved(addresses[name].lpToken, account || "", addresses[name].tenderSwap, lpSharesInput);
-
   const hasValue = (val: any) => {
     return val && val !== "0";
   };
 
   const { state: exitPoolSingleTx, send: removeLiquidityOneToken } = useContractFunction(
-    contracts[name].lpToken,
+    contracts[name].tenderSwap,
     "removeLiquidityOneToken",
     {
       transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
@@ -80,8 +79,8 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(addresses[name].tenderSwap, utils.parseEther(lpSharesInput || "0"));
 
   useEffect(() => {
-    setTokenOutput(utils.formatEther(tokenOut || "0"));
-    setTenderOutput(utils.formatEther(tenderOut || "0"))
+    setTokenOutput(weiToEthWithDecimals(tokenOut, 6));
+    setTenderOutput(weiToEthWithDecimals(tenderOut, 6))
   }, [tenderOut, tokenOut]);
 
   const handleRemoveLiquidity = async (e: any) => {
@@ -246,7 +245,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
               <Box pad={{ horizontal: "large" }} justify="center" gap="small">
                 <ApproveToken
                   symbol={symbolFull}
-                  spender={addresses[name].lpToken}
+                  spender={addresses[name].tenderSwap}
                   token={contracts[name].lpToken}
                   show={!isLpSharesApproved}
                 />

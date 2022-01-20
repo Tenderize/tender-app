@@ -18,22 +18,22 @@ export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], de
 };
 
 export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber) => {
-  const [tenderOut, tokenOut]: BigNumber[] = (
+  const [values] = (
     useContractCall(
-      pool && amount && !amount.isZero && {
+      pool && amount && !amount.isZero() && {
       abi: TenderSwapABI,
       address: pool,
       method: "calculateRemoveLiquidity",
       args: [amount],
-    }) ?? [constants.Zero, constants.Zero]
+    }) ?? [[constants.Zero, constants.Zero]]
   );
-
-  return [tenderOut, tokenOut]
+  
+  return values
 };
 
 export const useCalculateRemoveLiquidityOneToken = (pool: string, amount: BigNumber, tokenReceive: string) => {
   const [tokens]: BigNumber[] =  (
-    useContractCall( pool && amount && !amount.isZero && tokenReceive && {
+    useContractCall( pool && amount && !amount.isZero() && tokenReceive && {
       abi: TenderSwapABI,
       address: pool,
       method: "calculateRemoveLiquidityOneToken",

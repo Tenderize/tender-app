@@ -18,6 +18,4 @@ export const useIsTokenApproved = (tokenAddress: string, ownerAddress: string, s
   ) ?? [constants.Zero]
   const amountWei = utils.parseEther(amount || "0")
  return allowance.gte(amountWei);
-
-
 };
