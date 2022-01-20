@@ -42,9 +42,9 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [tokenInput, setTokenInput] = useState("0");
+  const [tokenInput, setTokenInput] = useState("");
 
-  const [tenderInput, setTenderInput] = useState("0");
+  const [tenderInput, setTenderInput] = useState("");
 
   const handleTenderInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const val = e.target.value;
