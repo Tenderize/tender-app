@@ -44,11 +44,16 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   const sendTokenBalance = isSendingToken ? tokenBalance : tenderTokenBalance;
   const sendTokenAddress = isSendingToken ? addresses[protocolName].token : addresses[protocolName].tenderToken;
 
-  const isTokenApproved = useIsTokenApproved(sendTokenAddress, account || "", addresses[protocolName].tenderSwap, sendTokenAmount);
+  const isTokenApproved = useIsTokenApproved(
+    sendTokenAddress,
+    account || "",
+    addresses[protocolName].tenderSwap,
+    sendTokenAmount
+  );
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const tokenSpotPrice =  useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
+  const tokenSpotPrice = useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
 
   const calcOutGivenIn = useCalculateSwap(
     addresses[protocolName].tenderSwap,

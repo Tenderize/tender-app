@@ -35,7 +35,12 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].lpToken, account || "", addresses[name].tenderFarm, farmInput);
+  const isTokenApproved = useIsTokenApproved(
+    addresses[name].lpToken,
+    account || "",
+    addresses[name].tenderFarm,
+    farmInput
+  );
 
   // Contract Functions
   const { state: farmTx, send: farm } = useContractFunction(contracts[name].tenderFarm, "farm", {

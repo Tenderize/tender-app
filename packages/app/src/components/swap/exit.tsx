@@ -46,12 +46,17 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
 
   const [isMulti, setIsMulti] = useState(true);
   const [lpSharesInput, setLpSharesInput] = useState("");
-  const [tokenOutput, setTokenOutput] = useState("")
-  const [tenderOutput, setTenderOutput] = useState("")
+  const [tokenOutput, setTokenOutput] = useState("");
+  const [tenderOutput, setTenderOutput] = useState("");
   const [selectedToken, setSelectedToken] = useState(symbol);
   const { account } = useEthers();
 
-  const isLpSharesApproved = useIsTokenApproved(addresses[name].lpToken, account || "", addresses[name].tenderSwap, lpSharesInput);
+  const isLpSharesApproved = useIsTokenApproved(
+    addresses[name].lpToken,
+    account || "",
+    addresses[name].tenderSwap,
+    lpSharesInput
+  );
   const hasValue = (val: any) => {
     return val && val !== "0";
   };
@@ -64,9 +69,13 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
     }
   );
 
-  const { state: exitPoolTx, send: removeLiquidity } = useContractFunction(contracts[name].tenderSwap, "removeLiquidity", {
-    transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
-  });
+  const { state: exitPoolTx, send: removeLiquidity } = useContractFunction(
+    contracts[name].tenderSwap,
+    "removeLiquidity",
+    {
+      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+    }
+  );
 
   const singleTokenOutAddress = selectedToken === symbol ? addresses[name].token : addresses[name].tenderToken;
 
@@ -76,11 +85,14 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
     singleTokenOutAddress
   );
 
-  const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(addresses[name].tenderSwap, utils.parseEther(lpSharesInput || "0"));
+  const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(
+    addresses[name].tenderSwap,
+    utils.parseEther(lpSharesInput || "0")
+  );
 
   useEffect(() => {
     setTokenOutput(weiToEthWithDecimals(tokenOut, 6));
-    setTenderOutput(weiToEthWithDecimals(tenderOut, 6))
+    setTenderOutput(weiToEthWithDecimals(tenderOut, 6));
   }, [tenderOut, tokenOut]);
 
   const handleRemoveLiquidity = async (e: any) => {

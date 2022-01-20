@@ -8,7 +8,6 @@ import { GrommetWrapper, apolloClient } from "@tender/shared/src/index";
 import "./index.css";
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
-  
   return (
     <>
       <Head>

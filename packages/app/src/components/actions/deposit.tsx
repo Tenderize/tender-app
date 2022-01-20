@@ -56,7 +56,12 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
     setDepositInput("");
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].token, account || "", addresses[name].tenderizer, depositInput);
+  const isTokenApproved = useIsTokenApproved(
+    addresses[name].token,
+    account || "",
+    addresses[name].tenderizer,
+    depositInput
+  );
 
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
