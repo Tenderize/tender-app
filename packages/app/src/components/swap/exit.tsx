@@ -18,6 +18,7 @@ import {
   Tabs,
   Tab,
   Paragraph,
+  Heading,
 } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -28,6 +29,7 @@ import stakers from "../../data/stakers";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { getDeadline, useCalculateRemoveLiquidity, useCalculateRemoveLiquidityOneToken } from "utils/tenderSwapHooks";
+import { FormClose } from "grommet-icons";
 
 type Props = {
   name: string;
@@ -135,8 +137,16 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
           onEsc={handleClose}
           onClickOutside={handleClose}
         >
-          <Card flex={false} pad="medium" width="large">
-            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Exit tender${symbol}/${symbol}`}</CardHeader>
+          <Card flex={false} pad="medium" width="large" style={{ position: "relative" }}>
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
+            <CardHeader justify="center" pad={{ bottom: "small" }}>
+              <Heading alignSelf="center"> {`Exit tender${symbol}/${symbol}`}</Heading>
+            </CardHeader>
             <CardBody>
               <Tabs id="exit-type" activeIndex={tabIndex} onActive={onActive}>
                 <Tab
