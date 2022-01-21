@@ -14,12 +14,14 @@ import {
   TextInput,
   Spinner,
   Text,
+  Heading,
 } from "grommet";
 
 import { InfoCard } from "@tender/shared/src/index";
 import { useContractFunction } from "@usedapp/core";
 import { TransactionListElement } from "components/transactions";
 import { getDeadline } from "utils/tenderSwapHooks";
+import { FormClose } from "grommet-icons";
 
 type Props = {
   show: boolean;
@@ -84,11 +86,16 @@ const ConfirmSwapModal: FC<Props> = ({
           }}
           onClickOutside={() => confirmStatus !== "Submitted" && onDismiss()}
         >
-          <Card flex={false} pad="medium">
-            <CardHeader
-              justify="center"
-              pad={{ bottom: "small" }}
-            >{`Confirm Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}</CardHeader>
+          <Card flex={false} style={{ position: "relative" }} pad="medium">
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={onDismiss}
+            />
+            <CardHeader justify="center" pad={{ bottom: "small" }}>
+              <Heading alignSelf="center">Confirm Swap</Heading>
+            </CardHeader>
             <CardBody justify="center" align="center">
               {confirmStatus === "None" && (
                 <>
