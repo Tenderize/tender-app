@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
-import { Box, Button, Card, CardHeader, Image, Layer, Spinner, Text, ThemeType } from "grommet";
+import { Box, Button, Card, CardHeader, Heading, Image, Layer, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
@@ -10,6 +10,7 @@ import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
+import { FormClose } from "grommet-icons";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();
@@ -75,9 +76,17 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
           onEsc={handleCloseWalletPicker}
           onClickOutside={handleCloseWalletPicker}
         >
-          <Card flex={false} pad="medium" width="medium">
+          <Card flex={false} style={{ position: "relative" }} pad="medium" width="medium">
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleCloseWalletPicker}
+            />
             <CardHeader justify="center">
-              <Text size="xlarge">Connect to a Wallet</Text>
+              <Heading level={2} alignSelf="center">
+                Connect Wallet
+              </Heading>
             </CardHeader>
             <Box gap="small" pad={{ top: "medium", horizontal: "medium" }}>
               <ProviderButton

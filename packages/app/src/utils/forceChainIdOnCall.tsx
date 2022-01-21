@@ -1,6 +1,6 @@
 import { ReactElement, useCallback, useState } from "react";
 import { ChainId, useEthers } from "@usedapp/core";
-import { Box, Button, Card, CardFooter, CardHeader, Layer } from "grommet";
+import { Box, Button, Card, CardFooter, CardHeader, Heading, Layer } from "grommet";
 
 type InferArguments<T> = T extends (...t: [...infer Arg]) => any ? Arg : never;
 type InferReturn<T> = Promise<T extends (...t: [...infer Res]) => infer Res ? Res : never>;
@@ -24,7 +24,9 @@ export const useForceRinkebyFunction = <TFunc extends (...args: any[]) => any>(
       <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={onClose} onClickOutside={onClose}>
         <Card flex={false} pad="medium" width="large">
           <CardHeader justify="center" pad={{ bottom: "small" }}>
-            {"Please switch to rinkeby to use Tenderize"}
+            <Heading level={2} alignSelf="center">
+              {"Please switch to rinkeby to use Tenderize"}
+            </Heading>
           </CardHeader>
           <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
             <Box justify="center" gap="small">

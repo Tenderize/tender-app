@@ -1,7 +1,8 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { contracts } from "@tender/contracts";
-import { Box, Button, Text, Heading, Layer, Card, CardHeader, CardBody } from "grommet";
+import { Button } from "grommet";
 import { useContractFunction } from "@usedapp/core";
+import Dialog from "components/swap/Dialog";
 
 type props = {
   symbol: string;
@@ -9,11 +10,6 @@ type props = {
 };
 
 const Faucet: FC<props> = ({ symbol, name }) => {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   const { send } = useContractFunction(contracts[name].faucet, "request");
 
   // TODO why is this needed
@@ -22,31 +18,21 @@ const Faucet: FC<props> = ({ symbol, name }) => {
   };
 
   return (
-    <>
-      <Button plain onClick={handleShow} label="Faucet" />
-      {show && (
-        <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
-          <Card flex={false} pad="medium" height="medium" width="medium">
-            <CardHeader>
-              <Heading>{symbol} Faucet</Heading>
-            </CardHeader>
-            <CardBody>
-              <Box width="large" gap="small">
-                <Text>{`Get some testnet ${symbol} and ETH (you need ETH to get ${symbol})`}</Text>
-                <Button primary onClick={requestTokens} label={`Get ${symbol}`} />
-                <Button
-                  primary
-                  href="https://faucet.metamask.io/"
-                  target="_blank"
-                  label="Get ETH"
-                  style={{ textAlign: "center" }}
-                />
-              </Box>
-            </CardBody>
-          </Card>
-        </Layer>
-      )}
-    </>
+    <Dialog
+      openButtonLabel="Faucet"
+      title="Faucet"
+      description={`Get some testnet ${symbol} and ETH (you need ETH to get ${symbol})`}
+      button1={<Button primary onClick={requestTokens} label={`Get ${symbol}`} />}
+      button2={
+        <Button
+          primary
+          href="https://faucet.metamask.io/"
+          target="_blank"
+          label="Get ETH"
+          style={{ textAlign: "center" }}
+        />
+      }
+    />
   );
 };
 

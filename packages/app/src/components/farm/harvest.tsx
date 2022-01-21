@@ -1,9 +1,10 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text } from "grommet";
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text, Heading } from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "@usedapp/core";
+import { FormClose } from "grommet-icons";
 
 type Props = {
   name: string;
@@ -49,8 +50,18 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
         >
-          <Card flex={false} pad="medium" width="large">
-            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Harvest ${symbol}`}</CardHeader>
+          <Card flex={false} style={{ position: "relative" }} pad="medium" width="large">
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
+            <CardHeader justify="center" pad={{ bottom: "small" }}>
+              <Heading level={2} alignSelf="center">
+                {`Harvest ${symbol}`}
+              </Heading>
+            </CardHeader>
             <CardBody align="center">
               <Text>
                 Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}

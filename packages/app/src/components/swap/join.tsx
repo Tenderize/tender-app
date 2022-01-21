@@ -14,6 +14,7 @@ import {
   FormField,
   TextInput,
   Text,
+  Heading,
 } from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -24,6 +25,7 @@ import { validateIsPositive, validateIsLargerThanMax, hasValue } from "../../uti
 import stakers from "../../data/stakers";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
+import { FormClose } from "grommet-icons";
 
 type Props = {
   name: string;
@@ -111,8 +113,18 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
           onEsc={handleClose}
           onClickOutside={handleClose}
         >
-          <Card flex={false} pad="medium" width="large">
-            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Join tender${symbol}/${symbol}`}</CardHeader>
+          <Card flex={false} pad="medium" width="large" style={{ position: "relative" }}>
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
+            <CardHeader justify="center" pad={{ bottom: "small" }}>
+              <Heading level={2} alignSelf="center">
+                {`Join tender${symbol}/${symbol}`}
+              </Heading>
+            </CardHeader>
             <CardBody>
               <Box pad={{ top: "medium" }} align="center">
                 <Form validate="change">
