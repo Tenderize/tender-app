@@ -145,7 +145,9 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
               onClick={handleClose}
             />
             <CardHeader justify="center" pad={{ bottom: "small" }}>
-              <Heading alignSelf="center"> {`Exit tender${symbol}/${symbol}`}</Heading>
+              <Heading level={2} alignSelf="center">
+                {`Exit tender${symbol}/${symbol}`}
+              </Heading>
             </CardHeader>
             <CardBody>
               <Tabs id="exit-type" activeIndex={tabIndex} onActive={onActive}>

@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { Button, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
+import { Button, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Heading } from "grommet";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { FormSubtract } from "grommet-icons";
+import { FormClose, FormSubtract } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction } from "@usedapp/core";
@@ -31,8 +31,6 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
     setUnfarmInput(utils.formatEther(stake.toString() || "0"));
   };
 
-  // Contract Functions
-
   const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].tenderFarm, "unfarm", {
     transactionName: `Unfarm ${symbol}`,
   });
@@ -59,8 +57,18 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
         >
-          <Card flex={false} pad="medium" width="large">
-            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Unfarm ${symbol}`}</CardHeader>
+          <Card flex={false} style={{ position: "relative" }} pad="medium" width="large">
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
+            <CardHeader justify="center" pad={{ bottom: "small" }}>
+              <Heading level={2} alignSelf="center">
+                {`Unfarm ${symbol}`}
+              </Heading>
+            </CardHeader>
             <CardBody>
               <Form validate="change">
                 <FormField

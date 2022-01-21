@@ -121,7 +121,9 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
               onClick={handleClose}
             />
             <CardHeader justify="center" pad={{ bottom: "small" }}>
-              <Heading alignSelf="center"> {`Join tender${symbol}/${symbol}`}</Heading>
+              <Heading level={2} alignSelf="center">
+                {`Join tender${symbol}/${symbol}`}
+              </Heading>
             </CardHeader>
             <CardBody>
               <Box pad={{ top: "medium" }} align="center">

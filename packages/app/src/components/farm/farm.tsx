@@ -1,11 +1,23 @@
 import { FC, useCallback, useState } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Heading,
+  Layer,
+  Form,
+  FormField,
+  TextInput,
+} from "grommet";
 import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { FormAdd } from "grommet-icons";
+import { FormAdd, FormClose } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction, useEthers } from "@usedapp/core";
@@ -52,8 +64,18 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
       <Button primary onClick={handleShow} label="Farm" reverse icon={<FormAdd color="white" />} />
       {show && (
         <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
-          <Card flex={false} pad="medium" width="large">
-            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Farm ${symbol}`}</CardHeader>
+          <Card flex={false} style={{ position: "relative" }} pad="medium" width="large">
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
+            <CardHeader justify="center" pad={{ bottom: "small" }}>
+              <Heading level={2} alignSelf="center">
+                {`Farm ${symbol}`}
+              </Heading>
+            </CardHeader>
             <CardBody>
               <Form validate="change">
                 <FormField

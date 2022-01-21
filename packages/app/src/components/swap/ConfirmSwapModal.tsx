@@ -94,7 +94,9 @@ const ConfirmSwapModal: FC<Props> = ({
               onClick={onDismiss}
             />
             <CardHeader justify="center" pad={{ bottom: "small" }}>
-              <Heading alignSelf="center">Confirm Swap</Heading>
+              <Heading level={2} alignSelf="center">
+                {`Confirm Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}
+              </Heading>
             </CardHeader>
             <CardBody justify="center" align="center">
               {confirmStatus === "None" && (

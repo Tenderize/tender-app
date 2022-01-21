@@ -6,7 +6,7 @@ import { formatEther } from "@ethersproject/units";
 import { BigNumber } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
 import { Link } from "../base";
-import { Box, Text, Layer, Card, CardHeader, CardBody } from "grommet";
+import { Box, Text, Layer, Card, CardHeader, CardBody, Heading } from "grommet";
 
 const formatter = new Intl.NumberFormat("en-us", {
   minimumFractionDigits: 4,
@@ -36,7 +36,9 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
           <Card flex={false}>
             <Box pad="medium" gap="medium">
               <CardHeader>
-                <Text size="xlarge">Account info</Text>
+                <Heading level={2} alignSelf="center">
+                  Account info
+                </Heading>
               </CardHeader>
               <CardBody>
                 <Box gap="medium">

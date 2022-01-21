@@ -35,7 +35,9 @@ const Dialog: FC<props> = (props) => {
               onClick={handleClose}
             />
             <CardHeader justify="center">
-              <Heading alignSelf="center">{props.title}</Heading>
+              <Heading level={2} alignSelf="center">
+                {props.title}
+              </Heading>
             </CardHeader>
             <CardBody>
               <Box flex justify="evenly">
