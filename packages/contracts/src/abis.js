@@ -1,4 +1,4 @@
-import ERC20 from "./abis/erc20.json";
+import ERC20 from "./abis/ERC20.json";
 import Ownable from "./abis/ownable.json";
 import Faucet from "./abis/Faucet.json"
 import Tenderizer from "./abis/Tenderizer.json"
