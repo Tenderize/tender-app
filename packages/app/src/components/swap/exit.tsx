@@ -1,7 +1,6 @@
-import { FC, useState, useCallback, ChangeEventHandler } from "react";
+import { FC, useState, useCallback, useEffect, ChangeEventHandler } from "react";
 import { addresses, contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { useContractCall } from "@usedapp/core";
 import {
   Image,
   Button,
@@ -26,32 +25,17 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction, useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
+import { getDeadline, useCalculateRemoveLiquidity, useCalculateRemoveLiquidityOneToken } from "utils/tenderSwapHooks";
 
 type Props = {
   name: string;
   symbol: string;
-  tokenWeight: BigNumberish;
-  tenderTokenWeight: BigNumberish;
-  totalWeight: BigNumberish;
-  swapFee: BigNumberish;
-  tokenLpBalance: BigNumberish;
-  tenderLpBalance: BigNumberish;
-  lpShares: BigNumberish;
+  lpTokenBalance: BigNumberish;
 };
 
-const ExitPool: FC<Props> = ({
-  name,
-  symbol,
-  tokenWeight,
-  tenderTokenWeight,
-  totalWeight,
-  swapFee,
-  tokenLpBalance,
-  tenderLpBalance,
-  lpShares,
-}) => {
+const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const staker = stakers[name];
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
@@ -60,82 +44,70 @@ const ExitPool: FC<Props> = ({
   const handleShow = () => setShow(true);
 
   const [isMulti, setIsMulti] = useState(true);
-  const [lpSharesInput, setLpSharesInput] = useState("");
+  const [lpSharesInputMulti, setLpSharesInputMulti] = useState("");
+  const [lpSharesInputSingle, setLpSharesInputSingle] = useState("");
 
+  const [tokenOutput, setTokenOutput] = useState("");
+  const [tenderOutput, setTenderOutput] = useState("");
   const [selectedToken, setSelectedToken] = useState(symbol);
+  const { account } = useEthers();
 
-  const isLpSharesApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].liquidity, lpSharesInput);
-
+  const isLpSharesApproved = useIsTokenApproved(
+    addresses[name].lpToken,
+    account,
+    addresses[name].tenderSwap,
+    lpSharesInputMulti || lpSharesInputSingle
+  );
   const hasValue = (val: any) => {
     return val && val !== "0";
   };
 
-  const useCalcSingleOutGivenPoolIn = () => {
-    let tokenBalOut: BigNumberish = 0;
-    let tokenWeightOut: BigNumberish = 0;
-
-    if (selectedToken === symbol) {
-      tokenBalOut = tokenLpBalance;
-      tokenWeightOut = tokenWeight;
-    } else {
-      tokenBalOut = tenderLpBalance;
-      tokenWeightOut = tenderTokenWeight;
-    }
-
-    const [calced] =
-      useContractCall(
-        hasValue(tokenBalOut) &&
-          hasValue(tokenWeightOut) &&
-          hasValue(lpShares) &&
-          hasValue(totalWeight) &&
-          hasValue(lpSharesInput) &&
-          hasValue(swapFee) && {
-            abi: contracts[name].swap.interface,
-            address: addresses[name].swap,
-            method: "calcSingleOutGivenPoolIn",
-            args: [tokenBalOut, tokenWeightOut, lpShares, totalWeight, utils.parseEther(lpSharesInput), swapFee],
-          }
-      ) ?? [];
-    return calced || "0";
-  };
-
-  const singleOutPoolIn = useCalcSingleOutGivenPoolIn();
-
-  const { state: exitPoolTx, send: exitPool } = useContractFunction(contracts[name].liquidity, "exitPool", {
-    transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
-  });
-
-  const { state: exitSwapPoolAmountInTx, send: exitSwapPoolAmountIn } = useContractFunction(
-    contracts[name].liquidity,
-    "exitswapPoolAmountIn",
+  const { state: exitPoolSingleTx, send: removeLiquidityOneToken } = useContractFunction(
+    contracts[name].tenderSwap,
+    "removeLiquidityOneToken",
     {
       transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
     }
   );
 
-  const calcPoolOutFromRatio = (balance: BigNumberish) => {
-    const tokenInBN = utils.parseEther(lpSharesInput || "0");
-    // return tokenInBN.mul(utils.parseEther("1")).div(tokenLpBalance).mul(lpShares).div(utils.parseEther("1"))
-    const total = hasValue(lpShares) ? lpShares : "1";
-    return tokenInBN.mul(balance).div(total).sub(1000);
-  };
+  const { state: exitPoolTx, send: removeLiquidity } = useContractFunction(
+    contracts[name].tenderSwap,
+    "removeLiquidity",
+    {
+      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+    }
+  );
 
-  const removeLiquidity = async (e: any) => {
+  const singleTokenOutAddress = selectedToken === symbol ? addresses[name].token : addresses[name].tenderToken;
+
+  const singleOut = useCalculateRemoveLiquidityOneToken(
+    addresses[name].tenderSwap,
+    utils.parseEther(lpSharesInputSingle || "0"),
+    singleTokenOutAddress
+  );
+
+  const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(
+    addresses[name].tenderSwap,
+    utils.parseEther(lpSharesInputMulti || "0")
+  );
+
+  useEffect(() => {
+    setTokenOutput(weiToEthWithDecimals(tokenOut, 6));
+    setTenderOutput(weiToEthWithDecimals(tenderOut, 6));
+  }, [tenderOut, tokenOut]);
+
+  const handleRemoveLiquidity = async (e: any) => {
     e.preventDefault();
-    const poolIn = utils.parseEther(lpSharesInput || "0");
     if (isMulti) {
-      const minTokenOut = calcPoolOutFromRatio(tokenLpBalance);
-      const minTenderOut = calcPoolOutFromRatio(tenderLpBalance);
-      // NOTE: Pool is currently tenderToken/Token
-      await exitPool(poolIn, [minTenderOut, minTokenOut]);
+      // NOTE: Pool cardinality is tenderToken/Token
+      await removeLiquidity(utils.parseEther(lpSharesInputMulti || "0"), [tenderOut, tokenOut], getDeadline());
     } else {
-      let token;
-      if (selectedToken === symbol) {
-        token = addresses[name].token;
-      } else if (selectedToken === `t${symbol}`) {
-        token = addresses[name].tenderToken;
-      }
-      exitSwapPoolAmountIn(token, poolIn, singleOutPoolIn);
+      await removeLiquidityOneToken(
+        utils.parseEther(lpSharesInputSingle || "0"),
+        singleTokenOutAddress,
+        singleOut,
+        getDeadline()
+      );
     }
   };
 
@@ -178,9 +150,9 @@ const ExitPool: FC<Props> = ({
                     <Form validate="change">
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
-                          lpShares={lpShares}
-                          lpSharesInput={lpSharesInput}
-                          setLpSharesInput={setLpSharesInput}
+                          lpTokenBalance={lpTokenBalance}
+                          lpSharesInput={lpSharesInputMulti}
+                          setLpSharesInput={setLpSharesInputMulti}
                           symbolFull={symbolFull}
                         />
                         <FormField label="You will receive">
@@ -198,7 +170,7 @@ const ExitPool: FC<Props> = ({
                                   </Box>
                                 }
                                 style={{ textAlign: "right", padding: "20px 50px" }}
-                                value={`${utils.formatEther(calcPoolOutFromRatio(tokenLpBalance) || "0")}`}
+                                value={tokenOutput}
                               />
                               <TextInput
                                 readOnly
@@ -212,7 +184,7 @@ const ExitPool: FC<Props> = ({
                                   </Box>
                                 }
                                 style={{ textAlign: "right", padding: "20px 50px" }}
-                                value={`${utils.formatEther(calcPoolOutFromRatio(tenderLpBalance) || "0")}`}
+                                value={tenderOutput}
                               />
                             </Box>
                           </Box>
@@ -232,9 +204,9 @@ const ExitPool: FC<Props> = ({
                     <Form>
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
-                          lpShares={lpShares}
-                          lpSharesInput={lpSharesInput}
-                          setLpSharesInput={setLpSharesInput}
+                          lpTokenBalance={lpTokenBalance}
+                          lpSharesInput={lpSharesInputSingle}
+                          setLpSharesInput={setLpSharesInputSingle}
                           symbolFull={symbolFull}
                         />
                         <Box>
@@ -275,7 +247,7 @@ const ExitPool: FC<Props> = ({
                                 disabled
                                 id="exitMultiReceive"
                                 placeholder={"0"}
-                                value={utils.formatEther(singleOutPoolIn || "0")}
+                                value={utils.formatEther(singleOut)}
                               />
                             </Box>
                           </FormField>
@@ -290,16 +262,16 @@ const ExitPool: FC<Props> = ({
               <Box pad={{ horizontal: "large" }} justify="center" gap="small">
                 <ApproveToken
                   symbol={symbolFull}
-                  spender={addresses[name].liquidity}
-                  token={contracts[name].liquidity}
+                  spender={addresses[name].tenderSwap}
+                  token={contracts[name].lpToken}
                   show={!isLpSharesApproved}
                 />
                 <Button
                   primary
-                  onClick={removeLiquidity}
-                  disabled={!hasValue(lpSharesInput) || !isLpSharesApproved}
+                  onClick={handleRemoveLiquidity}
+                  disabled={!hasValue(lpSharesInputSingle || lpSharesInputMulti) || !isLpSharesApproved}
                   label={
-                    exitPoolTx.status === "Mining" || exitSwapPoolAmountInTx.status === "Mining" ? (
+                    exitPoolSingleTx.status === "Mining" || exitPoolTx.status === "Mining" ? (
                       <LoadingButtonContent label="Removing Liquidity..." />
                     ) : (
                       "Remove Liquidity"
@@ -319,11 +291,11 @@ const LPTokensToRemoveInputField: FC<{
   lpSharesInput: string;
   setLpSharesInput: (value: string) => void;
   symbolFull: string;
-  lpShares: BigNumberish;
-}> = ({ lpSharesInput, setLpSharesInput, symbolFull, lpShares }) => {
+  lpTokenBalance: BigNumberish;
+}> = ({ lpSharesInput, setLpSharesInput, symbolFull, lpTokenBalance }) => {
   const maxDeposit = useCallback(() => {
-    setLpSharesInput(utils.formatEther(lpShares || "0"));
-  }, [lpShares, setLpSharesInput]);
+    setLpSharesInput(utils.formatEther(lpTokenBalance || "0"));
+  }, [lpTokenBalance, setLpSharesInput]);
 
   const handleLpSharesInputChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -338,7 +310,7 @@ const LPTokensToRemoveInputField: FC<{
     <FormField
       label="LP Tokens to remove"
       name="lpTokenToRemove"
-      validate={[validateIsPositive(lpSharesInput), validateIsLargerThanMax(lpSharesInput, lpShares)]}
+      validate={[validateIsPositive(lpSharesInput), validateIsLargerThanMax(lpSharesInput, lpTokenBalance)]}
     >
       <Box direction="row" align="center" gap="small">
         <TextInput
@@ -349,7 +321,7 @@ const LPTokensToRemoveInputField: FC<{
         />
       </Box>
       <AmountInputFooter
-        label={`Staked: ${weiToEthWithDecimals(lpShares?.toString() || "0", 2)} ${symbolFull}`}
+        label={`Staked: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 2)} ${symbolFull}`}
         onClick={maxDeposit}
       />
     </FormField>

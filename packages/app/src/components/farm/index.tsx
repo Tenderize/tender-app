@@ -19,25 +19,25 @@ type Props = {
 };
 
 const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
-  const symbolFull = `POOL-t${symbol}-${symbol}`;
+  const symbolFull = `t${symbol}-${symbol}-SWAP`;
 
   const stakeOf = useContractCall({
-    abi: contracts[name].farm.interface,
-    address: addresses[name].farm.toLowerCase(),
+    abi: contracts[name].tenderFarm.interface,
+    address: addresses[name].tenderFarm.toLowerCase(),
     method: "stakeOf",
     args: [account],
   });
 
   // const totalStake = useContractCall({
-  //   abi: contracts[name].farm.interface,
-  //   address: addresses[name].farm,
+  //   abi: contracts[name].tenderFarm.interface,
+  //   address: addresses[name].tenderFarm,
   //   method: "nextTotalStake",
   //   args: [],
   // });
 
   const availableRewards = useContractCall({
-    abi: contracts[name].farm.interface,
-    address: addresses[name].farm,
+    abi: contracts[name].tenderFarm.interface,
+    address: addresses[name].tenderFarm,
     method: "availableRewards",
     args: [account],
   });

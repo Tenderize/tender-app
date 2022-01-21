@@ -17,33 +17,32 @@ import {
 } from "grommet";
 
 import { InfoCard } from "@tender/shared/src/index";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction } from "@usedapp/core";
 import { TransactionListElement } from "components/transactions";
+import { getDeadline } from "utils/tenderSwapHooks";
 
 type Props = {
   show: boolean;
-  onDismiss: () => void;
+  tokenAddress: string;
+  tokenAmount: BigNumber;
+  tokenReceiveAmount: BigNumber;
   tokenSendedSymbol: string;
   tokenReceivedSymbol: string;
-  sendTokenAmount: BigNumber;
-  receiveTokenAmount: BigNumber;
   tokenSpotPrice: BigNumber;
-  tokenSendedAddress: string;
-  tokenReceivedAddress: string;
   protocolName: string;
+  onDismiss: () => void;
 };
 
 const ConfirmSwapModal: FC<Props> = ({
   show,
+  tokenAddress,
+  tokenAmount,
+  tokenReceiveAmount,
   tokenSendedSymbol,
-  sendTokenAmount,
   tokenReceivedSymbol,
-  receiveTokenAmount,
-  onDismiss,
   tokenSpotPrice,
-  tokenSendedAddress,
-  tokenReceivedAddress,
   protocolName,
+  onDismiss,
 }) => {
   const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted" | "Success">("None");
 
@@ -54,26 +53,19 @@ const ConfirmSwapModal: FC<Props> = ({
     }
   }, [show]);
 
-  const { state: swapTx, send: swapExactAmountOut } = useContractFunction(
-    contracts[protocolName].swap,
-    "swapExactAmountOut",
-    { transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}` }
-  );
+  const { state: swapTx, send: swap } = useContractFunction(contracts[protocolName].tenderSwap, "swap", {
+    transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`,
+  });
+
+  const minAmount = tokenReceiveAmount.mul(98).div(100);
 
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
-    await swapExactAmountOut(
-      tokenSendedAddress,
-      sendTokenAmount,
-      tokenReceivedAddress,
-      receiveTokenAmount,
-      tokenSpotPrice
-    );
+    await swap(tokenAddress, tokenAmount, minAmount, getDeadline());
     onDismiss();
   };
 
   useEffect(() => {
-    console.log("swapState", swapTx);
     if (swapTx.status === "Mining") {
       setConfirmStatus("Submitted");
     } else if (swapTx.status === "Success") {
@@ -107,7 +99,7 @@ const ConfirmSwapModal: FC<Props> = ({
                           readOnly
                           id="formSwapSend"
                           type="number"
-                          value={utils.formatEther(sendTokenAmount || "0")}
+                          value={utils.formatEther(tokenAmount || "0")}
                           required={true}
                         />
                       </FormField>
@@ -116,7 +108,7 @@ const ConfirmSwapModal: FC<Props> = ({
                           readOnly
                           id="formSwapReceive"
                           placeholder={"0"}
-                          value={utils.formatEther(receiveTokenAmount || "0")}
+                          value={utils.formatEther(tokenReceiveAmount || "0")}
                         />
                       </FormField>
                     </Box>
@@ -133,8 +125,8 @@ const ConfirmSwapModal: FC<Props> = ({
                     Waiting For Confirmation...
                   </Text>
                   <Text>
-                    Swapping {utils.formatEther(sendTokenAmount || "0")} {tokenSendedSymbol} for{" "}
-                    {utils.formatEther(receiveTokenAmount || "0")} {tokenReceivedSymbol}
+                    Swapping {utils.formatEther(tokenAmount || "0")} {tokenSendedSymbol} for{" "}
+                    {utils.formatEther(tokenReceiveAmount || "0")} {tokenReceivedSymbol}
                   </Text>
                   <Text>Confirm this transaction in your wallet.</Text>
                 </Box>

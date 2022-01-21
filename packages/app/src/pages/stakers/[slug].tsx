@@ -27,9 +27,10 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
 
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
+  // TODO: USE MULTICALL FOR THESE
   const tokenBalance = useTokenBalance(addresses[name].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
-  const lpTokenBal = useTokenBalance(addresses[name].liquidity, account) || constants.Zero;
+  const lpTokenBalance = useTokenBalance(addresses[name].lpToken, account) || constants.Zero;
 
   const onActive = useCallback((nextIndex: number) => {
     if (nextIndex === 0) {
@@ -39,7 +40,6 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
     }
   }, []);
 
-  console.log("config", props.config);
   return (
     <Box>
       <NotificationsList />
@@ -102,6 +102,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
                   symbol={info.symbol}
                   tokenBalance={tokenBalance}
                   tenderTokenBalance={tenderBalance}
+                  lpTokenBalance={lpTokenBalance}
                 />
               </Box>
             </Tab>
@@ -119,7 +120,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
               }
             >
               <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBal} />
+                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBalance} />
               </Box>
             </Tab>
           </Tabs>

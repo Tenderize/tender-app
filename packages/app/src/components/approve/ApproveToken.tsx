@@ -2,7 +2,7 @@ import { FC } from "react";
 import { constants, Contract } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction } from "@usedapp/core";
 import { useForceRinkebyFunction } from "../../utils/forceChainIdOnCall";
 
 type Props = {

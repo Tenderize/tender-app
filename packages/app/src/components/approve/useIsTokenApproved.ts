@@ -1,10 +1,24 @@
-import { useEthers, useTokenAllowance } from "@usedapp/core";
-import { utils } from "ethers";
+import { useContractCall } from "@usedapp/core";
+import { constants, utils } from "ethers";
+import { abis } from "@tender/contracts";
 
-export const useIsTokenApproved = (tokenAddress: string, spenderAddress: string, amount: string): boolean => {
-  const { account } = useEthers();
-  const allowance = useTokenAllowance(tokenAddress, account, spenderAddress);
-  const isTokenApproved = allowance != null && allowance.gt(amount === "" ? "0" : utils.parseEther(amount));
-
-  return isTokenApproved;
+export const useIsTokenApproved = (
+  tokenAddress: string,
+  ownerAddress: string | null | undefined,
+  spenderAddress: string,
+  amount: string
+): boolean => {
+  const [allowance] = useContractCall(
+    tokenAddress &&
+      ownerAddress &&
+      spenderAddress &&
+      amount && {
+        abi: new utils.Interface(abis.token),
+        address: tokenAddress,
+        method: "allowance",
+        args: [ownerAddress, spenderAddress],
+      }
+  ) ?? [constants.Zero];
+  const amountWei = utils.parseEther(amount || "0");
+  return allowance.gte(amountWei);
 };

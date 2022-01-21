@@ -3,7 +3,7 @@ import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text } from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction } from "@usedapp/core";
 
 type Props = {
   name: string;
@@ -20,7 +20,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
   const handleShow = () => setShow(true);
 
   // Contract Functions
-  const { state: harvestTx, send: harvest } = useContractFunction(contracts[name].farm, "harvest", {
+  const { state: harvestTx, send: harvest } = useContractFunction(contracts[name].tenderFarm, "harvest", {
     transactionName: `Harvest ${symbol}`,
   });
   const harvestRewards = (e: any) => {

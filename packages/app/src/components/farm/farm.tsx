@@ -8,7 +8,7 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction, useEthers } from "@usedapp/core";
 
 type Props = {
   name: string;
@@ -18,6 +18,7 @@ type Props = {
 
 const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
   const [show, setShow] = useState(false);
+  const { account } = useEthers();
 
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback(() => setShow(true), []);
@@ -33,10 +34,10 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput);
+  const isTokenApproved = useIsTokenApproved(addresses[name].lpToken, account, addresses[name].tenderFarm, farmInput);
 
   // Contract Functions
-  const { state: farmTx, send: farm } = useContractFunction(contracts[name].farm, "farm", {
+  const { state: farmTx, send: farm } = useContractFunction(contracts[name].tenderFarm, "farm", {
     transactionName: `Farm ${symbol}`,
   });
 
@@ -76,8 +77,8 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
               <Box justify="center" gap="small">
                 <ApproveToken
                   symbol={symbol}
-                  spender={addresses[name].farm}
-                  token={contracts[name].liquidity}
+                  spender={addresses[name].tenderFarm}
+                  token={contracts[name].lpToken}
                   show={!isTokenApproved}
                 />
                 <Button

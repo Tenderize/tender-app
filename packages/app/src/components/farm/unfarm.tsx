@@ -6,7 +6,7 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { FormSubtract } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { useContractFunction } from "@usedapp/core";
 
 type Props = {
   name: string;
@@ -28,13 +28,12 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
   };
 
   const maxUnfarm = () => {
-    console.log(stake);
     setUnfarmInput(utils.formatEther(stake.toString() || "0"));
   };
 
   // Contract Functions
 
-  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].farm, "unfarm", {
+  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].tenderFarm, "unfarm", {
     transactionName: `Unfarm ${symbol}`,
   });
   const unfarmLpTokens = async (e: any) => {
