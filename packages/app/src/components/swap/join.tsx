@@ -79,7 +79,10 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
   );
 
   const isButtonDisabled = () => {
-    return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved);
+    return (
+      !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved) ||
+      addLiquidityTx.status === "Mining"
+    );
   };
 
   const { state: addLiquidityTx, send: addLiquidity } = useContractFunction(
