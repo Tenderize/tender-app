@@ -26,7 +26,7 @@ const Faucet: FC<props> = ({ symbol, name }) => {
       button2={
         <Button
           primary
-          href="https://faucet.metamask.io/"
+          href="https://www.rinkebyfaucet.com/"
           target="_blank"
           label="Get ETH"
           style={{ textAlign: "center" }}
