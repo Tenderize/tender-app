@@ -281,7 +281,12 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
                 <Button
                   primary
                   onClick={handleRemoveLiquidity}
-                  disabled={!hasValue(lpSharesInputSingle || lpSharesInputMulti) || !isLpSharesApproved}
+                  disabled={
+                    !hasValue(lpSharesInputSingle || lpSharesInputMulti) ||
+                    !isLpSharesApproved ||
+                    exitPoolSingleTx.status === "Mining" ||
+                    exitPoolTx.status === "Mining"
+                  }
                   label={
                     exitPoolSingleTx.status === "Mining" || exitPoolTx.status === "Mining" ? (
                       <LoadingButtonContent label="Removing Liquidity..." />
