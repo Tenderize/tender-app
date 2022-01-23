@@ -280,6 +280,7 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
                 />
                 <Button
                   primary
+                  style={{ width: 501 }}
                   onClick={handleRemoveLiquidity}
                   disabled={
                     !hasValue(lpSharesInputSingle || lpSharesInputMulti) ||

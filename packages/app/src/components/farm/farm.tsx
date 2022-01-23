@@ -105,6 +105,7 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                 />
                 <Button
                   primary
+                  style={{ width: 467 }}
                   disabled={
                     !isTokenApproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"
                   }

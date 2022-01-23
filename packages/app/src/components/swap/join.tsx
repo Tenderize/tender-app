@@ -221,6 +221,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                 )}
                 <Button
                   primary
+                  style={{ width: 467 }}
                   onClick={handleAddLiquidity}
                   disabled={isButtonDisabled()}
                   label={
