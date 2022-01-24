@@ -22,7 +22,7 @@ import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { useCalculateLpTokenAmount, getDeadline } from "utils/tenderSwapHooks";
 import { validateIsPositive, validateIsLargerThanMax, hasValue } from "utils/inputValidation";
-import {isPendingTransaction} from "utils/transactions"
+import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import stakers from "data/stakers";
 import { useContractFunction, useEthers } from "@usedapp/core";
@@ -226,7 +226,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                   onClick={handleAddLiquidity}
                   disabled={isButtonDisabled()}
                   label={
-                    isPendingTransaction(addLiquidityTx)? (
+                    isPendingTransaction(addLiquidityTx) ? (
                       <LoadingButtonContent label="Adding Liquidity..." />
                     ) : (
                       "Add Liquidity"

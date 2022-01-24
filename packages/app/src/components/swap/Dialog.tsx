@@ -9,9 +9,9 @@ type props = {
   description?: string;
   button1?: React.ReactNode;
   button2?: React.ReactNode;
-  card?: BoxExtendedProps
+  card?: BoxExtendedProps;
   height?: HeightType | undefined;
-  width?: WidthType | undefined
+  width?: WidthType | undefined;
 };
 
 const Dialog: FC<props> = (props) => {

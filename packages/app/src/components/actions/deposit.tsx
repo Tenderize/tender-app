@@ -10,7 +10,7 @@ import { InfoCard, Queries } from "@tender/shared/src/index";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
-import {isPendingTransaction} from "utils/transactions"
+import { isPendingTransaction } from "utils/transactions";
 import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
 import stakers from "data/stakers";
 
@@ -128,7 +128,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                     isPendingTransaction(depositTx)
                   }
                   onClick={depositTokens}
-                  label={isPendingTransaction(depositTx)? <LoadingButtonContent label="Depositing..." /> : "Deposit"}
+                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Depositing..." /> : "Deposit"}
                 />
               </Box>
             </Box>

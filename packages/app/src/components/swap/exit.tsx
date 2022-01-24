@@ -286,7 +286,8 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
                   disabled={
                     !hasValue(lpSharesInputSingle || lpSharesInputMulti) ||
                     !isLpSharesApproved ||
-                    isPendingTransaction(exitPoolSingleTx) || isPendingTransaction(exitPoolTx)
+                    isPendingTransaction(exitPoolSingleTx) ||
+                    isPendingTransaction(exitPoolTx)
                   }
                   label={
                     isPendingTransaction(exitPoolSingleTx) || isPendingTransaction(exitPoolTx) ? (

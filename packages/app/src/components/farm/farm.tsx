@@ -21,7 +21,7 @@ import { FormAdd, FormClose } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
 import { useContractFunction, useEthers } from "@usedapp/core";
-import {isPendingTransaction} from "utils/transactions"
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   name: string;
