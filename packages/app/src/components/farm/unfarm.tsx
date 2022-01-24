@@ -7,6 +7,7 @@ import { FormClose, FormSubtract } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import { useContractFunction } from "@usedapp/core";
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   name: string;
@@ -92,9 +93,9 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
               <Button primary onClick={handleClose} label="Cancel" />
               <Button
                 secondary
-                disabled={!unfarmInput || unfarmInput.toString() === "0" || unfarmTx.status === "Mining"}
+                disabled={!unfarmInput || unfarmInput.toString() === "0" || isPendingTransaction(unfarmTx)}
                 onClick={unfarmLpTokens}
-                label={unfarmTx.status === "Mining" ? <LoadingButtonContent label="Unfarming..." /> : "Unfarm"}
+                label={isPendingTransaction(unfarmTx) ? <LoadingButtonContent label="Unfarming..." /> : "Unfarm"}
               />
             </CardFooter>
           </Card>

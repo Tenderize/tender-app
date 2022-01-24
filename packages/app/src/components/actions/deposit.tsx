@@ -4,14 +4,15 @@ import { useEthers, useContractFunction } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
-import ApproveToken from "../approve/ApproveToken";
-import { useIsTokenApproved } from "../approve/useIsTokenApproved";
+import ApproveToken from "components/approve/ApproveToken";
+import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
 import { InfoCard, Queries } from "@tender/shared/src/index";
-import { weiToEthWithDecimals } from "../../utils/amountFormat";
-import { AmountInputFooter } from "../AmountInputFooter";
-import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
-import stakers from "../../data/stakers";
+import { AmountInputFooter } from "components/AmountInputFooter";
+import { LoadingButtonContent } from "components/LoadingButtonContent";
+import { weiToEthWithDecimals } from "utils/amountFormat";
+import {isPendingTransaction} from "utils/transactions"
+import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
+import stakers from "data/stakers";
 
 type Props = {
   name: string;
@@ -124,10 +125,10 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                     !isTokenApproved ||
                     !depositInput ||
                     depositInput.toString() === "0" ||
-                    depositTx.status === "Mining"
+                    isPendingTransaction(depositTx)
                   }
                   onClick={depositTokens}
-                  label={depositTx.status === "Mining" ? <LoadingButtonContent label="Depositing..." /> : "Deposit"}
+                  label={isPendingTransaction(depositTx)? <LoadingButtonContent label="Depositing..." /> : "Deposit"}
                 />
               </Box>
             </Box>

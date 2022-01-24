@@ -22,6 +22,7 @@ import { useContractFunction } from "@usedapp/core";
 import { TransactionListElement } from "components/transactions";
 import { getDeadline } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   show: boolean;
@@ -68,7 +69,7 @@ const ConfirmSwapModal: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (swapTx.status === "Mining") {
+    if (isPendingTransaction(swapTx)) {
       setConfirmStatus("Submitted");
     } else if (swapTx.status === "Success") {
       setConfirmStatus("Success");

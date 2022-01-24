@@ -30,6 +30,7 @@ import { useContractFunction, useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { getDeadline, useCalculateRemoveLiquidity, useCalculateRemoveLiquidityOneToken } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   name: string;
@@ -285,11 +286,10 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
                   disabled={
                     !hasValue(lpSharesInputSingle || lpSharesInputMulti) ||
                     !isLpSharesApproved ||
-                    exitPoolSingleTx.status === "Mining" ||
-                    exitPoolTx.status === "Mining"
+                    isPendingTransaction(exitPoolSingleTx) || isPendingTransaction(exitPoolTx)
                   }
                   label={
-                    exitPoolSingleTx.status === "Mining" || exitPoolTx.status === "Mining" ? (
+                    isPendingTransaction(exitPoolSingleTx) || isPendingTransaction(exitPoolTx) ? (
                       <LoadingButtonContent label="Removing Liquidity..." />
                     ) : (
                       "Remove Liquidity"
