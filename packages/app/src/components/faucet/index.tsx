@@ -23,6 +23,7 @@ const Faucet: FC<props> = ({ symbol, name }) => {
 
   return (
     <Dialog
+      card={{width:"large"}}
       width="large"
       openButtonLabel="Faucet"
       title="Faucet"
