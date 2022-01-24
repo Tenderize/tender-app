@@ -16,15 +16,16 @@ import {
   Text,
   Heading,
 } from "grommet";
-import ApproveToken from "../approve/ApproveToken";
-import { useIsTokenApproved } from "../approve/useIsTokenApproved";
-import { useCalculateLpTokenAmount, getDeadline } from "../../utils/tenderSwapHooks";
-import { AmountInputFooter } from "../AmountInputFooter";
-import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsPositive, validateIsLargerThanMax, hasValue } from "../../utils/inputValidation";
-import stakers from "../../data/stakers";
+import ApproveToken from "components/approve/ApproveToken";
+import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
+import { AmountInputFooter } from "components/AmountInputFooter";
+import { LoadingButtonContent } from "components/LoadingButtonContent";
+import { useCalculateLpTokenAmount, getDeadline } from "utils/tenderSwapHooks";
+import { validateIsPositive, validateIsLargerThanMax, hasValue } from "utils/inputValidation";
+import { isPendingTransaction } from "utils/transactions";
+import { weiToEthWithDecimals } from "utils/amountFormat";
+import stakers from "data/stakers";
 import { useContractFunction, useEthers } from "@usedapp/core";
-import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import { FormClose } from "grommet-icons";
 
 type Props = {
@@ -81,7 +82,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
   const isButtonDisabled = () => {
     return (
       !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved) ||
-      addLiquidityTx.status === "Mining"
+      isPendingTransaction(addLiquidityTx)
     );
   };
 
@@ -225,7 +226,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                   onClick={handleAddLiquidity}
                   disabled={isButtonDisabled()}
                   label={
-                    addLiquidityTx.status === "Mining" ? (
+                    isPendingTransaction(addLiquidityTx) ? (
                       <LoadingButtonContent label="Adding Liquidity..." />
                     ) : (
                       "Add Liquidity"

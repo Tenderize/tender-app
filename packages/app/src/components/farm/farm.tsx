@@ -19,8 +19,9 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd, FormClose } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
+import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
 import { useContractFunction, useEthers } from "@usedapp/core";
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   name: string;
@@ -107,10 +108,10 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
                   primary
                   style={{ width: 467 }}
                   disabled={
-                    !isTokenApproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"
+                    !isTokenApproved || !farmInput || farmInput.toString() === "0" || isPendingTransaction(farmTx)
                   }
                   onClick={farmLpTokens}
-                  label={farmTx.status === "Mining" ? <LoadingButtonContent label="Farming..." /> : "Farm"}
+                  label={isPendingTransaction(farmTx) ? <LoadingButtonContent label="Farming..." /> : "Farm"}
                 />
               </Box>
             </CardFooter>

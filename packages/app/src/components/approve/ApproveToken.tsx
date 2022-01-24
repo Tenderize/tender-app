@@ -3,7 +3,8 @@ import { constants, Contract } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "@usedapp/core";
-import { useForceRinkebyFunction } from "../../utils/forceChainIdOnCall";
+import { useForceRinkebyFunction } from "utils/forceChainIdOnCall";
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   symbol: string;
@@ -40,7 +41,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
         label={
           <>
             <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
-              {approveTx.status === "Mining" && <LoadingButtonContent />}
+              {isPendingTransaction(approveTx) && <LoadingButtonContent />}
               <Text weight="normal">Allow Tenderize to spend {symbol}</Text>
               <Tip
                 plain

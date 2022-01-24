@@ -5,6 +5,7 @@ import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text, Headi
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   name: string;
@@ -71,9 +72,9 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
               <Button secondary onClick={handleClose} label="Cancel" />
               <Button
                 primary
-                disabled={!availableRewards || availableRewards.toString() === "0" || harvestTx.status === "Mining"}
+                disabled={!availableRewards || availableRewards.toString() === "0" || isPendingTransaction(harvestTx)}
                 onClick={harvestRewards}
-                label={harvestTx.status === "Mining" ? <LoadingButtonContent label="Harvesting..." /> : "Harvest"}
+                label={isPendingTransaction(harvestTx) ? <LoadingButtonContent label="Harvesting..." /> : "Harvest"}
               />
             </CardFooter>
           </Card>
