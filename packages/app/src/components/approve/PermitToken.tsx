@@ -1,27 +1,50 @@
 import { FC } from "react";
-import { constants, Contract } from "ethers";
+import { BigNumber, Contract } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
-import { useContractFunction } from "@usedapp/core";
+import { signERC2612Permit } from "eth-permit";
+import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useForceRinkebyFunction } from "utils/forceChainIdOnCall";
-import { LoadingButtonContent } from "components/LoadingButtonContent";
+import { isPendingTransaction } from "utils/transactions";
+import { useContractFunction, useEthers } from "@usedapp/core";
+import { getDeadline } from "utils/tenderSwapHooks";
 
 type Props = {
   symbol: string;
   show: boolean;
   spender: string;
   token: Contract;
+  amount: BigNumber;
+  owner: string | undefined | null;
 };
 
-const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
-  const { state: approveTx, send: approveToken } = useContractFunction(token, "approve", {
-    transactionName: `Approve ${symbol}`,
+const PermitToken: FC<Props> = ({ symbol, spender, show, token, owner, amount }) => {
+  const { state: approveTx, send: permitToken } = useContractFunction(token, "permit", {
+    transactionName: `Permit ${symbol}`,
   });
+
+  const { library } = useEthers();
 
   const { rinkebyForcedFunction: handleApproval, renderError } = useForceRinkebyFunction(async (e) => {
     e.preventDefault();
 
     if (show) {
-      await approveToken(spender, constants.MaxUint256);
+      const tenderTokenApproval = await signERC2612Permit(
+        library,
+        token.address,
+        owner ?? "",
+        spender,
+        amount?.toString(),
+        getDeadline()
+      );
+      await permitToken(
+        owner,
+        spender,
+        amount?.toString(),
+        tenderTokenApproval.deadline,
+        tenderTokenApproval.v,
+        tenderTokenApproval.r,
+        tenderTokenApproval.s
+      );
     }
   });
 
@@ -40,7 +63,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
         label={
           <>
             <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
-              {approveTx.status === "Mining" && <LoadingButtonContent />}
+              {isPendingTransaction(approveTx) && <LoadingButtonContent />}
               <Text weight="normal">Allow Tenderize to spend {symbol}</Text>
               <Tip
                 plain
@@ -54,8 +77,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
                 content={
                   <Box width="medium" elevation="none" pad="medium">
                     <Text color="white">
-                      You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do
-                      this once per token.
+                      {`You must give the Tenderize smart contracts permission to use your ${symbol}. This will not cost you anything.`}
                     </Text>
                   </Box>
                 }
@@ -75,4 +97,4 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
   );
 };
 
-export default ApproveToken;
+export default PermitToken;

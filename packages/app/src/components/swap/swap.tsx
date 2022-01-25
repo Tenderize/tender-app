@@ -158,16 +158,13 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
             <ApproveToken
               symbol={sendTokenSymbol}
               spender={addresses[protocolName].tenderSwap}
-              owner={account}
-              usePermit={!isSendingToken}
-              amount={utils.parseEther(sendTokenAmount || "0")}
               token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-              show={!isTokenApproved}
+              show={!isTokenApproved && isSendingToken}
             />
             <Button
               primary
               disabled={
-                !isTokenApproved ||
+                (!isTokenApproved && isSendingToken) ||
                 !isPositive(sendTokenAmount) ||
                 isLargerThanMax(sendTokenAmount, sendTokenBalance) ||
                 utils.parseEther(sendTokenAmount).isZero()
@@ -188,6 +185,8 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         tokenAddress={sendTokenAddress}
         tokenSpotPrice={tokenSpotPrice}
         protocolName={protocolName}
+        usePermit={!isSendingToken && !isTokenApproved}
+        owner={account}
       />
     </Box>
   );

@@ -1,6 +1,7 @@
-import { useContractCall } from "@usedapp/core";
-import { abis } from "@tender/contracts";
+import { useContractCall, useContractFunction, useEthers } from "@usedapp/core";
+import { abis, contracts } from "@tender/contracts";
 import { BigNumber, constants, utils } from "ethers";
+import { signERC2612Permit } from "eth-permit";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -63,6 +64,39 @@ export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNum
       }
   ) ?? [constants.Zero];
   return tokens;
+};
+
+export const useSwapWithPermit = (
+  token: string,
+  protocolName: string,
+  owner: string | null | undefined,
+  spender: string,
+  amount: BigNumber
+) => {
+  const { state, send: multicall } = useContractFunction(contracts[protocolName].tenderSwap, "multicall");
+  const { library } = useEthers();
+
+  const swapWithPermit = async (
+    tokenAddress: string,
+    tokenAmount: BigNumber,
+    minAmount: BigNumber,
+    deadline: number
+  ) => {
+    const permit = await signERC2612Permit(library, token, owner ?? "", spender, amount?.toString(), getDeadline());
+    await multicall(
+      TenderSwapABI.encodeFunctionData("selfPermit", [
+        token,
+        permit.value,
+        permit.deadline,
+        permit.v,
+        permit.r,
+        permit.s,
+      ]),
+      TenderSwapABI.encodeFunctionData("swap", [tokenAddress, tokenAmount, minAmount, deadline])
+    );
+  };
+
+  return { swapWithPermit, tx: state };
 };
 
 export const getDeadline = () => {
