@@ -4,6 +4,7 @@ import { Box, Button, Tip, Text } from "grommet";
 import { useContractFunction } from "@usedapp/core";
 import { useForceRinkebyFunction } from "utils/forceChainIdOnCall";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
+import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
   symbol: string;
@@ -40,7 +41,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
         label={
           <>
             <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
-              {approveTx.status === "Mining" && <LoadingButtonContent />}
+              {isPendingTransaction(approveTx) && <LoadingButtonContent />}
               <Text weight="normal">Allow Tenderize to spend {symbol}</Text>
               <Tip
                 plain
