@@ -82,8 +82,9 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token, owner, amount, 
                 content={
                   <Box width="medium" elevation="none" pad="medium">
                     <Text color="white">
-                      You must give the Tenderize smart contracts permission to use your {symbol}. You only have to do
-                      this once per token.
+                      {`You must give the Tenderize smart contracts permission to use your ${symbol}. ${
+                        usePermit ? "This will not cost you anything." : "You only have to do this once per token."
+                      }`}
                     </Text>
                   </Box>
                 }
