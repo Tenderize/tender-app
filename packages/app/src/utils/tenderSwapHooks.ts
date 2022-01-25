@@ -82,8 +82,15 @@ export const useSwapWithPermit = (
     minAmount: BigNumber,
     deadline: number
   ) => {
-    const permit = await signERC2612Permit(library, token, owner ?? "", spender, amount?.toString(), getDeadline());
-    await multicall(
+    const permit = await signERC2612Permit(
+      library?.getSigner(),
+      token,
+      owner ?? "",
+      spender,
+      amount?.toString(),
+      getDeadline()
+    );
+    await multicall([
       TenderSwapABI.encodeFunctionData("selfPermit", [
         token,
         permit.value,
@@ -92,8 +99,8 @@ export const useSwapWithPermit = (
         permit.r,
         permit.s,
       ]),
-      TenderSwapABI.encodeFunctionData("swap", [tokenAddress, tokenAmount, minAmount, deadline])
-    );
+      TenderSwapABI.encodeFunctionData("swap", [tokenAddress, tokenAmount, minAmount, deadline]),
+    ]);
   };
 
   return { swapWithPermit, tx: state };
