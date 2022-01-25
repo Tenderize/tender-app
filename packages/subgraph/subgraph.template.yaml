@@ -119,3 +119,21 @@ templates:
         eventHandlers:
           - event: Transfer(indexed address,indexed address,uint256)
             handler: handleTransferEvent
+    - name: TenderSwap
+      kind: ethereum/contract
+      network: {{networkName}}
+      source:
+        abi: TenderSwap
+      mapping:
+        kind: ethereum/events
+        apiVersion: 0.0.1
+        language: wasm/assemblyscript
+        file: ./src/mappings/tenderSwap.ts
+        entities:
+          - Tenderizer
+        abis:
+          - name: TenderSwap
+            file: ../contracts/src/abis/TenderSwap.json
+        eventHandlers:
+          - event: Swap(indexed address,address,uint256,uint256)
+            handler: handleSwapEvent

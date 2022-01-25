@@ -283,3 +283,12 @@ type TenderTokenTransferEvent @entity {
   amount: BigInt!
   timestamp: BigInt!
 }
+
+type SwapEvent @entity {
+  id: ID!
+  from: String!
+  tokenSold: String!
+  amountSold: BigInt!
+  amountReceived: BigInt!
+  timestamp: BigInt!
+}
