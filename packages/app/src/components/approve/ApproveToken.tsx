@@ -1,28 +1,55 @@
 import { FC } from "react";
-import { constants, Contract } from "ethers";
+import { BigNumber, constants, Contract } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
+import { signERC2612Permit } from "eth-permit";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { useContractFunction } from "@usedapp/core";
 import { useForceRinkebyFunction } from "utils/forceChainIdOnCall";
 import { isPendingTransaction } from "utils/transactions";
+import { useContractFunction, useEthers } from "@usedapp/core";
+import { getDeadline } from "utils/tenderSwapHooks";
 
 type Props = {
   symbol: string;
   show: boolean;
   spender: string;
   token: Contract;
+  usePermit?: boolean;
+  amount?: BigNumber;
+  owner?: string | undefined | null;
 };
 
-const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
-  const { state: approveTx, send: approveToken } = useContractFunction(token, "approve", {
+const ApproveToken: FC<Props> = ({ symbol, spender, show, token, owner, amount, usePermit = false }) => {
+  const { state: approveTx, send: approveToken } = useContractFunction(token, usePermit ? "permit" : "approve", {
     transactionName: `Approve ${symbol}`,
   });
+
+  const { library } = useEthers();
 
   const { rinkebyForcedFunction: handleApproval, renderError } = useForceRinkebyFunction(async (e) => {
     e.preventDefault();
 
     if (show) {
-      await approveToken(spender, constants.MaxUint256);
+      if (usePermit) {
+        const tenderTokenApproval = await signERC2612Permit(
+          library,
+          token.address,
+          owner ?? "",
+          spender,
+          amount?.toString(),
+          getDeadline()
+        );
+        await approveToken(
+          owner,
+          spender,
+          amount?.toString(),
+          tenderTokenApproval.deadline,
+          tenderTokenApproval.v,
+          tenderTokenApproval.r,
+          tenderTokenApproval.s
+        );
+      } else {
+        await approveToken(spender, constants.MaxUint256);
+      }
     }
   });
 

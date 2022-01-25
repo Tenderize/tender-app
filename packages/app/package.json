@@ -30,6 +30,7 @@
     "@web3-react/walletconnect-connector": "^6.2.4",
     "@web3-react/walletlink-connector": "^6.2.3",
     "bufferutil": "^4.0.6",
+    "eth-permit": "^0.2.1",
     "ethers": "^5.5.2",
     "framer-motion": "^4.1.17",
     "grommet": "^2.19.1",
