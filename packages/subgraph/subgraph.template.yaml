@@ -134,6 +134,24 @@ templates:
         abis:
           - name: TenderSwap
             file: ../contracts/src/abis/TenderSwap.json
+          - name: ERC20
+            file: ../contracts/src/abis/erc20.json
         eventHandlers:
+          - event: NewAdminFee(uint256)
+            handler: handleNewAdminFee
+          - event: NewSwapFee(uint256)
+            handler: handleNewSwapFee
+          - event: RampA(uint256,uint256,uint256,uint256)
+            handler: handleRampA
+          - event: StopRampA(uint256,uint256)
+            handler: handleStopRampA
+          - event: AddLiquidity(indexed address,uint256[2],uint256[2],uint256,uint256)
+            handler: handleAddLiquidity
+          - event: RemoveLiquidity(indexed address,uint256[2],uint256)
+            handler: handleRemoveLiquidity
+          - event: RemoveLiquidityImbalance(indexed address,uint256[2],uint256[2],uint256,uint256)
+            handler: handleRemoveLiquidityImbalance
+          - event: RemoveLiquidityOne(indexed address,uint256,uint256,address,uint256)
+            handler: handleRemoveLiquidityOne
           - event: Swap(indexed address,address,uint256,uint256)
             handler: handleSwapEvent

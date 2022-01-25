@@ -1,11 +1,35 @@
-import { BigDecimal, BigInt, Address, dataSource } from "@graphprotocol/graph-ts";
-import { Deployment, TenderizeGlobal, User, TenderizerDay, Tenderizer, UserDeployment, UserDeploymentDay, TenderFarmDay, TenderFarm, Config } from "../types/schema";
+import { 
+  BigDecimal,
+  BigInt,
+  Address,
+  dataSource,
+  ethereum 
+} from "@graphprotocol/graph-ts";
+import { 
+  Deployment,
+  TenderizeGlobal,
+  User,
+  TenderSwap,
+  TenderizerDay,
+  Tenderizer,
+  UserDeployment,
+  UserDeploymentDay,
+  TenderFarmDay,
+  TenderFarm,
+  Config,
+  TendeSwapInfo,
+  Token,
+  DailyVolume,
+  HourlyVolume,
+  WeeklyVolume 
+} from "../types/schema";
 import { OneInch } from "../types/templates/Tenderizer/OneInch"
 import * as config from "./config"
-import { TenderSwap } from "../types/templates/TenderSwap/TenderSwap"
+import { TenderSwap as TenderSwapContact} from "../types/templates/TenderSwap/TenderSwap"
 import { LiquidityPoolToken } from "../types/templates/TenderFarm/LiquidityPoolToken"
 import { TenderToken } from "../types/templates/TenderFarm/TenderToken"
 import { ERC20 } from "../types/templates/TenderFarm/ERC20"
+import { decimal } from "@protofire/subgraph-toolkit"
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
@@ -253,7 +277,7 @@ export function getUSDPrice(protocol: string): BigDecimal {
 
 export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {
   let config = Config.load(protocol)
-  let tenderSwap = TenderSwap.bind(Address.fromString(config.tenderSwap))
+  let tenderSwap = TenderSwapContact.bind(Address.fromString(config.tenderSwap))
   let lpToken = LiquidityPoolToken.bind(tenderSwap.lpToken())
   let totalSupply = lpToken.totalSupply().toBigDecimal()
   let tenderTokens = tenderSwap.getToken0Balance().toBigDecimal()
@@ -276,4 +300,218 @@ export function addressIsContract(config: Config, address: Address): Boolean {
   addressString.includes(config.tenderFarm) ||
   addressString.includes(config.tenderizer)
   ) as Boolean
+}
+
+// Tenderswap helpers
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+
+class SwapInfo {
+  tokens: Address[]
+  balances: BigInt[]
+  A: BigInt
+  swapFee: BigInt
+  adminFee: BigInt
+  withdrawFee: BigInt
+  virtualPrice: BigInt
+  owner: Address
+  lpToken: Address
+}
+
+export function getOrCreateMetaSwap(
+  address: Address,
+  block: ethereum.Block,
+  tx: ethereum.Transaction,
+): TenderSwap {
+  let swap = TenderSwap.load(address.toHexString())
+
+  if (swap == null) {
+    let info = getMetaSwapInfo(address)
+
+    swap = new TenderSwap(address.toHexString())
+    swap.address = address
+    swap.numTokens = info.tokens.length
+    swap.tokens = registerTokens(info.tokens, block, tx)
+    swap.balances = info.balances
+    swap.lpToken = info.lpToken
+
+    swap.A = info.A
+
+    swap.swapFee = info.swapFee
+    swap.adminFee = info.adminFee
+    swap.withdrawFee = info.withdrawFee
+
+    swap.virtualPrice = info.virtualPrice
+
+    swap.owner = info.owner
+
+    swap.save()
+
+    let system = getSystemInfo(block, tx)
+    system.swapCount = system.swapCount.plus(BigInt.fromI32(1))
+    system.save()
+  }
+
+  return swap as TenderSwap
+}
+
+export function getMetaSwapInfo(swap: Address): SwapInfo {
+  let swapContract = TenderSwapContact.bind(swap)
+
+  let tokens: Address[] = []
+  let balances: BigInt[] = []
+
+  tokens.push(swapContract.try_getToken0().value)
+  tokens.push(swapContract.try_getToken1().value)
+  balances.push(swapContract.try_getToken0Balance().value)
+  balances.push(swapContract.try_getToken1Balance().value)
+
+  return {
+    tokens,
+    balances,
+    A: swapContract.getA(),
+    swapFee: swapContract.feeParams().value0,
+    adminFee: swapContract.feeParams().value1,
+    withdrawFee: BigInt.fromI32(0),
+    virtualPrice: swapContract.getVirtualPrice(),
+    owner: swapContract.owner(),
+    lpToken: swapContract.lpToken(),
+  }
+}
+
+export function getSystemInfo(
+  block: ethereum.Block,
+  tx: ethereum.Transaction,
+): TendeSwapInfo {
+  let state = TendeSwapInfo.load("current")
+
+  if (state == null) {
+    state = new TendeSwapInfo("current")
+
+    state.exchangeCount = BigInt.fromI32(0)
+    state.swapCount = BigInt.fromI32(0)
+    state.tokenCount = BigInt.fromI32(0)
+  }
+
+  state.updated = block.timestamp
+  state.updatedAtBlock = block.number
+  state.updatedAtTransaction = tx.hash
+
+  return state as TendeSwapInfo
+}
+
+export function getOrCreateToken(
+  address: Address,
+  block: ethereum.Block,
+  tx: ethereum.Transaction,
+): Token {
+  let token = Token.load(address.toHexString())
+
+  if (token == null) {
+    let erc20 = ERC20.bind(address)
+
+    let name = erc20.try_name()
+    let symbol = erc20.try_symbol()
+    let decimals = erc20.try_decimals()
+
+    token = new Token(address.toHexString())
+    token.address = address
+    token.name = name.reverted ? null : name.value.toString()
+    token.symbol = symbol.reverted ? null : symbol.value.toString()
+    token.decimals = BigInt.fromI32(decimals.reverted ? 18 : decimals.value)
+    token.save()
+
+    let system = getSystemInfo(block, tx)
+    system.tokenCount = system.tokenCount.plus(BigInt.fromI32(1))
+    system.save()
+  }
+
+  return token as Token
+}
+
+function registerTokens(
+  list: Address[],
+  block: ethereum.Block,
+  tx: ethereum.Transaction,
+): string[] {
+  let result: string[] = []
+
+  for (let i = 0; i < list.length; ++i) {
+    let current = list[i]
+
+    if (current.toHexString() != ZERO_ADDRESS) {
+      let token = getOrCreateToken(current, block, tx)
+
+      result.push(token.id)
+    }
+  }
+
+  return result
+}
+
+export function getBalancesMetaSwap(swap: Address, N_COINS: number): BigInt[] {
+  let swapContract = TenderSwapContact.bind(swap)
+  let balances = new Array<BigInt>(<i32>N_COINS)
+  balances[0] = swapContract.getToken0Balance()
+  balances[1] = swapContract.getToken1Balance()
+  return balances
+}
+
+export function getHourlyTradeVolume(
+  swap: TenderSwap,
+  timestamp: BigInt,
+): HourlyVolume {
+  let interval = BigInt.fromI32(60 * 60)
+  let hour = timestamp.div(interval).times(interval)
+  let id = swap.id + "-hour-" + hour.toString()
+
+  let volume = HourlyVolume.load(id)
+
+  if (volume == null) {
+    volume = new HourlyVolume(id)
+    volume.swap = swap.id
+    volume.timestamp = hour
+    volume.volume = decimal.ZERO
+  }
+
+  return volume!
+}
+
+export function getDailyTradeVolume(
+  swap: TenderSwap,
+  timestamp: BigInt,
+): DailyVolume {
+  let interval = BigInt.fromI32(60 * 60 * 24)
+  let day = timestamp.div(interval).times(interval)
+  let id = swap.id + "-day-" + day.toString()
+
+  let volume = DailyVolume.load(id)
+
+  if (volume == null) {
+    volume = new DailyVolume(id)
+    volume.swap = swap.id
+    volume.timestamp = day
+    volume.volume = decimal.ZERO
+  }
+
+  return volume!
+}
+
+export function getWeeklyTradeVolume(
+  swap: TenderSwap,
+  timestamp: BigInt,
+): WeeklyVolume {
+  let interval = BigInt.fromI32(60 * 60 * 24 * 7)
+  let week = timestamp.div(interval).times(interval)
+  let id = swap.id + "-week-" + week.toString()
+
+  let volume = WeeklyVolume.load(id)
+
+  if (volume == null) {
+    volume = new WeeklyVolume(id)
+    volume.swap = swap.id
+    volume.timestamp = week
+    volume.volume = decimal.ZERO
+  }
+
+  return volume!
 }
