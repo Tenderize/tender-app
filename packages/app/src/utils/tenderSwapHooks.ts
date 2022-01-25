@@ -106,6 +106,50 @@ export const useSwapWithPermit = (
   return { swapWithPermit, tx: state };
 };
 
+export const useAddLiquidityWithPermit = (
+  token: string,
+  protocolName: string,
+  owner: string | null | undefined,
+  spender: string,
+  isTenderApproved: boolean
+) => {
+  const { state, send: multicall } = useContractFunction(contracts[protocolName].tenderSwap, "multicall");
+  const { library } = useEthers();
+
+  const addLiquidity = async (tenderIn: BigNumber, tokenIn: BigNumber, lpTokenAmount: BigNumber) => {
+    const addLiquidityData = TenderSwapABI.encodeFunctionData("addLiquidity", [
+      [tenderIn, tokenIn],
+      lpTokenAmount.sub(1),
+      getDeadline(),
+    ]);
+
+    if (!isTenderApproved) {
+      const permit = await signERC2612Permit(
+        library?.getSigner(),
+        token,
+        owner ?? "",
+        spender,
+        tenderIn?.toString(),
+        getDeadline()
+      );
+
+      const permitData = TenderSwapABI.encodeFunctionData("selfPermit", [
+        token,
+        permit.value,
+        permit.deadline,
+        permit.v,
+        permit.r,
+        permit.s,
+      ]);
+      await multicall([permitData, addLiquidityData]);
+    } else {
+      await multicall([addLiquidityData]);
+    }
+  };
+
+  return { addLiquidity, tx: state };
+};
+
 export const getDeadline = () => {
   const DEADLINE_MINUTES = 10;
   const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;

@@ -20,12 +20,12 @@ import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
-import { useCalculateLpTokenAmount, getDeadline } from "utils/tenderSwapHooks";
+import { useCalculateLpTokenAmount, useAddLiquidityWithPermit } from "utils/tenderSwapHooks";
 import { validateIsPositive, validateIsLargerThanMax, hasValue } from "utils/inputValidation";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import stakers from "data/stakers";
-import { useContractFunction, useEthers } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 
 type Props = {
@@ -80,16 +80,15 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
   );
 
   const isButtonDisabled = () => {
-    return (
-      !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved && isTenderApproved) ||
-      isPendingTransaction(addLiquidityTx)
-    );
+    return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved) || isPendingTransaction(addLiquidityTx);
   };
 
-  const { state: addLiquidityTx, send: addLiquidity } = useContractFunction(
-    contracts[name].tenderSwap,
-    "addLiquidity",
-    { transactionName: `Add t${symbol}/${symbol} Liquidity` }
+  const { addLiquidity, tx: addLiquidityTx } = useAddLiquidityWithPermit(
+    addresses[name].tenderToken,
+    name,
+    account,
+    addresses[name].tenderSwap,
+    isTenderApproved
   );
 
   const lpTokenAmount = useCalculateLpTokenAmount(
@@ -102,7 +101,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
-    addLiquidity([tenderIn, tokenIn], lpTokenAmount.sub(1), getDeadline());
+    addLiquidity(tenderIn, tokenIn, lpTokenAmount.sub(1));
   };
 
   return (
@@ -212,14 +211,6 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                     />
                   )
                 }
-                {!isTenderApproved && (
-                  <ApproveToken
-                    symbol={`t${symbol}`}
-                    spender={addresses[name].tenderSwap}
-                    token={contracts[name].tenderToken}
-                    show={!isTenderApproved}
-                  />
-                )}
                 <Button
                   primary
                   style={{ width: 467 }}

@@ -87,8 +87,6 @@ const ConfirmSwapModal: FC<Props> = ({
     onDismiss();
   };
 
-  console.log("status", swapTx);
-
   useEffect(() => {
     if (isPendingTransaction(swapTx)) {
       setConfirmStatus("Submitted");
