@@ -20,7 +20,7 @@ import {
 import { InfoCard } from "@tender/shared/src/index";
 import { useContractFunction } from "@usedapp/core";
 import { TransactionListElement } from "components/transactions";
-import { getDeadline } from "utils/tenderSwapHooks";
+import { getDeadline, useSwapWithPermit } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 
@@ -34,6 +34,8 @@ type Props = {
   tokenSpotPrice: BigNumber;
   protocolName: string;
   onDismiss: () => void;
+  usePermit: boolean;
+  owner: string | null | undefined;
 };
 
 const ConfirmSwapModal: FC<Props> = ({
@@ -46,6 +48,8 @@ const ConfirmSwapModal: FC<Props> = ({
   tokenSpotPrice,
   protocolName,
   onDismiss,
+  usePermit,
+  owner,
 }) => {
   const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted" | "Success">("None");
 
@@ -56,9 +60,24 @@ const ConfirmSwapModal: FC<Props> = ({
     }
   }, [show]);
 
-  const { state: swapTx, send: swap } = useContractFunction(contracts[protocolName].tenderSwap, "swap", {
-    transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`,
-  });
+  const { state: swapWithApproveTx, send: swapWithApprove } = useContractFunction(
+    contracts[protocolName].tenderSwap,
+    "swap",
+    {
+      transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`,
+    }
+  );
+
+  const { tx: swapWithPermitTx, swapWithPermit } = useSwapWithPermit(
+    tokenAddress,
+    protocolName,
+    owner,
+    contracts[protocolName].tenderSwap.address,
+    tokenAmount
+  );
+
+  const swapTx = usePermit ? swapWithPermitTx : swapWithApproveTx;
+  const swap = usePermit ? swapWithPermit : swapWithApprove;
 
   const minAmount = tokenReceiveAmount.mul(98).div(100);
 

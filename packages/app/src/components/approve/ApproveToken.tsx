@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { constants, Contract } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
-import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "@usedapp/core";
 import { useForceRinkebyFunction } from "utils/forceChainIdOnCall";
+import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
