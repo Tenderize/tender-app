@@ -271,10 +271,10 @@ export const useAddLiquidity = (
           permit.r,
           permit.s,
         ]),
-        TenderSwapABI.encodeFunctionData("addLiquidity", [[tenderIn, tokenIn], lpTokenAmount.sub(1), getDeadline()]),
+        TenderSwapABI.encodeFunctionData("addLiquidity", [[tenderIn, tokenIn], lpTokenAmount, getDeadline()]),
       ]);
     } else {
-      await addLiquidityWithApprove([tenderIn, tokenIn], lpTokenAmount.sub(1), getDeadline());
+      await addLiquidityWithApprove([tenderIn, tokenIn], lpTokenAmount, getDeadline());
     }
   };
 

@@ -94,7 +94,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
 
   const lpTokenAmount = useCalculateLpTokenAmount(
     addresses[name].tenderSwap,
-    [utils.parseEther(tokenInput || "0"), utils.parseEther(tenderInput || "0")],
+    [utils.parseEther(tenderInput || "0"), utils.parseEther(tokenInput || "0")],
     true
   );
 
