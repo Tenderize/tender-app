@@ -20,7 +20,7 @@ export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], de
   return tokens.mul(999).div(1000);
 };
 
-export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber) => {
+export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber): [BigNumber, BigNumber] => {
   const [values] = useContractCall(
     pool &&
       amount &&
@@ -35,8 +35,12 @@ export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber) => 
   return values;
 };
 
-export const useCalculateRemoveLiquidityOneToken = (pool: string, amount: BigNumber, tokenReceive: string) => {
-  const [tokens]: BigNumber[] = useContractCall(
+export const useCalculateRemoveLiquidityOneToken = (
+  pool: string,
+  amount: BigNumber,
+  tokenReceive: string
+): BigNumber => {
+  const [tokens] = useContractCall(
     pool &&
       amount &&
       !amount.isZero() &&
@@ -104,6 +108,177 @@ export const useSwapWithPermit = (
   };
 
   return { swapWithPermit, tx: state };
+};
+
+export const useExitPoolSingle = (
+  token: string,
+  protocolName: string,
+  owner: string | null | undefined,
+  spender: string,
+  symbol: string,
+  isLpSharesApproved: boolean
+) => {
+  const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(
+    contracts[protocolName].tenderSwap,
+    "multicall"
+  );
+
+  const { state: removeLiquidityWithApproveTx, send: removeLiquidity } = useContractFunction(
+    contracts[protocolName].tenderSwap,
+    "removeLiquidityOneToken",
+    {
+      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+    }
+  );
+
+  const state = isLpSharesApproved ? removeLiquidityWithApproveTx : removeLiquidityWithPermitTx;
+  const { library } = useEthers();
+
+  const removeLiquiditySingleOut = async (
+    lpSharesInputSingle: BigNumber,
+    singleTokenOutAddress: string,
+    singleOut: BigNumber
+  ) => {
+    const deadline = getDeadline();
+
+    if (!isLpSharesApproved) {
+      const permit = await signERC2612Permit(
+        library?.getSigner(),
+        token,
+        owner ?? "",
+        spender,
+        lpSharesInputSingle.toString(),
+        deadline
+      );
+
+      await multicall([
+        TenderSwapABI.encodeFunctionData("selfPermit", [
+          token,
+          permit.value,
+          permit.deadline,
+          permit.v,
+          permit.r,
+          permit.s,
+        ]),
+        TenderSwapABI.encodeFunctionData("removeLiquidityOneToken", [
+          lpSharesInputSingle,
+          singleTokenOutAddress,
+          singleOut,
+          deadline,
+        ]),
+      ]);
+    } else {
+      await removeLiquidity(lpSharesInputSingle, singleTokenOutAddress, singleOut, deadline);
+    }
+  };
+
+  return { removeLiquiditySingleOut, tx: state };
+};
+
+export const useExitPool = (
+  token: string,
+  protocolName: string,
+  owner: string | null | undefined,
+  spender: string,
+  symbol: string,
+  isLpSharesApproved: boolean
+) => {
+  const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(
+    contracts[protocolName].tenderSwap,
+    "multicall"
+  );
+
+  const { state: removeLiquidityWithApproveTx, send: removeLiquidityFunction } = useContractFunction(
+    contracts[protocolName].tenderSwap,
+    "removeLiquidity",
+    {
+      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+    }
+  );
+
+  const state = isLpSharesApproved ? removeLiquidityWithApproveTx : removeLiquidityWithPermitTx;
+  const { library } = useEthers();
+
+  const removeLiquidity = async (lpSharesInputMulti: BigNumber, tenderOut: BigNumber, tokenOut: BigNumber) => {
+    const deadline = getDeadline();
+
+    if (!isLpSharesApproved) {
+      const permit = await signERC2612Permit(
+        library?.getSigner(),
+        token,
+        owner ?? "",
+        spender,
+        lpSharesInputMulti.toString(),
+        deadline
+      );
+
+      await multicall([
+        TenderSwapABI.encodeFunctionData("selfPermit", [
+          token,
+          permit.value,
+          permit.deadline,
+          permit.v,
+          permit.r,
+          permit.s,
+        ]),
+        TenderSwapABI.encodeFunctionData("removeLiquidity", [lpSharesInputMulti, [tenderOut, tokenOut], deadline]),
+      ]);
+    } else {
+      await removeLiquidityFunction(lpSharesInputMulti, [tenderOut, tokenOut], deadline);
+    }
+  };
+
+  return { removeLiquidity, exitPoolTx: state };
+};
+
+export const useAddLiquidity = (
+  token: string,
+  protocolName: string,
+  owner: string | null | undefined,
+  spender: string,
+  symbol: string,
+  isTenderApproved: boolean
+) => {
+  const { state: addLiquidityWithPermitTx, send: multicall } = useContractFunction(
+    contracts[protocolName].tenderSwap,
+    "multicall"
+  );
+  const { state: addLiquidityWithApproveTx, send: addLiquidityWithApprove } = useContractFunction(
+    contracts[protocolName].tenderSwap,
+    "addLiquidity",
+    { transactionName: `Add t${symbol}/${symbol} Liquidity` }
+  );
+  const state = isTenderApproved ? addLiquidityWithApproveTx : addLiquidityWithPermitTx;
+  const { library } = useEthers();
+
+  const addLiquidity = async (tenderIn: BigNumber, tokenIn: BigNumber, lpTokenAmount: BigNumber) => {
+    if (!isTenderApproved) {
+      const permit = await signERC2612Permit(
+        library?.getSigner(),
+        token,
+        owner ?? "",
+        spender,
+        tenderIn?.toString(),
+        getDeadline()
+      );
+
+      await multicall([
+        TenderSwapABI.encodeFunctionData("selfPermit", [
+          token,
+          permit.value,
+          permit.deadline,
+          permit.v,
+          permit.r,
+          permit.s,
+        ]),
+        TenderSwapABI.encodeFunctionData("addLiquidity", [[tenderIn, tokenIn], lpTokenAmount, getDeadline()]),
+      ]);
+    } else {
+      await addLiquidityWithApprove([tenderIn, tokenIn], lpTokenAmount, getDeadline());
+    }
+  };
+
+  return { addLiquidity, tx: state };
 };
 
 export const getDeadline = () => {

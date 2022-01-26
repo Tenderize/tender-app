@@ -1,5 +1,5 @@
 import { FC, useState, useCallback, useEffect, ChangeEventHandler } from "react";
-import { addresses, contracts } from "@tender/contracts";
+import { addresses } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import {
   Image,
@@ -20,26 +20,30 @@ import {
   Paragraph,
   Heading,
 } from "grommet";
-import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
-import { useContractFunction, useEthers } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
-import { getDeadline, useCalculateRemoveLiquidity, useCalculateRemoveLiquidityOneToken } from "utils/tenderSwapHooks";
+import {
+  useCalculateRemoveLiquidity,
+  useCalculateRemoveLiquidityOneToken,
+  useExitPool,
+  useExitPoolSingle,
+} from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   lpTokenBalance: BigNumberish;
 };
 
-const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
-  const staker = stakers[name];
+const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
+  const staker = stakers[protocolName];
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -56,41 +60,44 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
   const { account } = useEthers();
 
   const isLpSharesApproved = useIsTokenApproved(
-    addresses[name].lpToken,
+    addresses[protocolName].lpToken,
     account,
-    addresses[name].tenderSwap,
+    addresses[protocolName].tenderSwap,
     lpSharesInputMulti || lpSharesInputSingle
   );
   const hasValue = (val: any) => {
     return val && val !== "0";
   };
 
-  const { state: exitPoolSingleTx, send: removeLiquidityOneToken } = useContractFunction(
-    contracts[name].tenderSwap,
-    "removeLiquidityOneToken",
-    {
-      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
-    }
+  const { removeLiquiditySingleOut, tx: exitPoolSingleTx } = useExitPoolSingle(
+    addresses[protocolName].lpToken,
+    protocolName,
+    account,
+    addresses[protocolName].tenderSwap,
+    symbol,
+    isLpSharesApproved
   );
 
-  const { state: exitPoolTx, send: removeLiquidity } = useContractFunction(
-    contracts[name].tenderSwap,
-    "removeLiquidity",
-    {
-      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
-    }
+  const { removeLiquidity, exitPoolTx } = useExitPool(
+    addresses[protocolName].lpToken,
+    protocolName,
+    account,
+    addresses[protocolName].tenderSwap,
+    symbol,
+    isLpSharesApproved
   );
 
-  const singleTokenOutAddress = selectedToken === symbol ? addresses[name].token : addresses[name].tenderToken;
+  const singleTokenOutAddress =
+    selectedToken === symbol ? addresses[protocolName].token : addresses[protocolName].tenderToken;
 
   const singleOut = useCalculateRemoveLiquidityOneToken(
-    addresses[name].tenderSwap,
+    addresses[protocolName].tenderSwap,
     utils.parseEther(lpSharesInputSingle || "0"),
     singleTokenOutAddress
   );
 
   const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(
-    addresses[name].tenderSwap,
+    addresses[protocolName].tenderSwap,
     utils.parseEther(lpSharesInputMulti || "0")
   );
 
@@ -103,14 +110,9 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
     e.preventDefault();
     if (isMulti) {
       // NOTE: Pool cardinality is tenderToken/Token
-      await removeLiquidity(utils.parseEther(lpSharesInputMulti || "0"), [tenderOut, tokenOut], getDeadline());
+      await removeLiquidity(utils.parseEther(lpSharesInputMulti || "0"), tenderOut, tokenOut);
     } else {
-      await removeLiquidityOneToken(
-        utils.parseEther(lpSharesInputSingle || "0"),
-        singleTokenOutAddress,
-        singleOut,
-        getDeadline()
-      );
+      await removeLiquiditySingleOut(utils.parseEther(lpSharesInputSingle || "0"), singleTokenOutAddress, singleOut);
     }
   };
 
@@ -273,19 +275,12 @@ const ExitPool: FC<Props> = ({ name, symbol, lpTokenBalance }) => {
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box pad={{ horizontal: "large" }} justify="center" gap="small">
-                <ApproveToken
-                  symbol={symbolFull}
-                  spender={addresses[name].tenderSwap}
-                  token={contracts[name].lpToken}
-                  show={!isLpSharesApproved}
-                />
                 <Button
                   primary
                   style={{ width: 501 }}
                   onClick={handleRemoveLiquidity}
                   disabled={
                     !hasValue(lpSharesInputSingle || lpSharesInputMulti) ||
-                    !isLpSharesApproved ||
                     isPendingTransaction(exitPoolSingleTx) ||
                     isPendingTransaction(exitPoolTx)
                   }
