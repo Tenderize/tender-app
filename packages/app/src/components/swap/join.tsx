@@ -20,7 +20,7 @@ import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
-import { useCalculateLpTokenAmount, useAddLiquidityWithPermit } from "utils/tenderSwapHooks";
+import { useCalculateLpTokenAmount, useAddLiquidity } from "utils/tenderSwapHooks";
 import { validateIsPositive, validateIsLargerThanMax, hasValue } from "utils/inputValidation";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -83,11 +83,12 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
     return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved) || isPendingTransaction(addLiquidityTx);
   };
 
-  const { addLiquidity, tx: addLiquidityTx } = useAddLiquidityWithPermit(
+  const { addLiquidity, tx: addLiquidityTx } = useAddLiquidity(
     addresses[name].tenderToken,
     name,
     account,
     addresses[name].tenderSwap,
+    symbol,
     isTenderApproved
   );
 
