@@ -231,7 +231,7 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
                                   readOnly
                                   value={utils.formatEther(singleOut)}
                                   placeholder={"0"}
-                                  type="text"
+                                  type="number"
                                   style={{ textAlign: "right", padding: "20px 50px", border: "none" }}
                                   icon={
                                     <Box pad="xsmall" direction="row" align="center" gap="small">
@@ -321,7 +321,7 @@ const LPTokensToRemoveInputField: FC<{
         <TextInput
           value={lpSharesInput}
           onChange={handleLpSharesInputChange}
-          type="text"
+          type="number"
           placeholder={"0 " + symbolFull}
           style={{ textAlign: "right", padding: "20px 50px" }}
         />

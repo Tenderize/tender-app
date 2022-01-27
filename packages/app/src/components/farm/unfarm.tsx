@@ -98,7 +98,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
                     <TextInput
                       value={unfarmInput}
                       onChange={handleUnfarmInputChange}
-                      type="text"
+                      type="number"
                       placeholder={"0 "}
                       icon={
                         <Box pad="xsmall" direction="row" align="center" gap="small">

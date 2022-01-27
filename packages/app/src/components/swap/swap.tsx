@@ -86,7 +86,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                 <TextInput
                   ref={sendInputRef}
                   id="formSwapSend"
-                  type="text"
+                  type="number"
                   icon={
                     <Box pad="xsmall" direction="row" align="center" gap="small">
                       <Image height="35" src={sendTokenLogo} />
@@ -138,7 +138,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                 <Box width="medium">
                   <TextInput
                     id="formSwapReceive"
-                    type="text"
+                    type="number"
                     placeholder={"0"}
                     icon={
                       <Box pad="xsmall" direction="row" align="center" gap="small">

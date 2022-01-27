@@ -139,7 +139,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                       <TextInput
                         value={tokenInput}
                         onChange={handleTokenInputChange}
-                        type="text"
+                        type="number"
                         icon={
                           <Box pad="xsmall" direction="row" align="center" gap="small">
                             <Image height="35" src={bwLogo} />
@@ -165,7 +165,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                       <TextInput
                         value={tenderInput}
                         onChange={handleTenderInputChange}
-                        type="text"
+                        type="number"
                         icon={
                           <Box pad="xsmall" direction="row" align="center" gap="small">
                             <Image height="35" src={bwTenderLogo} />
@@ -186,7 +186,7 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                         disabled
                         value={weiToEthWithDecimals(lpTokenAmount, 6)}
                         placeholder={"0"}
-                        type="text"
+                        type="number"
                         style={{ textAlign: "right", padding: "20px 50px" }}
                         icon={
                           <Box pad="xsmall" direction="row" align="center" gap="small">

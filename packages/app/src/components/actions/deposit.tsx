@@ -96,7 +96,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
                 <TextInput
                   value={depositInput}
                   onChange={handleInputChange}
-                  type="text"
+                  type="number"
                   icon={
                     <Box pad="xsmall" direction="row" align="center" gap="small">
                       <Image height="35" src={`/${logo}`} />

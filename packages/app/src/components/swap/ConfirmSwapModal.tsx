@@ -139,7 +139,7 @@ const ConfirmSwapModal: FC<Props> = ({
                         <TextInput
                           readOnly
                           id="formSwapSend"
-                          type="text"
+                          type="number"
                           value={utils.formatEther(tokenAmount || "0")}
                           required={true}
                           style={{ textAlign: "right", padding: "20px 50px" }}

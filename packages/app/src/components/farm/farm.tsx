@@ -96,7 +96,7 @@ const Farm: FC<Props> = ({ name: protocolName, symbol, tokenBalance }) => {
                     <TextInput
                       value={farmInput}
                       onChange={handleFarmInputChange}
-                      type="text"
+                      type="number"
                       placeholder={"0"}
                       icon={
                         <Box pad="xsmall" direction="row" align="center" gap="small">
