@@ -109,15 +109,13 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
     <Box pad={{ horizontal: "large", top: "small" }}>
       <Button primary onClick={handleShow} label="Join Pool" />
       {show && (
-        <Layer
-          style={{ overflow: "auto" }}
-          animation="fadeIn"
-          margin={{ top: "xlarge" }}
-          position="top"
-          onEsc={handleClose}
-          onClickOutside={handleClose}
-        >
-          <Card flex={false} pad="medium" width="large" style={{ position: "relative" }}>
+        <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
+          <Card
+            flex={false}
+            pad={{ vertical: "medium", horizontal: "xlarge" }}
+            width="large"
+            style={{ position: "relative" }}
+          >
             <Button
               style={{ position: "absolute", top: 10, right: 10 }}
               plain
@@ -130,29 +128,27 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
               </Heading>
             </CardHeader>
             <CardBody>
-              <Box pad={{ top: "medium" }} align="center">
-                <Form validate="change">
+              <Box pad={{ top: "medium", horizontal: "large" }} align="center">
+                <Form validate="change" style={{ width: "100%" }}>
                   <Box gap="medium">
                     <FormField
                       label={`${symbol} Amount`}
                       name="tokenInput"
                       validate={[validateIsPositive(tokenInput), validateIsLargerThanMax(tokenInput, tokenBalance)]}
                     >
-                      <Box width="medium">
-                        <TextInput
-                          value={tokenInput}
-                          onChange={handleTokenInputChange}
-                          type="text"
-                          icon={
-                            <Box pad="xsmall" direction="row" align="center" gap="small">
-                              <Image height="35" src={bwLogo} />
-                              <Text>{symbol}</Text>
-                            </Box>
-                          }
-                          style={{ textAlign: "right", padding: "20px 50px" }}
-                          placeholder={"0"}
-                        />
-                      </Box>
+                      <TextInput
+                        value={tokenInput}
+                        onChange={handleTokenInputChange}
+                        type="text"
+                        icon={
+                          <Box pad="xsmall" direction="row" align="center" gap="small">
+                            <Image height="35" src={bwLogo} />
+                            <Text>{symbol}</Text>
+                          </Box>
+                        }
+                        style={{ textAlign: "right", padding: "20px 50px" }}
+                        placeholder={"0"}
+                      />
                       <AmountInputFooter
                         label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
                         onClick={maxTokenDeposit}
@@ -166,41 +162,45 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                         validateIsLargerThanMax(tenderInput, tenderTokenBalance),
                       ]}
                     >
-                      <Box width="medium">
-                        <TextInput
-                          value={tenderInput}
-                          onChange={handleTenderInputChange}
-                          type="text"
-                          icon={
-                            <Box pad="xsmall" direction="row" align="center" gap="small">
-                              <Image height="35" src={bwTenderLogo} />
-                              <Text>t{symbol}</Text>
-                            </Box>
-                          }
-                          style={{ textAlign: "right", padding: "20px 50px" }}
-                          placeholder={"0"}
-                        />
-                      </Box>
+                      <TextInput
+                        value={tenderInput}
+                        onChange={handleTenderInputChange}
+                        type="text"
+                        icon={
+                          <Box pad="xsmall" direction="row" align="center" gap="small">
+                            <Image height="35" src={bwTenderLogo} />
+                            <Text>t{symbol}</Text>
+                          </Box>
+                        }
+                        style={{ textAlign: "right", padding: "20px 50px" }}
+                        placeholder={"0"}
+                      />
                       <AmountInputFooter
                         label={`Balance: ${utils.formatEther(tenderTokenBalance?.toString() || "0")} t${symbol}`}
                         onClick={maxTenderTokenDeposit}
                       />
                     </FormField>
+                    <FormField label={`Amount of ${lpTokenSymbol} to receive`}>
+                      <TextInput
+                        readOnly
+                        disabled
+                        value={weiToEthWithDecimals(lpTokenAmount, 6)}
+                        placeholder={"0"}
+                        type="text"
+                        style={{ textAlign: "right", padding: "20px 50px" }}
+                        icon={
+                          <Box pad="xsmall" direction="row" align="center" gap="small">
+                            <Text>{lpTokenSymbol}</Text>
+                          </Box>
+                        }
+                      />
+                    </FormField>
                   </Box>
                 </Form>
-                <Text>
-                  {lpTokenAmount && !lpTokenAmount.isZero() ? (
-                    <>
-                      You will receive {weiToEthWithDecimals(lpTokenAmount, 6)} {lpTokenSymbol}
-                    </>
-                  ) : (
-                    <>&nbsp;</>
-                  )}
-                </Text>
               </Box>
             </CardBody>
-            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Box justify="center" gap="small">
+            <CardFooter align="center" justify="center" pad={{ vertical: "medium" }}>
+              <Box style={{ width: "100%" }} pad={{ horizontal: "large" }} justify="center" gap="small">
                 {
                   // TODO this is a workaround, report gap bug to grommet (applying gap for undefined or empty elements)
                   !isTokenApproved && (
@@ -214,7 +214,6 @@ const JoinPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance })
                 }
                 <Button
                   primary
-                  style={{ width: 467 }}
                   onClick={handleAddLiquidity}
                   disabled={isButtonDisabled()}
                   label={
