@@ -12,6 +12,7 @@ import {
   Layer,
   Form,
   FormField,
+  Text,
   TextInput,
 } from "grommet";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
@@ -68,7 +69,12 @@ const Farm: FC<Props> = ({ name: protocolName, symbol, tokenBalance }) => {
       <Button primary onClick={handleShow} label="Farm" reverse icon={<FormAdd color="white" />} />
       {show && (
         <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
-          <Card flex={false} style={{ position: "relative" }} pad="medium" width="large">
+          <Card
+            flex={false}
+            style={{ position: "relative" }}
+            pad={{ vertical: "medium", horizontal: "xlarge" }}
+            width="large"
+          >
             <Button
               style={{ position: "absolute", top: 10, right: 10 }}
               plain
@@ -81,23 +87,31 @@ const Farm: FC<Props> = ({ name: protocolName, symbol, tokenBalance }) => {
               </Heading>
             </CardHeader>
             <CardBody>
-              <Form validate="change">
-                <FormField
-                  name="farmInput"
-                  validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
-                >
-                  <TextInput
-                    value={farmInput}
-                    onChange={handleFarmInputChange}
-                    type="text"
-                    placeholder={"0 " + symbol}
-                  />
-                  <AmountInputFooter
-                    label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-                    onClick={maxDeposit}
-                  />
-                </FormField>
-              </Form>
+              <Box pad={{ top: "medium", horizontal: "large" }} align="center">
+                <Form validate="change" style={{ width: "100%" }}>
+                  <FormField
+                    name="farmInput"
+                    validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
+                  >
+                    <TextInput
+                      value={farmInput}
+                      onChange={handleFarmInputChange}
+                      type="text"
+                      placeholder={"0"}
+                      icon={
+                        <Box pad="xsmall" direction="row" align="center" gap="small">
+                          <Text>{symbol}</Text>
+                        </Box>
+                      }
+                      style={{ textAlign: "right", padding: "20px 50px" }}
+                    />
+                    <AmountInputFooter
+                      label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                      onClick={maxDeposit}
+                    />
+                  </FormField>
+                </Form>
+              </Box>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box justify="center" gap="small">
