@@ -1,12 +1,15 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { useEthers, useEtherBalance, Rinkeby } from "@usedapp/core";
+import { useEthers, useEtherBalance, Rinkeby, useTokenBalance } from "@usedapp/core";
+import { addresses } from "@tender/contracts";
 import { TransactionsList } from "../transactions";
 import { formatEther } from "@ethersproject/units";
-import { BigNumber } from "ethers";
+import { BigNumber, constants } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
 import { Link } from "../base";
-import { Box, Text, Layer, Card, CardHeader, CardBody, Heading } from "grommet";
+import { Box, Text, Layer, Card, CardHeader, CardBody, Heading, Accordion, AccordionPanel } from "grommet";
+import stakers from "data/stakers";
+import { AddToken } from "./AddToken";
 
 const formatter = new Intl.NumberFormat("en-us", {
   minimumFractionDigits: 4,
@@ -40,12 +43,10 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                   Account info
                 </Heading>
               </CardHeader>
-              <CardBody>
-                <Box gap="medium">
-                  <Text size="medium" weight="bold">
-                    Address: {account}
-                  </Text>
-                </Box>
+              <CardBody gap="small">
+                <Text size="medium" weight="bold">
+                  Address: {account}
+                </Text>
                 <Box direction="row" justify="between">
                   <Link href={Rinkeby.getExplorerAddressLink("account")} target="_blank" rel="noopener noreferrer">
                     Show on etherscan
@@ -57,9 +58,46 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                     <Link onClick={() => console.log(navigator.clipboard.writeText(account))}>Copy to clipboard</Link>
                   )}
                 </Box>
-                <Box direction="row" justify="between" margin={{ vertical: "12px" }}>
-                  <Text>Balance: </Text>
-                  <Text>ETH: {balance && formatBalance(balance)}</Text>
+                <Box>
+                  <Box
+                    direction="row"
+                    align="center"
+                    justify="between"
+                    pad={{ vertical: "12px", left: "6px", right: "12px" }}
+                  >
+                    <Heading margin={{ vertical: "none" }} level={4}>
+                      Balance
+                    </Heading>
+                    <Text>ETH: {balance && formatBalance(balance)}</Text>
+                  </Box>
+                  <Accordion>
+                    <AccordionPanel label={"Tender Balances"}>
+                      {Object.values(stakers).map((staker) => {
+                        return (
+                          <TokenBalance
+                            tokenAddress={addresses[staker.name].tenderToken}
+                            symbol={`t${staker.symbol}`}
+                            image={`/${staker.bwTenderLogo}`}
+                            account={account}
+                          />
+                        );
+                      })}
+                    </AccordionPanel>
+                  </Accordion>
+                  <Accordion>
+                    <AccordionPanel label={"LP Balances"}>
+                      {Object.values(stakers).map((staker) => {
+                        return (
+                          <TokenBalance
+                            tokenAddress={addresses[staker.name].lpToken}
+                            symbol={`t${staker.symbol}/${staker.symbol}`}
+                            image={""}
+                            account={account}
+                          />
+                        );
+                      })}
+                    </AccordionPanel>
+                  </Accordion>
                 </Box>
                 <Box>
                   <TransactionsList />
@@ -70,6 +108,21 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
         </Layer>
       )}
     </>
+  );
+};
+
+const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; account: string | undefined | null }> = ({
+  tokenAddress,
+  symbol,
+  image,
+  account,
+}) => {
+  const tenderBalance = useTokenBalance(tokenAddress, account) || constants.Zero;
+  return (
+    <Box pad="small" direction="row" align="center" justify="between">
+      <AddToken address={tokenAddress} symbol={symbol} image={image} />
+      <Text>{`${symbol}: ${tenderBalance && formatBalance(tenderBalance)}`}</Text>
+    </Box>
   );
 };
 

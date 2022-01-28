@@ -1,5 +1,5 @@
 import { FC, ReactElement, ReactNode } from "react";
-import { Box, Table, TableHeader, TableBody, Text } from "grommet";
+import { Box, Table, TableHeader, TableBody, Text, Heading } from "grommet";
 import type { TransactionResponse } from "@ethersproject/providers";
 import {
   Rinkeby,
@@ -32,12 +32,10 @@ interface TableWrapperProps {
 const TableWrapper = ({ children, title }: TableWrapperProps) => (
   <Table>
     <TableHeader>
-      <Text size="large">{title}</Text>
+      <Heading level={4}>{title}</Heading>
     </TableHeader>
     <TableBody>
-      <Box height="medium" style={{ overflow: "auto" }}>
-        {children}
-      </Box>
+      <Box style={{ overflow: "auto" }}>{children}</Box>
     </TableBody>
   </Table>
 );
