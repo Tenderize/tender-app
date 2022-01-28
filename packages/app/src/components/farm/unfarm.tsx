@@ -83,7 +83,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Unfarm ${symbol}`}
               </Heading>

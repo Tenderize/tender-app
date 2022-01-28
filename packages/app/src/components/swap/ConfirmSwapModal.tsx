@@ -125,7 +125,7 @@ const ConfirmSwapModal: FC<Props> = ({
               icon={<FormClose />}
               onClick={onDismiss}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Confirm Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`}
               </Heading>

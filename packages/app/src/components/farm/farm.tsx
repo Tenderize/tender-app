@@ -81,37 +81,35 @@ const Farm: FC<Props> = ({ name: protocolName, symbol, tokenBalance }) => {
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Farm ${symbol}`}
               </Heading>
             </CardHeader>
-            <CardBody>
-              <Box pad={{ top: "medium", horizontal: "large" }} align="center">
-                <Form validate="change" style={{ width: "100%" }}>
-                  <FormField
-                    name="farmInput"
-                    validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
-                  >
-                    <TextInput
-                      value={farmInput}
-                      onChange={handleFarmInputChange}
-                      type="number"
-                      placeholder={"0"}
-                      icon={
-                        <Box pad="xsmall" direction="row" align="center" gap="small">
-                          <Text>{symbol}</Text>
-                        </Box>
-                      }
-                      style={{ textAlign: "right", padding: "20px 50px" }}
-                    />
-                    <AmountInputFooter
-                      label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
-                      onClick={maxDeposit}
-                    />
-                  </FormField>
-                </Form>
-              </Box>
+            <CardBody pad={{ top: "medium", horizontal: "large" }} align="center">
+              <Form validate="change" style={{ width: "100%" }}>
+                <FormField
+                  name="farmInput"
+                  validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
+                >
+                  <TextInput
+                    value={farmInput}
+                    onChange={handleFarmInputChange}
+                    type="number"
+                    placeholder={"0"}
+                    icon={
+                      <Box pad="xsmall" direction="row" align="center" gap="small">
+                        <Text>{symbol}</Text>
+                      </Box>
+                    }
+                    style={{ textAlign: "right", padding: "20px 50px" }}
+                  />
+                  <AmountInputFooter
+                    label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                    onClick={maxDeposit}
+                  />
+                </FormField>
+              </Form>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box justify="center" gap="small">

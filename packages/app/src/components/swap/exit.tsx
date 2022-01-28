@@ -145,7 +145,7 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Exit tender${symbol}/${symbol}`}
               </Heading>

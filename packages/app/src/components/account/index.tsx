@@ -83,7 +83,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
               icon={<FormClose />}
               onClick={handleCloseWalletPicker}
             />
-            <CardHeader justify="center">
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 Connect Wallet
               </Heading>

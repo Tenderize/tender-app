@@ -35,7 +35,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
         >
           <Card flex={false}>
             <Box pad="medium" gap="medium">
-              <CardHeader>
+              <CardHeader justify="center" pad="none">
                 <Heading level={2} alignSelf="center">
                   Account info
                 </Heading>

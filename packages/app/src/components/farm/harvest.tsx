@@ -1,11 +1,24 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
-import { BigNumberish, utils } from "ethers";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text, Heading } from "grommet";
+import { BigNumberish } from "ethers";
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Text,
+  Heading,
+  FormField,
+  TextInput,
+} from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
+import { weiToEthWithDecimals } from "utils/amountFormat";
 
 type Props = {
   name: string;
@@ -58,15 +71,27 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Harvest ${symbol}`}
               </Heading>
             </CardHeader>
-            <CardBody align="center">
-              <Text>
-                Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
-              </Text>
+            <CardBody pad={{ top: "medium", horizontal: "large" }} align="center">
+              <FormField label="Available for harvest:">
+                <TextInput
+                  readOnly
+                  disabled
+                  value={weiToEthWithDecimals(availableRewards, 6)}
+                  placeholder={"0"}
+                  type="number"
+                  style={{ textAlign: "right", padding: "20px 50px" }}
+                  icon={
+                    <Box pad="xsmall" direction="row" align="center" gap="small">
+                      <Text>{symbol}</Text>
+                    </Box>
+                  }
+                />
+              </FormField>
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Button secondary onClick={handleClose} label="Cancel" />
