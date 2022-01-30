@@ -7,11 +7,11 @@ import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { isPendingTransaction } from "../../utils/transactions";
 type props = {
   symbol: string;
-  name: string;
+  protocolName: string;
 };
 
-const Faucet: FC<props> = ({ symbol, name }) => {
-  const { state: requestTx, send: request } = useContractFunction(contracts[name].faucet, "request", {
+const Faucet: FC<props> = ({ symbol, protocolName }) => {
+  const { state: requestTx, send: request } = useContractFunction(contracts[protocolName].faucet, "request", {
     transactionName: `Requesting ${symbol} from faucet`,
   });
 

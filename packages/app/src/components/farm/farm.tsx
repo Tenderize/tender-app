@@ -25,12 +25,12 @@ import { isPendingTransaction } from "utils/transactions";
 import { useFarm } from "utils/tenderFarmHooks";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   tokenBalance: BigNumberish;
 };
 
-const Farm: FC<Props> = ({ name: protocolName, symbol, tokenBalance }) => {
+const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
   const [show, setShow] = useState(false);
   const { account } = useEthers();
 
@@ -89,7 +89,7 @@ const Farm: FC<Props> = ({ name: protocolName, symbol, tokenBalance }) => {
             <CardBody pad={{ top: "medium", horizontal: "large" }} align="center">
               <Form validate="change" style={{ width: "100%" }}>
                 <FormField
-                  name="farmInput"
+                  protocolName="farmInput"
                   validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
                 >
                   <TextInput

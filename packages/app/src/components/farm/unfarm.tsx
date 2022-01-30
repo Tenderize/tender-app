@@ -23,12 +23,12 @@ import { useContractFunction } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   stake: BigNumberish;
 };
 
-const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
+const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -45,7 +45,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
     setUnfarmInput(utils.formatEther(stake.toString() || "0"));
   };
 
-  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].tenderFarm, "unfarm", {
+  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[protocolName].tenderFarm, "unfarm", {
     transactionName: `Unfarm ${symbol}`,
   });
   const unfarmLpTokens = async (e: any) => {

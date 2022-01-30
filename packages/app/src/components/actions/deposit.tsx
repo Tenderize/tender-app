@@ -15,18 +15,18 @@ import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidati
 import stakers from "data/stakers";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   logo: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
 };
 
-const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalance }) => {
+const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTokenBalance }) => {
   const [depositInput, setDepositInput] = useState("");
   const { account } = useEthers();
 
-  const subgraphName = stakers[name].subgraphId;
+  const subgraphName = stakers[protocolName].subgraphId;
   const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
@@ -46,7 +46,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
     setDepositInput(val);
   };
 
-  const { state: depositTx, send: deposit } = useContractFunction(contracts[name].tenderizer, "deposit", {
+  const { state: depositTx, send: deposit } = useContractFunction(contracts[protocolName].tenderizer, "deposit", {
     transactionName: `Deposit ${symbol}`,
   });
 
@@ -56,7 +56,12 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
     setDepositInput("");
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].token, account, addresses[name].tenderizer, depositInput);
+  const isTokenApproved = useIsTokenApproved(
+    addresses[protocolName].token,
+    account,
+    addresses[protocolName].tenderizer,
+    depositInput
+  );
 
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
@@ -90,7 +95,7 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
               <FormField
                 fill
                 label="Deposit Amount"
-                name="depositAmount"
+                protocolName="depositAmount"
                 validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
               >
                 <TextInput
@@ -114,8 +119,8 @@ const Deposit: FC<Props> = ({ name, symbol, logo, tokenBalance, tenderTokenBalan
               <Box gap="small" direction="column">
                 <ApproveToken
                   symbol={symbol}
-                  spender={addresses[name].tenderizer}
-                  token={contracts[name].token}
+                  spender={addresses[protocolName].tenderizer}
+                  token={contracts[protocolName].token}
                   show={!isTokenApproved}
                 />
                 <Button

@@ -21,16 +21,16 @@ import { TenderizeConfig } from "types";
 
 const Token: FC<{ config: TenderizeConfig }> = (props) => {
   const router = useRouter();
-  const name = router.query.slug as string;
-  const info = stakers[name];
+  const protocolName = router.query.slug as string;
+  const info = stakers[protocolName];
   const [tabIndex, setTabIndex] = useState(1);
 
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
   // TODO: USE MULTICALL FOR THESE
-  const tokenBalance = useTokenBalance(addresses[name].token, account) || constants.Zero;
-  const tenderBalance = useTokenBalance(addresses[name].tenderToken, account) || constants.Zero;
-  const lpTokenBalance = useTokenBalance(addresses[name].lpToken, account) || constants.Zero;
+  const tokenBalance = useTokenBalance(addresses[protocolName].token, account) || constants.Zero;
+  const tenderBalance = useTokenBalance(addresses[protocolName].tenderToken, account) || constants.Zero;
+  const lpTokenBalance = useTokenBalance(addresses[protocolName].lpToken, account) || constants.Zero;
 
   const onActive = useCallback((nextIndex: number) => {
     if (nextIndex === 0) {
@@ -43,7 +43,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
   return (
     <Box>
       <NotificationsList />
-      <Navbar symbol={info.symbol} name={name} config={props.config} />
+      <Navbar symbol={info.symbol} protocolName={protocolName} config={props.config} />
       <Box width="100vw" align="center" alignSelf="start">
         <TenderBox
           margin={{
@@ -75,7 +75,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
                 }}
               >
                 <Deposit
-                  name={name}
+                  protocolName={protocolName}
                   symbol={info.symbol}
                   logo={info.bwLogo}
                   tokenBalance={tokenBalance}
@@ -98,7 +98,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
             >
               <Box round={{ corner: "bottom" }} border="top" pad="medium">
                 <LiquidityPool
-                  name={name}
+                  protocolName={protocolName}
                   symbol={info.symbol}
                   tokenBalance={tokenBalance}
                   tenderTokenBalance={tenderBalance}
@@ -120,7 +120,12 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
               }
             >
               <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <Farm name={name} symbol={info.symbol} account={account} lpTokenBalance={lpTokenBalance} />
+                <Farm
+                  protocolName={protocolName}
+                  symbol={info.symbol}
+                  account={account}
+                  lpTokenBalance={lpTokenBalance}
+                />
               </Box>
             </Tab>
           </Tabs>
