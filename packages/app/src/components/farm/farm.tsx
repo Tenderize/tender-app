@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from "react";
-import { addresses, contracts } from "@tender/contracts";
+import { addresses } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import {
   Button,
@@ -14,14 +14,14 @@ import {
   FormField,
   TextInput,
 } from "grommet";
-import ApproveToken from "../approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd, FormClose } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
-import { useContractFunction, useEthers } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
+import { useFarm } from "utils/tenderFarmHooks";
 
 type Props = {
   name: string;
@@ -29,7 +29,7 @@ type Props = {
   tokenBalance: BigNumberish;
 };
 
-const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
+const Farm: FC<Props> = ({ name: protocolName, symbol, tokenBalance }) => {
   const [show, setShow] = useState(false);
   const { account } = useEthers();
 
@@ -47,12 +47,15 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].lpToken, account, addresses[name].tenderFarm, farmInput);
+  const isTokenApproved = useIsTokenApproved(
+    addresses[protocolName].lpToken,
+    account,
+    addresses[protocolName].tenderFarm,
+    farmInput
+  );
 
   // Contract Functions
-  const { state: farmTx, send: farm } = useContractFunction(contracts[name].tenderFarm, "farm", {
-    transactionName: `Farm ${symbol}`,
-  });
+  const { farmTx, farm } = useFarm(account, protocolName, symbol, isTokenApproved);
 
   const farmLpTokens = async (e: any) => {
     e.preventDefault();
@@ -98,18 +101,10 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box justify="center" gap="small">
-                <ApproveToken
-                  symbol={symbol}
-                  spender={addresses[name].tenderFarm}
-                  token={contracts[name].lpToken}
-                  show={!isTokenApproved}
-                />
                 <Button
                   primary
                   style={{ width: 467 }}
-                  disabled={
-                    !isTokenApproved || !farmInput || farmInput.toString() === "0" || isPendingTransaction(farmTx)
-                  }
+                  disabled={!farmInput || farmInput.toString() === "0" || isPendingTransaction(farmTx)}
                   onClick={farmLpTokens}
                   label={isPendingTransaction(farmTx) ? <LoadingButtonContent label="Farming..." /> : "Farm"}
                 />
