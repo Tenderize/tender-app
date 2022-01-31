@@ -46,7 +46,12 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
   return (
     <>
       {account && chainId && showModal && (
-        <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
+        <LayerWithHiddenScrollbar
+          style={{ overflow: "auto" }}
+          animation="fadeIn"
+          onEsc={handleClose}
+          onClickOutside={handleClose}
+        >
           <Card flex={false} pad="medium" width="large">
             <Button
               style={{ position: "absolute", top: 10, right: 10 }}
@@ -122,7 +127,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
               </CardBody>
             </Box>
           </Card>
-        </Layer>
+        </LayerWithHiddenScrollbar>
       )}
     </>
   );
@@ -162,4 +167,11 @@ const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; ac
 const LinkIconWrapper = styled.div`
   width: 1.2rem;
   height: 1.2rem;
+`;
+
+const LayerWithHiddenScrollbar = styled(Layer)`
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
 `;
