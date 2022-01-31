@@ -21,6 +21,10 @@ import {
   FormField,
   TextInput,
   Button,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
 } from "grommet";
 import stakers from "data/stakers";
 import { AddToken } from "./AddToken";
@@ -52,7 +56,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
           onEsc={handleClose}
           onClickOutside={handleClose}
         >
-          <Card flex={false} pad="medium" width="large">
+          <Card flex={false} pad={{ horizontal: "large" }}>
             <Button
               style={{ position: "absolute", top: 10, right: 10 }}
               plain
@@ -94,30 +98,60 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                   </Box>
                   <Accordion>
                     <AccordionPanel label={"Tender Balances"}>
-                      {Object.values(stakers).map((staker) => {
-                        return (
-                          <TokenBalance
-                            tokenAddress={addresses[staker.name].tenderToken}
-                            symbol={`t${staker.symbol}`}
-                            image={`/${staker.bwTenderLogo}`}
-                            account={account}
-                          />
-                        );
-                      })}
+                      <Table>
+                        <TableBody>
+                          {Object.values(stakers).map((staker) => {
+                            return (
+                              <TableRow>
+                                <TableCell scope="row" border="bottom">
+                                  <TokenBalance
+                                    tokenAddress={addresses[staker.name].tenderToken}
+                                    symbol={`t${staker.symbol}`}
+                                    image={`/${staker.bwTenderLogo}`}
+                                    account={account}
+                                  />
+                                </TableCell>
+                                <TableCell border="bottom">
+                                  <AddToken
+                                    address={addresses[staker.name].tenderToken}
+                                    symbol={`t${staker.symbol}`}
+                                    image={`/${staker.bwTenderLogo}`}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
                     </AccordionPanel>
                   </Accordion>
                   <Accordion>
-                    <AccordionPanel label={"LP Balances"}>
-                      {Object.values(stakers).map((staker) => {
-                        return (
-                          <TokenBalance
-                            tokenAddress={addresses[staker.name].lpToken}
-                            symbol={`t${staker.symbol}/${staker.symbol}`}
-                            image={""}
-                            account={account}
-                          />
-                        );
-                      })}
+                    <AccordionPanel label={"Liquidity Pools"}>
+                      <Table>
+                        <TableBody>
+                          {Object.values(stakers).map((staker) => {
+                            return (
+                              <TableRow>
+                                <TableCell scope="row" border="bottom">
+                                  <TokenBalance
+                                    tokenAddress={addresses[staker.name].lpToken}
+                                    symbol={`t${staker.symbol}-${staker.symbol}-SWAP`}
+                                    image={""}
+                                    account={account}
+                                  />
+                                </TableCell>
+                                <TableCell border="bottom">
+                                  <AddToken
+                                    address={addresses[staker.name].lpToken}
+                                    symbol={`t${staker.symbol}-${staker.symbol}-SWAP`}
+                                    image={""}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
                     </AccordionPanel>
                     <AccordionPanel label="Transaction History">
                       <TransactionsList />
@@ -143,7 +177,7 @@ const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; ac
 
   return (
     <Box pad="small" direction="row" align="center" justify="between">
-      <FormField margin="none">
+      <FormField margin="none" plain={true} focusIndicator={false}>
         <Box width="medium">
           <TextInput
             type="number"
@@ -153,13 +187,14 @@ const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; ac
                 <Text>{symbol}</Text>
               </Box>
             }
-            disabled
+            readOnly
+            plain={true}
+            focusIndicator={false}
             style={{ textAlign: "right", padding: "20px 50px" }}
             value={tenderBalance && formatBalance(tenderBalance)}
           />
         </Box>
       </FormField>
-      <AddToken address={tokenAddress} symbol={symbol} image={image} />
     </Box>
   );
 };

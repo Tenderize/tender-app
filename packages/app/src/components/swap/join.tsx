@@ -112,7 +112,7 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
-      <Button primary onClick={handleShow} label="Join Pool" />
+      <Button primary onClick={handleShow} label="Add Liquidity" />
       {show && (
         <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
           <Card
@@ -129,7 +129,7 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
             />
             <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
-                {`Join tender${symbol}/${symbol}`}
+                {`Add t${symbol}/${symbol} Liquidity`}
               </Heading>
             </CardHeader>
             <CardBody>

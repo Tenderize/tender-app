@@ -125,12 +125,11 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
     }
   }, []);
 
-  const symbolFull = `t${symbol}-${symbol} Pool Token`;
+  const symbolFull = `t${symbol}-${symbol}-SWAP`;
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
-      <Button secondary onClick={handleShow} label="Exit Pool" />
-
+      <Button secondary onClick={handleShow} label="Remove Liquidity" />
       {show && (
         <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
           <Card
@@ -147,7 +146,7 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
             />
             <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
-                {`Exit tender${symbol}/${symbol}`}
+                {`Remove t${symbol}/${symbol} Liquidity`}
               </Heading>
             </CardHeader>
             <CardBody>

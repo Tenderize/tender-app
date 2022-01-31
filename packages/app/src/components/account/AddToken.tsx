@@ -25,15 +25,15 @@ const addToken = async (address: string, symbol: string, image: string, decimals
 export const AddToken: FC<{ address: string; symbol: string; image: string }> = ({ address, symbol, image }) => {
   return (
     <Button
-      primary
-      plain
+      secondary
+      style={{ padding: "5px 12px" }}
       onClick={async (e) => {
         e.preventDefault();
         await addToken(address, symbol, image);
       }}
       label="Add to"
       reverse
-      icon={<Image height="35" src={"/metamask.png"} />}
+      icon={<Image height="20" src={"/metamask.png"} />}
     />
   );
 };

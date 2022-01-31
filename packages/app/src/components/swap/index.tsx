@@ -16,21 +16,24 @@ type Props = {
 
 const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBalance, lpTokenBalance }) => {
   return (
-    <Box justify="start" align="center">
+    <Box justify="center" align="center" direction="column">
       <Swap
         protocolName={protocolName}
         tokenSymbol={symbol}
         tokenBalance={tokenBalance}
         tenderTokenBalance={tenderTokenBalance}
       />
+
+      {/* <Text>Provide Liquidity</Text> */}
       <Box
+        margin={{ top: "medium" }}
+        pad={{ horizontal: "large", vertical: "medium" }}
         border={{ side: "top" }}
-        direction="column"
         justify="center"
         align="center"
-        pad={{ horizontal: "large", top: "medium" }}
-        width="large"
-        margin={{ top: "large" }}
+        direction="row"
+        style={{ width: "100%%" }}
+        gap="small"
       >
         <Text>Provide Liquidity</Text>
         <Box direction="row" gap="large" justify="center" align="center">

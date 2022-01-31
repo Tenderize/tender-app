@@ -127,7 +127,7 @@ export const useExitPoolSingle = (
     contracts[protocolName].tenderSwap,
     "removeLiquidityOneToken",
     {
-      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+      transactionName: `Remove t${symbol}/${symbol} Liquidity`,
     }
   );
 
@@ -192,7 +192,7 @@ export const useExitPool = (
     contracts[protocolName].tenderSwap,
     "removeLiquidity",
     {
-      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+      transactionName: `Remove t${symbol}/${symbol} Liquidity`,
     }
   );
 
