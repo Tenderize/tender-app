@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import styled from "styled-components";
 import { useEthers, useEtherBalance, Rinkeby, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
@@ -7,9 +7,24 @@ import { formatEther } from "@ethersproject/units";
 import { BigNumber, constants } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
 import { Link } from "../base";
-import { Box, Text, Layer, Card, CardHeader, CardBody, Heading, Accordion, AccordionPanel } from "grommet";
+import {
+  Box,
+  Text,
+  Layer,
+  Card,
+  CardHeader,
+  CardBody,
+  Heading,
+  Image,
+  Accordion,
+  AccordionPanel,
+  FormField,
+  TextInput,
+  Button,
+} from "grommet";
 import stakers from "data/stakers";
 import { AddToken } from "./AddToken";
+import { FormClose } from "grommet-icons";
 
 const formatter = new Intl.NumberFormat("en-us", {
   minimumFractionDigits: 4,
@@ -27,16 +42,18 @@ type AccountModalProps = {
 export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal }) => {
   const { account, chainId } = useEthers();
   const balance = useEtherBalance(account);
+  const handleClose = useCallback(() => setShowModal(false), []);
   return (
     <>
       {account && chainId && showModal && (
-        <Layer
-          style={{ overflow: "auto" }}
-          animation="fadeIn"
-          onEsc={() => setShowModal(false)}
-          onClickOutside={() => setShowModal(false)}
-        >
-          <Card flex={false}>
+        <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
+          <Card flex={false} pad="medium" width="large">
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
             <Box pad="medium" gap="medium">
               <CardHeader justify="center" pad="none">
                 <Heading level={2} alignSelf="center">
@@ -97,10 +114,10 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                         );
                       })}
                     </AccordionPanel>
+                    <AccordionPanel label="Transaction History">
+                      <TransactionsList />
+                    </AccordionPanel>
                   </Accordion>
-                </Box>
-                <Box>
-                  <TransactionsList />
                 </Box>
               </CardBody>
             </Box>
@@ -118,10 +135,26 @@ const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; ac
   account,
 }) => {
   const tenderBalance = useTokenBalance(tokenAddress, account) || constants.Zero;
+
   return (
     <Box pad="small" direction="row" align="center" justify="between">
+      <FormField margin="none">
+        <Box width="medium">
+          <TextInput
+            type="number"
+            icon={
+              <Box pad="xsmall" direction="row" align="center" gap="small">
+                <Image height="35" src={image} />
+                <Text>{symbol}</Text>
+              </Box>
+            }
+            disabled
+            style={{ textAlign: "right", padding: "20px 50px" }}
+            value={tenderBalance && formatBalance(tenderBalance)}
+          />
+        </Box>
+      </FormField>
       <AddToken address={tokenAddress} symbol={symbol} image={image} />
-      <Text>{`${symbol}: ${tenderBalance && formatBalance(tenderBalance)}`}</Text>
     </Box>
   );
 };

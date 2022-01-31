@@ -1,4 +1,4 @@
-import { Button } from "grommet";
+import { Button, Image } from "grommet";
 import { FC } from "react";
 
 const addToken = async (address: string, symbol: string, image: string, decimals = 18) => {
@@ -25,12 +25,15 @@ const addToken = async (address: string, symbol: string, image: string, decimals
 export const AddToken: FC<{ address: string; symbol: string; image: string }> = ({ address, symbol, image }) => {
   return (
     <Button
-      size="small"
+      primary
+      plain
       onClick={async (e) => {
         e.preventDefault();
         await addToken(address, symbol, image);
       }}
-      label="Add to Metamask"
+      label="Add to"
+      reverse
+      icon={<Image height="35" src={"/metamask.png"} />}
     />
   );
 };

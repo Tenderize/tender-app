@@ -1,5 +1,5 @@
 import { FC, ReactElement, ReactNode } from "react";
-import { Box, Table, TableHeader, TableBody, Text, Heading } from "grommet";
+import { Box, Table, TableBody, Text } from "grommet";
 import type { TransactionResponse } from "@ethersproject/providers";
 import {
   Rinkeby,
@@ -26,14 +26,10 @@ import { Link } from "../base";
 
 interface TableWrapperProps {
   children: ReactNode;
-  title: string;
 }
 
-const TableWrapper = ({ children, title }: TableWrapperProps) => (
+const TableWrapper = ({ children }: TableWrapperProps) => (
   <Table>
-    <TableHeader>
-      <Heading level={4}>{title}</Heading>
-    </TableHeader>
     <TableBody>
       <Box style={{ overflow: "auto" }}>{children}</Box>
     </TableBody>
@@ -127,7 +123,7 @@ function TransactionIcon(transaction: StoredTransaction) {
 export const TransactionsList: FC = () => {
   const { transactions } = useTransactions();
   return (
-    <TableWrapper title="Transactions history">
+    <TableWrapper>
       <AnimatePresence initial={false}>
         {transactions.map((transaction) => (
           <TransactionListElement
