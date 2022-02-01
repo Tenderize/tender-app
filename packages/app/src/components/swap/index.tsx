@@ -24,14 +24,13 @@ const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTo
         tenderTokenBalance={tenderTokenBalance}
       />
 
-      {/* <Text>Provide Liquidity</Text> */}
       <Box
         margin={{ top: "medium" }}
         pad={{ horizontal: "large", vertical: "medium" }}
         border={{ side: "top" }}
         justify="center"
         align="center"
-        direction="row"
+        direction="column"
         style={{ width: "100%%" }}
         gap="small"
       >
