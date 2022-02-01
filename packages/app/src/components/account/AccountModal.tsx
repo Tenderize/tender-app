@@ -55,7 +55,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
           animation="fadeIn"
           onEsc={handleClose}
           onClickOutside={handleClose}
-          margin={{vertical: "30px"}}
+          margin={{ vertical: "30px" }}
         >
           <Card flex={false} pad={{ horizontal: "large" }} width="large">
             <Button
