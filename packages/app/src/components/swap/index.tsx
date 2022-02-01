@@ -7,18 +7,18 @@ import ExitPool from "./exit";
 import { Box, Text } from "grommet";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
   lpTokenBalance: BigNumber;
 };
 
-const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalance, lpTokenBalance }) => {
+const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBalance, lpTokenBalance }) => {
   return (
     <Box justify="start" align="center">
       <Swap
-        protocolName={name}
+        protocolName={protocolName}
         tokenSymbol={symbol}
         tokenBalance={tokenBalance}
         tenderTokenBalance={tenderTokenBalance}
@@ -34,8 +34,13 @@ const LiquidityPool: FC<Props> = ({ name, symbol, tokenBalance, tenderTokenBalan
       >
         <Text>Provide Liquidity</Text>
         <Box direction="row" gap="large" justify="center" align="center">
-          <JoinPool name={name} symbol={symbol} tokenBalance={tokenBalance} tenderTokenBalance={tenderTokenBalance} />
-          <ExitPool protocolName={name} symbol={symbol} lpTokenBalance={lpTokenBalance} />
+          <JoinPool
+            protocolName={protocolName}
+            symbol={symbol}
+            tokenBalance={tokenBalance}
+            tenderTokenBalance={tenderTokenBalance}
+          />
+          <ExitPool protocolName={protocolName} symbol={symbol} lpTokenBalance={lpTokenBalance} />
         </Box>
       </Box>
     </Box>

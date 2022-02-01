@@ -1,7 +1,20 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { Button, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput, Heading } from "grommet";
+import {
+  Box,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Form,
+  FormField,
+  Text,
+  TextInput,
+  Heading,
+} from "grommet";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormClose, FormSubtract } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
@@ -10,12 +23,12 @@ import { useContractFunction } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   stake: BigNumberish;
 };
 
-const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
+const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -32,7 +45,7 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
     setUnfarmInput(utils.formatEther(stake.toString() || "0"));
   };
 
-  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[name].tenderFarm, "unfarm", {
+  const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[protocolName].tenderFarm, "unfarm", {
     transactionName: `Unfarm ${symbol}`,
   });
   const unfarmLpTokens = async (e: any) => {
@@ -58,45 +71,61 @@ const Unfarm: FC<Props> = ({ name, symbol, stake }) => {
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
         >
-          <Card flex={false} style={{ position: "relative" }} pad="medium" width="large">
+          <Card
+            flex={false}
+            style={{ position: "relative" }}
+            pad={{ vertical: "medium", horizontal: "xlarge" }}
+            width="large"
+          >
             <Button
               style={{ position: "absolute", top: 10, right: 10 }}
               plain
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Unfarm ${symbol}`}
               </Heading>
             </CardHeader>
             <CardBody>
-              <Form validate="change">
-                <FormField
-                  label="Unfarm Amount"
-                  validate={[validateIsPositive(unfarmInput), validateIsLargerThanMax(unfarmInput, stake)]}
-                >
-                  <TextInput
-                    value={unfarmInput}
-                    onChange={handleUnfarmInputChange}
-                    type="text"
-                    placeholder={"0 " + symbol}
-                  />
-                  <AmountInputFooter
-                    label={`Current Stake: ${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
-                    onClick={maxUnfarm}
-                  />
-                </FormField>
-              </Form>
+              <Box pad={{ top: "medium", horizontal: "large" }} align="center">
+                <Form validate="change" style={{ width: "100%" }}>
+                  <FormField
+                    label="Unfarm Amount"
+                    validate={[validateIsPositive(unfarmInput), validateIsLargerThanMax(unfarmInput, stake)]}
+                  >
+                    <TextInput
+                      value={unfarmInput}
+                      onChange={handleUnfarmInputChange}
+                      type="number"
+                      placeholder={"0 "}
+                      icon={
+                        <Box pad="xsmall" direction="row" align="center" gap="small">
+                          <Text>{symbol}</Text>
+                        </Box>
+                      }
+                      style={{ textAlign: "right", padding: "20px 50px" }}
+                    />
+                    <AmountInputFooter
+                      label={`Current Stake: ${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
+                      onClick={maxUnfarm}
+                    />
+                  </FormField>
+                </Form>
+              </Box>
             </CardBody>
-            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Button primary onClick={handleClose} label="Cancel" />
-              <Button
-                secondary
-                disabled={!unfarmInput || unfarmInput.toString() === "0" || isPendingTransaction(unfarmTx)}
-                onClick={unfarmLpTokens}
-                label={isPendingTransaction(unfarmTx) ? <LoadingButtonContent label="Unfarming..." /> : "Unfarm"}
-              />
+            <CardFooter align="center" justify="center" pad={{ vertical: "medium" }}>
+              <Box direction="row" style={{ width: "100%" }} pad={{ horizontal: "large" }} justify="center" gap="small">
+                <Button style={{ width: "100%" }} primary onClick={handleClose} label="Cancel" />
+                <Button
+                  style={{ width: "100%" }}
+                  secondary
+                  disabled={!unfarmInput || unfarmInput.toString() === "0" || isPendingTransaction(unfarmTx)}
+                  onClick={unfarmLpTokens}
+                  label={isPendingTransaction(unfarmTx) ? <LoadingButtonContent label="Unfarming..." /> : "Unfarm"}
+                />
+              </Box>
             </CardFooter>
           </Card>
         </Layer>

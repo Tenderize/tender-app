@@ -38,7 +38,7 @@ const Dialog: FC<props> = (props) => {
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center">
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {props.title}
               </Heading>

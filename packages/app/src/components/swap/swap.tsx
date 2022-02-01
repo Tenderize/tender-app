@@ -139,7 +139,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                   <TextInput
                     id="formSwapReceive"
                     type="number"
-                    placeholder={`0 ${tokenReceivedSymbol}`}
+                    placeholder={"0"}
                     icon={
                       <Box pad="xsmall" direction="row" align="center" gap="small">
                         <Image height="35" src={tokenReceivedLogo} />

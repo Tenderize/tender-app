@@ -1,20 +1,37 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
-import { BigNumberish, utils } from "ethers";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Text, Heading } from "grommet";
+import { BigNumberish } from "ethers";
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Layer,
+  Form,
+  Image,
+  Text,
+  Heading,
+  FormField,
+  TextInput,
+} from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useContractFunction } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
+import { weiToEthWithDecimals } from "utils/amountFormat";
+import stakers from "../../data/stakers";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   availableRewards: BigNumberish;
 };
 
-const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
+const Harvest: FC<Props> = ({ protocolName, symbol, availableRewards }) => {
   // Component state & helpers
+  const tenderLogo = `/${stakers[protocolName].bwTenderLogo}`;
 
   const [show, setShow] = useState(false);
 
@@ -22,7 +39,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
   const handleShow = () => setShow(true);
 
   // Contract Functions
-  const { state: harvestTx, send: harvest } = useContractFunction(contracts[name].tenderFarm, "harvest", {
+  const { state: harvestTx, send: harvest } = useContractFunction(contracts[protocolName].tenderFarm, "harvest", {
     transactionName: `Harvest ${symbol}`,
   });
   const harvestRewards = (e: any) => {
@@ -39,7 +56,7 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
         label={
           <Box direction="row" align="center" justify="center" gap="small">
             <Text>Harvest</Text>
-            <img height={18} width={8.69} src={"/harvest.svg"} alt="" />
+            <Image height={18} width={8.69} src={"/harvest.svg"} alt="" />
           </Box>
         }
         style={{ color: "#4E66DE" }}
@@ -51,31 +68,54 @@ const Harvest: FC<Props> = ({ name, symbol, availableRewards }) => {
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
         >
-          <Card flex={false} style={{ position: "relative" }} pad="medium" width="large">
+          <Card
+            flex={false}
+            style={{ position: "relative" }}
+            pad={{ vertical: "medium", horizontal: "xlarge" }}
+            width="large"
+          >
             <Button
               style={{ position: "absolute", top: 10, right: 10 }}
               plain
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Harvest ${symbol}`}
               </Heading>
             </CardHeader>
-            <CardBody align="center">
-              <Text>
-                Available for harvest: {`${utils.formatEther(availableRewards?.toString() || "0")} ${symbol}`}
-              </Text>
+            <CardBody pad={{ top: "medium", horizontal: "large" }} align="center">
+              <Form style={{ width: "100%" }}>
+                <FormField label="Available for harvest:">
+                  <TextInput
+                    readOnly
+                    disabled
+                    value={weiToEthWithDecimals(availableRewards, 6)}
+                    placeholder={"0"}
+                    type="number"
+                    style={{ textAlign: "right", padding: "20px 50px" }}
+                    icon={
+                      <Box pad="xsmall" direction="row" align="center" gap="small">
+                        <Image height="35" src={tenderLogo} />
+                        <Text>{symbol}</Text>
+                      </Box>
+                    }
+                  />
+                </FormField>
+              </Form>
             </CardBody>
-            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Button secondary onClick={handleClose} label="Cancel" />
-              <Button
-                primary
-                disabled={!availableRewards || availableRewards.toString() === "0" || isPendingTransaction(harvestTx)}
-                onClick={harvestRewards}
-                label={isPendingTransaction(harvestTx) ? <LoadingButtonContent label="Harvesting..." /> : "Harvest"}
-              />
+            <CardFooter align="center" justify="center" pad={{ vertical: "medium" }}>
+              <Box direction="row" style={{ width: "100%" }} pad={{ horizontal: "large" }} justify="center" gap="small">
+                <Button style={{ width: "100%" }} secondary onClick={handleClose} label="Cancel" />
+                <Button
+                  style={{ width: "100%" }}
+                  primary
+                  disabled={!availableRewards || availableRewards.toString() === "0" || isPendingTransaction(harvestTx)}
+                  onClick={harvestRewards}
+                  label={isPendingTransaction(harvestTx) ? <LoadingButtonContent label="Harvesting..." /> : "Harvest"}
+                />
+              </Box>
             </CardFooter>
           </Card>
         </Layer>

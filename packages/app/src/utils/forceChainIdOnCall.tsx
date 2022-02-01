@@ -23,7 +23,7 @@ export const useForceRinkebyFunction = <TFunc extends (...args: any[]) => any>(
     return (
       <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={onClose} onClickOutside={onClose}>
         <Card flex={false} pad="medium" width="large">
-          <CardHeader justify="center" pad={{ bottom: "small" }}>
+          <CardHeader justify="center" pad="none">
             <Heading level={2} alignSelf="center">
               {"Please switch to rinkeby to use Tenderize"}
             </Heading>

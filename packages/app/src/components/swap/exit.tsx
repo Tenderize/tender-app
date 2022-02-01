@@ -132,22 +132,20 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
       <Button secondary onClick={handleShow} label="Exit Pool" />
 
       {show && (
-        <Layer
-          style={{ overflow: "auto" }}
-          animation="fadeIn"
-          margin={{ top: "xlarge" }}
-          position="top"
-          onEsc={handleClose}
-          onClickOutside={handleClose}
-        >
-          <Card flex={false} pad="medium" width="large" style={{ position: "relative" }}>
+        <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
+          <Card
+            flex={false}
+            pad={{ vertical: "medium", horizontal: "xlarge" }}
+            width="large"
+            style={{ position: "relative" }}
+          >
             <Button
               style={{ position: "absolute", top: 10, right: 10 }}
               plain
               icon={<FormClose />}
               onClick={handleClose}
             />
-            <CardHeader justify="center" pad={{ bottom: "small" }}>
+            <CardHeader justify="center" pad="none">
               <Heading level={2} alignSelf="center">
                 {`Exit tender${symbol}/${symbol}`}
               </Heading>
@@ -161,8 +159,8 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
                     </Box>
                   }
                 >
-                  <Box pad={{ top: "medium" }} align="center">
-                    <Form validate="change">
+                  <Box pad={{ top: "medium", horizontal: "large" }} align="center">
+                    <Form validate="change" style={{ width: "100%" }}>
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
                           lpTokenBalance={lpTokenBalance}
@@ -215,8 +213,8 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
                     </Box>
                   }
                 >
-                  <Box pad={{ top: "medium" }} align="center">
-                    <Form>
+                  <Box pad={{ top: "medium", horizontal: "large" }} align="center">
+                    <Form style={{ width: "100%" }}>
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
                           lpTokenBalance={lpTokenBalance}
@@ -226,45 +224,39 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
                         />
                         <Box>
                           <FormField label="Select Token To Receive" controlId="selectTokenReceive">
-                            <Box width="medium">
-                              <Select
-                                value={
-                                  <Box direction="row" gap="small" align="center" pad="7px">
-                                    <img
-                                      height={30}
-                                      width={30}
-                                      src={selectedToken === symbol ? `/${staker.bwLogo}` : `/${staker.bwTenderLogo}`}
-                                      alt="token logo"
-                                    />
-                                    {selectedToken}
-                                  </Box>
-                                }
-                                options={[
-                                  <Box direction="row" gap="small" align="center">
-                                    <img
-                                      height={30}
-                                      width={30}
-                                      src={selectedToken === symbol ? `/${staker.bwTenderLogo}` : `/${staker.bwLogo}`}
-                                      alt="token logo"
-                                    />
-                                    {selectedToken === symbol ? `t${symbol}` : symbol}
-                                  </Box>,
-                                ]}
-                                onChange={() => setSelectedToken(selectedToken === symbol ? `t${symbol}` : symbol)}
-                              />
-                            </Box>
-                          </FormField>
-                          <FormField label="You will receive">
-                            <Box direction="row" align="center" width="medium" gap="small">
-                              <Text>{selectedToken}</Text>
-                              <TextInput
-                                readOnly
-                                disabled
-                                id="exitMultiReceive"
-                                placeholder={"0"}
-                                value={utils.formatEther(singleOut)}
-                              />
-                            </Box>
+                            <Select
+                              value={
+                                <TextInput
+                                  disabled
+                                  readOnly
+                                  value={utils.formatEther(singleOut)}
+                                  placeholder={"0"}
+                                  type="number"
+                                  style={{ textAlign: "right", padding: "20px 50px", border: "none" }}
+                                  icon={
+                                    <Box pad="xsmall" direction="row" align="center" gap="small">
+                                      <Image
+                                        height="35"
+                                        src={selectedToken === symbol ? `/${staker.bwTenderLogo}` : `/${staker.bwLogo}`}
+                                      />
+                                      <Text>t{symbol}</Text>
+                                    </Box>
+                                  }
+                                />
+                              }
+                              options={[
+                                <Box direction="row" gap="small" align="center">
+                                  <img
+                                    height={30}
+                                    width={30}
+                                    src={selectedToken === symbol ? `/${staker.bwTenderLogo}` : `/${staker.bwLogo}`}
+                                    alt="token logo"
+                                  />
+                                  {selectedToken === symbol ? `t${symbol}` : symbol}
+                                </Box>,
+                              ]}
+                              onChange={() => setSelectedToken(selectedToken === symbol ? `t${symbol}` : symbol)}
+                            />
                           </FormField>
                         </Box>
                       </Box>
@@ -273,11 +265,10 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
                 </Tab>
               </Tabs>
             </CardBody>
-            <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
-              <Box pad={{ horizontal: "large" }} justify="center" gap="small">
+            <CardFooter align="center" justify="center" pad={{ vertical: "medium" }}>
+              <Box style={{ width: "100%" }} pad={{ horizontal: "large" }} justify="center" gap="small">
                 <Button
                   primary
-                  style={{ width: 501 }}
                   onClick={handleRemoveLiquidity}
                   disabled={
                     !hasValue(lpSharesInputSingle || lpSharesInputMulti) ||
@@ -330,8 +321,9 @@ const LPTokensToRemoveInputField: FC<{
         <TextInput
           value={lpSharesInput}
           onChange={handleLpSharesInputChange}
-          type="text"
+          type="number"
           placeholder={"0 " + symbolFull}
+          style={{ textAlign: "right", padding: "20px 50px" }}
         />
       </Box>
       <AmountInputFooter

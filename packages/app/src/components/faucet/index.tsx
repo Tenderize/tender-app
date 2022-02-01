@@ -7,11 +7,11 @@ import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { isPendingTransaction } from "../../utils/transactions";
 type props = {
   symbol: string;
-  name: string;
+  protocolName: string;
 };
 
-const Faucet: FC<props> = ({ symbol, name }) => {
-  const { state: requestTx, send: request } = useContractFunction(contracts[name].faucet, "request", {
+const Faucet: FC<props> = ({ symbol, protocolName }) => {
+  const { state: requestTx, send: request } = useContractFunction(contracts[protocolName].faucet, "request", {
     transactionName: `Requesting ${symbol} from faucet`,
   });
 
@@ -30,7 +30,7 @@ const Faucet: FC<props> = ({ symbol, name }) => {
       button1={
         <Button
           primary
-          style={{ width: "250px" }}
+          style={{ width: "100%" }}
           onClick={requestTokens}
           label={
             isPendingTransaction(requestTx) ? <LoadingButtonContent label={`Request ${symbol}`} /> : `Get ${symbol}`
@@ -41,7 +41,7 @@ const Faucet: FC<props> = ({ symbol, name }) => {
       button2={
         <Button
           primary
-          style={{ width: "250px" }}
+          style={{ width: "100%" }}
           href="https://www.rinkebyfaucet.com/"
           target="_blank"
           label="Get ETH"
