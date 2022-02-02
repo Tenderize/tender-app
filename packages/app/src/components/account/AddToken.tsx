@@ -33,7 +33,7 @@ export const AddToken: FC<{ address: string; symbol: string; image: string }> = 
       }}
       label="Add to"
       reverse
-      icon={<Image height="20" src={"/metamask.png"} />}
+      icon={<Image height="20" src={"/MetaMask_Fox.svg"} />}
     />
   );
 };
