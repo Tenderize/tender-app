@@ -1,5 +1,5 @@
 import { FC, ReactElement, ReactNode } from "react";
-import { Box, Table, TableHeader, TableBody, Text } from "grommet";
+import { Box, Table, TableBody, Text } from "grommet";
 import type { TransactionResponse } from "@ethersproject/providers";
 import {
   Rinkeby,
@@ -12,32 +12,18 @@ import {
 } from "@usedapp/core";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  CheckIcon,
-  ClockIcon,
-  ExclamationIcon,
-  ShareIcon,
-  UnwrapIcon,
-  WalletIcon,
-  WrapIcon,
-  SpinnerIcon,
-} from "./Icons";
+import { CheckIcon, ClockIcon, ExclamationIcon, UnwrapIcon, WalletIcon, WrapIcon, SpinnerIcon } from "./Icons";
 import { Link } from "../base";
+import { ShareRounded } from "grommet-icons";
 
 interface TableWrapperProps {
   children: ReactNode;
-  title: string;
 }
 
-const TableWrapper = ({ children, title }: TableWrapperProps) => (
+const TableWrapper = ({ children }: TableWrapperProps) => (
   <Table>
-    <TableHeader>
-      <Text size="large">{title}</Text>
-    </TableHeader>
     <TableBody>
-      <Box height="medium" style={{ overflow: "auto" }}>
-        {children}
-      </Box>
+      <Box style={{ overflow: "auto" }}>{children}</Box>
     </TableBody>
   </Table>
 );
@@ -63,23 +49,6 @@ const DateCell = ({ date }: DateProps) => {
   );
 };
 
-interface TransactionLinkProps {
-  transaction: TransactionResponse | undefined;
-}
-
-const TransactionLink = ({ transaction }: TransactionLinkProps) => (
-  <>
-    {transaction && (
-      <Link href={Rinkeby.getExplorerTransactionLink(transaction.hash)} target="_blank" rel="noopener noreferrer">
-        View on Etherscan
-        <LinkIconWrapper>
-          <ShareIcon fill="#FFFFFF" />
-        </LinkIconWrapper>
-      </Link>
-    )}
-  </>
-);
-
 const notificationContent: { [key in Notification["type"]]: { title: string; icon: ReactElement } } = {
   transactionFailed: { title: "Transaction failed", icon: <ExclamationIcon fill="white" /> },
   transactionStarted: { title: "Transaction started", icon: <ClockIcon fill="white" /> },
@@ -98,18 +67,34 @@ interface ListElementProps {
 export const TransactionListElement: FC<Omit<ListElementProps, "type">> = ({ transaction, icon, title, date }) => {
   return (
     <ListElementWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-      {icon != null && (
-        <ListIconContainer>
-          <Text color="white">{icon}</Text>
-        </ListIconContainer>
-      )}
-      <ListDetailsWrapper>
-        <TextBold>{title}</TextBold>
-        <TransactionLink transaction={transaction} />
-      </ListDetailsWrapper>
-      {date != null && <NotificationDate date={date} />}
+      <MaybeLink transaction={transaction}>
+        <Box direction="row" gap="small">
+          {transaction && <ShareRounded />}
+          <TextBold>{title}</TextBold>
+        </Box>
+      </MaybeLink>
+      <Box direction="row">
+        {date != null && <NotificationDate date={date} />}
+        {icon != null && (
+          <ListIconContainer>
+            <Text color="white">{icon}</Text>
+          </ListIconContainer>
+        )}
+      </Box>
     </ListElementWrapper>
   );
+};
+
+const MaybeLink: FC<{ transaction: TransactionResponse | undefined }> = ({ transaction, children }) => {
+  if (transaction != null) {
+    return (
+      <Link href={Rinkeby.getExplorerTransactionLink(transaction.hash)} target="_blank" rel="noopener noreferrer">
+        {children}
+      </Link>
+    );
+  } else {
+    return <>{children}</>;
+  }
 };
 
 function TransactionIcon(transaction: StoredTransaction) {
@@ -129,7 +114,7 @@ function TransactionIcon(transaction: StoredTransaction) {
 export const TransactionsList: FC = () => {
   const { transactions } = useTransactions();
   return (
-    <TableWrapper title="Transactions history">
+    <TableWrapper>
       <AnimatePresence initial={false}>
         {transactions.map((transaction) => (
           <TransactionListElement
@@ -153,21 +138,23 @@ const useNotificationBackground = (notification: Notification["type"]) => {
 const NotificationElement: FC<ListElementProps> = ({ transaction, icon, title, type }) => {
   return (
     <NotificationWrapper layout initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-      <Box
-        direction="row"
-        background={useNotificationBackground(type)}
-        pad={{ horizontal: "20px", vertical: "10px" }}
-        round="20px"
-      >
-        <NotificationIconContainer>{icon}</NotificationIconContainer>
-        <NotificationDetailsWrapper>
-          <NotificationText>{title}</NotificationText>
-          <TransactionLink transaction={transaction} />
-          <TransactionDetails>
-            {transaction && `${shortenTransactionHash(transaction?.hash)} #${transaction.nonce}`}
-          </TransactionDetails>
-        </NotificationDetailsWrapper>
-      </Box>
+      <MaybeLink transaction={transaction}>
+        <Box
+          direction="row"
+          background={useNotificationBackground(type)}
+          pad={{ horizontal: "20px", vertical: "10px" }}
+          round="20px"
+        >
+          <NotificationIconContainer>{icon}</NotificationIconContainer>
+          <NotificationDetailsWrapper>
+            <NotificationText>{title}</NotificationText>
+            {transaction && <ShareRounded />}
+            <TransactionDetails>
+              {transaction && `${shortenTransactionHash(transaction?.hash)} #${transaction.nonce}`}
+            </TransactionDetails>
+          </NotificationDetailsWrapper>
+        </Box>
+      </MaybeLink>
     </NotificationWrapper>
   );
 };
@@ -245,8 +232,8 @@ const NotificationIconContainer = styled.div`
 `;
 
 const ListIconContainer = styled.div`
-  width: 48px;
-  height: 48px;
+  width: 24px;
+  height: 24px;
   padding: 12px;
   padding: 14px 16px 14px 12px;
 `;
@@ -254,25 +241,13 @@ const ListIconContainer = styled.div`
 const ListElementWrapper = styled(motion.div)`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const NotificationDetailsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px 0;
-`;
-
-const ListDetailsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 4px 0;
-`;
-
-const LinkIconWrapper = styled.div`
-  width: 12px;
-  height: 12px;
-  margin-left: 8px;
 `;
 
 const DateRow = styled.div`

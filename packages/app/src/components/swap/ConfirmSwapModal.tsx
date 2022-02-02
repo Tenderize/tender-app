@@ -78,6 +78,8 @@ const ConfirmSwapModal: FC<Props> = ({
   const { tx: swapWithPermitTx, swapWithPermit } = useSwapWithPermit(
     tokenAddress,
     protocolName,
+    tokenSendedSymbol,
+    tokenReceivedSymbol,
     owner,
     contracts[protocolName].tenderSwap.address,
     tokenAmount

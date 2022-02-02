@@ -1,12 +1,34 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import styled from "styled-components";
-import { useEthers, useEtherBalance, Rinkeby } from "@usedapp/core";
+import { useEthers, useEtherBalance, Rinkeby, useTokenBalance } from "@usedapp/core";
+import { addresses } from "@tender/contracts";
 import { TransactionsList } from "../transactions";
 import { formatEther } from "@ethersproject/units";
-import { BigNumber } from "ethers";
+import { BigNumber, constants } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
 import { Link } from "../base";
-import { Box, Text, Layer, Card, CardHeader, CardBody, Heading } from "grommet";
+import {
+  Box,
+  Text,
+  Layer,
+  Card,
+  CardHeader,
+  CardBody,
+  Heading,
+  Image,
+  Accordion,
+  AccordionPanel,
+  FormField,
+  TextInput,
+  Button,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "grommet";
+import stakers from "data/stakers";
+import { AddToken } from "./AddToken";
+import { FormClose } from "grommet-icons";
 
 const formatter = new Intl.NumberFormat("en-us", {
   minimumFractionDigits: 4,
@@ -24,28 +46,34 @@ type AccountModalProps = {
 export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal }) => {
   const { account, chainId } = useEthers();
   const balance = useEtherBalance(account);
+  const handleClose = useCallback(() => setShowModal(false), []);
   return (
     <>
       {account && chainId && showModal && (
-        <Layer
+        <LayerWithHiddenScrollbar
           style={{ overflow: "auto" }}
           animation="fadeIn"
-          onEsc={() => setShowModal(false)}
-          onClickOutside={() => setShowModal(false)}
+          onEsc={handleClose}
+          onClickOutside={handleClose}
+          margin={{ vertical: "30px" }}
         >
-          <Card flex={false}>
+          <Card flex={false} pad={{ horizontal: "large" }} width="large">
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
             <Box pad="medium" gap="medium">
               <CardHeader justify="center" pad="none">
                 <Heading level={2} alignSelf="center">
                   Account info
                 </Heading>
               </CardHeader>
-              <CardBody>
-                <Box gap="medium">
-                  <Text size="medium" weight="bold">
-                    Address: {account}
-                  </Text>
-                </Box>
+              <CardBody gap="small">
+                <Text size="medium" weight="bold">
+                  Address: {account}
+                </Text>
                 <Box direction="row" justify="between">
                   <Link href={Rinkeby.getExplorerAddressLink("account")} target="_blank" rel="noopener noreferrer">
                     Show on etherscan
@@ -57,23 +85,129 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                     <Link onClick={() => console.log(navigator.clipboard.writeText(account))}>Copy to clipboard</Link>
                   )}
                 </Box>
-                <Box direction="row" justify="between" margin={{ vertical: "12px" }}>
-                  <Text>Balance: </Text>
-                  <Text>ETH: {balance && formatBalance(balance)}</Text>
-                </Box>
                 <Box>
-                  <TransactionsList />
+                  <Box
+                    direction="row"
+                    align="center"
+                    justify="between"
+                    pad={{ vertical: "12px", left: "6px", right: "12px" }}
+                  >
+                    <Heading margin={{ vertical: "none" }} level={4}>
+                      Balance
+                    </Heading>
+                    <Text>ETH: {balance && formatBalance(balance)}</Text>
+                  </Box>
+                  <Accordion>
+                    <AccordionPanel label={"Tender Balances"}>
+                      <Table>
+                        <TableBody>
+                          {Object.values(stakers).map((staker) => {
+                            return (
+                              <TableRow>
+                                <TableCell scope="row" border="bottom">
+                                  <TokenBalance
+                                    tokenAddress={addresses[staker.name].tenderToken}
+                                    symbol={`t${staker.symbol}`}
+                                    image={`/${staker.bwTenderLogo}`}
+                                    account={account}
+                                  />
+                                </TableCell>
+                                <TableCell border="bottom">
+                                  <AddToken
+                                    address={addresses[staker.name].tenderToken}
+                                    symbol={`t${staker.symbol}`}
+                                    image={`/${staker.bwTenderLogo}`}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </AccordionPanel>
+                  </Accordion>
+                  <Accordion>
+                    <AccordionPanel label={"Liquidity Pools"}>
+                      <Table>
+                        <TableBody>
+                          {Object.values(stakers).map((staker) => {
+                            return (
+                              <TableRow>
+                                <TableCell scope="row" border="bottom">
+                                  <TokenBalance
+                                    tokenAddress={addresses[staker.name].lpToken}
+                                    symbol={`t${staker.symbol}-${staker.symbol}-SWAP`}
+                                    image={""}
+                                    account={account}
+                                  />
+                                </TableCell>
+                                <TableCell border="bottom">
+                                  <AddToken
+                                    address={addresses[staker.name].lpToken}
+                                    symbol={`t${staker.symbol}-${staker.symbol}-SWAP`}
+                                    image={""}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </AccordionPanel>
+                    <AccordionPanel label="Transaction History">
+                      <TransactionsList />
+                    </AccordionPanel>
+                  </Accordion>
                 </Box>
               </CardBody>
             </Box>
           </Card>
-        </Layer>
+        </LayerWithHiddenScrollbar>
       )}
     </>
+  );
+};
+
+const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; account: string | undefined | null }> = ({
+  tokenAddress,
+  symbol,
+  image,
+  account,
+}) => {
+  const tenderBalance = useTokenBalance(tokenAddress, account) || constants.Zero;
+
+  return (
+    <Box pad="small" direction="row" align="center" justify="between">
+      <FormField margin="none" plain={true} focusIndicator={false}>
+        <Box width="medium">
+          <TextInput
+            type="number"
+            icon={
+              <Box pad="xsmall" direction="row" align="center" gap="small">
+                <Image height="35" src={image} />
+                <Text>{symbol}</Text>
+              </Box>
+            }
+            readOnly
+            plain={true}
+            focusIndicator={false}
+            style={{ textAlign: "right", padding: "20px 50px" }}
+            value={tenderBalance && formatBalance(tenderBalance)}
+          />
+        </Box>
+      </FormField>
+    </Box>
   );
 };
 
 const LinkIconWrapper = styled.div`
   width: 1.2rem;
   height: 1.2rem;
+`;
+
+const LayerWithHiddenScrollbar = styled(Layer)`
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
 `;
