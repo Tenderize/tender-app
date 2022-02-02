@@ -106,7 +106,6 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                               <TableRow>
                                 <TableCell scope="row" border="bottom">
                                   <TokenBalance
-                                    tokenAddress={addresses[staker.name].tenderToken}
                                     data={tenderBalances[index]}
                                     symbol={`t${staker.symbol}`}
                                     image={`/${staker.bwTenderLogo}`}
@@ -135,7 +134,6 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                               <TableRow>
                                 <TableCell scope="row" border="bottom">
                                   <TokenBalance
-                                    tokenAddress={addresses[staker.name].tenderToken}
                                     data={lpBalances[index]}
                                     symbol={`t${staker.symbol}`}
                                     image={`/${staker.bwTenderLogo}`}
@@ -169,7 +167,6 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
 };
 
 const TokenBalance: FC<{
-  tokenAddress: string;
   data: { balance: BigNumber[] | undefined };
   symbol: string;
   image: string;
