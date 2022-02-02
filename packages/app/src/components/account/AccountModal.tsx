@@ -1,10 +1,10 @@
 import { FC, useCallback } from "react";
 import styled from "styled-components";
-import { useEthers, useEtherBalance, Rinkeby, useTokenBalance } from "@usedapp/core";
+import { useEthers, Rinkeby, useContractCalls, useMulticallAddress, MultiCallABI, ERC20Interface } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import { TransactionsList } from "../transactions";
 import { formatEther } from "@ethersproject/units";
-import { BigNumber, constants } from "ethers";
+import { BigNumber } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
 import { Link } from "../base";
 import {
@@ -45,7 +45,7 @@ type AccountModalProps = {
 
 export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal }) => {
   const { account, chainId } = useEthers();
-  const balance = useEtherBalance(account);
+  const { ethBalance: balance, tenderBalances, lpBalances } = useBalances(account);
   const handleClose = useCallback(() => setShowModal(false), []);
   return (
     <>
@@ -101,15 +101,15 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                     <AccordionPanel label={"Tender Balances"}>
                       <Table>
                         <TableBody>
-                          {Object.values(stakers).map((staker) => {
+                          {Object.values(stakers).map((staker, index) => {
                             return (
                               <TableRow>
                                 <TableCell scope="row" border="bottom">
                                   <TokenBalance
                                     tokenAddress={addresses[staker.name].tenderToken}
+                                    data={tenderBalances[index]}
                                     symbol={`t${staker.symbol}`}
                                     image={`/${staker.bwTenderLogo}`}
-                                    account={account}
                                   />
                                 </TableCell>
                                 <TableCell border="bottom">
@@ -130,15 +130,15 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                     <AccordionPanel label={"Liquidity Pools"}>
                       <Table>
                         <TableBody>
-                          {Object.values(stakers).map((staker) => {
+                          {Object.values(stakers).map((staker, index) => {
                             return (
                               <TableRow>
                                 <TableCell scope="row" border="bottom">
                                   <TokenBalance
-                                    tokenAddress={addresses[staker.name].lpToken}
-                                    symbol={`t${staker.symbol}-${staker.symbol}-SWAP`}
-                                    image={""}
-                                    account={account}
+                                    tokenAddress={addresses[staker.name].tenderToken}
+                                    data={lpBalances[index]}
+                                    symbol={`t${staker.symbol}`}
+                                    image={`/${staker.bwTenderLogo}`}
                                   />
                                 </TableCell>
                                 <TableCell border="bottom">
@@ -168,14 +168,12 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
   );
 };
 
-const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; account: string | undefined | null }> = ({
-  tokenAddress,
-  symbol,
-  image,
-  account,
-}) => {
-  const tenderBalance = useTokenBalance(tokenAddress, account) || constants.Zero;
-
+const TokenBalance: FC<{
+  tokenAddress: string;
+  data: { balance: BigNumber[] | undefined };
+  symbol: string;
+  image: string;
+}> = ({ data, symbol, image }) => {
   return (
     <Box pad="small" direction="row" align="center" justify="between">
       <FormField margin="none" plain={true} focusIndicator={false}>
@@ -192,7 +190,7 @@ const TokenBalance: FC<{ tokenAddress: string; symbol: string; image: string; ac
             plain={true}
             focusIndicator={false}
             style={{ textAlign: "right", padding: "20px 50px" }}
-            value={tenderBalance && formatBalance(tenderBalance)}
+            value={data.balance?.[0] && formatBalance(data.balance[0])}
           />
         </Box>
       </FormField>
@@ -211,3 +209,60 @@ const LayerWithHiddenScrollbar = styled(Layer)`
   }
   scrollbar-width: none;
 `;
+
+const useBalances = (address: string | null | undefined) => {
+  const multicallAddress = useMulticallAddress();
+  const stakersArray = Object.values(stakers);
+  const tenderBalanceCalls = stakersArray.map((staker) => {
+    return (
+      address &&
+      addresses[staker.name].tenderToken && {
+        abi: ERC20Interface,
+        address: addresses[staker.name].tenderToken,
+        method: "balanceOf",
+        args: [address],
+      }
+    );
+  });
+  const lpBalanceCalls = stakersArray.map((staker) => {
+    return (
+      address &&
+      addresses[staker.name].lpToken && {
+        abi: ERC20Interface,
+        address: addresses[staker.name].lpToken,
+        method: "balanceOf",
+        args: [address],
+      }
+    );
+  });
+  const [ethBalanceResult, ...tokenBalanceResults] =
+    useContractCalls([
+      multicallAddress &&
+        address && {
+          abi: MultiCallABI,
+          address: multicallAddress,
+          method: "getEthBalance",
+          args: [address],
+        },
+      ...tenderBalanceCalls,
+      ...lpBalanceCalls,
+    ]) ?? [];
+
+  const [ethBalance] = ethBalanceResult ?? [];
+  const tokenBalances = tokenBalanceResults
+    ? tokenBalanceResults.map((res: BigNumber[] | undefined) => {
+        return {
+          balance: res,
+        };
+      })
+    : [];
+  const half = Math.ceil(tokenBalances.length / 2);
+
+  const tenderBalances = tokenBalances.slice(0, half);
+  const lpBalances = tokenBalances.slice(-half);
+  return {
+    ethBalance,
+    tenderBalances,
+    lpBalances,
+  };
+};
