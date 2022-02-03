@@ -1,23 +1,38 @@
 import { FC, useCallback, useState } from "react";
-import { addresses, contracts } from "@tender/contracts";
+import { addresses } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
-import { Button, Box, Card, CardHeader, CardBody, CardFooter, Layer, Form, FormField, TextInput } from "grommet";
-import ApproveToken from "../approve/ApproveToken";
+import {
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Heading,
+  Layer,
+  Form,
+  FormField,
+  Text,
+  TextInput,
+} from "grommet";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { FormAdd } from "grommet-icons";
+import { FormAdd, FormClose } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
-import { useContractFunction } from "../../utils/useDappPatch";
+import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
+import { useEthers } from "@usedapp/core";
+import { isPendingTransaction } from "utils/transactions";
+import { useFarm } from "utils/tenderFarmHooks";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   tokenBalance: BigNumberish;
 };
 
-const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
+const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
   const [show, setShow] = useState(false);
+  const { account } = useEthers();
 
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback(() => setShow(true), []);
@@ -33,12 +48,15 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
     setFarmInput(utils.formatEther(tokenBalance || "0"));
   };
 
-  const isTokenApproved = useIsTokenApproved(addresses[name].liquidity, addresses[name].farm, farmInput);
+  const isTokenApproved = useIsTokenApproved(
+    addresses[protocolName].lpToken,
+    account,
+    addresses[protocolName].tenderFarm,
+    farmInput
+  );
 
   // Contract Functions
-  const { state: farmTx, send: farm } = useContractFunction(contracts[name].farm, "farm", {
-    transactionName: `Farm ${symbol}`,
-  });
+  const { farmTx, farm } = useFarm(account, protocolName, symbol, isTokenApproved);
 
   const farmLpTokens = async (e: any) => {
     e.preventDefault();
@@ -51,19 +69,40 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
       <Button primary onClick={handleShow} label="Farm" reverse icon={<FormAdd color="white" />} />
       {show && (
         <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
-          <Card flex={false} pad="medium" width="large">
-            <CardHeader justify="center" pad={{ bottom: "small" }}>{`Farm ${symbol}`}</CardHeader>
-            <CardBody>
-              <Form validate="change">
+          <Card
+            flex={false}
+            style={{ position: "relative" }}
+            pad={{ vertical: "medium", horizontal: "xlarge" }}
+            width="large"
+          >
+            <Button
+              style={{ position: "absolute", top: 10, right: 10 }}
+              plain
+              icon={<FormClose />}
+              onClick={handleClose}
+            />
+            <CardHeader justify="center" pad="none">
+              <Heading level={2} alignSelf="center">
+                {`Farm ${symbol}`}
+              </Heading>
+            </CardHeader>
+            <CardBody pad={{ top: "medium", horizontal: "large" }} align="center">
+              <Form validate="change" style={{ width: "100%" }}>
                 <FormField
-                  name="farmInput"
+                  protocolName="farmInput"
                   validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
                 >
                   <TextInput
                     value={farmInput}
                     onChange={handleFarmInputChange}
-                    type="text"
-                    placeholder={"0 " + symbol}
+                    type="number"
+                    placeholder={"0"}
+                    icon={
+                      <Box pad="xsmall" direction="row" align="center" gap="small">
+                        <Text>{symbol}</Text>
+                      </Box>
+                    }
+                    style={{ textAlign: "right", padding: "20px 50px" }}
                   />
                   <AmountInputFooter
                     label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
@@ -74,19 +113,12 @@ const Farm: FC<Props> = ({ name, symbol, tokenBalance }) => {
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box justify="center" gap="small">
-                <ApproveToken
-                  symbol={symbol}
-                  spender={addresses[name].farm}
-                  token={contracts[name].liquidity}
-                  show={!isTokenApproved}
-                />
                 <Button
                   primary
-                  disabled={
-                    !isTokenApproved || !farmInput || farmInput.toString() === "0" || farmTx.status === "Mining"
-                  }
+                  style={{ width: 467 }}
+                  disabled={!farmInput || farmInput.toString() === "0" || isPendingTransaction(farmTx)}
                   onClick={farmLpTokens}
-                  label={farmTx.status === "Mining" ? <LoadingButtonContent label="Farming..." /> : "Farm"}
+                  label={isPendingTransaction(farmTx) ? <LoadingButtonContent label="Farming..." /> : "Farm"}
                 />
               </Box>
             </CardFooter>

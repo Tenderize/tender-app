@@ -12,37 +12,37 @@ import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import stakers from "../../data/stakers";
 
 type Props = {
-  name: string;
+  protocolName: string;
   symbol: string;
   account: string;
   lpTokenBalance: BigNumberish;
 };
 
-const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
-  const symbolFull = `POOL-t${symbol}-${symbol}`;
+const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }) => {
+  const symbolFull = `t${symbol}-${symbol}-SWAP`;
 
   const stakeOf = useContractCall({
-    abi: contracts[name].farm.interface,
-    address: addresses[name].farm.toLowerCase(),
+    abi: contracts[protocolName].tenderFarm.interface,
+    address: addresses[protocolName].tenderFarm.toLowerCase(),
     method: "stakeOf",
     args: [account],
   });
 
   // const totalStake = useContractCall({
-  //   abi: contracts[name].farm.interface,
-  //   address: addresses[name].farm,
+  //   abi: contracts[protocolName].tenderFarm.interface,
+  //   address: addresses[protocolName].tenderFarm,
   //   method: "nextTotalStake",
   //   args: [],
   // });
 
   const availableRewards = useContractCall({
-    abi: contracts[name].farm.interface,
-    address: addresses[name].farm,
+    abi: contracts[protocolName].tenderFarm.interface,
+    address: addresses[protocolName].tenderFarm,
     method: "availableRewards",
     args: [account],
   });
 
-  const subgraphName = stakers[name].subgraphId;
+  const subgraphName = stakers[protocolName].subgraphId;
   const { data: userData, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
   });
@@ -79,9 +79,9 @@ const TenderFarm: FC<Props> = ({ name, symbol, account, lpTokenBalance }) => {
         </Box>
       </Box>
       <Box flex justify="around" align="center" direction="row" pad={{ bottom: "large" }}>
-        <Farm name={name} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
-        <Unfarm name={name} symbol={symbolFull} stake={stakeOf || "0"} />
-        <Harvest name={name} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
+        <Farm protocolName={protocolName} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
+        <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />
+        <Harvest protocolName={protocolName} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
       </Box>
       {/* <Box gap="large" justify="center" direction="row">
         <Box

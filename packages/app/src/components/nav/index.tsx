@@ -8,7 +8,7 @@ import { TenderizeConfig } from "types";
 
 type props = {
   symbol?: string;
-  name?: string;
+  protocolName?: string;
   config: TenderizeConfig;
 };
 const Navbar: FC<props> = (props) => {
@@ -31,14 +31,14 @@ const Navbar: FC<props> = (props) => {
 
   return (
     <Box>
-      {props.symbol != null && props.name != null && <TestnetBanner />}
+      {props.symbol != null && props.protocolName != null && <TestnetBanner />}
       <Header justify="between" pad={{ horizontal: "xlarge", vertical: "xsmall" }}>
         <Link href="/" passHref>
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
-        {props.symbol != null && props.name != null && (
+        {props.symbol != null && props.protocolName != null && (
           <Box direction="row" align="center" gap="medium">
-            <Faucet symbol={props.symbol} name={props.name} />
+            <Faucet symbol={props.symbol} protocolName={props.protocolName} />
             <Nav direction="row">
               <AccountButton config={props.config} />
             </Nav>
