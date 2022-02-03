@@ -12,7 +12,6 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
 }) => {
   return (
     <HighlightContainer item="intro" setVisibleIndex={setVisibleIndex} index={index}>
-      {/* <Image src="/landing/animated-hero.png" width={392} height={600} /> */}
       <Box style={{ position: "relative", marginLeft: "45%", marginTop: "11.5%" }}>
         <Heading margin={{ bottom: "medium" }} style={{ textShadow: "0px 0px 17px #AD01FF" }} size={"large"}>
           Tenderize
