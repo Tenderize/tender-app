@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { Box, Button, ButtonExtendedProps, Heading, Paragraph } from "grommet";
 import Link from "next/link";
-import Image from "next/image";
 import styled from "styled-components";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
