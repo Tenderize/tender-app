@@ -2,7 +2,7 @@ import { FC } from "react";
 import { constants, Contract } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
 import { useContractFunction } from "@usedapp/core";
-import { useForceRinkebyFunction } from "utils/forceChainIdOnCall";
+import { useEnsureRinkebyConnect } from "utils/useEnsureRinkebyConnect";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { isPendingTransaction } from "utils/transactions";
 
@@ -18,7 +18,7 @@ const ApproveToken: FC<Props> = ({ symbol, spender, show, token }) => {
     transactionName: `Approve ${symbol}`,
   });
 
-  const { rinkebyForcedFunction: handleApproval, renderError } = useForceRinkebyFunction(async (e) => {
+  const { rinkebyForcedFunction: handleApproval, renderError } = useEnsureRinkebyConnect(async (e) => {
     e.preventDefault();
 
     if (show) {
