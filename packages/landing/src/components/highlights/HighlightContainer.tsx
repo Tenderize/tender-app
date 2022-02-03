@@ -69,7 +69,8 @@ export const HighlightContainer: FC<{
                   : `url('/landing/img-${item}.svg')`
                 : undefined,
               backgroundRepeat: "no-repeat",
-              backgroundSize: "contain",
+              backgroundSize: item === "intro" ? "32%, contain" : "contain",
+              backgroundPosition: item === "intro" ? "12%, top left" : undefined,
             }}
           >
             {children}
