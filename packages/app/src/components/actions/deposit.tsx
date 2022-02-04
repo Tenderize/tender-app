@@ -95,7 +95,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
               <FormField
                 fill
                 label="Deposit Amount"
-                protocolName="depositAmount"
+                name="depositAmount"
                 validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
               >
                 <TextInput
