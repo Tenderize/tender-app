@@ -25,7 +25,7 @@ export const useEnsureRinkebyConnect = <TFunc extends (...args: any[]) => any>(
         <Card flex={false} pad="medium" width="large">
           <CardHeader justify="center" pad="none">
             <Heading level={2} alignSelf="center">
-              {account == null ? "Please connect your wallet" : "Please switch to rinkeby to use Tenderize"}
+              {!account ? "Please connect your wallet" : "Please switch to rinkeby to use Tenderize"}
             </Heading>
           </CardHeader>
           <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
