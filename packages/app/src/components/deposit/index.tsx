@@ -69,7 +69,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
   return (
     <>
-      <Box gap="medium">
+      <Box gap="medium" pad={{bottom: "medium"}}>
         <Box justify="around" direction="row">
           <Box>
             <InfoCard
@@ -94,7 +94,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
             <Box width="490px" gap="small" direction="column">
               <FormField
                 fill
-                label="Deposit Amount"
+                label="Stake Amount"
                 name="depositAmount"
                 validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
               >
@@ -133,7 +133,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     isPendingTransaction(depositTx)
                   }
                   onClick={depositTokens}
-                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Depositing..." /> : "Deposit"}
+                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "🥩 Stake"}
                 />
               </Box>
             </Box>

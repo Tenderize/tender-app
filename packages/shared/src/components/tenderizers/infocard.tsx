@@ -6,12 +6,13 @@ type Props = {
   title: string;
   text: string;
   subText?: string;
+  align?: string;
 };
 
-export const InfoCard: FC<Props> = ({ title = "", text = "", subText = "" }) => {
+export const InfoCard: FC<Props> = ({ title = "", text = "", subText = "", align="baseline" }) => {
   return (
     <Box fill="horizontal">
-      <Card align="baseline" elevation="none" round="none">
+      <Card align={align} elevation="none" round="none">
         <CardHeader
           pad={{
             horizontal: "0",
