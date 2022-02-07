@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar: FC = () => {
   const [navBackground, setNavBackground] = useState(false);
@@ -26,7 +27,7 @@ const Navbar: FC = () => {
   return (
     <Box>
       <Header justify="between" pad={{ horizontal: "xlarge", vertical: "xsmall" }}>
-        <Link href="#intro">
+        <Link href="#intro" passHref>
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
         <Box direction="row" gap="medium" align="center">
@@ -47,6 +48,7 @@ const Navbar: FC = () => {
           <NavAnchor label="Blog" href="#blog" size="small" color="white" style={{ textDecorationLine: "none" }} />
           <NavAnchor
             color="white"
+            title="Chat with us on Discord"
             a11yTitle="Chat with us on Discord"
             href="https://discord.gg/WXR5VBttP5"
             icon={<FontAwesomeIcon icon={faDiscord} />}
@@ -54,9 +56,19 @@ const Navbar: FC = () => {
           />
           <NavAnchor
             color="white"
+            title="Follow us on Twitter"
             a11yTitle="Follow us on Twitter"
             href="https://twitter.com/tenderize_me"
             icon={<FontAwesomeIcon icon={faTwitter} />}
+            target="_blank"
+            style={{ paddingLeft: 0 }}
+          />
+          <NavAnchor
+            color="white"
+            title="Docs"
+            a11yTitle="Docs"
+            href="https://docs.tenderize.me"
+            icon={<FontAwesomeIcon icon={faBook} />}
             target="_blank"
             style={{ paddingLeft: 0 }}
           />

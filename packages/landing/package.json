@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@tender/shared": "*",
     "@types/lru-cache": "^5.1.1",
     "@types/node": "^12.0.0",

@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Box, Text, Anchor, Footer } from "grommet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 
 export const Foot: FC = () => {
@@ -19,6 +20,7 @@ export const Foot: FC = () => {
       <Box direction="row" gap="xxsmall" justify="center" align="center">
         <Anchor
           color="white"
+          title="Chat with us on Discord"
           a11yTitle="Chat with us on Discord"
           href="https://discord.gg/WXR5VBttP5"
           icon={<FontAwesomeIcon icon={faDiscord} />}
@@ -26,12 +28,20 @@ export const Foot: FC = () => {
         />
         <Anchor
           color="white"
+          title="Follow us on Twitter"
           a11yTitle="Follow us on Twitter"
           href="https://twitter.com/tenderize_me"
           icon={<FontAwesomeIcon icon={faTwitter} />}
           target="_blank"
         />
-        {/* <Anchor color="white" as="div" a11yTitle="Built on Tenderizer" href="#" label="Docs"></Anchor> */}
+        <Anchor
+          color="white"
+          title="Docs"
+          a11yTitle="Docs"
+          href="https://docs.tenderize.me"
+          icon={<FontAwesomeIcon icon={faBook} />}
+          target="_blank"
+        />
       </Box>
     </Footer>
   );

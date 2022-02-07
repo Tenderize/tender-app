@@ -180,6 +180,9 @@ const overrideDefaultTheme: ThemeType = {
     background: {
       color: "rgba(0, 0, 0, 0.0)",
     },
+    extend: `
+      height: 100%;
+    `,
   },
   tabs: {
     panel: {

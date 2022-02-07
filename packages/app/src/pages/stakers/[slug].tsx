@@ -1,6 +1,6 @@
 import { FC, MouseEventHandler, useCallback, useRef, useState } from "react";
 import { Box, Tabs, Tab, Text, Paragraph, Drop, Button, Tip } from "grommet";
-import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
+import { FormDown } from "grommet-icons";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -60,8 +60,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
                   dropProps={{ align: { bottom: "top" } }}
                   content={`Stake your ${info.symbol} and earn staking rewards`}
                 >
-                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                    <Currency />
+                  <Box height="100%" justify="center" align="center">
                     <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
                   </Box>
                 </Tip>
@@ -89,8 +88,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
                   dropProps={{ align: { bottom: "top" } }}
                   content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
                 >
-                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                    <PhoneHorizontal />
+                  <Box height="100%" justify="center" align="center">
                     <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
                   </Box>
                 </Tip>
@@ -112,8 +110,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
                   dropProps={{ align: { bottom: "top" } }}
                   content={`Farm your liquidity pool tokens for more rewards`}
                 >
-                  <Box pad={{ vertical: "medium" }} justify="center" align="center" gap="small">
-                    <Grow />
+                  <Box height="100%" justify="center" align="center">
                     <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
                   </Box>
                 </Tip>
