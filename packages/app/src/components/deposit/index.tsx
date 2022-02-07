@@ -79,12 +79,12 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Box>
           <Box>
             <InfoCard
-              title={"Tender Token Balance"}
-              text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} tender${symbol}`}
+              title={`t${symbol} Balance`}
+              text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} t${symbol}`}
             />
           </Box>
           <Box>
-            <InfoCard title={`Rewards`} text={`${weiToEthWithDecimals(nonNegativeRewards ?? "0", 3)} ${symbol}`} />
+            <InfoCard title={`Rewards`} text={`${weiToEthWithDecimals(nonNegativeRewards ?? "0", 3)} t${symbol}`} />
           </Box>
         </Box>
       </Box>
