@@ -112,7 +112,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                   placeholder={`0`}
                 />
                 <AmountInputFooter
-                  label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                  label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
                   onClick={maxDeposit}
                 />
               </FormField>

@@ -100,7 +100,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                   required={true}
                 />
                 <AmountInputFooter
-                  label={`Balance: ${weiToEthWithDecimals(sendTokenBalance, 4)} ${sendTokenSymbol}`}
+                  label={`Balance: ${weiToEthWithDecimals(sendTokenBalance, 6)} ${sendTokenSymbol}`}
                   onClick={() => {
                     setSendTokenAmount(utils.formatEther(sendTokenBalance.toString() ?? "0"));
                     sendInputRef.current?.focus();

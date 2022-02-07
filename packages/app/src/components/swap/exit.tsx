@@ -326,7 +326,7 @@ const LPTokensToRemoveInputField: FC<{
         />
       </Box>
       <AmountInputFooter
-        label={`Staked: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 2)} ${symbolFull}`}
+        label={`Staked: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 6)} ${symbolFull}`}
         onClick={maxDeposit}
       />
     </FormField>
