@@ -69,7 +69,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
   return (
     <>
-      <Box gap="medium" pad={{bottom: "medium"}}>
+      <Box gap="medium" pad={{ bottom: "medium" }}>
         <Box justify="around" direction="row">
           <Box>
             <InfoCard

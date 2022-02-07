@@ -155,8 +155,8 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
                         placeholder={"0"}
                       />
                       <AmountInputFooter
-                  label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
-                  onClick={maxTokenDeposit}
+                        label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
+                        onClick={maxTokenDeposit}
                       />
                     </FormField>
                     <FormField

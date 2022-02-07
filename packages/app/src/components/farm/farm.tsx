@@ -25,7 +25,6 @@ import { isPendingTransaction } from "utils/transactions";
 import { useFarm } from "utils/tenderFarmHooks";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 
-
 type Props = {
   protocolName: string;
   symbol: string;
@@ -107,8 +106,8 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
                     style={{ textAlign: "right", padding: "20px 50px" }}
                   />
                   <AmountInputFooter
-                  label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
-                  onClick={maxDeposit}
+                    label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
+                    onClick={maxDeposit}
                   />
                 </FormField>
               </Form>

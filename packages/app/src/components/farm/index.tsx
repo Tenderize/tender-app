@@ -62,8 +62,10 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
             align="center"
           />
           <Farm protocolName={protocolName} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
-          <Text size="small">{`Balance: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 3)} ${symbolFull}`}</Text>
-
+          <Text size="small">{`Balance: ${weiToEthWithDecimals(
+            lpTokenBalance?.toString() || "0",
+            3
+          )} ${symbolFull}`}</Text>
         </Box>
         <Box direction="column" gap="large" align="center">
           <InfoCard
@@ -71,7 +73,7 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
             text={`${weiToEthWithDecimals(availableRewards?.toString() || "0", 3)} tender${symbol}`}
             align="center"
           />
-                  <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />
+          <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />
         </Box>
         <Box direction="column" gap="large" align="center">
           <InfoCard
@@ -82,7 +84,7 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
               3
             )} tender${symbol}`}
           />
-                  <Harvest protocolName={protocolName} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
+          <Harvest protocolName={protocolName} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
         </Box>
       </Box>
     </Box>
