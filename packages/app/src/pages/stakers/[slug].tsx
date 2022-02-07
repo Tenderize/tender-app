@@ -1,6 +1,6 @@
 import { FC, MouseEventHandler, useCallback, useRef, useState } from "react";
 import { Box, Tabs, Tab, Text, Paragraph, Drop, Button, Tip } from "grommet";
-import { Currency, Grow, PhoneHorizontal, FormDown } from "grommet-icons";
+import { FormDown } from "grommet-icons";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
