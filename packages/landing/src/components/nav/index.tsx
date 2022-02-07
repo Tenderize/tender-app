@@ -65,9 +65,9 @@ const Navbar: FC = () => {
           />
           <NavAnchor
             color="white"
-            title="Documentation"
-            a11yTitle="Documentation"
-            href="https://twitter.com/tenderize_me"
+            title="Docs"
+            a11yTitle="Docs"
+            href="https://docs.tenderize.me"
             icon={<FontAwesomeIcon icon={faBook} />}
             target="_blank"
             style={{ paddingLeft: 0 }}

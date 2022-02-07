@@ -36,8 +36,8 @@ export const Foot: FC = () => {
         />
         <Anchor
           color="white"
-          title="Documentation"
-          a11yTitle="Documentation"
+          title="Docs"
+          a11yTitle="Docs"
           href="https://docs.tenderize.me"
           icon={<FontAwesomeIcon icon={faBook} />}
           target="_blank"
