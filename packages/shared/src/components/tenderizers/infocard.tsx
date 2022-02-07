@@ -9,7 +9,7 @@ type Props = {
   align?: string;
 };
 
-export const InfoCard: FC<Props> = ({ title = "", text = "", subText = "", align="baseline" }) => {
+export const InfoCard: FC<Props> = ({ title = "", text = "", subText = "", align = "baseline" }) => {
   return (
     <Box fill="horizontal">
       <Card align={align} elevation="none" round="none">
