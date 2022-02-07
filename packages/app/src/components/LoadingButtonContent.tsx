@@ -2,7 +2,7 @@ import { Box, Spinner } from "grommet";
 import { FC } from "react";
 
 export const LoadingButtonContent: FC<{ label?: string }> = (props) => (
-  <Box direction="row" align="center" justify="center" gap="small">
+  <Box style={{ margin: -4 }} direction="row" align="center" justify="center" gap="small">
     <Spinner
       border={[
         { side: "all", color: "background-contrast", size: "medium" },
