@@ -155,7 +155,7 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
                         placeholder={"0"}
                       />
                       <AmountInputFooter
-                        label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                        label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
                         onClick={maxTokenDeposit}
                       />
                     </FormField>
@@ -181,7 +181,7 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
                         placeholder={"0"}
                       />
                       <AmountInputFooter
-                        label={`Balance: ${utils.formatEther(tenderTokenBalance?.toString() || "0")} t${symbol}`}
+                        label={`Balance: ${weiToEthWithDecimals(tenderTokenBalance?.toString() || "0", 6)} t${symbol}`}
                         onClick={maxTenderTokenDeposit}
                       />
                     </FormField>

@@ -3,7 +3,7 @@ import { addresses, contracts } from "@tender/contracts";
 import { BigNumberish } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { useQuery } from "@apollo/client";
-import { Box } from "grommet";
+import { Box, Text } from "grommet";
 import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
@@ -54,60 +54,39 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
 
   return (
     <Box>
-      <Box justify="around" direction="row" pad={{ bottom: "medium" }}>
-        <Box>
+      <Box justify="evenly" gap="large" direction="row" pad={{ bottom: "medium" }}>
+        <Box direction="column" gap="large" align="center">
           <InfoCard
-            title={"Pool Tokens Staked"}
+            title={"Swap Tokens Staked"}
             text={`${weiToEthWithDecimals(stakeOf?.toString() || "0", 3)} ${symbolFull}`}
-            subText={`Balance: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 3)}`}
+            align="center"
           />
+          <Farm protocolName={protocolName} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
+          <Text size="small">{`Balance: ${weiToEthWithDecimals(
+            lpTokenBalance?.toString() || "0",
+            3
+          )} ${symbolFull}`}</Text>
         </Box>
-        <Box>
+        <Box direction="column" gap="large" align="center">
           <InfoCard
-            title={"Harvestable Rewards"}
+            title={"Available Rewards"}
             text={`${weiToEthWithDecimals(availableRewards?.toString() || "0", 3)} tender${symbol}`}
+            align="center"
           />
+          <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />
         </Box>
-        <Box>
+        <Box direction="column" gap="large" align="center">
           <InfoCard
             title={"Total Harvested"}
+            align="center"
             text={`${weiToEthWithDecimals(
               userData?.userDeployments?.[0]?.farmHarvest?.toString() || "0",
               3
             )} tender${symbol}`}
           />
+          <Harvest protocolName={protocolName} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
         </Box>
       </Box>
-      <Box flex justify="around" align="center" direction="row" pad={{ bottom: "large" }}>
-        <Farm protocolName={protocolName} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
-        <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />
-        <Harvest protocolName={protocolName} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
-      </Box>
-      {/* <Box gap="large" justify="center" direction="row">
-        <Box
-          border={{ side: "top" }}
-          gap="large"
-          justify="center"
-          direction="row"
-          pad={{ top: "large", horizontal: "medium" }}
-        >
-          <Box>
-            <InfoCard
-              title={"Total Staked"}
-              text={`${utils.formatEther(totalStake?.toString() || "0")} ${symbolFull}`}
-            />
-          </Box>
-          <Box>
-            <InfoCard
-              title={"Total Rewards"}
-              text={`${weiToEthWithDecimals(data?.deployment?.tenderizer.rewards ?? "0", 4)} tender${symbol}`}
-            />
-          </Box>
-          <Box>
-            <InfoCard title={"APY"} text={`10 %`} />
-          </Box>
-        </Box>
-      </Box> */}
     </Box>
   );
 };

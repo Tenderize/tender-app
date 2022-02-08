@@ -23,6 +23,7 @@ import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidati
 import { useEthers } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 import { useFarm } from "utils/tenderFarmHooks";
+import { weiToEthWithDecimals } from "utils/amountFormat";
 
 type Props = {
   protocolName: string;
@@ -105,7 +106,7 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
                     style={{ textAlign: "right", padding: "20px 50px" }}
                   />
                   <AmountInputFooter
-                    label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                    label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
                     onClick={maxDeposit}
                   />
                 </FormField>

@@ -18,9 +18,10 @@ import {
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormClose, FormSubtract } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
+import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
 import { useContractFunction } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
+import { weiToEthWithDecimals } from "utils/amountFormat";
 
 type Props = {
   protocolName: string;
@@ -108,7 +109,7 @@ const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
                       style={{ textAlign: "right", padding: "20px 50px" }}
                     />
                     <AmountInputFooter
-                      label={`Current Stake: ${utils.formatEther(stake?.toString() || "0")} ${symbol}`}
+                      label={`Current Stake: ${weiToEthWithDecimals(stake?.toString() || "0", 6)} ${symbol}`}
                       onClick={maxUnfarm}
                     />
                   </FormField>

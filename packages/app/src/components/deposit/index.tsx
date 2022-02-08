@@ -69,7 +69,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
   return (
     <>
-      <Box gap="medium">
+      <Box gap="medium" pad={{ bottom: "medium" }}>
         <Box justify="around" direction="row">
           <Box>
             <InfoCard
@@ -79,12 +79,12 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Box>
           <Box>
             <InfoCard
-              title={"Tender Token Balance"}
-              text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} tender${symbol}`}
+              title={`t${symbol} Balance`}
+              text={`${weiToEthWithDecimals(tenderTokenBalance ?? "0", 3)} t${symbol}`}
             />
           </Box>
           <Box>
-            <InfoCard title={`Rewards`} text={`${weiToEthWithDecimals(nonNegativeRewards ?? "0", 3)} ${symbol}`} />
+            <InfoCard title={`Rewards`} text={`${weiToEthWithDecimals(nonNegativeRewards ?? "0", 3)} t${symbol}`} />
           </Box>
         </Box>
       </Box>
@@ -94,7 +94,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
             <Box width="490px" gap="small" direction="column">
               <FormField
                 fill
-                label="Deposit Amount"
+                label="Stake Amount"
                 name="depositAmount"
                 validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
               >
@@ -112,7 +112,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                   placeholder={`0`}
                 />
                 <AmountInputFooter
-                  label={`Balance: ${utils.formatEther(tokenBalance?.toString() || "0")} ${symbol}`}
+                  label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
                   onClick={maxDeposit}
                 />
               </FormField>
@@ -133,7 +133,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     isPendingTransaction(depositTx)
                   }
                   onClick={depositTokens}
-                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Depositing..." /> : "Deposit"}
+                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "🥩 Stake"}
                 />
               </Box>
             </Box>

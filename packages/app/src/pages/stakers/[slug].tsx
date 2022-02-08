@@ -8,7 +8,7 @@ import { constants } from "ethers";
 import { ChainId, Config, DAppProvider, useEthers, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import styled from "styled-components";
-import { Deposit } from "../../components/actions";
+import Deposit from "../../components/deposit";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
 import stakers, { Staker } from "../../data/stakers";
