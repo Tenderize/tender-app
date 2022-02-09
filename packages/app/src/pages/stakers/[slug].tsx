@@ -66,13 +66,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
                 </Tip>
               }
             >
-              <Box
-                round={{ corner: "bottom" }}
-                border="top"
-                pad={{
-                  top: "medium",
-                }}
-              >
+              <Box round={{ corner: "bottom" }} border="top" pad="medium">
                 <Deposit
                   protocolName={protocolName}
                   symbol={info.symbol}

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
-import { useEthers, useContractFunction } from "@usedapp/core";
+import { useEthers, useContractFunction, ChainId } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
@@ -13,6 +13,7 @@ import { weiToEthWithDecimals } from "utils/amountFormat";
 import { isPendingTransaction } from "utils/transactions";
 import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
 import stakers from "data/stakers";
+import Faucet from "components/faucet";
 
 type Props = {
   protocolName: string;
@@ -24,7 +25,7 @@ type Props = {
 
 const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTokenBalance }) => {
   const [depositInput, setDepositInput] = useState("");
-  const { account } = useEthers();
+  const { account, chainId } = useEthers();
 
   const subgraphName = stakers[protocolName].subgraphId;
   const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
@@ -68,7 +69,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
   const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
   return (
-    <>
+    <Box>
       <Box gap="medium" pad={{ bottom: "medium" }}>
         <Box justify="around" direction="row">
           <Box>
@@ -88,7 +89,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Box>
         </Box>
       </Box>
-      <Box direction="row" justify="center" align="center">
+      <Box justify="center" align="center">
         <Form validate="change">
           <Box align="center" justify="center">
             <Box width="490px" gap="small" direction="column">
@@ -140,7 +141,23 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Box>
         </Form>
       </Box>
-    </>
+      {chainId === ChainId.Rinkeby && (
+        <Box
+          margin={{ top: "medium" }}
+          alignSelf="center"
+          width="large"
+          pad={{ horizontal: "large", vertical: "medium" }}
+          border={{ side: "top" }}
+          justify="center"
+          align="center"
+          direction="column"
+          gap="medium"
+        >
+          <Text>Get Testnet Tokens</Text>
+          <Faucet symbol={symbol} protocolName={protocolName} />
+        </Box>
+      )}
+    </Box>
   );
 };
 

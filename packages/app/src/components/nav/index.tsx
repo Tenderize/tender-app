@@ -3,7 +3,6 @@ import { FC, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AccountButton } from "../account";
 import TestnetBanner from "../testnet-banner";
-import Faucet from "../faucet";
 import { TenderizeConfig } from "types";
 
 type props = {
@@ -38,7 +37,6 @@ const Navbar: FC<props> = (props) => {
         </Link>
         {props.symbol != null && props.protocolName != null && (
           <Box direction="row" align="center" gap="medium">
-            <Faucet symbol={props.symbol} protocolName={props.protocolName} />
             <Nav direction="row">
               <AccountButton config={props.config} />
             </Nav>
