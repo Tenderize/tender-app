@@ -134,7 +134,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     isPendingTransaction(depositTx)
                   }
                   onClick={depositTokens}
-                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "🥩 Stake"}
+                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "Stake"}
                 />
               </Box>
             </Box>
