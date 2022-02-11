@@ -31,7 +31,6 @@ const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTo
         justify="center"
         align="center"
         direction="column"
-        style={{ width: "100%%" }}
         gap="small"
       >
         <Text>Provide Liquidity</Text>

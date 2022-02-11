@@ -3,7 +3,7 @@ import { Box, Button, Text, Heading, Layer, Card, CardHeader, CardBody, BoxExten
 import { FormClose } from "grommet-icons";
 import { HeightType, WidthType } from "grommet/utils";
 
-type props = {
+const Dialog: FC<{
   title: string;
   openButtonLabel: string;
   description?: string;
@@ -12,9 +12,7 @@ type props = {
   card?: BoxExtendedProps;
   height?: HeightType | undefined;
   width?: WidthType | undefined;
-};
-
-const Dialog: FC<props> = (props) => {
+}> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -22,7 +20,7 @@ const Dialog: FC<props> = (props) => {
 
   return (
     <>
-      <Button plain onClick={handleShow} label={props.openButtonLabel} />
+      <Button secondary onClick={handleShow} label={props.openButtonLabel} />
       {show && (
         <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={handleClose} onClickOutside={handleClose}>
           <Card

@@ -19,7 +19,7 @@ import { Foot } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
 
-const Token: FC<{ config: TenderizeConfig }> = (props) => {
+const Token: FC = () => {
   const router = useRouter();
   const protocolName = router.query.slug as string;
   const info = stakers[protocolName];
@@ -43,7 +43,6 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
   return (
     <Box>
       <NotificationsList />
-      <Navbar symbol={info.symbol} protocolName={protocolName} config={props.config} />
       <Box width="100vw" align="center" alignSelf="start">
         <TenderBox
           margin={{
@@ -66,13 +65,7 @@ const Token: FC<{ config: TenderizeConfig }> = (props) => {
                 </Tip>
               }
             >
-              <Box
-                round={{ corner: "bottom" }}
-                border="top"
-                pad={{
-                  top: "medium",
-                }}
-              >
+              <Box round={{ corner: "bottom" }} border="top" pad="medium">
                 <Deposit
                   protocolName={protocolName}
                   symbol={info.symbol}
@@ -237,7 +230,8 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 
   return (
     <DAppProvider config={dappConfig}>
-      <Token config={props.config} />
+      <Navbar config={props.config} />
+      <Token />
     </DAppProvider>
   );
 };
