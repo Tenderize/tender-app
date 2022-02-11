@@ -6,8 +6,6 @@ import TestnetBanner from "../testnet-banner";
 import { TenderizeConfig } from "types";
 
 type props = {
-  symbol?: string;
-  protocolName?: string;
   config: TenderizeConfig;
 };
 const Navbar: FC<props> = (props) => {
@@ -30,18 +28,17 @@ const Navbar: FC<props> = (props) => {
 
   return (
     <Box>
-      {props.symbol != null && props.protocolName != null && <TestnetBanner />}
+      <TestnetBanner />
       <Header justify="between" pad={{ horizontal: "xlarge", vertical: "xsmall" }}>
         <Link href="/" passHref>
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
         </Link>
-        {props.symbol != null && props.protocolName != null && (
-          <Box direction="row" align="center" gap="medium">
-            <Nav direction="row">
-              <AccountButton config={props.config} />
-            </Nav>
-          </Box>
-        )}
+
+        <Box direction="row" align="center" gap="medium">
+          <Nav direction="row">
+            <AccountButton config={props.config} />
+          </Nav>
+        </Box>
       </Header>
     </Box>
   );
