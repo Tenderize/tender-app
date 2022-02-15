@@ -6,7 +6,7 @@ import { FC } from "react";
 const TestnetBanner: FC = () => {
   const { chainId } = useEthers();
 
-  if (chainId === ChainId.Rinkeby) {
+  if (chainId === ChainId.Rinkeby || chainId === ChainId.ArbitrumRinkeby) {
     return null;
   }
 

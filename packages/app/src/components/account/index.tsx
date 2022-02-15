@@ -11,6 +11,7 @@ import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
 import { FormClose } from "grommet-icons";
+import { fetchNetworkName } from "./helpers";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();
@@ -29,21 +30,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   }, [error]);
 
   useEffect(() => {
-    const fetchNetworkName = async () => {
-      const network = await library?.getNetwork();
-      let nameToSet = "";
-      if (chainId === 1) {
-        nameToSet = "Ethereum";
-      } else {
-        if (network?.name != null) {
-          const [initial, ...rest] = network.name;
-          nameToSet = [initial.toUpperCase(), ...rest].join("");
-        }
-      }
-      setNetworkName(nameToSet);
-    };
-
-    fetchNetworkName();
+    fetchNetworkName(library, setNetworkName);
   }, [chainId, library]);
 
   const activateWallet = async () => {

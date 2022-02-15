@@ -18,6 +18,7 @@ import { NotificationsList } from "../../components/transactions";
 import { Foot } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
+import { addNetwork } from "components/account/SwitchNetwork";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -165,8 +166,9 @@ const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => 
                 <DropdownOption
                   key={option.title}
                   staker={option}
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
+                    await addNetwork(option.testnetChainId);
                     setOpen(false);
                   }}
                 />
