@@ -11,7 +11,7 @@ import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
 import { FormClose } from "grommet-icons";
-import { fetchNetworkName } from "./helpers";
+import { fetchNetworkName } from "../../utils/helpers";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();

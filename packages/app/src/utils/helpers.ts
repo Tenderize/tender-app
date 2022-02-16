@@ -1,4 +1,5 @@
 import { Web3Provider } from "@ethersproject/providers";
+import { DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core";
 
 export const fetchNetworkName = async (
   library: Web3Provider | undefined,
@@ -14,4 +15,8 @@ export const fetchNetworkName = async (
   }
   setNetworkName?.(nameToSet);
   return nameToSet;
+};
+
+export const chainIdToNetworkName = (chainId: number) => {
+  return DEFAULT_SUPPORTED_CHAINS.find((chain) => chain.chainId === chainId)?.chainName;
 };
