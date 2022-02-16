@@ -1,14 +1,15 @@
 import { ReactElement, useCallback, useState } from "react";
-import { ChainId, useEthers } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import { Box, Button, Card, CardFooter, CardHeader, Heading, Layer } from "grommet";
 
 type InferArguments<T> = T extends (...t: [...infer Arg]) => any ? Arg : never;
 type InferReturn<T> = Promise<T extends (...t: [...infer Res]) => infer Res ? Res : never>;
 
-export const useEnsureRinkebyConnect = <TFunc extends (...args: any[]) => any>(
-  func: TFunc
+export const useEnsureChain = <TFunc extends (...args: any[]) => any>(
+  func: TFunc,
+  requestedChainId: number
 ): {
-  rinkebyForcedFunction: (...args: InferArguments<TFunc>) => InferReturn<TFunc>;
+  chainForcedFunction: (...args: InferArguments<TFunc>) => InferReturn<TFunc>;
   renderError: () => ReactElement;
 } => {
   const { account, chainId } = useEthers();
@@ -39,8 +40,8 @@ export const useEnsureRinkebyConnect = <TFunc extends (...args: any[]) => any>(
   };
 
   return {
-    rinkebyForcedFunction: async (...args: InferArguments<TFunc>) => {
-      if (chainId === ChainId.Rinkeby && account != null) {
+    chainForcedFunction: async (...args: InferArguments<TFunc>) => {
+      if (chainId === requestedChainId && account != null) {
         return await func(...args);
       } else {
         setdisplayWarning(true);

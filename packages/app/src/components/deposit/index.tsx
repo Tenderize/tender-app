@@ -123,6 +123,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                   spender={addresses[protocolName].tenderizer}
                   token={contracts[protocolName].token}
                   show={!isTokenApproved}
+                  chainId={stakers[protocolName].testnetChainId}
                 />
                 <Button
                   primary
