@@ -62,7 +62,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     account,
     addresses[protocolName].tenderizer,
     depositInput
-  );
+  );  
 
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");

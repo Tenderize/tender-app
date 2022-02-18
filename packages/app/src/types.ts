@@ -1,8 +1,9 @@
 export type TenderizeConfig = {
-  rpcUrl: string;
-  fortmaticApiKey: string;
   portisApiKey: string;
-  chainUrlMapping: {
-    4: string;
-  };
+  chainUrlMapping: ChainUrlMapping;
+  supportedChainIds: number[];
 };
+
+export interface ChainUrlMapping {
+    [chainId: number]: string;
+}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
-import { ChainId, Config, DAppProvider, useEthers, useTokenBalance } from "@usedapp/core";
+import { ChainId, Config, DAppProvider, useEthers, useTokenBalance, ArbitrumRinkeby, Rinkeby } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import styled from "styled-components";
 import Deposit from "../../components/deposit";
@@ -29,6 +29,7 @@ const Token: FC = () => {
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
   // TODO: USE MULTICALL FOR THESE
+  console.log(account)
   const tokenBalance = useTokenBalance(addresses[protocolName].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[protocolName].tenderToken, account) || constants.Zero;
   const lpTokenBalance = useTokenBalance(addresses[protocolName].lpToken, account) || constants.Zero;
@@ -43,7 +44,6 @@ const Token: FC = () => {
 
   return (
     <Box>
-      <NotificationsList />
       <Box width="100vw" align="center" alignSelf="start">
         <TenderBox
           margin={{
@@ -224,7 +224,7 @@ const DropdownBackground = styled.div`
 
 const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   const dappConfig: Config = {
-    readOnlyChainId: ChainId.Rinkeby,
+    networks: [ArbitrumRinkeby, Rinkeby],
     readOnlyUrls: props.config?.chainUrlMapping,
   };
 
@@ -232,6 +232,7 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 
   return (
     <DAppProvider config={dappConfig}>
+      <NotificationsList />
       <Navbar config={props.config} />
       <Token />
     </DAppProvider>
@@ -239,16 +240,17 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 };
 
 export const getStaticProps = async () => {
-  const rpcUrl = process.env.JSON_RPC ?? "";
   const CHAIN_URL_MAPPING = {
-    [ChainId.Rinkeby]: rpcUrl,
+    [ChainId.Rinkeby]: process.env.RPC_RINKEBY ?? "",
+    // [ChainId.Mainnet]: process.env.RPC_MAINNET ?? "",
+    // [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
+    [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUMRINKEBY ?? ""
   };
 
   const config: TenderizeConfig = {
-    rpcUrl,
-    fortmaticApiKey: process.env.FORTMATIC_API_KEY ?? "",
     portisApiKey: process.env.PORTIS_API_KEY ?? "",
     chainUrlMapping: CHAIN_URL_MAPPING ?? "",
+    supportedChainIds: Object.keys(CHAIN_URL_MAPPING).map(i => parseInt(i, 10))
   };
 
   return {
