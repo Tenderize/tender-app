@@ -28,13 +28,6 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
     args: [account],
   });
 
-  // const totalStake = useContractCall({
-  //   abi: contracts[protocolName].tenderFarm.interface,
-  //   address: addresses[protocolName].tenderFarm,
-  //   method: "nextTotalStake",
-  //   args: [],
-  // });
-
   const availableRewards = useContractCall({
     abi: contracts[protocolName].tenderFarm.interface,
     address: addresses[protocolName].tenderFarm,
@@ -45,6 +38,7 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
   const subgraphName = stakers[protocolName].subgraphId;
   const { data: userData, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
+    context: { chainId: stakers[protocolName].chainId },
   });
 
   // update my stake when tokenBalance changes

@@ -3,5 +3,5 @@ export { InfoCard } from "./components/tenderizers/infocard";
 export { GrommetWrapper } from "./components/GrommetWrapper";
 export { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 export { theme } from "./theme";
-export { apolloClient } from "./config";
+export { Subgraph } from "./graph";
 export * as Queries from "./queries";

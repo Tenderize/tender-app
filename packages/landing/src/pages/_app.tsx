@@ -6,7 +6,7 @@ import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 
 import * as gtag from "../lib/gtag";
-import { apolloClient, GrommetWrapper } from "@tender/shared/src/index";
+import { Subgraph, GrommetWrapper } from "@tender/shared/src/index";
 import "./index.css";
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
@@ -27,7 +27,7 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
         <title>Tenderize - Connecting Web3 with DeFi through Liquid Staking</title>
         <meta name="description" content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi" />
       </Head>
-      <ApolloProvider client={apolloClient}>
+      <ApolloProvider client={Subgraph}>
         {/* Global Site Tag (gtag.js) - Google Analytics */}
         <Script
           strategy="afterInteractive"

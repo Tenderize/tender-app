@@ -30,6 +30,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const subgraphName = stakers[protocolName].subgraphId;
   const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
+    context: { chainId: stakers[protocolName].chainId },
   });
 
   // update my stake when tokenBalance changes
@@ -142,12 +143,12 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Box>
         </Form>
       </Box>
-      {chainId === ChainId.Rinkeby && (
+      {(chainId === ChainId.Rinkeby || chainId === ChainId.ArbitrumRinkeby) && (
         <Box
           margin={{ top: "medium" }}
           alignSelf="center"
           width="large"
-          pad={{ horizontal: "large", vertical: "medium" }}
+          pad={{ horizontal: "large", top: "medium" }}
           border={{ side: "top" }}
           justify="center"
           align="center"
