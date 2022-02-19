@@ -3,7 +3,6 @@ import { ChainId } from "@usedapp/core";
 export type Staker = {
   name: string;
   subgraphId: string;
-  description: string;
   title: string;
   available: boolean;
   apy: number;
@@ -24,8 +23,6 @@ const stakers: Record<string, Staker> = {
     path: "/stakers/livepeer",
     title: "Livepeer",
     subgraphId: "Livepeer",
-    description:
-      "The Livepeer project aims to deliver a live video streaming network protocol that is fully decentralized, highly scalable, crypto token incentivized, and results in a solution which can serve as the live media layer in the decentralized development (web3) stack. In addition, Livepeer is meant to provide an economically efficient alternative to centralized broadcasting solutions for any existing broadcaster. In this document we describe the Livepeer Protocol - a delegated stake based protocol for incentivizing participants in a live video broadcast network in a game-theoretically secure way.",
     available: true,
     apy: 23.3,
     logo: "livepeer.svg",
@@ -35,15 +32,13 @@ const stakers: Record<string, Staker> = {
     symbol: "LPT",
     testnetChainId: ChainId.ArbitrumRinkeby,
     chainId: ChainId.ArbitrumRinkeby,
-    hasPermit: true
+    hasPermit: true,
   },
   graph: {
     name: "graph",
     path: "/stakers/graph",
     title: "The Graph",
     subgraphId: "Graph",
-    description:
-      "The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible.",
     available: true,
     apy: 6.5,
     logo: "graph.svg",
@@ -53,7 +48,7 @@ const stakers: Record<string, Staker> = {
     symbol: "GRT",
     testnetChainId: ChainId.Rinkeby,
     chainId: ChainId.Rinkeby,
-    hasPermit: false
+    hasPermit: false,
   },
   // matic: {
   //   name: "matic",
