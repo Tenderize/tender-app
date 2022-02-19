@@ -30,7 +30,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
     handleShowWalletPicker();
   };
 
-  const etherBal = useEtherBalance(account)
+  const etherBal = useEtherBalance(account);
 
   const supportedChainIds = Object.keys(config.chainUrlMapping).map((i) => parseInt(i, 10));
 
@@ -39,12 +39,18 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
       <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
       {account ? (
         <Box direction="row" gap="medium">
-          <Button style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }} label={<Text weight={300}>{networkName}</Text>} />
-          <Button style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }} label={<Text weight={300}>{`${weiToEthWithDecimals(etherBal ?? "0", 4)} ETH`}</Text>} />
+          <Button
+            style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
+            label={<Text weight={300}>{networkName}</Text>}
+          />
+          <Button
+            style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
+            label={<Text weight={300}>{`${weiToEthWithDecimals(etherBal ?? "0", 4)} ETH`}</Text>}
+          />
           <Button
             style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
             onClick={() => setShowAccountInfo(!showAccountInfo)}
-            label={<Text weight={300}>{ens ?? shortenAddress(account)}</Text>} 
+            label={<Text weight={300}>{ens ?? shortenAddress(account)}</Text>}
           />
           <Button secondary onClick={() => deactivate()} label={<Text weight={300}>Disconnect</Text>} />
         </Box>
