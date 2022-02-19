@@ -62,7 +62,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     account,
     addresses[protocolName].tenderizer,
     depositInput
-  );  
+  );
 
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
@@ -142,12 +142,12 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Box>
         </Form>
       </Box>
-      {chainId === ChainId.Rinkeby && (
+      {(chainId === ChainId.Rinkeby || chainId === ChainId.ArbitrumRinkeby) && (
         <Box
           margin={{ top: "medium" }}
           alignSelf="center"
           width="large"
-          pad={{ horizontal: "large", vertical: "medium" }}
+          pad={{ horizontal: "large", top: "medium" }}
           border={{ side: "top" }}
           justify="center"
           align="center"

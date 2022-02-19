@@ -3023,20 +3023,6 @@
   resolved "https://registry.yarnpkg.com/@uniswap/token-lists/-/token-lists-1.0.0-beta.27.tgz#8b02a979b0b0024cc96f60e694a3f6db6b2ccab2"
   integrity sha512-x5hmIniQ9TGqOBCRqfWcmZi/U5kB0qrHMDQ9igs3nMbK0wwmYLraL4owbIwXFGR/co6/lJYJC4K/Gjn4wZY5mQ==
 
-"@usedapp/core@^0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.7.1.tgz#549f6fe3e4ff22687f68a7950facfa52fec21054"
-  integrity sha512-mG3pCAye51m5Y1lYstIg5HGMwz02gM2xhnDYB4t3GelxxEZvPwFWdkpNoclcvbrEWC3X0DXr8M4gVNfq20Tn3g==
-  dependencies:
-    "@types/react" "17.0.1"
-    "@uniswap/token-lists" "^1.0.0-beta.27"
-    "@web3-react/core" "6.1.1"
-    "@web3-react/injected-connector" "6.0.7"
-    "@web3-react/network-connector" "6.1.5"
-    ethers "5.5.1"
-    lodash.merge "^4.6.2"
-    nanoid "3.1.22"
-
 "@usedapp/core@^0.9.1":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.9.1.tgz#b895caabf4bfe7f1bfda00651b60812b3437156f"

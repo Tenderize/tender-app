@@ -1,4 +1,4 @@
-import { Button, Image } from "grommet";
+import { Button, Image, Text } from "grommet";
 import { FC } from "react";
 
 const addToken = async (address: string, symbol: string, image: string, decimals = 18) => {
@@ -31,7 +31,7 @@ export const AddToken: FC<{ address: string; symbol: string; image: string }> = 
         e.preventDefault();
         await addToken(address, symbol, image);
       }}
-      label="Add to"
+      label={<Text weight={300}>{"Add To"}</Text>}
       reverse
       icon={<Image height="20" src={"/MetaMask_Fox.svg"} />}
     />

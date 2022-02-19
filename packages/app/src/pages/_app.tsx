@@ -1,9 +1,8 @@
 import { AppProps } from "next/app";
 import { FC } from "react";
 import Head from "next/head";
-import { ApolloProvider } from "@apollo/client";
 
-import { GrommetWrapper, apolloClient } from "@tender/shared/src/index";
+import { GrommetWrapper } from "@tender/shared/src/index";
 
 import "./index.css";
 
@@ -14,7 +13,6 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
         <title>Tenderize App</title>
         <meta name="description" content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi" />
       </Head>
-      <ApolloProvider client={apolloClient}>
         <GrommetWrapper
           style={{
             background: "url('/shad-defi.jpg')",
@@ -22,7 +20,6 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
         >
           <Component {...pageProps} />
         </GrommetWrapper>
-      </ApolloProvider>
     </>
   );
 };

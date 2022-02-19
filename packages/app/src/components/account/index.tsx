@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { useEthers, shortenAddress, useLookupAddress } from "@usedapp/core";
+import { useEthers, shortenAddress, useLookupAddress, useEtherBalance } from "@usedapp/core";
 import { Box, Button, Card, CardHeader, Heading, Image, Layer, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
@@ -11,22 +11,16 @@ import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
 import { FormClose } from "grommet-icons";
 import { fetchNetworkName } from "../../utils/helpers";
+import { weiToEthWithDecimals } from "utils/amountFormat";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
-  const { account, deactivate, activate, activateBrowserWallet, error, chainId, library } = useEthers();
+  const { account, deactivate, activate, activateBrowserWallet, chainId, library } = useEthers();
   const ens = useLookupAddress();
   const [showAccountInfo, setShowAccountInfo] = useState(false);
   const [showWalletPicker, setShowWalletPicker] = useState(false);
   const [networkName, setNetworkName] = useState<string | undefined>();
   const handleCloseWalletPicker = useCallback(() => setShowWalletPicker(false), []);
   const handleShowWalletPicker = useCallback(() => setShowWalletPicker(true), []);
-  const [activateError, setActivateError] = useState("");
-
-  useEffect(() => {
-    if (error) {
-      setActivateError(error.message);
-    }
-  }, [error]);
 
   useEffect(() => {
     fetchNetworkName(library, setNetworkName);
@@ -34,26 +28,26 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
 
   const activateWallet = async () => {
     handleShowWalletPicker();
-    setActivateError("");
   };
 
-  const supportedChainIds = Object.keys(config.chainUrlMapping).map(i => parseInt(i, 10))
+  const etherBal = useEtherBalance(account)
+
+  const supportedChainIds = Object.keys(config.chainUrlMapping).map((i) => parseInt(i, 10));
 
   return (
     <Account>
-      <ErrorWrapper>{activateError}</ErrorWrapper>
       <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
       {account ? (
-        <>
-          <NetworkLabel color="light-2" style={{ color: normalizeColor("brand", theme) }} label={networkName} />
-          <AccountLabel
-            color="light-2"
-            style={{ color: normalizeColor("brand", theme) }}
+        <Box direction="row" gap="medium">
+          <Button style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }} label={<Text weight={300}>{networkName}</Text>} />
+          <Button style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }} label={<Text weight={300}>{`${weiToEthWithDecimals(etherBal ?? "0", 4)} ETH`}</Text>} />
+          <Button
+            style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
             onClick={() => setShowAccountInfo(!showAccountInfo)}
-            label={ens ?? shortenAddress(account)}
+            label={<Text weight={300}>{ens ?? shortenAddress(account)}</Text>} 
           />
-          <Button onClick={() => deactivate()} label="Disconnect" />
-        </>
+          <Button secondary onClick={() => deactivate()} label={<Text weight={300}>Disconnect</Text>} />
+        </Box>
       ) : (
         <ConnectButton primary color="light-2" onClick={activateWallet} label="Connect" />
       )}
@@ -89,7 +83,10 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 label="WalletConnect"
                 image={"/walletconnect-logo.svg"}
                 handleClick={async () => {
-                  const walletConnector = new WalletConnectConnector({ rpc: config.chainUrlMapping, supportedChainIds: supportedChainIds });
+                  const walletConnector = new WalletConnectConnector({
+                    rpc: config.chainUrlMapping,
+                    supportedChainIds: supportedChainIds,
+                  });
                   await activate(walletConnector);
                   handleCloseWalletPicker();
                 }}
@@ -98,7 +95,10 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 label="Portis"
                 image={"/portis.svg"}
                 handleClick={async () => {
-                  const walletConnector = new PortisConnector({ dAppId: config.portisApiKey, networks: supportedChainIds });
+                  const walletConnector = new PortisConnector({
+                    dAppId: config.portisApiKey,
+                    networks: supportedChainIds,
+                  });
                   await activate(walletConnector);
                   handleCloseWalletPicker();
                 }}
@@ -107,7 +107,12 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 label="Coinbase Wallet"
                 image={"/coinbaseWalletIcon.svg"}
                 handleClick={async () => {
-                  const walletConnector = new WalletLinkConnector({ appName: "Tenderize", supportedChainIds, url: config.chainUrlMapping[4], darkMode: true });
+                  const walletConnector = new WalletLinkConnector({
+                    appName: "Tenderize",
+                    supportedChainIds,
+                    url: config.chainUrlMapping[4],
+                    darkMode: true,
+                  });
                   await activate(walletConnector);
                   handleCloseWalletPicker();
                 }}
@@ -148,34 +153,9 @@ const ProviderButton: FC<{ handleClick: () => Promise<void>; label: string; imag
   );
 };
 
-const ErrorWrapper = styled.div`
-  color: #ff3960;
-  margin-right: 4rem;
-  margin-left: 4rem;
-  overflow: auto;
-`;
-
 const Account = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const NetworkLabel = styled(Button)`
-  ${({ theme }: { theme: ThemeType }) => css`
-    color: ${normalizeColor("brand", theme)};
-  `}
-  margin-right: 1rem;
-  margin-left: 1rem;
-  padding-right: 1rem;
-`;
-
-const AccountLabel = styled(Button)`
-  ${({ theme }: { theme: ThemeType }) => css`
-    color: ${normalizeColor("brand", theme)};
-  `}
-  border-bottom-right-radius: 0rem;
-  border-top-right-radius: 0rem;
-  margin-right: -1.1rem;
 `;
 
 const ConnectButton = styled(Button)`

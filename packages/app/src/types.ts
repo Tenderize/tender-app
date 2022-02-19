@@ -1,9 +1,11 @@
+import { Chain } from "@usedapp/core";
+
 export type TenderizeConfig = {
   portisApiKey: string;
   chainUrlMapping: ChainUrlMapping;
-  supportedChainIds: number[];
+  supportedChains: number[];
 };
 
 export interface ChainUrlMapping {
-    [chainId: number]: string;
+  [chainId: number]: string;
 }

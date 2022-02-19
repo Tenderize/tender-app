@@ -15,10 +15,11 @@ import stakers, { Staker } from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
-import { Foot } from "@tender/shared/src/index";
+import { Foot, Subgraph } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
 import { addNetwork } from "components/account/SwitchNetwork";
+import { ApolloProvider } from "@apollo/client";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -29,7 +30,6 @@ const Token: FC = () => {
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
   // TODO: USE MULTICALL FOR THESE
-  console.log(account)
   const tokenBalance = useTokenBalance(addresses[protocolName].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[protocolName].tenderToken, account) || constants.Zero;
   const lpTokenBalance = useTokenBalance(addresses[protocolName].lpToken, account) || constants.Zero;
@@ -43,87 +43,89 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box>
-      <Box width="100vw" align="center" alignSelf="start">
-        <TenderBox
-          margin={{
-            top: "xlarge",
-          }}
-          pad={{ bottom: "xlarge" }}
-          width="xlarge"
-        >
-          <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-            <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Stake your ${info.symbol} and earn staking rewards`}
-                >
-                  <Box height="100%" justify="center" align="center">
-                    <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <Deposit
-                  protocolName={protocolName}
-                  symbol={info.symbol}
-                  logo={info.bwLogo}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
-                >
-                  <Box height="100%" justify="center" align="center">
-                    <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <LiquidityPool
-                  protocolName={protocolName}
-                  symbol={info.symbol}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                  lpTokenBalance={lpTokenBalance}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Farm your liquidity pool tokens for more rewards`}
-                >
-                  <Box height="100%" justify="center" align="center">
-                    <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <Farm
-                  protocolName={protocolName}
-                  symbol={info.symbol}
-                  account={account}
-                  lpTokenBalance={lpTokenBalance}
-                />
-              </Box>
-            </Tab>
-          </Tabs>
-        </TenderBox>
+    <ApolloProvider client={Subgraph[info.chainId]}>
+      <Box>
+        <Box width="100vw" align="center" alignSelf="start">
+          <TenderBox
+            margin={{
+              top: "xlarge",
+            }}
+            pad={{ bottom: "xlarge" }}
+            width="xlarge"
+          >
+            <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+              <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
+              <Tab
+                title={
+                  <Tip
+                    dropProps={{ align: { bottom: "top" } }}
+                    content={`Stake your ${info.symbol} and earn staking rewards`}
+                  >
+                    <Box height="100%" justify="center" align="center">
+                      <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
+                    </Box>
+                  </Tip>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                  <Deposit
+                    protocolName={protocolName}
+                    symbol={info.symbol}
+                    logo={info.bwLogo}
+                    tokenBalance={tokenBalance}
+                    tenderTokenBalance={tenderBalance}
+                  />
+                </Box>
+              </Tab>
+              <Tab
+                title={
+                  <Tip
+                    dropProps={{ align: { bottom: "top" } }}
+                    content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
+                  >
+                    <Box height="100%" justify="center" align="center">
+                      <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
+                    </Box>
+                  </Tip>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                  <LiquidityPool
+                    protocolName={protocolName}
+                    symbol={info.symbol}
+                    tokenBalance={tokenBalance}
+                    tenderTokenBalance={tenderBalance}
+                    lpTokenBalance={lpTokenBalance}
+                  />
+                </Box>
+              </Tab>
+              <Tab
+                title={
+                  <Tip
+                    dropProps={{ align: { bottom: "top" } }}
+                    content={`Farm your liquidity pool tokens for more rewards`}
+                  >
+                    <Box height="100%" justify="center" align="center">
+                      <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
+                    </Box>
+                  </Tip>
+                }
+              >
+                <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                  <Farm
+                    protocolName={protocolName}
+                    symbol={info.symbol}
+                    account={account}
+                    lpTokenBalance={lpTokenBalance}
+                  />
+                </Box>
+              </Tab>
+            </Tabs>
+          </TenderBox>
+        </Box>
+        <Foot />
       </Box>
-      <Foot />
-    </Box>
+    </ApolloProvider>
   );
 };
 
@@ -244,13 +246,13 @@ export const getStaticProps = async () => {
     [ChainId.Rinkeby]: process.env.RPC_RINKEBY ?? "",
     // [ChainId.Mainnet]: process.env.RPC_MAINNET ?? "",
     // [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
-    [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUMRINKEBY ?? ""
+    [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUMRINKEBY ?? "",
   };
 
   const config: TenderizeConfig = {
     portisApiKey: process.env.PORTIS_API_KEY ?? "",
     chainUrlMapping: CHAIN_URL_MAPPING ?? "",
-    supportedChainIds: Object.keys(CHAIN_URL_MAPPING).map(i => parseInt(i, 10))
+    supportedChains: [ArbitrumRinkeby.chainId, Rinkeby.chainId],
   };
 
   return {

@@ -15,6 +15,7 @@ export type Staker = {
   symbol: string;
   testnetChainId: number;
   chainId: number;
+  hasPermit: boolean;
 };
 
 const stakers: Record<string, Staker> = {
@@ -33,7 +34,8 @@ const stakers: Record<string, Staker> = {
     neonLogo: "landing/neon-lpt.png",
     symbol: "LPT",
     testnetChainId: ChainId.ArbitrumRinkeby,
-    chainId: ChainId.Arbitrum,
+    chainId: ChainId.ArbitrumRinkeby,
+    hasPermit: true
   },
   graph: {
     name: "graph",
@@ -50,7 +52,8 @@ const stakers: Record<string, Staker> = {
     neonLogo: "landing/neon-grt.png",
     symbol: "GRT",
     testnetChainId: ChainId.Rinkeby,
-    chainId: ChainId.Mainnet,
+    chainId: ChainId.Rinkeby,
+    hasPermit: false
   },
   // matic: {
   //   name: "matic",
