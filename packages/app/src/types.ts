@@ -1,5 +1,3 @@
-import { Chain } from "@usedapp/core";
-
 export type TenderizeConfig = {
   portisApiKey: string;
   chainUrlMapping: ChainUrlMapping;

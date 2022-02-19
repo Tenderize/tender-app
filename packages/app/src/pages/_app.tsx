@@ -1,8 +1,9 @@
 import { AppProps } from "next/app";
 import { FC } from "react";
 import Head from "next/head";
+import { ApolloProvider } from "@apollo/client";
 
-import { GrommetWrapper } from "@tender/shared/src/index";
+import { Foot, GrommetWrapper, Subgraph } from "@tender/shared/src/index";
 
 import "./index.css";
 
@@ -18,7 +19,11 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
             background: "url('/shad-defi.jpg')",
           }}
         >
+          <ApolloProvider client={Subgraph}>
+
           <Component {...pageProps} />
+          </ApolloProvider>
+          <Foot />
         </GrommetWrapper>
     </>
   );

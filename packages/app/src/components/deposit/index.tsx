@@ -30,6 +30,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const subgraphName = stakers[protocolName].subgraphId;
   const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
+    context: { chainId: stakers[protocolName].chainId },
   });
 
   // update my stake when tokenBalance changes

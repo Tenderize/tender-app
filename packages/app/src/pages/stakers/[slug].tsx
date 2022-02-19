@@ -15,11 +15,9 @@ import stakers, { Staker } from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
-import { Foot, Subgraph } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
 import { addNetwork } from "components/account/SwitchNetwork";
-import { ApolloProvider } from "@apollo/client";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -43,7 +41,6 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <ApolloProvider client={Subgraph[info.chainId]}>
       <Box>
         <Box width="100vw" align="center" alignSelf="start">
           <TenderBox
@@ -123,9 +120,7 @@ const Token: FC = () => {
             </Tabs>
           </TenderBox>
         </Box>
-        <Foot />
       </Box>
-    </ApolloProvider>
   );
 };
 
