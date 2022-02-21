@@ -9,7 +9,7 @@ import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
-import { FormClose, Trigger } from "grommet-icons";
+import { FormClose } from "grommet-icons";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
