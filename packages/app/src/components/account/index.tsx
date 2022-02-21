@@ -1,6 +1,6 @@
-import { FC, useCallback, useEffect, useState } from "react";
-import { useEthers, shortenAddress, useLookupAddress, useEtherBalance } from "@usedapp/core";
-import { Box, Button, Card, CardHeader, Heading, Image, Layer, Spinner, Text, ThemeType } from "grommet";
+import React, { FC, useCallback, useState } from "react";
+import { useEthers, shortenAddress, useLookupAddress, useEtherBalance, ChainId, getChainName } from "@usedapp/core";
+import { Avatar, Box, Button, Card, CardHeader, Heading, Image, Layer, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
@@ -9,22 +9,16 @@ import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
-import { FormClose } from "grommet-icons";
-import { fetchNetworkName } from "../../utils/helpers";
+import { FormClose, Trigger } from "grommet-icons";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
-  const { account, deactivate, activate, activateBrowserWallet, chainId, library } = useEthers();
+  const { account, deactivate, activate, activateBrowserWallet, chainId } = useEthers();
   const ens = useLookupAddress();
   const [showAccountInfo, setShowAccountInfo] = useState(false);
   const [showWalletPicker, setShowWalletPicker] = useState(false);
-  const [networkName, setNetworkName] = useState<string | undefined>();
   const handleCloseWalletPicker = useCallback(() => setShowWalletPicker(false), []);
   const handleShowWalletPicker = useCallback(() => setShowWalletPicker(true), []);
-
-  useEffect(() => {
-    fetchNetworkName(library, setNetworkName);
-  }, [chainId, library]);
 
   const activateWallet = async () => {
     handleShowWalletPicker();
@@ -34,14 +28,31 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
 
   const supportedChainIds = Object.keys(config.chainUrlMapping).map((i) => parseInt(i, 10));
 
+  const networkAvatar = (chain: ChainId | undefined) => {
+    switch (chain) {
+      case ChainId.Arbitrum:
+        return <Avatar size="small" src="/arbitrum.svg" />;
+      case ChainId.ArbitrumRinkeby:
+        return <Avatar size="small" src="/arbitrum.svg" />;
+      case ChainId.Rinkeby:
+        return <Avatar size="small" src="/ethereum.png" />;
+      case ChainId.Mainnet:
+        return <Avatar size="small" src="/ethereum.png" />;
+      default:
+        return <Avatar />;
+    }
+  };
+
   return (
     <Account>
       <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
       {account ? (
         <Box direction="row" gap="medium">
           <Button
-            style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
-            label={<Text weight={300}>{networkName}</Text>}
+            plain
+            icon={networkAvatar(chainId)}
+            style={{ color: normalizeColor("white", theme) }}
+            label={<Text weight={300}>{getChainName(chainId || ChainId.Mainnet)}</Text>}
           />
           <Button
             style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
@@ -55,7 +66,13 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
           <Button secondary onClick={() => deactivate()} label={<Text weight={300}>Disconnect</Text>} />
         </Box>
       ) : (
-        <ConnectButton primary color="light-2" onClick={activateWallet} label="Connect" />
+        <ConnectButton
+          primary
+          color="light-2"
+          onClick={activateWallet}
+          label="Connect"
+          icon={<Trigger color={"brand"} />}
+        />
       )}
       {showWalletPicker && (
         <Layer
