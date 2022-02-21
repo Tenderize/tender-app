@@ -14,17 +14,16 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
         <title>Tenderize App</title>
         <meta name="description" content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi" />
       </Head>
-        <GrommetWrapper
-          style={{
-            background: "url('/shad-defi.jpg')",
-          }}
-        >
-          <ApolloProvider client={Subgraph}>
-
+      <GrommetWrapper
+        style={{
+          background: "url('/shad-defi.jpg')",
+        }}
+      >
+        <ApolloProvider client={Subgraph}>
           <Component {...pageProps} />
-          </ApolloProvider>
-          <Foot />
-        </GrommetWrapper>
+        </ApolloProvider>
+        <Foot />
+      </GrommetWrapper>
     </>
   );
 };
