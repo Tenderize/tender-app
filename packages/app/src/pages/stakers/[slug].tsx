@@ -41,86 +41,86 @@ const Token: FC = () => {
   }, []);
 
   return (
-      <Box>
-        <Box width="100vw" align="center" alignSelf="start">
-          <TenderBox
-            margin={{
-              top: "xlarge",
-            }}
-            pad={{ bottom: "xlarge" }}
-            width="xlarge"
-          >
-            <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-              <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
-              <Tab
-                title={
-                  <Tip
-                    dropProps={{ align: { bottom: "top" } }}
-                    content={`Stake your ${info.symbol} and earn staking rewards`}
-                  >
-                    <Box height="100%" justify="center" align="center">
-                      <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
-                    </Box>
-                  </Tip>
-                }
-              >
-                <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                  <Deposit
-                    protocolName={protocolName}
-                    symbol={info.symbol}
-                    logo={info.bwLogo}
-                    tokenBalance={tokenBalance}
-                    tenderTokenBalance={tenderBalance}
-                  />
-                </Box>
-              </Tab>
-              <Tab
-                title={
-                  <Tip
-                    dropProps={{ align: { bottom: "top" } }}
-                    content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
-                  >
-                    <Box height="100%" justify="center" align="center">
-                      <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
-                    </Box>
-                  </Tip>
-                }
-              >
-                <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                  <LiquidityPool
-                    protocolName={protocolName}
-                    symbol={info.symbol}
-                    tokenBalance={tokenBalance}
-                    tenderTokenBalance={tenderBalance}
-                    lpTokenBalance={lpTokenBalance}
-                  />
-                </Box>
-              </Tab>
-              <Tab
-                title={
-                  <Tip
-                    dropProps={{ align: { bottom: "top" } }}
-                    content={`Farm your liquidity pool tokens for more rewards`}
-                  >
-                    <Box height="100%" justify="center" align="center">
-                      <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
-                    </Box>
-                  </Tip>
-                }
-              >
-                <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                  <Farm
-                    protocolName={protocolName}
-                    symbol={info.symbol}
-                    account={account}
-                    lpTokenBalance={lpTokenBalance}
-                  />
-                </Box>
-              </Tab>
-            </Tabs>
-          </TenderBox>
-        </Box>
+    <Box>
+      <Box width="100vw" align="center" alignSelf="start">
+        <TenderBox
+          margin={{
+            top: "xlarge",
+          }}
+          pad={{ bottom: "xlarge" }}
+          width="xlarge"
+        >
+          <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+            <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
+            <Tab
+              title={
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Stake your ${info.symbol} and earn staking rewards`}
+                >
+                  <Box height="100%" justify="center" align="center">
+                    <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
+                  </Box>
+                </Tip>
+              }
+            >
+              <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                <Deposit
+                  protocolName={protocolName}
+                  symbol={info.symbol}
+                  logo={info.bwLogo}
+                  tokenBalance={tokenBalance}
+                  tenderTokenBalance={tenderBalance}
+                />
+              </Box>
+            </Tab>
+            <Tab
+              title={
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
+                >
+                  <Box height="100%" justify="center" align="center">
+                    <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
+                  </Box>
+                </Tip>
+              }
+            >
+              <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                <LiquidityPool
+                  protocolName={protocolName}
+                  symbol={info.symbol}
+                  tokenBalance={tokenBalance}
+                  tenderTokenBalance={tenderBalance}
+                  lpTokenBalance={lpTokenBalance}
+                />
+              </Box>
+            </Tab>
+            <Tab
+              title={
+                <Tip
+                  dropProps={{ align: { bottom: "top" } }}
+                  content={`Farm your liquidity pool tokens for more rewards`}
+                >
+                  <Box height="100%" justify="center" align="center">
+                    <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
+                  </Box>
+                </Tip>
+              }
+            >
+              <Box round={{ corner: "bottom" }} border="top" pad="medium">
+                <Farm
+                  protocolName={protocolName}
+                  symbol={info.symbol}
+                  account={account}
+                  lpTokenBalance={lpTokenBalance}
+                />
+              </Box>
+            </Tab>
+          </Tabs>
+        </TenderBox>
       </Box>
+    </Box>
   );
 };
 
@@ -165,7 +165,7 @@ const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => 
                   staker={option}
                   onClick={async (e) => {
                     e.stopPropagation();
-                    await addNetwork(option.testnetChainId);
+                    await addNetwork(option.chainId);
                     setOpen(false);
                   }}
                 />

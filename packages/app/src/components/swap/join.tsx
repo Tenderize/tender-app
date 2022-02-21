@@ -214,7 +214,7 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
                       spender={addresses[protocolName].tenderSwap}
                       token={contracts[protocolName].token}
                       show={!isTokenApproved}
-                      chainId={stakers[protocolName].testnetChainId}
+                      chainId={stakers[protocolName].chainId}
                     />
                   )
                 }

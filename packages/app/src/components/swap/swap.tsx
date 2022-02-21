@@ -160,7 +160,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
               spender={addresses[protocolName].tenderSwap}
               token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
               show={!isTokenApproved && isSendingToken}
-              chainId={stakers[protocolName].testnetChainId}
+              chainId={stakers[protocolName].chainId}
             />
             <Button
               primary

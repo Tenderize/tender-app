@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
-import { useEthers, useContractFunction, ChainId } from "@usedapp/core";
+import { useEthers, useContractFunction } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
@@ -124,7 +124,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                   spender={addresses[protocolName].tenderizer}
                   token={contracts[protocolName].token}
                   show={!isTokenApproved}
-                  chainId={stakers[protocolName].testnetChainId}
+                  chainId={stakers[protocolName].chainId}
                 />
                 <Button
                   primary
@@ -143,7 +143,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Box>
         </Form>
       </Box>
-      {(chainId === ChainId.Rinkeby || chainId === ChainId.ArbitrumRinkeby) && (
+      {chainId === stakers[protocolName].chainId && (
         <Box
           margin={{ top: "medium" }}
           alignSelf="center"

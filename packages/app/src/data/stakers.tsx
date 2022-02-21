@@ -12,7 +12,6 @@ export type Staker = {
   neonLogo: string;
   path: string;
   symbol: string;
-  testnetChainId: number;
   chainId: number;
   hasPermit: boolean;
 };
@@ -30,7 +29,6 @@ const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderLPT.svg",
     neonLogo: "landing/neon-lpt.png",
     symbol: "LPT",
-    testnetChainId: ChainId.ArbitrumRinkeby,
     chainId: ChainId.ArbitrumRinkeby,
     hasPermit: true,
   },
@@ -46,7 +44,6 @@ const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderGRT.svg",
     neonLogo: "landing/neon-grt.png",
     symbol: "GRT",
-    testnetChainId: ChainId.Rinkeby,
     chainId: ChainId.Rinkeby,
     hasPermit: false,
   },
@@ -64,8 +61,7 @@ const stakers: Record<string, Staker> = {
   //   bwTenderLogo: "tenderMATIC.svg",
   //   neonLogo: "landing/neon-matic.png",
   //   symbol: "MATIC",
-  //   testnetChainId: ChainId.Rinkeby,
-  //   chainId: ChainId.Mainnet,
+  //   chainId: ChainId.Rinkeby,
   // },
   // audius: {
   //   name: "audius",
@@ -80,8 +76,7 @@ const stakers: Record<string, Staker> = {
   //   bwTenderLogo: "tenderAUDIO.svg",
   //   neonLogo: "landing/neon-audio.png",
   //   symbol: "AUDIO",
-  //   testnetChainId: ChainId.Rinkeby,
-  //   chainId: ChainId.Mainnet,
+  //   chainId: ChainId.Rinkeby,
   // },
 };
 
