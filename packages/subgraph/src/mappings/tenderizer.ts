@@ -23,10 +23,11 @@ import {
   BI_18,
   exponentToBigDecimal,
   getUSDPrice,
-  loadOrCreateUserDeploymentDay
+  loadOrCreateUserDeploymentDay,
+  ZERO_BD
  } from "./utils"
 import { TenderToken } from "../types/templates/Tenderizer/TenderToken"
-import { Address } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizerAddress = depositEvent.address.toHex()
@@ -168,7 +169,11 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
-  day.DPY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal())
+  if(day.startPrinciple.gt(BigInt.fromI32(0))) {
+    day.DPY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal())
+  } else {
+    day.DPY = ZERO_BD
+  }
   day.shares = tenderToken.getTotalShares()
   day.supply = tenderToken.getTotalPooledTokens()
   day.save()

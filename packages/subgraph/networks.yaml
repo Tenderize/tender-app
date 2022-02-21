@@ -8,8 +8,8 @@ rinkeby:
   networkName: rinkeby
   contracts:
     registry:
-      address: "Fb68d38Efa5250ae21F99353f1aeB40492817f1E"
-      startBlock: 9972106
+      address: "bD37ca301D6031455FB8FBA696c68861e70ED694"
+      startBlock: 10208627
 arbitrum-rinkeby:
   networkName: arbitrum-rinkeby
   contracts:
