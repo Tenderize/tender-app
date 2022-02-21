@@ -12,7 +12,7 @@ export type Staker = {
   neonLogo: string;
   path: string;
   symbol: string;
-  chainId: number;
+  chainId: ChainId;
   hasPermit: boolean;
 };
 

@@ -1,14 +1,13 @@
 import { ReactElement, useCallback, useState } from "react";
-import { useEthers } from "@usedapp/core";
+import { useEthers, getChainName, ChainId } from "@usedapp/core";
 import { Box, Button, Card, CardFooter, CardHeader, Heading, Layer } from "grommet";
-import { chainIdToNetworkName } from "./helpers";
 
 type InferArguments<T> = T extends (...t: [...infer Arg]) => any ? Arg : never;
 type InferReturn<T> = Promise<T extends (...t: [...infer Res]) => infer Res ? Res : never>;
 
 export const useEnsureChain = <TFunc extends (...args: any[]) => any>(
   func: TFunc,
-  requestedChainId: number
+  requestedChainId: ChainId
 ): {
   chainForcedFunction: (...args: InferArguments<TFunc>) => InferReturn<TFunc>;
   renderError: () => ReactElement;
@@ -29,7 +28,7 @@ export const useEnsureChain = <TFunc extends (...args: any[]) => any>(
             <Heading level={2} alignSelf="center">
               {!account
                 ? "Please connect your wallet"
-                : `Please switch to ${chainIdToNetworkName(requestedChainId)} to use Tenderize`}
+                : `Please switch to ${getChainName(requestedChainId)} to use Tenderize`}
             </Heading>
           </CardHeader>
           <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
