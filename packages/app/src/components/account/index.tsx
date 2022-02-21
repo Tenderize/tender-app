@@ -52,27 +52,21 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
             plain
             icon={networkAvatar(chainId)}
             style={{ color: normalizeColor("white", theme) }}
-            label={<Text weight={300}>{getChainName(chainId || ChainId.Mainnet)}</Text>}
+            label={<Text>{getChainName(chainId || ChainId.Mainnet)}</Text>}
           />
           <Button
             style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
-            label={<Text weight={300}>{`${weiToEthWithDecimals(etherBal ?? "0", 4)} ETH`}</Text>}
+            label={<Text>{`${weiToEthWithDecimals(etherBal ?? "0", 4)} ETH`}</Text>}
           />
           <Button
             style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
             onClick={() => setShowAccountInfo(!showAccountInfo)}
-            label={<Text weight={300}>{ens ?? shortenAddress(account)}</Text>}
+            label={<Text>{ens ?? shortenAddress(account)}</Text>}
           />
-          <Button secondary onClick={() => deactivate()} label={<Text weight={300}>Disconnect</Text>} />
+          <Button onClick={() => deactivate()} label={<Text>Disconnect</Text>} />
         </Box>
       ) : (
-        <ConnectButton
-          primary
-          color="light-2"
-          onClick={activateWallet}
-          label="Connect"
-          icon={<Trigger color={"brand"} />}
-        />
+        <ConnectButton color="light-2" onClick={activateWallet} label="Connect" />
       )}
       {showWalletPicker && (
         <Layer
@@ -185,6 +179,4 @@ const ConnectButton = styled(Button)`
   ${({ theme }: { theme: ThemeType }) => css`
     color: ${normalizeColor("brand", theme)};
   `}
-  padding-left: 2rem;
-  padding-right: 2rem;
 `;
