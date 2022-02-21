@@ -15,7 +15,7 @@ export const Subgraph = new ApolloClient({
   link: ApolloLink.from([
     new MultiAPILink({
       endpoints: ENDPOINTS,
-      httpSuffix: '',
+      httpSuffix: "",
       createHttpLink: () => createHttpLink(),
     }),
   ]),
