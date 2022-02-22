@@ -15,7 +15,7 @@ type Config @entity{
   tenderizer: String!
   "Address of ERC20 Tender Token"
   tenderToken: String!
-  "Address of tenderSwap"
+  "Address of TenderSwap"
   tenderSwap: String!
   "Address of LP Token"
   lpToken: String!
