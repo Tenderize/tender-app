@@ -50,7 +50,7 @@ export const SwitchNetwork: FC<{ chainId: ChainId }> = ({ chainId }) => {
       secondary
       onClick={async (e) => {
         e.preventDefault();
-        const isAdded = await addNetwork(ChainId.Rinkeby);
+        const isAdded = await addNetwork(chainId);
         setIsNetworkAdded(isAdded);
       }}
       icon={<Avatar size="medium" src={networkAvatar(chainId)} />}
