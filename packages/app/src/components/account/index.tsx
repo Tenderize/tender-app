@@ -99,7 +99,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 handleClick={async () => {
                   const walletConnector = new PortisConnector({
                     dAppId: config.portisApiKey,
-                    networks: supportedChainIds
+                    networks: supportedChainIds,
                   });
                   await activate(walletConnector);
                   handleCloseWalletPicker();

@@ -10,8 +10,8 @@ import Harvest from "./harvest";
 import { InfoCard, Queries } from "@tender/shared/src/index";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import stakers from "data/stakers";
-import {useIsCorrectChain} from 'utils/useEnsureRinkebyConnect'
-import {SwitchNetwork} from 'components/account/SwitchNetwork'
+import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
+import { SwitchNetwork } from "components/account/SwitchNetwork";
 
 type Props = {
   protocolName: string;
@@ -23,7 +23,7 @@ type Props = {
 const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }) => {
   const symbolFull = `t${symbol}-${symbol}-SWAP`;
   const requiredChain = stakers[protocolName].chainId;
-  const isCorrectChain = useIsCorrectChain(requiredChain)
+  const isCorrectChain = useIsCorrectChain(requiredChain);
 
   const stakeOf = useContractCall({
     abi: contracts[protocolName].tenderFarm.interface,
@@ -59,16 +59,17 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
             text={`${weiToEthWithDecimals(stakeOf?.toString() || "0", 3)} ${symbolFull}`}
             align="center"
           />
-          {!isCorrectChain ? <></> : 
-                    <>
-                    <Farm protocolName={protocolName} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
-                    <Text size="small">{`Balance: ${weiToEthWithDecimals(
-                      lpTokenBalance?.toString() || "0",
-                      3
-                    )} ${symbolFull}`}</Text>
-                    </>
-          
-          }
+          {!isCorrectChain ? (
+            <></>
+          ) : (
+            <>
+              <Farm protocolName={protocolName} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
+              <Text size="small">{`Balance: ${weiToEthWithDecimals(
+                lpTokenBalance?.toString() || "0",
+                3
+              )} ${symbolFull}`}</Text>
+            </>
+          )}
         </Box>
         <Box direction="column" gap="large" align="center">
           <InfoCard
@@ -76,9 +77,7 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
             text={`${weiToEthWithDecimals(availableRewards?.toString() || "0", 3)} tender${symbol}`}
             align="center"
           />
-          {!isCorrectChain ? <></> : 
-            <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />
-          }
+          {!isCorrectChain ? <></> : <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />}
         </Box>
         <Box direction="column" gap="large" align="center">
           <InfoCard
@@ -89,19 +88,24 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
               3
             )} tender${symbol}`}
           />
-          {!isCorrectChain ? <></> :
-                    <Harvest protocolName={protocolName} symbol={`tender${symbol}`} availableRewards={availableRewards || "0"} />
-                  }
+          {!isCorrectChain ? (
+            <></>
+          ) : (
+            <Harvest
+              protocolName={protocolName}
+              symbol={`tender${symbol}`}
+              availableRewards={availableRewards || "0"}
+            />
+          )}
         </Box>
       </Box>
-      {
-          !isCorrectChain && account ? 
-        <Box justify="center" align="center" pad={{vertical: "large"}}>
-        <SwitchNetwork chainId={requiredChain}/>
+      {!isCorrectChain && account ? (
+        <Box justify="center" align="center" pad={{ vertical: "large" }}>
+          <SwitchNetwork chainId={requiredChain} />
         </Box>
-        :
+      ) : (
         <></>
-      }
+      )}
     </Box>
   );
 };

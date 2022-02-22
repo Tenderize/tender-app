@@ -18,7 +18,7 @@ type Props = {
   tokenSymbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
-  disabled: boolean
+  disabled: boolean;
 };
 
 const hasValue = (val: any) => {

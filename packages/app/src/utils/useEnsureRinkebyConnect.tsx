@@ -55,5 +55,5 @@ export const useEnsureChain = <TFunc extends (...args: any[]) => any>(
 
 export const useIsCorrectChain = (requiredChainId: ChainId): boolean => {
   const { account, chainId } = useEthers();
-  return account !== undefined && requiredChainId === chainId
-}
+  return account !== undefined && requiredChainId === chainId;
+};

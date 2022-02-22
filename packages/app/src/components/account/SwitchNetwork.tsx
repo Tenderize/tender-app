@@ -39,7 +39,7 @@ export const addNetwork = async (chainId: number) => {
   return isNetworkAdded;
 };
 
-export const SwitchNetwork: FC<{chainId: ChainId}> = ({chainId}) => {
+export const SwitchNetwork: FC<{ chainId: ChainId }> = ({ chainId }) => {
   const [isNetworkAdded, setIsNetworkAdded] = useState(false);
 
   if (isNetworkAdded) {
