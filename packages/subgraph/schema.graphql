@@ -9,18 +9,16 @@ type TenderizeGlobal @entity { # Global Values/ TODO: better name?
 type Config @entity{
   "Name of the protocol eg. 'livepeer'"
   id: ID!
-  "Address of the Controller"
-  controller: String!
   "Address of the ERC20 token for integration"
   steak: String!
   "Address of Tenderizer"
   tenderizer: String!
   "Address of ERC20 Tender Token"
   tenderToken: String!
-  "Address of Elastic Supply Pool"
-  esp: String!
-  "Address of liquidity pool for pair"
-  bpool: String!
+  "Address of TenderSwap"
+  tenderSwap: String!
+  "Address of LP Token"
+  lpToken: String!
   "Address of TenderFarm contract"
   tenderFarm: String!
 }
@@ -178,12 +176,10 @@ type UserDeploymentDay @entity {
 type TenderizerCreatedEvent @entity {
   id: ID!
   name: String!
-  controller: String!
   steak: String!
   tenderizer: String!
   tenderToken: String!
-  esp: String!
-  bpool: String!
+  tenderSwap: String!
   tenderFarm: String!
   timestamp: BigInt!
 }
@@ -286,4 +282,215 @@ type TenderTokenTransferEvent @entity {
   to: String!
   amount: BigInt!
   timestamp: BigInt!
+}
+
+# Tenderswap Entities
+
+type TendeSwapInfo @entity {
+  id: ID!
+
+  exchangeCount: BigInt!
+  swapCount: BigInt!
+  tokenCount: BigInt!
+
+  updated: BigInt!
+  updatedAtBlock: BigInt!
+  updatedAtTransaction: Bytes!
+}
+
+type TenderSwap @entity {
+  id: ID!
+
+  # swap address
+  address: Bytes!
+
+  # number of tokens supported
+  numTokens: Int!
+
+  # supported tokens
+  tokens: [Token!]!
+
+  # token balances
+  balances: [BigInt!]!
+
+  # liquidity provider token
+  lpToken: Bytes!
+
+  # amplification coefficient
+  A: BigInt!
+
+  swapFee: BigInt!
+  adminFee: BigInt!
+  withdrawFee: BigInt!
+
+  virtualPrice: BigInt!
+
+  # owner address
+  owner: Bytes!
+
+  events: [SwapEvent!] @derivedFrom(field: "swap")
+
+  exchanges: [Exchange!] @derivedFrom(field: "swap")
+
+  # cumulative hourly trade volume
+  hourlyVolumes: [HourlyVolume!] @derivedFrom(field: "swap")
+
+  # cumulative daily trade volume
+  dailyVolumes: [DailyVolume!] @derivedFrom(field: "swap")
+
+  # cumulative weekly trade volume
+  weeklyVolumes: [WeeklyVolume!] @derivedFrom(field: "swap")
+}
+
+interface TradeVolume @entity {
+  swap: TenderSwap!
+  timestamp: BigInt!
+  volume: BigDecimal!
+}
+
+type DailyVolume implements TradeVolume @entity {
+  id: ID!
+  swap: TenderSwap!
+  timestamp: BigInt!
+  volume: BigDecimal!
+}
+
+type HourlyVolume implements TradeVolume @entity {
+  id: ID!
+  swap: TenderSwap!
+  timestamp: BigInt!
+  volume: BigDecimal!
+}
+
+type WeeklyVolume implements TradeVolume @entity {
+  id: ID!
+  swap: TenderSwap!
+  timestamp: BigInt!
+  volume: BigDecimal!
+}
+
+interface SwapEvent @entity {
+  swap: TenderSwap!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type NewAdminFeeEvent implements SwapEvent @entity {
+  id: ID!
+  swap: TenderSwap!
+  newFee: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type NewSwapFeeEvent implements SwapEvent @entity {
+  id: ID!
+  swap: TenderSwap!
+  newFee: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type NewWithdrawFeeEvent implements SwapEvent @entity {
+  id: ID!
+  swap: TenderSwap!
+  newFee: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type RampAEvent implements SwapEvent @entity {
+  id: ID!
+  swap: TenderSwap!
+  oldA: BigInt!
+  newA: BigInt!
+  initialTime: BigInt!
+  futureTime: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type StopRampAEvent implements SwapEvent @entity {
+  id: ID!
+  swap: TenderSwap!
+  currentA: BigInt!
+  time: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type AddLiquidityEvent implements SwapEvent @entity {
+  id: ID!
+  swap: TenderSwap!
+  provider: Bytes!
+  tokenAmounts: [BigInt!]!
+  fees: [BigInt!]!
+  invariant: BigInt
+  lpTokenSupply: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type RemoveLiquidityEvent implements SwapEvent @entity {
+  id: ID!
+  swap: TenderSwap!
+  provider: Bytes!
+  tokenAmounts: [BigInt!]!
+  fees: [BigInt!]
+  invariant: BigInt
+  lpTokenSupply: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+interface Exchange {
+  swap: TenderSwap!
+
+  buyer: Bytes!
+  soldId: BigInt!
+  tokensSold: BigInt!
+  boughtId: BigInt!
+  tokensBought: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type TokenExchange implements Exchange @entity {
+  id: ID!
+  swap: TenderSwap!
+  buyer: Bytes!
+  boughtId: BigInt!
+  tokensBought: BigInt!
+  soldId: BigInt!
+  tokensSold: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type Token @entity {
+  id: ID!
+  address: Bytes!
+  decimals: BigInt!
+  name: String
+  symbol: String
 }

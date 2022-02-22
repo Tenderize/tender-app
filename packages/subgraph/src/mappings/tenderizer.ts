@@ -23,10 +23,11 @@ import {
   BI_18,
   exponentToBigDecimal,
   getUSDPrice,
-  loadOrCreateUserDeploymentDay
+  loadOrCreateUserDeploymentDay,
+  ZERO_BD
  } from "./utils"
 import { TenderToken } from "../types/templates/Tenderizer/TenderToken"
-import { Address } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizerAddress = depositEvent.address.toHex()
@@ -160,7 +161,7 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
 export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): void {
   let tenderizerAddress = rewardsClaimedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
-  let amount = rewardsClaimedEvent.params.rewards
+  let amount = rewardsClaimedEvent.params.stakeDiff
   let usdPrice = getUSDPrice(protocolId)
   let config = Config.load(protocolId)
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
@@ -168,7 +169,11 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
-  day.DPY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal())
+  if(day.startPrinciple.gt(BigInt.fromI32(0))) {
+    day.DPY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal())
+  } else {
+    day.DPY = ZERO_BD
+  }
   day.shares = tenderToken.getTotalShares()
   day.supply = tenderToken.getTotalPooledTokens()
   day.save()
@@ -184,7 +189,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   // Save raw event
   let event = new RewardsClaimedEvent(rewardsClaimedEvent.transaction.hash.toHex());
   event.tenderizer = tenderizerAddress
-  event.rewards = rewardsClaimedEvent.params.rewards
+  event.rewards = rewardsClaimedEvent.params.stakeDiff
   event.currentPrincipal = rewardsClaimedEvent.params.currentPrincipal
   event.oldPrincipal = rewardsClaimedEvent.params.oldPrincipal
   event.timestamp = rewardsClaimedEvent.block.timestamp

@@ -3,7 +3,8 @@ import { TenderizerCreated } from "../types/Registry/Registry"
 import { 
   Tenderizer as TenderizerContract, 
   TenderFarm as TenderFarmContract,
-  TenderToken as TenderTokenContract 
+  TenderToken as TenderTokenContract,
+  TenderSwap as TenderSwapContract
 } from "../types/templates"
 import { Tenderizer } from "../types/templates/Tenderizer/Tenderizer"
 import {
@@ -14,6 +15,7 @@ import {
 } from "./utils"
 import { Address } from "@graphprotocol/graph-ts";
 import { TenderToken } from "../types/templates/TenderToken/TenderToken"
+import { TenderSwap } from "../types/templates/TenderSwap/TenderSwap"
 
 export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Create Config entity and save raw event
@@ -22,13 +24,13 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   let protocolConfigEvent = new TenderizerCreatedEvent(config.transaction.hash.toHex())
   
   protocolConfigEvent.name = params.name
-  protocolConfigEvent.controller = protocolConfig.controller = params.controller.toHex()
   protocolConfigEvent.steak = protocolConfig.steak = params.steak.toHex()
   protocolConfigEvent.tenderizer = protocolConfig.tenderizer = params.tenderizer.toHex()
   protocolConfigEvent.tenderToken = protocolConfig.tenderToken = params.tenderToken.toHex()
-  protocolConfigEvent.esp = protocolConfig.esp = params.esp.toHex()
-  protocolConfigEvent.bpool = protocolConfig.bpool = params.bpool.toHex()
   protocolConfigEvent.tenderFarm = protocolConfig.tenderFarm = params.tenderFarm.toHex()
+  protocolConfigEvent.tenderSwap = protocolConfig.tenderSwap = params.tenderSwap.toHex()
+  let tenderSwap = TenderSwap.bind(Address.fromString(protocolConfig.tenderSwap))
+  protocolConfig.lpToken = tenderSwap.lpToken().toHex()
   protocolConfigEvent.timestamp = config.block.timestamp
   
   protocolConfig.save()
@@ -45,6 +47,7 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   TenderizerContract.create(params.tenderizer)
   TenderFarmContract.create(params.tenderFarm)
   TenderTokenContract.create(params.tenderToken)
+  TenderSwapContract.create(params.tenderSwap)
 
   // Accomodate initial deposit
   // The registry event is fired after bootstrap deposit 

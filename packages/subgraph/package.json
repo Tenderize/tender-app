@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.20.1",
-    "@graphprotocol/graph-ts": "^0.20.1"
+    "@graphprotocol/graph-ts": "^0.20.1",
+    "@protofire/subgraph-toolkit": "^0.1.2"
   },
   "license": "MIT",
   "scripts": {
     "prepare": "node ./templatify.js",
     "prepare:rinkeby": "NETWORK_NAME=rinkeby node ./templatify.js",
+    "prepare:arbitrum-rinkeby": "NETWORK_NAME=arbitrum-rinkeby node ./templatify.js",
     "prepare:mainnet": "NETWORK_NAME=mainnet node ./templatify.js",
     "auth": "graph auth https://api.thegraph.com/ $GRAPH_ACCESS_TOKEN",
     "build": "graph build",
