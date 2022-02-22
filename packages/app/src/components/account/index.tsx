@@ -11,6 +11,7 @@ import { theme } from "@tender/shared/src/index";
 import { TenderizeConfig } from "types";
 import { FormClose } from "grommet-icons";
 import { weiToEthWithDecimals } from "utils/amountFormat";
+import { networkAvatar } from "./helpers";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, chainId } = useEthers();
@@ -28,21 +29,6 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
 
   const supportedChainIds = Object.keys(config.chainUrlMapping).map((i) => parseInt(i, 10));
 
-  const networkAvatar = (chain: ChainId | undefined) => {
-    switch (chain) {
-      case ChainId.Arbitrum:
-        return <Avatar size="small" src="/arbitrum.svg" />;
-      case ChainId.ArbitrumRinkeby:
-        return <Avatar size="small" src="/arbitrum.svg" />;
-      case ChainId.Rinkeby:
-        return <Avatar size="small" src="/ethereum.png" />;
-      case ChainId.Mainnet:
-        return <Avatar size="small" src="/ethereum.png" />;
-      default:
-        return <Avatar />;
-    }
-  };
-
   return (
     <Account>
       <AccountModal showModal={showAccountInfo} setShowModal={setShowAccountInfo} />
@@ -50,7 +36,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
         <Box direction="row" gap="medium">
           <Button
             plain
-            icon={networkAvatar(chainId)}
+            icon={<Avatar size="small" src={networkAvatar(chainId)} />}
             style={{ color: normalizeColor("white", theme) }}
             label={<Text>{getChainName(chainId || ChainId.Mainnet)}</Text>}
           />
@@ -102,7 +88,6 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 handleClick={async () => {
                   const walletConnector = new WalletConnectConnector({
                     rpc: config.chainUrlMapping,
-                    supportedChainIds: supportedChainIds,
                   });
                   await activate(walletConnector);
                   handleCloseWalletPicker();
@@ -114,7 +99,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 handleClick={async () => {
                   const walletConnector = new PortisConnector({
                     dAppId: config.portisApiKey,
-                    networks: supportedChainIds,
+                    networks: supportedChainIds
                   });
                   await activate(walletConnector);
                   handleCloseWalletPicker();
@@ -126,7 +111,6 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 handleClick={async () => {
                   const walletConnector = new WalletLinkConnector({
                     appName: "Tenderize",
-                    supportedChainIds,
                     url: config.chainUrlMapping[4],
                     darkMode: true,
                   });

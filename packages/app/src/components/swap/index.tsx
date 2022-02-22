@@ -1,10 +1,14 @@
 import { FC } from "react";
 import { BigNumber, BigNumberish } from "ethers";
+import { useEthers } from "@usedapp/core";
 
 import Swap from "./swap";
 import JoinPool from "./join";
 import ExitPool from "./exit";
 import { Box, Text } from "grommet";
+import {useIsCorrectChain} from 'utils/useEnsureRinkebyConnect'
+import {SwitchNetwork} from 'components/account/SwitchNetwork'
+import stakers from "data/stakers";
 
 type Props = {
   protocolName: string;
@@ -15,6 +19,10 @@ type Props = {
 };
 
 const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBalance, lpTokenBalance }) => {
+  const requiredChain = stakers[protocolName].chainId;
+  const { account } = useEthers();
+  const isCorrectChain = useIsCorrectChain(requiredChain)
+
   return (
     <Box justify="center" align="center" direction="column">
       <Swap
@@ -22,8 +30,14 @@ const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTo
         tokenSymbol={symbol}
         tokenBalance={tokenBalance}
         tenderTokenBalance={tenderTokenBalance}
+        disabled={!isCorrectChain}
       />
-
+      {
+          !isCorrectChain && account ? 
+        <Box pad={{vertical: "large"}}>
+        <SwitchNetwork chainId={requiredChain}/>
+        </Box>
+        :
       <Box
         margin={{ top: "medium" }}
         pad={{ horizontal: "large", vertical: "medium" }}
@@ -43,7 +57,8 @@ const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTo
           />
           <ExitPool protocolName={protocolName} symbol={symbol} lpTokenBalance={lpTokenBalance} />
         </Box>
-      </Box>
+        </Box>
+      }
     </Box>
   );
 };

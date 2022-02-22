@@ -3,7 +3,7 @@ import { FC } from "react";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 
-import { Foot, GrommetWrapper, Subgraph } from "@tender/shared/src/index";
+import { GrommetWrapper, Subgraph } from "@tender/shared/src/index";
 
 import "./index.css";
 
@@ -22,7 +22,6 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
         <ApolloProvider client={Subgraph}>
           <Component {...pageProps} />
         </ApolloProvider>
-        <Foot />
       </GrommetWrapper>
     </>
   );

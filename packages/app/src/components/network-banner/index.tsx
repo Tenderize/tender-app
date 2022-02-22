@@ -3,7 +3,7 @@ import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { Box, Text } from "grommet";
 import { FC } from "react";
 
-const TestnetBanner: FC = () => {
+const NetworkBanner: FC = () => {
   const { chainId } = useEthers();
 
   if (chainId === ChainId.Rinkeby || chainId === ChainId.ArbitrumRinkeby) {
@@ -14,7 +14,7 @@ const TestnetBanner: FC = () => {
 
   return (
     <Box background="#FFE8B9" height="40px" justify="center" align="center" gap="xsmall" direction="row">
-      <SwitchNetwork />
+      <SwitchNetwork chainId={chainId} />
       <Text color="gray" size="small">
         {message}
       </Text>
@@ -22,4 +22,4 @@ const TestnetBanner: FC = () => {
   );
 };
 
-export default TestnetBanner;
+export default NetworkBanner;

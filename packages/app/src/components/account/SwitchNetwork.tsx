@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
-import { Button } from "grommet";
-import { ChainId, DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core";
+import { Avatar, Button } from "grommet";
+import { ChainId, DEFAULT_SUPPORTED_CHAINS, getChainName } from "@usedapp/core";
+import { networkAvatar } from "./helpers";
 
 export const addNetwork = async (chainId: number) => {
   let isNetworkAdded = false;
@@ -26,7 +27,7 @@ export const addNetwork = async (chainId: number) => {
             rpcUrls: ["https://rinkeby.arbitrum.io/rpc"],
             blockExplorerUrls: ["https://rinkeby-explorer.arbitrum.io/#/"],
             nativeCurrency: {
-              symbol: "ARETH",
+              symbol: "ETH",
               decimals: 18,
             },
           },
@@ -38,7 +39,7 @@ export const addNetwork = async (chainId: number) => {
   return isNetworkAdded;
 };
 
-export const SwitchNetwork: FC = () => {
+export const SwitchNetwork: FC<{chainId: ChainId}> = ({chainId}) => {
   const [isNetworkAdded, setIsNetworkAdded] = useState(false);
 
   if (isNetworkAdded) {
@@ -46,14 +47,14 @@ export const SwitchNetwork: FC = () => {
   }
   return (
     <Button
-      size="small"
-      style={{ color: "gray", borderColor: "gray", borderWidth: 1 }}
+      secondary
       onClick={async (e) => {
         e.preventDefault();
         const isAdded = await addNetwork(ChainId.Rinkeby);
         setIsNetworkAdded(isAdded);
       }}
-      label="Switch to Rinkeby"
+      icon={<Avatar size="medium" src={networkAvatar(chainId)} />}
+      label={`Switch to ${getChainName(chainId)}`}
     />
   );
 };

@@ -18,6 +18,7 @@ import { NotificationsList } from "../../components/transactions";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
 import { addNetwork } from "components/account/SwitchNetwork";
+import { Foot } from "@tender/shared/src/index";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -41,7 +42,6 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box>
       <Box width="100vw" align="center" alignSelf="start">
         <TenderBox
           margin={{
@@ -120,7 +120,6 @@ const Token: FC = () => {
           </Tabs>
         </TenderBox>
       </Box>
-    </Box>
   );
 };
 
@@ -221,7 +220,6 @@ const DropdownBackground = styled.div`
 
 const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   const dappConfig: Config = {
-    networks: [ArbitrumRinkeby, Rinkeby],
     readOnlyUrls: props.config?.chainUrlMapping,
   };
 
@@ -232,6 +230,7 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
       <NotificationsList />
       <Navbar config={props.config} />
       <Token />
+      <Foot />
     </DAppProvider>
   );
 };
