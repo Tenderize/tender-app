@@ -7,8 +7,7 @@ const Dialog: FC<{
   title: string;
   openButtonLabel: string;
   description?: string;
-  button1?: React.ReactNode;
-  button2?: React.ReactNode;
+  buttons: React.ReactNode[];
   card?: BoxExtendedProps;
   height?: HeightType | undefined;
   width?: WidthType | undefined;
@@ -45,8 +44,7 @@ const Dialog: FC<{
               <Box flex justify="evenly">
                 <Text textAlign="center">{props.description}</Text>
                 <Box gap="small" direction="row" justify="center">
-                  {props.button1}
-                  {props.button2}
+                  {props.buttons}
                 </Box>
               </Box>
             </CardBody>
