@@ -31,7 +31,7 @@ const Faucet: FC<{
       width="large"
       openButtonLabel="Faucet"
       title="Faucet"
-      description={`Get some testnet ${symbol} and ETH (you need ETH to get ${symbol}).
+      description={`Get some testnet ETH first, then some ${symbol}.
 ${isRinkebyArbitrum ? "To get ETH on ArbitrumRinkeby, you have to bridge it from Rinkeby." : ""}
           `}
       buttons={[
