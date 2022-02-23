@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
-import { useEthers, useContractFunction } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
@@ -16,6 +16,7 @@ import stakers from "data/stakers";
 import Faucet from "components/faucet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
+import { useDeposit } from "utils/tenderDepositHooks";
 
 type Props = {
   protocolName: string;
@@ -30,6 +31,9 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const { account, chainId } = useEthers();
 
   const requiredChain = stakers[protocolName].chainId;
+
+  // whether supported asset (e.g. LPT) has ERC20 permit support
+  const hasPermit = stakers[protocolName].hasPermit;
 
   const subgraphName = stakers[protocolName].subgraphId;
   const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
@@ -54,9 +58,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     setDepositInput(val);
   };
 
-  const { state: depositTx, send: deposit } = useContractFunction(contracts[protocolName].tenderizer, "deposit", {
-    transactionName: `Deposit ${symbol}`,
-  });
+  const { tx: depositTx, deposit } = useDeposit(protocolName);
 
   const depositTokens = async (e: any) => {
     e.preventDefault();
@@ -134,14 +136,14 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     symbol={symbol}
                     spender={addresses[protocolName].tenderizer}
                     token={contracts[protocolName].token}
-                    show={!isTokenApproved}
+                    show={!hasPermit && !isTokenApproved}
                     chainId={stakers[protocolName].chainId}
                   />
                   <Button
                     primary
                     fill="horizontal"
                     disabled={
-                      !isTokenApproved ||
+                      (!hasPermit && !isTokenApproved) ||
                       !depositInput ||
                       depositInput.toString() === "0" ||
                       isPendingTransaction(depositTx)
