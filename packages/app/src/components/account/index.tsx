@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress, useEtherBalance, ChainId, getChainName } from "@usedapp/core";
-import { Avatar, Box, Button, Card, CardHeader, Heading, Image, Layer, Spinner, Text, ThemeType } from "grommet";
+import { Avatar, Box, Button, Card, CardHeader, Heading, Image, Layer, Menu, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
@@ -44,12 +44,23 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
             style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
             label={<Text>{`${weiToEthWithDecimals(etherBal ?? "0", 4)} ETH`}</Text>}
           />
-          <Button
+          <Menu
             style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}
-            onClick={() => setShowAccountInfo(!showAccountInfo)}
+            dropProps={{
+              align: { top: "bottom", left: "left" },
+              margin: { top: "small" },
+              round: "xsmall",
+            }}
+            messages={{
+              openMenu: "Open Menu",
+              closeMenu: "Close Menu",
+            }}
             label={<Text>{ens ?? shortenAddress(account)}</Text>}
+            items={[
+              { label: "Account Info", onClick: () => setShowAccountInfo(!showAccountInfo) },
+              { label: "Disconnect", onClick: () => deactivate() },
+            ]}
           />
-          <Button onClick={() => deactivate()} label={<Text>Disconnect</Text>} />
         </Box>
       ) : (
         <ConnectButton color="light-2" onClick={activateWallet} label="Connect" />
