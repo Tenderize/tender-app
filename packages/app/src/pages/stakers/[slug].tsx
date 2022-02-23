@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
-import { ChainId, Config, DAppProvider, useEthers, useTokenBalance } from "@usedapp/core";
+import { ChainId, Config, DAppProvider, useEthers, useTokenBalance, ArbitrumRinkeby, Rinkeby } from "@usedapp/core";
 import { addresses } from "@tender/contracts";
 import styled from "styled-components";
 import Deposit from "../../components/deposit";
@@ -15,9 +15,9 @@ import stakers, { Staker } from "../../data/stakers";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
-import { Foot } from "@tender/shared/src/index";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
+import { Foot } from "@tender/shared/src/index";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -27,7 +27,6 @@ const Token: FC = () => {
 
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
-  // TODO: USE MULTICALL FOR THESE
   const tokenBalance = useTokenBalance(addresses[protocolName].token, account) || constants.Zero;
   const tenderBalance = useTokenBalance(addresses[protocolName].tenderToken, account) || constants.Zero;
   const lpTokenBalance = useTokenBalance(addresses[protocolName].lpToken, account) || constants.Zero;
@@ -41,87 +40,83 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box>
-      <NotificationsList />
-      <Box width="100vw" align="center" alignSelf="start">
-        <TenderBox
-          margin={{
-            top: "xlarge",
-          }}
-          pad={{ bottom: "xlarge" }}
-          width="xlarge"
-        >
-          <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
-            <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Stake your ${info.symbol} and earn staking rewards`}
-                >
-                  <Box height="100%" justify="center" align="center">
-                    <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <Deposit
-                  protocolName={protocolName}
-                  symbol={info.symbol}
-                  logo={info.bwLogo}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
-                >
-                  <Box height="100%" justify="center" align="center">
-                    <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <LiquidityPool
-                  protocolName={protocolName}
-                  symbol={info.symbol}
-                  tokenBalance={tokenBalance}
-                  tenderTokenBalance={tenderBalance}
-                  lpTokenBalance={lpTokenBalance}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Tip
-                  dropProps={{ align: { bottom: "top" } }}
-                  content={`Farm your liquidity pool tokens for more rewards`}
-                >
-                  <Box height="100%" justify="center" align="center">
-                    <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
-                  </Box>
-                </Tip>
-              }
-            >
-              <Box round={{ corner: "bottom" }} border="top" pad="medium">
-                <Farm
-                  protocolName={protocolName}
-                  symbol={info.symbol}
-                  account={account}
-                  lpTokenBalance={lpTokenBalance}
-                />
-              </Box>
-            </Tab>
-          </Tabs>
-        </TenderBox>
-      </Box>
-      <Foot />
+    <Box width="100vw" align="center" alignSelf="start">
+      <TenderBox
+        margin={{
+          top: "xlarge",
+        }}
+        pad={{ bottom: "xlarge" }}
+        width="xlarge"
+      >
+        <Tabs alignControls="center" id="tokenpage-tabs" activeIndex={tabIndex} onActive={onActive}>
+          <Tab plain title={<TokenDropdown title={info.title} logo={info.bwLogo} />} />
+          <Tab
+            title={
+              <Tip
+                dropProps={{ align: { bottom: "top" } }}
+                content={`Stake your ${info.symbol} and earn staking rewards`}
+              >
+                <Box height="100%" justify="center" align="center">
+                  <Paragraph style={{ fontWeight: 600 }}>Stake</Paragraph>
+                </Box>
+              </Tip>
+            }
+          >
+            <Box round={{ corner: "bottom" }} border="top" pad="medium">
+              <Deposit
+                protocolName={protocolName}
+                symbol={info.symbol}
+                logo={info.bwLogo}
+                tokenBalance={tokenBalance}
+                tenderTokenBalance={tenderBalance}
+              />
+            </Box>
+          </Tab>
+          <Tab
+            title={
+              <Tip
+                dropProps={{ align: { bottom: "top" } }}
+                content={`Trade between ${info.symbol} and t${info.symbol} or provide liquidity`}
+              >
+                <Box height="100%" justify="center" align="center">
+                  <Paragraph style={{ fontWeight: 600 }}>Swap</Paragraph>
+                </Box>
+              </Tip>
+            }
+          >
+            <Box round={{ corner: "bottom" }} border="top" pad="medium">
+              <LiquidityPool
+                protocolName={protocolName}
+                symbol={info.symbol}
+                tokenBalance={tokenBalance}
+                tenderTokenBalance={tenderBalance}
+                lpTokenBalance={lpTokenBalance}
+              />
+            </Box>
+          </Tab>
+          <Tab
+            title={
+              <Tip
+                dropProps={{ align: { bottom: "top" } }}
+                content={`Farm your liquidity pool tokens for more rewards`}
+              >
+                <Box height="100%" justify="center" align="center">
+                  <Paragraph style={{ fontWeight: 600 }}>Farm</Paragraph>
+                </Box>
+              </Tip>
+            }
+          >
+            <Box round={{ corner: "bottom" }} border="top" pad="medium">
+              <Farm
+                protocolName={protocolName}
+                symbol={info.symbol}
+                account={account}
+                lpTokenBalance={lpTokenBalance}
+              />
+            </Box>
+          </Tab>
+        </Tabs>
+      </TenderBox>
     </Box>
   );
 };
@@ -165,7 +160,7 @@ const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => 
                 <DropdownOption
                   key={option.title}
                   staker={option}
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
                     setOpen(false);
                   }}
@@ -222,7 +217,6 @@ const DropdownBackground = styled.div`
 
 const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   const dappConfig: Config = {
-    readOnlyChainId: ChainId.Rinkeby,
     readOnlyUrls: props.config?.chainUrlMapping,
   };
 
@@ -230,23 +224,26 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 
   return (
     <DAppProvider config={dappConfig}>
+      <NotificationsList />
       <Navbar config={props.config} />
       <Token />
+      <Foot />
     </DAppProvider>
   );
 };
 
 export const getStaticProps = async () => {
-  const rpcUrl = process.env.JSON_RPC ?? "";
   const CHAIN_URL_MAPPING = {
-    [ChainId.Rinkeby]: rpcUrl,
+    [ChainId.Rinkeby]: process.env.RPC_RINKEBY ?? "",
+    // [ChainId.Mainnet]: process.env.RPC_MAINNET ?? "",
+    // [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
+    [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUMRINKEBY ?? "",
   };
 
   const config: TenderizeConfig = {
-    rpcUrl,
-    fortmaticApiKey: process.env.FORTMATIC_API_KEY ?? "",
     portisApiKey: process.env.PORTIS_API_KEY ?? "",
     chainUrlMapping: CHAIN_URL_MAPPING ?? "",
+    supportedChains: [ArbitrumRinkeby.chainId, Rinkeby.chainId],
   };
 
   return {

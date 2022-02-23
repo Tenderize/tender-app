@@ -17,7 +17,7 @@ export type UserDeploymentsType = {
 };
 
 export const GetUserDeployments = gql`
-  query GetUserDeployments($id: ID!) {
+  query GetUserDeployments($id: ID!) @api(contextKey: "chainId") {
     userDeployments(where: { id: $id }) {
       tenderizerStake
       farmHarvest
@@ -27,7 +27,7 @@ export const GetUserDeployments = gql`
 `;
 
 export const GetDeployment = gql`
-  query GetDeployment($id: ID!) {
+  query GetDeployment($id: ID!) @api(contextKey: "chainId") {
     deployment(id: $id) {
       id
       tenderizer {
@@ -39,7 +39,7 @@ export const GetDeployment = gql`
 `;
 
 export const GetTenderizerDays = gql`
-  query GetDPY($from: Int!) {
+  query GetDPY($from: Int!) @api(contextKey: "chainId") {
     tenderizerDays(where: { date_gt: $from }) {
       id
       date

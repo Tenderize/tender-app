@@ -1,5 +1,5 @@
 import { NextApiResponse } from "next";
-import { apolloClient, Queries } from "@tender/shared/src/index";
+import { Subgraph, Queries } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
 
 const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
   }
 
   const monthAgo = getUnixTimestampMonthAgo();
-  const { data } = await apolloClient.query({
+  const { data } = await Subgraph.query({
     query: Queries.GetTenderizerDays,
     variables: { from: monthAgo },
   });
