@@ -217,6 +217,7 @@ const DropdownBackground = styled.div`
 
 const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   const dappConfig: Config = {
+    pollingInterval: 2500,
     readOnlyUrls: props.config?.chainUrlMapping,
   };
 
