@@ -2,7 +2,6 @@ import { Header, Nav, Image, Box } from "grommet";
 import { FC, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AccountButton } from "../account";
-import TestnetBanner from "../testnet-banner";
 import { TenderizeConfig } from "types";
 
 type props = {
@@ -28,7 +27,6 @@ const Navbar: FC<props> = (props) => {
 
   return (
     <Box>
-      <TestnetBanner />
       <Header justify="between" pad={{ horizontal: "xlarge", vertical: "xsmall" }}>
         <Link href="/" passHref>
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />

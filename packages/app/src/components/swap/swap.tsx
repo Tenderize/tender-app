@@ -18,6 +18,7 @@ type Props = {
   tokenSymbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
+  disabled: boolean;
 };
 
 const hasValue = (val: any) => {
@@ -26,9 +27,12 @@ const hasValue = (val: any) => {
 
 const ONE = utils.parseEther("1");
 
-const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protocolName }) => {
+const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protocolName, disabled }) => {
   const logo = `/${stakers[protocolName].bwLogo}`;
   const tenderLogo = `/${stakers[protocolName].bwTenderLogo}`;
+
+  // whether supported asset (e.g. LPT) has ERC20 permit support
+  const hasPermit = stakers[protocolName].hasPermit;
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [isSendingToken, setIsSendingToken] = useState(false);
@@ -61,6 +65,13 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     utils.parseEther(sendTokenAmount || "0")
   );
 
+  const usePermit = (): boolean => {
+    // if underlying token check if it has permit support
+    if (isSendingToken) return hasPermit && !isTokenApproved;
+    // tender tokens always have permit support, check only if sufficient allowance
+    return !isTokenApproved;
+  };
+
   const handleSendTokenInput: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setSendTokenAmount(e.target.value);
   }, []);
@@ -75,6 +86,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         <Box align="center" justify="center">
           <Box direction="row" gap="small">
             <FormField
+              disabled={disabled}
               name="sendAmount"
               label={`Send`}
               validate={[
@@ -84,6 +96,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
             >
               <Box width="medium">
                 <TextInput
+                  disabled={disabled}
                   ref={sendInputRef}
                   id="formSwapSend"
                   type="number"
@@ -159,12 +172,14 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
               symbol={sendTokenSymbol}
               spender={addresses[protocolName].tenderSwap}
               token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-              show={!isTokenApproved && isSendingToken}
+              show={!disabled && !isTokenApproved && isSendingToken && !hasPermit}
+              chainId={stakers[protocolName].chainId}
             />
             <Button
               primary
               disabled={
-                (!isTokenApproved && isSendingToken) ||
+                disabled ||
+                (!isTokenApproved && isSendingToken && !hasPermit) ||
                 !isPositive(sendTokenAmount) ||
                 isLargerThanMax(sendTokenAmount, sendTokenBalance) ||
                 utils.parseEther(sendTokenAmount).isZero()
@@ -185,7 +200,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         tokenAddress={sendTokenAddress}
         tokenSpotPrice={tokenSpotPrice}
         protocolName={protocolName}
-        usePermit={!isSendingToken && !isTokenApproved}
+        usePermit={usePermit()}
         owner={account}
       />
     </Box>

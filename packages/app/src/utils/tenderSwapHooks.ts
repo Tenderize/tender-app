@@ -1,7 +1,8 @@
 import { useContractCall, useContractFunction, useEthers } from "@usedapp/core";
-import { abis, contracts } from "@tender/contracts";
+import { abis, contracts, addresses } from "@tender/contracts";
 import { BigNumber, constants, utils } from "ethers";
 import { signERC2612Permit } from "eth-permit";
+import stakers from "data/stakers";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -241,14 +242,9 @@ export const useExitPool = (
   return { removeLiquidity, exitPoolTx: state };
 };
 
-export const useAddLiquidity = (
-  token: string,
-  protocolName: string,
-  owner: string | null | undefined,
-  spender: string,
-  symbol: string,
-  isTenderApproved: boolean
-) => {
+export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, isTenderApproved: boolean) => {
+  const symbol = stakers[protocolName].symbol;
+
   const { state: addLiquidityWithPermitTx, send: multicall } = useContractFunction(
     contracts[protocolName].tenderSwap,
     "multicall",
@@ -261,21 +257,46 @@ export const useAddLiquidity = (
     "addLiquidity",
     { transactionName: `Add t${symbol}/${symbol} Liquidity` }
   );
-  const state = isTenderApproved ? addLiquidityWithApproveTx : addLiquidityWithPermitTx;
-  const { library } = useEthers();
+
+  const { library, account } = useEthers();
+  const multicallData: string[] = [];
 
   const addLiquidity = async (tenderIn: BigNumber, tokenIn: BigNumber, lpTokenAmount: BigNumber) => {
     if (!isTenderApproved) {
+      const tenderToken = addresses[protocolName].tenderToken;
       const permit = await signERC2612Permit(
         library?.getSigner(),
-        token,
-        owner ?? "",
-        spender,
+        tenderToken,
+        account ?? "",
+        addresses[protocolName].tenderSwap,
         tenderIn?.toString(),
         getDeadline()
       );
 
-      await multicall([
+      multicallData.push(
+        TenderSwapABI.encodeFunctionData("selfPermit", [
+          tenderToken,
+          permit.value,
+          permit.deadline,
+          permit.v,
+          permit.r,
+          permit.s,
+        ])
+      );
+    }
+
+    if (!tokenIn.isZero() && stakers[protocolName].hasPermit && !isTokenApproved) {
+      const token = addresses[protocolName].token;
+      const permit = await signERC2612Permit(
+        library?.getSigner(),
+        token,
+        account ?? "",
+        addresses[protocolName].tenderSwap,
+        tokenIn?.toString(),
+        getDeadline()
+      );
+
+      multicallData.push(
         TenderSwapABI.encodeFunctionData("selfPermit", [
           token,
           permit.value,
@@ -283,13 +304,21 @@ export const useAddLiquidity = (
           permit.v,
           permit.r,
           permit.s,
-        ]),
-        TenderSwapABI.encodeFunctionData("addLiquidity", [[tenderIn, tokenIn], lpTokenAmount, getDeadline()]),
-      ]);
+        ])
+      );
+    }
+
+    if (multicallData.length > 0) {
+      multicallData.push(
+        TenderSwapABI.encodeFunctionData("addLiquidity", [[tenderIn, tokenIn], lpTokenAmount, getDeadline()])
+      );
+      await multicall(multicallData);
     } else {
       await addLiquidityWithApprove([tenderIn, tokenIn], lpTokenAmount, getDeadline());
     }
   };
+
+  const state = multicallData.length === 0 ? addLiquidityWithApproveTx : addLiquidityWithPermitTx;
 
   return { addLiquidity, tx: state };
 };

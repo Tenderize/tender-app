@@ -1799,6 +1799,11 @@
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
   integrity sha512-wYn6r8zVZyQJ6rQaALBEln5B1pzxb9shV5Ef97kTvn6yVGrqyXVnDqnU24MXnFubR+rZjBY9NWuxX3FB2sTsjg==
 
+"@habx/apollo-multi-endpoint-link@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@habx/apollo-multi-endpoint-link/-/apollo-multi-endpoint-link-2.6.0.tgz#0bdf59c00b6b550713b161056ae13c0962655705"
+  integrity sha512-V//jXEk9xn1mqlt9EbpDWbcnvduA6ebnUyiXgxVRRBBLyFVXfBcas3QN5+x0jek5m47jG2gq4Wnd2cHIch/xwg==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -3034,20 +3039,6 @@
   version "1.0.0-beta.27"
   resolved "https://registry.yarnpkg.com/@uniswap/token-lists/-/token-lists-1.0.0-beta.27.tgz#8b02a979b0b0024cc96f60e694a3f6db6b2ccab2"
   integrity sha512-x5hmIniQ9TGqOBCRqfWcmZi/U5kB0qrHMDQ9igs3nMbK0wwmYLraL4owbIwXFGR/co6/lJYJC4K/Gjn4wZY5mQ==
-
-"@usedapp/core@^0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.7.1.tgz#549f6fe3e4ff22687f68a7950facfa52fec21054"
-  integrity sha512-mG3pCAye51m5Y1lYstIg5HGMwz02gM2xhnDYB4t3GelxxEZvPwFWdkpNoclcvbrEWC3X0DXr8M4gVNfq20Tn3g==
-  dependencies:
-    "@types/react" "17.0.1"
-    "@uniswap/token-lists" "^1.0.0-beta.27"
-    "@web3-react/core" "6.1.1"
-    "@web3-react/injected-connector" "6.0.7"
-    "@web3-react/network-connector" "6.1.5"
-    ethers "5.5.1"
-    lodash.merge "^4.6.2"
-    nanoid "3.1.22"
 
 "@usedapp/core@^0.9.1":
   version "0.9.1"

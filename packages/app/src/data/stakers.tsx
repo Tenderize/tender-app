@@ -1,7 +1,8 @@
+import { ChainId } from "@usedapp/core";
+
 export type Staker = {
   name: string;
   subgraphId: string;
-  description: string;
   title: string;
   available: boolean;
   apy: number;
@@ -11,31 +12,31 @@ export type Staker = {
   neonLogo: string;
   path: string;
   symbol: string;
+  chainId: ChainId;
+  hasPermit: boolean;
 };
 
 const stakers: Record<string, Staker> = {
-  // livepeer: {
-  //   name: "livepeer",
-  //   path: "/stakers/livepeer",
-  //   title: "Livepeer",
-  //   subgraphId: "Livepeer",
-  //   description:
-  //     "The Livepeer project aims to deliver a live video streaming network protocol that is fully decentralized, highly scalable, crypto token incentivized, and results in a solution which can serve as the live media layer in the decentralized development (web3) stack. In addition, Livepeer is meant to provide an economically efficient alternative to centralized broadcasting solutions for any existing broadcaster. In this document we describe the Livepeer Protocol - a delegated stake based protocol for incentivizing participants in a live video broadcast network in a game-theoretically secure way.",
-  //   available: true,
-  //   apy: 23.3,
-  //   logo: "livepeer.svg",
-  //   bwLogo: "LPT.svg",
-  //   bwTenderLogo: "tenderLPT.svg",
-  //   neonLogo: "landing/neon-lpt.png",
-  //   symbol: "LPT",
-  // },
+  livepeer: {
+    name: "livepeer",
+    path: "/stakers/livepeer",
+    title: "Livepeer",
+    subgraphId: "Livepeer",
+    available: true,
+    apy: 23.3,
+    logo: "livepeer.svg",
+    bwLogo: "LPT.svg",
+    bwTenderLogo: "tenderLPT.svg",
+    neonLogo: "landing/neon-lpt.png",
+    symbol: "LPT",
+    chainId: ChainId.ArbitrumRinkeby,
+    hasPermit: true,
+  },
   graph: {
     name: "graph",
     path: "/stakers/graph",
     title: "The Graph",
     subgraphId: "Graph",
-    description:
-      "The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible.",
     available: true,
     apy: 6.5,
     logo: "graph.svg",
@@ -43,6 +44,8 @@ const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderGRT.svg",
     neonLogo: "landing/neon-grt.png",
     symbol: "GRT",
+    chainId: ChainId.Rinkeby,
+    hasPermit: false,
   },
   // matic: {
   //   name: "matic",
@@ -58,21 +61,23 @@ const stakers: Record<string, Staker> = {
   //   bwTenderLogo: "tenderMATIC.svg",
   //   neonLogo: "landing/neon-matic.png",
   //   symbol: "MATIC",
+  //   chainId: ChainId.Rinkeby,
   // },
-  // audius: {
-  //   name: "audius",
-  //   path: "/stakers/audius",
-  //   title: "Audius",
-  //   subgraphId: "Audius",
-  //   description: "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
-  //   available: true,
-  //   apy: 14.8,
-  //   logo: "AUDIO.svg",
-  //   bwLogo: "AUDIO.svg",
-  //   bwTenderLogo: "tenderAUDIO.svg",
-  //   neonLogo: "landing/neon-audio.png",
-  //   symbol: "AUDIO",
-  // },
+  audius: {
+    name: "audius",
+    path: "/stakers/audius",
+    title: "Audius",
+    subgraphId: "Audius",
+    available: true,
+    apy: 14.8,
+    logo: "AUDIO.svg",
+    bwLogo: "AUDIO.svg",
+    bwTenderLogo: "tenderAUDIO.svg",
+    neonLogo: "landing/neon-audio.png",
+    symbol: "AUDIO",
+    chainId: ChainId.Rinkeby,
+    hasPermit: false,
+  },
 };
 
 export default stakers;

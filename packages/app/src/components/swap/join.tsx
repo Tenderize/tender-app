@@ -42,6 +42,9 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
   const [show, setShow] = useState(false);
   const { account } = useEthers();
 
+  // whether supported asset (e.g. LPT) has ERC20 permit support
+  const hasPermit = stakers[protocolName].hasPermit;
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -85,17 +88,15 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
   );
 
   const isButtonDisabled = () => {
-    return !(hasValue(tokenInput) && hasValue(tenderInput) && isTokenApproved) || isPendingTransaction(addLiquidityTx);
+    // if either field has an invalid value return false
+    if (!hasValue(tokenInput) || !hasValue(tenderInput)) return false;
+    // if a transaction is pending return false
+    if (isPendingTransaction(addLiquidityTx)) return false;
+    // if underlying token (e.g. LPT) has no permit support and is not approved, return false
+    if (!hasPermit && !isTokenApproved) return false;
   };
 
-  const { addLiquidity, tx: addLiquidityTx } = useAddLiquidity(
-    addresses[protocolName].tenderToken,
-    protocolName,
-    account,
-    addresses[protocolName].tenderSwap,
-    symbol,
-    isTenderApproved
-  );
+  const { addLiquidity, tx: addLiquidityTx } = useAddLiquidity(protocolName, isTokenApproved, isTenderApproved);
 
   const lpTokenAmount = useCalculateLpTokenAmount(
     addresses[protocolName].tenderSwap,
@@ -213,7 +214,8 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
                       symbol={symbol}
                       spender={addresses[protocolName].tenderSwap}
                       token={contracts[protocolName].token}
-                      show={!isTokenApproved}
+                      show={!hasPermit && !isTokenApproved}
+                      chainId={stakers[protocolName].chainId}
                     />
                   )
                 }
