@@ -63,21 +63,21 @@ const stakers: Record<string, Staker> = {
   //   symbol: "MATIC",
   //   chainId: ChainId.Rinkeby,
   // },
-  // audius: {
-  //   name: "audius",
-  //   path: "/stakers/audius",
-  //   title: "Audius",
-  //   subgraphId: "Audius",
-  //   description: "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
-  //   available: true,
-  //   apy: 14.8,
-  //   logo: "AUDIO.svg",
-  //   bwLogo: "AUDIO.svg",
-  //   bwTenderLogo: "tenderAUDIO.svg",
-  //   neonLogo: "landing/neon-audio.png",
-  //   symbol: "AUDIO",
-  //   chainId: ChainId.Rinkeby,
-  // },
+  audius: {
+    name: "audius",
+    path: "/stakers/audius",
+    title: "Audius",
+    subgraphId: "Audius",
+    available: true,
+    apy: 14.8,
+    logo: "AUDIO.svg",
+    bwLogo: "AUDIO.svg",
+    bwTenderLogo: "tenderAUDIO.svg",
+    neonLogo: "landing/neon-audio.png",
+    symbol: "AUDIO",
+    chainId: ChainId.Rinkeby,
+    hasPermit: false
+  },
 };
 
 export default stakers;
