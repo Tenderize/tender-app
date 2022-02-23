@@ -76,7 +76,7 @@ const stakers: Record<string, Staker> = {
     neonLogo: "landing/neon-audio.png",
     symbol: "AUDIO",
     chainId: ChainId.Rinkeby,
-    hasPermit: false
+    hasPermit: false,
   },
 };
 
