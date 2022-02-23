@@ -26,7 +26,6 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   };
 
   const etherBal = useEtherBalance(account);
-
   const supportedChainIds = Object.keys(config.chainUrlMapping).map((i) => parseInt(i, 10));
 
   return (
