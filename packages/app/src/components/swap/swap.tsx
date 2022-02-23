@@ -18,6 +18,7 @@ type Props = {
   tokenSymbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
+  disabled: boolean;
 };
 
 const hasValue = (val: any) => {
@@ -26,7 +27,7 @@ const hasValue = (val: any) => {
 
 const ONE = utils.parseEther("1");
 
-const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protocolName }) => {
+const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protocolName, disabled }) => {
   const logo = `/${stakers[protocolName].bwLogo}`;
   const tenderLogo = `/${stakers[protocolName].bwTenderLogo}`;
 
@@ -75,6 +76,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         <Box align="center" justify="center">
           <Box direction="row" gap="small">
             <FormField
+              disabled={disabled}
               name="sendAmount"
               label={`Send`}
               validate={[
@@ -84,6 +86,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
             >
               <Box width="medium">
                 <TextInput
+                  disabled={disabled}
                   ref={sendInputRef}
                   id="formSwapSend"
                   type="number"
@@ -159,11 +162,13 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
               symbol={sendTokenSymbol}
               spender={addresses[protocolName].tenderSwap}
               token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-              show={!isTokenApproved && isSendingToken}
+              show={!disabled && !isTokenApproved && isSendingToken}
+              chainId={stakers[protocolName].chainId}
             />
             <Button
               primary
               disabled={
+                disabled ||
                 (!isTokenApproved && isSendingToken) ||
                 !isPositive(sendTokenAmount) ||
                 isLargerThanMax(sendTokenAmount, sendTokenBalance) ||

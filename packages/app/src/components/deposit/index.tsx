@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { contracts, addresses } from "@tender/contracts";
-import { useEthers, useContractFunction, ChainId } from "@usedapp/core";
+import { useEthers, useContractFunction } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
@@ -14,6 +14,8 @@ import { isPendingTransaction } from "utils/transactions";
 import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
 import stakers from "data/stakers";
 import Faucet from "components/faucet";
+import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
+import { SwitchNetwork } from "components/account/SwitchNetwork";
 
 type Props = {
   protocolName: string;
@@ -27,9 +29,12 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const [depositInput, setDepositInput] = useState("");
   const { account, chainId } = useEthers();
 
+  const requiredChain = stakers[protocolName].chainId;
+
   const subgraphName = stakers[protocolName].subgraphId;
   const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
+    context: { chainId: requiredChain },
   });
 
   // update my stake when tokenBalance changes
@@ -40,6 +45,8 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
   };
+
+  const isCorrectChain = useIsCorrectChain(requiredChain);
 
   const handleInputChange = (e: any) => {
     const val = e.target.value;
@@ -90,63 +97,70 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
         </Box>
       </Box>
       <Box justify="center" align="center">
-        <Form validate="change">
-          <Box align="center" justify="center">
-            <Box width="490px" gap="small" direction="column">
-              <FormField
-                fill
-                label="Stake Amount"
-                name="depositAmount"
-                validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
-              >
-                <TextInput
-                  value={depositInput}
-                  onChange={handleInputChange}
-                  type="number"
-                  icon={
-                    <Box pad="xsmall" direction="row" align="center" gap="small">
-                      <Image height="35" src={`/${logo}`} />
-                      <Text>{symbol}</Text>
-                    </Box>
-                  }
-                  style={{ textAlign: "right", padding: "20px 50px" }}
-                  placeholder={`0`}
-                />
-                <AmountInputFooter
-                  label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
-                  onClick={maxDeposit}
-                />
-              </FormField>
-              <Box gap="small" direction="column">
-                <ApproveToken
-                  symbol={symbol}
-                  spender={addresses[protocolName].tenderizer}
-                  token={contracts[protocolName].token}
-                  show={!isTokenApproved}
-                />
-                <Button
-                  primary
-                  fill="horizontal"
-                  disabled={
-                    !isTokenApproved ||
-                    !depositInput ||
-                    depositInput.toString() === "0" ||
-                    isPendingTransaction(depositTx)
-                  }
-                  onClick={depositTokens}
-                  label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "Stake"}
-                />
+        {!isCorrectChain && account ? (
+          <Box pad={{ vertical: "large" }}>
+            <SwitchNetwork chainId={requiredChain} protocol={stakers[protocolName].title} />
+          </Box>
+        ) : (
+          <Form validate="change">
+            <Box align="center" justify="center">
+              <Box width="490px" gap="small" direction="column">
+                <FormField
+                  fill
+                  label="Stake Amount"
+                  name="depositAmount"
+                  validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
+                >
+                  <TextInput
+                    value={depositInput}
+                    onChange={handleInputChange}
+                    type="number"
+                    icon={
+                      <Box pad="xsmall" direction="row" align="center" gap="small">
+                        <Image height="35" src={`/${logo}`} />
+                        <Text>{symbol}</Text>
+                      </Box>
+                    }
+                    style={{ textAlign: "right", padding: "20px 50px" }}
+                    placeholder={`0`}
+                  />
+                  <AmountInputFooter
+                    label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
+                    onClick={maxDeposit}
+                  />
+                </FormField>
+                <Box gap="small" direction="column">
+                  <ApproveToken
+                    symbol={symbol}
+                    spender={addresses[protocolName].tenderizer}
+                    token={contracts[protocolName].token}
+                    show={!isTokenApproved}
+                    chainId={stakers[protocolName].chainId}
+                  />
+                  <Button
+                    primary
+                    fill="horizontal"
+                    disabled={
+                      !isTokenApproved ||
+                      !depositInput ||
+                      depositInput.toString() === "0" ||
+                      isPendingTransaction(depositTx)
+                    }
+                    onClick={depositTokens}
+                    label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "Stake"}
+                  />
+                </Box>
               </Box>
             </Box>
-          </Box>
-        </Form>
+          </Form>
+        )}
       </Box>
-      {chainId === ChainId.Rinkeby && (
+      {chainId === requiredChain && (
         <Box
           margin={{ top: "medium" }}
           alignSelf="center"
           width="large"
-          pad={{ horizontal: "large", vertical: "medium" }}
+          pad={{ horizontal: "large", top: "medium" }}
           border={{ side: "top" }}
           justify="center"
           align="center"
