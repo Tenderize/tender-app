@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { addresses, contracts } from "@tender/contracts";
-import { BigNumberish } from "ethers";
+import { BigNumberish, constants } from "ethers";
 import { useContractCall } from "@usedapp/core";
 import { useQuery } from "@apollo/client";
 import { Box, Text } from "grommet";
@@ -59,16 +59,14 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
             text={`${weiToEthWithDecimals(stakeOf?.toString() || "0", 3)} ${symbolFull}`}
             align="center"
           />
-          {!isCorrectChain ? (
-            <></>
-          ) : (
-            <>
+          {isCorrectChain && (
+            <Box direction="column" gap="small" align="center">
               <Farm protocolName={protocolName} symbol={symbolFull} tokenBalance={lpTokenBalance || "0"} />
               <Text size="small">{`Balance: ${weiToEthWithDecimals(
                 lpTokenBalance?.toString() || "0",
                 3
               )} ${symbolFull}`}</Text>
-            </>
+            </Box>
           )}
         </Box>
         <Box direction="column" gap="large" align="center">
@@ -77,7 +75,7 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
             text={`${weiToEthWithDecimals(availableRewards?.toString() || "0", 3)} tender${symbol}`}
             align="center"
           />
-          {!isCorrectChain ? <></> : <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />}
+          {isCorrectChain && <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />}
         </Box>
         <Box direction="column" gap="large" align="center">
           <InfoCard
@@ -88,9 +86,7 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
               3
             )} tender${symbol}`}
           />
-          {!isCorrectChain ? (
-            <></>
-          ) : (
+          {isCorrectChain && (
             <Harvest
               protocolName={protocolName}
               symbol={`tender${symbol}`}
@@ -99,15 +95,15 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
           )}
         </Box>
       </Box>
-      {!isCorrectChain && account ? (
+      {!isCorrectChain && isConnected(account) && (
         <Box justify="center" align="center" pad={{ vertical: "large" }}>
           <SwitchNetwork chainId={requiredChain} protocol={stakers[protocolName].title} />
         </Box>
-      ) : (
-        <></>
       )}
     </Box>
   );
 };
+
+const isConnected = (account: string) => account && account !== constants.AddressZero;
 
 export default TenderFarm;

@@ -32,11 +32,12 @@ const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTo
         tenderTokenBalance={tenderTokenBalance}
         disabled={!isCorrectChain}
       />
-      {!isCorrectChain && account ? (
+      {!isCorrectChain && account && (
         <Box pad={{ vertical: "large" }}>
           <SwitchNetwork chainId={requiredChain} protocol={stakers[protocolName].title} />
         </Box>
-      ) : (
+      )}
+      {isCorrectChain && (
         <Box
           margin={{ top: "medium" }}
           pad={{ horizontal: "large", vertical: "medium" }}
