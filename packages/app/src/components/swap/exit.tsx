@@ -23,7 +23,7 @@ import {
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
+import { useBalanceValidation } from "../../utils/inputValidation";
 import stakers from "../../data/stakers";
 import { useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
@@ -159,7 +159,7 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
                   }
                 >
                   <Box pad={{ top: "medium", horizontal: "large" }} align="center">
-                    <Form validate="change" style={{ width: "100%" }}>
+                    <Form style={{ width: "100%" }}>
                       <Box gap="medium">
                         <LPTokensToRemoveInputField
                           lpTokenBalance={lpTokenBalance}
@@ -310,12 +310,10 @@ const LPTokensToRemoveInputField: FC<{
     [setLpSharesInput]
   );
 
+  const { validationMessage } = useBalanceValidation(lpSharesInput, lpTokenBalance);
+
   return (
-    <FormField
-      label="LP Tokens to remove"
-      name="lpTokenToRemove"
-      validate={[validateIsPositive(lpSharesInput), validateIsLargerThanMax(lpSharesInput, lpTokenBalance)]}
-    >
+    <FormField label="LP Tokens to remove" name="lpTokenToRemove">
       <Box direction="row" align="center" gap="small">
         <TextInput
           value={lpSharesInput}
@@ -325,6 +323,7 @@ const LPTokensToRemoveInputField: FC<{
           style={{ textAlign: "right", padding: "20px 50px" }}
         />
       </Box>
+      <Text color="red">{validationMessage}</Text>
       <AmountInputFooter
         label={`Staked: ${weiToEthWithDecimals(lpTokenBalance?.toString() || "0", 6)} ${symbolFull}`}
         onClick={maxDeposit}
