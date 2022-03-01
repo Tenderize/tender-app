@@ -9,7 +9,7 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
 import { ethWithDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { isLargerThanMax, isPositive, validateIsLargerThanMax, validateIsPositive } from "../../utils/inputValidation";
+import { isLargerThanMax, isPositive, useBalanceValidation } from "../../utils/inputValidation";
 import { useCalculateSwap } from "../../utils/tenderSwapHooks";
 import { useEthers } from "@usedapp/core";
 
@@ -80,20 +80,14 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     setReceiveTokenAmount(utils.formatEther(calcOutGivenIn || "0"));
   }, [calcOutGivenIn]);
 
+  const { validationMessage } = useBalanceValidation(sendTokenAmount, sendTokenBalance, sendTokenSymbol);
+
   return (
     <Box>
-      <Form validate="change">
+      <Form>
         <Box align="center" justify="center">
           <Box direction="row" gap="small">
-            <FormField
-              disabled={disabled}
-              name="sendAmount"
-              label={`Send`}
-              validate={[
-                validateIsPositive(sendTokenAmount),
-                validateIsLargerThanMax(sendTokenAmount, sendTokenBalance),
-              ]}
-            >
+            <FormField disabled={disabled} name="sendAmount" label={`Send`}>
               <Box width="medium">
                 <TextInput
                   disabled={disabled}
@@ -112,6 +106,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                   onChange={handleSendTokenInput}
                   required={true}
                 />
+                <Text color="red">{validationMessage}</Text>
                 <AmountInputFooter
                   label={`Balance: ${weiToEthWithDecimals(sendTokenBalance, 6)} ${sendTokenSymbol}`}
                   onClick={() => {

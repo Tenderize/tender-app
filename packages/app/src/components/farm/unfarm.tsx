@@ -18,7 +18,7 @@ import {
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormClose, FormSubtract } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
+import { useBalanceValidation } from "utils/inputValidation";
 import { useContractFunction } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -54,6 +54,8 @@ const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
     await unfarm(utils.parseEther(unfarmInput || "0"));
     setUnfarmInput("");
   };
+
+  const { validationMessage } = useBalanceValidation(unfarmInput, stake);
 
   return (
     <>
@@ -91,11 +93,8 @@ const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
             </CardHeader>
             <CardBody>
               <Box pad={{ top: "medium", horizontal: "large" }} align="center">
-                <Form validate="change" style={{ width: "100%" }}>
-                  <FormField
-                    label="Unfarm Amount"
-                    validate={[validateIsPositive(unfarmInput), validateIsLargerThanMax(unfarmInput, stake)]}
-                  >
+                <Form style={{ width: "100%" }}>
+                  <FormField label="Unfarm Amount">
                     <TextInput
                       value={unfarmInput}
                       onChange={handleUnfarmInputChange}
@@ -108,6 +107,7 @@ const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
                       }
                       style={{ textAlign: "right", padding: "20px 50px" }}
                     />
+                    <Text color="red">{validationMessage}</Text>
                     <AmountInputFooter
                       label={`Current Stake: ${weiToEthWithDecimals(stake?.toString() || "0", 6)} ${symbol}`}
                       onClick={maxUnfarm}

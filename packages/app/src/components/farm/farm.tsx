@@ -19,7 +19,7 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd, FormClose } from "grommet-icons";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
+import { useBalanceValidation } from "utils/inputValidation";
 import { useEthers } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 import { useFarm } from "utils/tenderFarmHooks";
@@ -65,6 +65,8 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
     setFarmInput("");
   };
 
+  const { validationMessage } = useBalanceValidation(farmInput, tokenBalance);
+
   return (
     <>
       <Button primary onClick={handleShow} label="Farm" reverse icon={<FormAdd color="white" />} />
@@ -88,11 +90,8 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
               </Heading>
             </CardHeader>
             <CardBody pad={{ top: "medium", horizontal: "large" }} align="center">
-              <Form validate="change" style={{ width: "100%" }}>
-                <FormField
-                  protocolName="farmInput"
-                  validate={[validateIsPositive(farmInput), validateIsLargerThanMax(farmInput, tokenBalance)]}
-                >
+              <Form style={{ width: "100%" }}>
+                <FormField protocolName="farmInput">
                   <TextInput
                     value={farmInput}
                     onChange={handleFarmInputChange}
@@ -105,6 +104,7 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
                     }
                     style={{ textAlign: "right", padding: "20px 50px" }}
                   />
+                  <Text color="red">{validationMessage}</Text>
                   <AmountInputFooter
                     label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
                     onClick={maxDeposit}

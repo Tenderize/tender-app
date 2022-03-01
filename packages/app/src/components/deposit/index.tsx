@@ -11,7 +11,7 @@ import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { isPendingTransaction } from "utils/transactions";
-import { validateIsLargerThanMax, validateIsPositive } from "utils/inputValidation";
+import { useBalanceValidation } from "utils/inputValidation";
 import stakers from "data/stakers";
 import Faucet from "components/faucet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
@@ -73,6 +73,8 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     depositInput
   );
 
+  const { validationMessage } = useBalanceValidation(depositInput, tokenBalance);
+
   const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
   const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
@@ -104,15 +106,10 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
             <SwitchNetwork chainId={requiredChain} protocol={stakers[protocolName].title} />
           </Box>
         ) : (
-          <Form validate="change">
+          <Form>
             <Box align="center" justify="center">
               <Box width="490px" gap="small" direction="column">
-                <FormField
-                  fill
-                  label="Stake Amount"
-                  name="depositAmount"
-                  validate={[validateIsPositive(depositInput), validateIsLargerThanMax(depositInput, tokenBalance)]}
-                >
+                <FormField fill label="Stake Amount" name="depositAmount">
                   <TextInput
                     value={depositInput}
                     onChange={handleInputChange}
@@ -126,6 +123,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     style={{ textAlign: "right", padding: "20px 50px" }}
                     placeholder={`0`}
                   />
+                  <Text color="red">{validationMessage}</Text>
                   <AmountInputFooter
                     label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
                     onClick={maxDeposit}

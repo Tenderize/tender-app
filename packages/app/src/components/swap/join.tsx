@@ -21,7 +21,7 @@ import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { useCalculateLpTokenAmount, useAddLiquidity } from "utils/tenderSwapHooks";
-import { validateIsPositive, validateIsLargerThanMax, hasValue } from "utils/inputValidation";
+import { hasValue, useBalanceValidation } from "utils/inputValidation";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import stakers from "data/stakers";
@@ -111,6 +111,9 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
     addLiquidity(tenderIn, tokenIn, lpTokenAmount.sub(1));
   };
 
+  const { validationMessage: tokenValidationMessage } = useBalanceValidation(tokenInput, tokenBalance);
+  const { validationMessage: tenderValidationMessage } = useBalanceValidation(tenderInput, tenderTokenBalance);
+
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
       <Button primary onClick={handleShow} label="Add Liquidity" />
@@ -135,13 +138,9 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
             </CardHeader>
             <CardBody>
               <Box pad={{ top: "medium", horizontal: "large" }} align="center">
-                <Form validate="change" style={{ width: "100%" }}>
+                <Form style={{ width: "100%" }}>
                   <Box gap="medium">
-                    <FormField
-                      label={`${symbol} Amount`}
-                      protocolName="tokenInput"
-                      validate={[validateIsPositive(tokenInput), validateIsLargerThanMax(tokenInput, tokenBalance)]}
-                    >
+                    <FormField label={`${symbol} Amount`} protocolName="tokenInput">
                       <TextInput
                         value={tokenInput}
                         onChange={handleTokenInputChange}
@@ -155,19 +154,13 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
                         style={{ textAlign: "right", padding: "20px 50px" }}
                         placeholder={"0"}
                       />
+                      <Text color="red">{tokenValidationMessage}</Text>
                       <AmountInputFooter
                         label={`Balance: ${weiToEthWithDecimals(tokenBalance?.toString() || "0", 6)} ${symbol}`}
                         onClick={maxTokenDeposit}
                       />
                     </FormField>
-                    <FormField
-                      label={`t${symbol} Amount`}
-                      protocolName="tenderInput"
-                      validate={[
-                        validateIsPositive(tenderInput),
-                        validateIsLargerThanMax(tenderInput, tenderTokenBalance),
-                      ]}
-                    >
+                    <FormField label={`t${symbol} Amount`} protocolName="tenderInput">
                       <TextInput
                         value={tenderInput}
                         onChange={handleTenderInputChange}
@@ -181,6 +174,7 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
                         style={{ textAlign: "right", padding: "20px 50px" }}
                         placeholder={"0"}
                       />
+                      <Text color="red">{tenderValidationMessage}</Text>
                       <AmountInputFooter
                         label={`Balance: ${weiToEthWithDecimals(tenderTokenBalance?.toString() || "0", 6)} t${symbol}`}
                         onClick={maxTenderTokenDeposit}
