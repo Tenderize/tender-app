@@ -35,7 +35,7 @@ const stakers: Record<string, Staker> = {
     name: "graph",
     path: "/stakers/graph",
     title: "The Graph",
-    subgraphId: "Graph3",
+    subgraphId: "Graph",
     description:
       "The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible.",
     stakerAddress: "",
@@ -67,7 +67,7 @@ const stakers: Record<string, Staker> = {
     name: "audius",
     path: "/stakers/audius",
     title: "Audius",
-    subgraphId: "Audius2",
+    subgraphId: "Audius",
     description: "Audius is a brand-new streaming platform built for all musicians, not just those signed to labels.",
     stakerAddress: "",
     available: true,
