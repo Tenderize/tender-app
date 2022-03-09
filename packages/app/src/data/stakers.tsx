@@ -60,7 +60,7 @@ const stakers: Record<string, Staker> = {
     neonLogo: "landing/neon-matic.png",
     symbol: "MATIC",
     chainId: ChainId.Rinkeby,
-    hasPermit: false
+    hasPermit: false,
   },
   audius: {
     name: "audius",
