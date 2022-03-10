@@ -2,7 +2,7 @@ import { useContractFunction, useEthers } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts";
 import { BigNumber } from "ethers";
 import { signERC2612Permit } from "eth-permit";
-import stakers from "data/stakers";
+import { stakers } from "@tender/shared/src/index";
 import { getDeadline } from "./tenderSwapHooks";
 
 export const useDeposit = (protocolName: string) => {

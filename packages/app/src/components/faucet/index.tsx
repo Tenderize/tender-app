@@ -5,7 +5,7 @@ import { ChainId, useContractFunction, useEtherBalance, useEthers } from "@useda
 import Dialog from "components/swap/Dialog";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { isPendingTransaction } from "../../utils/transactions";
-import stakers from "data/stakers";
+import { stakers } from "@tender/shared/src/index";
 import { constants } from "ethers";
 
 const Faucet: FC<{

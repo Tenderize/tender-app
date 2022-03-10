@@ -5,3 +5,5 @@ export { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 export { theme } from "./theme";
 export { Subgraph, SubgraphForLanding } from "./graph";
 export * as Queries from "./queries";
+export { stakers } from "./data/stakers";
+export type { Staker } from "./data/stakers";

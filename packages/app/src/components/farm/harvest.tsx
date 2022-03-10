@@ -21,7 +21,7 @@ import { useContractFunction } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
-import stakers from "../../data/stakers";
+import { stakers } from "@tender/shared/src/index";
 
 type Props = {
   protocolName: string;

@@ -1,6 +1,5 @@
 import useSWR from "swr";
-import { Queries } from "@tender/shared/src/index";
-import stakers from "../../data/stakers";
+import { Queries, stakers } from "@tender/shared/src/index";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

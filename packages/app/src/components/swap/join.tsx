@@ -24,7 +24,7 @@ import { useCalculateLpTokenAmount, useAddLiquidity } from "utils/tenderSwapHook
 import { hasValue, useBalanceValidation } from "utils/inputValidation";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
-import stakers from "data/stakers";
+import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 

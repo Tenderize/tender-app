@@ -7,9 +7,8 @@ import { Box, Text } from "grommet";
 import Farm from "./farm";
 import Unfarm from "./unfarm";
 import Harvest from "./harvest";
-import { InfoCard, Queries } from "@tender/shared/src/index";
+import { InfoCard, Queries, stakers } from "@tender/shared/src/index";
 import { weiToEthWithDecimals } from "utils/amountFormat";
-import stakers from "data/stakers";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
 

@@ -24,7 +24,7 @@ import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { useBalanceValidation } from "../../utils/inputValidation";
-import stakers from "../../data/stakers";
+import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
 import {

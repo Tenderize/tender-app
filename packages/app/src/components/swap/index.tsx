@@ -8,7 +8,7 @@ import ExitPool from "./exit";
 import { Box, Text } from "grommet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
-import stakers from "data/stakers";
+import { stakers } from "@tender/shared/src/index";
 
 type Props = {
   protocolName: string;

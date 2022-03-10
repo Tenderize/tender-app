@@ -16,7 +16,7 @@ export type Staker = {
   hasPermit: boolean;
 };
 
-const stakers: Record<string, Staker> = {
+export const stakers: Record<string, Staker> = {
   livepeer: {
     name: "livepeer",
     path: "/stakers/livepeer",
@@ -66,7 +66,7 @@ const stakers: Record<string, Staker> = {
     name: "audius",
     path: "/stakers/audius",
     title: "Audius",
-    subgraphId: "Audius2",
+    subgraphId: "Audius",
     available: true,
     apy: 14.8,
     logo: "AUDIO.svg",
@@ -78,5 +78,3 @@ const stakers: Record<string, Staker> = {
     hasPermit: false,
   },
 };
-
-export default stakers;
