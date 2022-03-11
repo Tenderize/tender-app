@@ -1,5 +1,5 @@
 import { NextApiResponse } from "next";
-import { Subgraph, SubgraphForLanding, Queries } from "@tender/shared/src/index";
+import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampMonthAgo } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
 
 const RinkebyChainId = 4;
@@ -37,13 +37,6 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
     res.setHeader("X-Cache", "MISS");
   }
   res.status(200).json(data);
-};
-
-const getUnixTimestampMonthAgo = () => {
-  const d = new Date();
-  d.setMonth(d.getMonth() - 1);
-  d.setHours(0, 0, 0, 0);
-  return d.getTime() / 1000;
 };
 
 export default lruCache(handler);

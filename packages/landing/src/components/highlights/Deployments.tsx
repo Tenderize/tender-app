@@ -10,7 +10,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
   setVisibleIndex,
   index,
 }) => {
-  const { stakersWithAPY } = useAPYData();
+  const { livepeer, audius, graph, matic } = useAPYData();
 
   return (
     <HighlightContainer item="deployments" setVisibleIndex={setVisibleIndex} index={index}>
@@ -34,7 +34,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: 50,
               }}
             >
-              <TokenCard key={stakersWithAPY[1].path} {...stakersWithAPY[1]} />
+              <TokenCard key={livepeer.path} {...livepeer} />
             </Box>
             <Box
               style={{
@@ -43,7 +43,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: 160,
               }}
             >
-              <TokenCard key={stakersWithAPY[0].path} {...stakersWithAPY[0]} />
+              <TokenCard key={audius.path} {...audius} />
             </Box>
             <Box
               style={{
@@ -52,7 +52,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: -170,
               }}
             >
-              <TokenCard key={stakersWithAPY[3].path} {...stakersWithAPY[3]} />
+              <TokenCard key={graph.path} {...graph} />
             </Box>
             <Box
               style={{
@@ -61,7 +61,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: -70,
               }}
             >
-              <TokenCard key={stakersWithAPY[2].path} {...stakersWithAPY[2]} />
+              <TokenCard key={matic.path} {...matic} />
             </Box>
             <Box
               style={{

@@ -6,7 +6,7 @@ import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
-import { InfoCard, Queries, stakers } from "@tender/shared/src/index";
+import { getUnixTimestampMonthAgo, InfoCard, Queries, stakers, calculateAPY } from "@tender/shared/src/index";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -39,11 +39,23 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
     context: { chainId: requiredChain },
   });
-
   // update my stake when tokenBalance changes
   useEffect(() => {
     refetch();
   }, [refetch, tokenBalance]);
+
+  const monthAgo = getUnixTimestampMonthAgo();
+
+  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
+    query: Queries.GetTenderizerDays,
+    variables: { from: monthAgo },
+    context: { chainId: requiredChain },
+  });
+  const apy = calculateAPY(apyData).stakersWithAPY.find((staker) => staker.name === protocolName)?.apy ?? "";
+  // update my stake when chainId changes
+  useEffect(() => {
+    refetchAPY();
+  }, [refetchAPY, chainId]);
 
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
@@ -83,10 +95,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
       <Box gap="medium" pad={{ bottom: "medium" }}>
         <Box justify="around" direction="row">
           <Box>
-            <InfoCard
-              title={`Staked ${symbol}`}
-              text={`${weiToEthWithDecimals(data?.userDeployments?.[0]?.tenderizerStake ?? "0", 3)} ${symbol}`}
-            />
+            <InfoCard title={`Current APY`} text={`${apy} %`} />
           </Box>
           <Box>
             <InfoCard

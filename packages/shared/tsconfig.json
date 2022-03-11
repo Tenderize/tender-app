@@ -7,5 +7,5 @@
   },
   "include": [
     "src/**/*"
-  ]
+, "../landing/src/components/highlights/useAPYData.ts"  ]
 }

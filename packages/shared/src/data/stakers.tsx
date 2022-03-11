@@ -1,11 +1,10 @@
 import { ChainId } from "@usedapp/core";
 
 export type Staker = {
-  name: string;
+  name: "livepeer" | "graph" | "matic" | "audius";
   subgraphId: string;
   title: string;
   available: boolean;
-  apy: number;
   logo: string;
   bwLogo: string;
   bwTenderLogo: string;
@@ -23,7 +22,6 @@ export const stakers: Record<string, Staker> = {
     title: "Livepeer",
     subgraphId: "Livepeer2",
     available: true,
-    apy: 23.3,
     logo: "livepeer.svg",
     bwLogo: "LPT.svg",
     bwTenderLogo: "tenderLPT.svg",
@@ -38,7 +36,6 @@ export const stakers: Record<string, Staker> = {
     title: "The Graph",
     subgraphId: "Graph2",
     available: true,
-    apy: 6.5,
     logo: "graph.svg",
     bwLogo: "GRT.svg",
     bwTenderLogo: "tenderGRT.svg",
@@ -53,7 +50,6 @@ export const stakers: Record<string, Staker> = {
     title: "Polygon",
     subgraphId: "Matic",
     available: true,
-    apy: 14.8,
     logo: "maticLogo.svg",
     bwLogo: "MATIC.svg",
     bwTenderLogo: "tenderMATIC.svg",
@@ -68,7 +64,6 @@ export const stakers: Record<string, Staker> = {
     title: "Audius",
     subgraphId: "Audius",
     available: true,
-    apy: 14.8,
     logo: "AUDIO.svg",
     bwLogo: "AUDIO.svg",
     bwTenderLogo: "tenderAUDIO.svg",
