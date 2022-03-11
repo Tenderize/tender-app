@@ -51,7 +51,9 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     variables: { from: monthAgo },
     context: { chainId: requiredChain },
   });
-  const apy = calculateAPY(apyData).stakersWithAPY.find((staker) => staker.name === protocolName)?.apy ?? "";
+  const apy =
+    calculateAPY(apyData).stakersWithAPY.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)
+      ?.apy ?? "";
   // update my stake when chainId changes
   useEffect(() => {
     refetchAPY();
