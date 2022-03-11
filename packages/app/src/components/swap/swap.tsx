@@ -2,7 +2,7 @@ import { ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from
 import { Button, Box, Form, FormField, Image, Text, TextInput, Tip } from "grommet";
 import { BigNumberish, utils } from "ethers";
 import { contracts, addresses } from "@tender/contracts";
-import stakers from "../../data/stakers";
+import { stakers } from "@tender/shared/src/index";
 import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";

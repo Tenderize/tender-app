@@ -26,7 +26,7 @@ import {
   TableRow,
   TableCell,
 } from "grommet";
-import stakers from "data/stakers";
+import { stakers } from "@tender/shared/src/index";
 import { AddToken } from "./AddToken";
 import { FormClose } from "grommet-icons";
 

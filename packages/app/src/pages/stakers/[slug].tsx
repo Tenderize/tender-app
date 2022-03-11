@@ -11,13 +11,12 @@ import styled from "styled-components";
 import Deposit from "../../components/deposit";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
-import stakers, { Staker } from "../../data/stakers";
+import { Staker, stakers, Foot } from "@tender/shared/src/index";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
-import { Foot } from "@tender/shared/src/index";
 
 const Token: FC = () => {
   const router = useRouter();

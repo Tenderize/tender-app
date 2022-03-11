@@ -1,19 +1,13 @@
 import { FC } from "react";
 import { Box, Text, Image } from "grommet";
 
-type Props = {
-  description: string;
-  stakerAddress: string;
+const TokenCard: FC<{
   title: string;
   available: boolean;
   apy: string;
-  logo: string;
-  bwLogo: string;
   neonLogo: string;
   symbol: string;
-};
-
-const TokenCard: FC<Props> = ({ neonLogo, symbol, title, available, apy }) => {
+}> = ({ neonLogo, symbol, title, available, apy }) => {
   const [apyWhole, apyFraction] = apy.split(".");
 
   return (

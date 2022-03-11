@@ -2,7 +2,7 @@ import { useContractCall, useContractFunction, useEthers } from "@usedapp/core";
 import { abis, contracts, addresses } from "@tender/contracts";
 import { BigNumber, constants, utils } from "ethers";
 import { signERC2612Permit } from "eth-permit";
-import stakers from "data/stakers";
+import { stakers } from "@tender/shared/src/index";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 

@@ -23,7 +23,7 @@ import { TransactionListElement } from "components/transactions";
 import { getDeadline, useSwapWithPermit } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
-import stakers from "data/stakers";
+import { stakers } from "@tender/shared/src/index";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 
 type Props = {

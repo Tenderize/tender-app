@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Heading, Paragraph } from "grommet";
-import { useAPYData } from "./useAPYData";
 import TokenCardMobile from "../token-card/TokenCardMobile";
+import { useAPYData } from "./useAPYData";
 
 export const DeploymentsMobile: FC = () => {
   const { stakersWithAPY } = useAPYData();
