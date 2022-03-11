@@ -18,7 +18,7 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
       return null;
     }
 
-    return blog.posts.slice(0, 3).map((post, index) => (
+    return blog.posts.map((post, index) => (
       <a style={{ textDecoration: "none", color: "white" }} href={post.link} rel="noreferrer" target="_blank">
         <BlogBox
           key={index}
@@ -28,6 +28,7 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
             borderRadius: "3rem",
             width: "25rem",
             height: "28rem",
+            margin: "2rem",
           }}
         >
           <div
@@ -58,9 +59,8 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
         <Heading style={{ textShadow: "0px 0px 8px #0075FF" }} size={screenToFontSize(screenSize)}>
           Blog
         </Heading>
-        <Box height="medium" direction="row" gap="large">
-          {blog.isLoading ? "Loading..." : renderPosts()}
-        </Box>
+
+        <Scroll>{blog.isLoading ? "Loading..." : renderPosts()}</Scroll>
         <div
           style={{
             position: "absolute",
@@ -86,5 +86,16 @@ export const BlogBox = styled(Box)<{ border?: boolean }>`
   &:hover {
     text-shadow: 0px 0px 12px #ad01ff;
     border-color: ${(props) => (props.border ? "#d98aff" : undefined)};
+  }
+`;
+
+const Scroll = styled.div`
+  display: flex;
+  overflow-x: auto;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
