@@ -9,7 +9,7 @@ const addresses = {
     tenderFarm: "0x45627ea9e44195e310c9016658dce665bfa4c577"
   },
   graph: {
-    faucet: "0x52f06f11E9a10Cb09fdF49e9602744A3C8f19ef8",
+    faucet: "0x3f25C4669d08516CDeB183C4e02726eBF81a1A17",
     token: "0x53466090C5bfba99B147aB0c43E212e6E8a3Fb90",
     tenderizer: "0xd76D6107AdD240e619aCfE7503f6F93413E072E7",
     tenderToken: "0xBc2EB1EEa4221F8Ce242C0A46E0B16944cd7788F",
