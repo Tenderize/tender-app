@@ -57,7 +57,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   // update my stake when chainId changes
   useEffect(() => {
     refetchAPY();
-  }, [refetchAPY, chainId]);
+  }, [refetchAPY, requiredChain]);
 
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
