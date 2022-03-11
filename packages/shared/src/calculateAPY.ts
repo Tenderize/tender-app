@@ -4,9 +4,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined) => {
   const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;
     if (data != null) {
-      const dpyData = Array.from(data.tenderizerDays)
-        .filter((item) => item.id.toLowerCase().includes(staker.name))
-        .filter((item) => Number.parseInt(item.DPY) < 1);
+      const dpyData = Array.from(data.tenderizerDays).filter((item) => item.id.includes(staker.subgraphId));
 
       if (dpyData.length === 0) {
         apyInPoints = 0;
