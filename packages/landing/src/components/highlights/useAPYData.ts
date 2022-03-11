@@ -9,7 +9,7 @@ export const useAPYData = () => {
   const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;
     if (data != null) {
-      const dpyData = Array.from(data.tenderizerDays).filter((item) => item.id.includes(staker.subgraphId));
+      const dpyData = Array.from(data.tenderizerDays).filter((item) => item.id.toLowerCase().includes(staker.name));
 
       if (dpyData.length === 0) {
         apyInPoints = 0;
