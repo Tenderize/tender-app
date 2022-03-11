@@ -20,7 +20,7 @@ export const stakers: Record<string, Staker> = {
     name: "livepeer",
     path: "/stakers/livepeer",
     title: "Livepeer",
-    subgraphId: "Livepeer2",
+    subgraphId: "Livepeer",
     available: true,
     logo: "livepeer.svg",
     bwLogo: "LPT.svg",
