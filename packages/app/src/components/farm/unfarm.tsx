@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { contracts } from "@tender/contracts";
-import { BigNumberish, utils } from "ethers";
+import { utils } from "ethers";
 import {
   Box,
   Button,
@@ -26,7 +26,7 @@ import { weiToEthWithDecimals } from "utils/amountFormat";
 type Props = {
   protocolName: string;
   symbol: string;
-  stake: BigNumberish;
+  stake: string;
 };
 
 const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
@@ -99,7 +99,7 @@ const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
                       value={unfarmInput}
                       onChange={handleUnfarmInputChange}
                       type="number"
-                      placeholder={"0 "}
+                      placeholder={"0"}
                       icon={
                         <Box pad="xsmall" direction="row" align="center" gap="small">
                           <Text>{symbol}</Text>
