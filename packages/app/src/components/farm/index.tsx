@@ -74,7 +74,9 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
             text={`${weiToEthWithDecimals(availableRewards?.toString() || "0", 3)} tender${symbol}`}
             align="center"
           />
-          {isCorrectChain && <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf || "0"} />}
+          {isCorrectChain && (
+            <Unfarm protocolName={protocolName} symbol={symbolFull} stake={stakeOf?.toString() ?? "0"} />
+          )}
         </Box>
         <Box direction="column" gap="large" align="center">
           <InfoCard
