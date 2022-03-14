@@ -236,16 +236,16 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
                                     <Box pad="xsmall" direction="row" align="center" gap="small">
                                       <Image
                                         height="35"
-                                        src={selectedToken === symbol ? `/${staker.bwTenderLogo}` : `/${staker.bwLogo}`}
+                                        src={selectedToken === symbol ? `/${staker.bwLogo}` : `/${staker.bwTenderLogo}`}
                                       />
-                                      <Text>t{symbol}</Text>
+                                      <Text>{selectedToken === symbol ? symbol : `t${symbol}`}</Text>
                                     </Box>
                                   }
                                 />
                               }
                               options={[
                                 <Box direction="row" gap="small" align="center">
-                                  <img
+                                  <Image
                                     height={30}
                                     width={30}
                                     src={selectedToken === symbol ? `/${staker.bwTenderLogo}` : `/${staker.bwLogo}`}
