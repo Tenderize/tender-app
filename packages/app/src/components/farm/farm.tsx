@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { addresses } from "@tender/contracts";
 import { BigNumberish, utils } from "ethers";
 import {
