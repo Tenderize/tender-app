@@ -3,8 +3,8 @@ import { BigNumber, BigNumberish } from "ethers";
 import { useEthers } from "@usedapp/core";
 
 import Swap from "./swap";
-import JoinPool from "./join";
-import ExitPool from "./exit";
+import AddLiquidity from "./AddLiquidity";
+import RemoveLiquidity from "./RemoveLiquidity";
 import { Box, Text } from "grommet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
@@ -49,13 +49,13 @@ const LiquidityPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTo
         >
           <Text>Provide Liquidity</Text>
           <Box direction="row" gap="large" justify="center" align="center">
-            <JoinPool
+            <AddLiquidity
               protocolName={protocolName}
               symbol={symbol}
               tokenBalance={tokenBalance}
               tenderTokenBalance={tenderTokenBalance}
             />
-            <ExitPool protocolName={protocolName} symbol={symbol} lpTokenBalance={lpTokenBalance} />
+            <RemoveLiquidity protocolName={protocolName} symbol={symbol} lpTokenBalance={lpTokenBalance} />
           </Box>
         </Box>
       )}

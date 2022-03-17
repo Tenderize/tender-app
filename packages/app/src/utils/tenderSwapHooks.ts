@@ -318,7 +318,10 @@ export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, 
     }
   };
 
-  const state = multicallData.length === 0 ? addLiquidityWithApproveTx : addLiquidityWithPermitTx;
+  const state =
+    !isTenderApproved || (stakers[protocolName].hasPermit && !isTokenApproved)
+      ? addLiquidityWithPermitTx
+      : addLiquidityWithApproveTx;
 
   return { addLiquidity, tx: state };
 };

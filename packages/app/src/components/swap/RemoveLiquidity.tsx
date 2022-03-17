@@ -35,6 +35,7 @@ import {
 } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
+import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 
 type Props = {
   protocolName: string;
@@ -42,7 +43,7 @@ type Props = {
   lpTokenBalance: BigNumberish;
 };
 
-const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
+const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
   const staker = stakers[protocolName];
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
@@ -86,6 +87,9 @@ const ExitPool: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) => {
     symbol,
     isLpSharesApproved
   );
+
+  useResetInputAfterTx(exitPoolTx, setLpSharesInputMulti);
+  useResetInputAfterTx(exitPoolSingleTx, setLpSharesInputSingle);
 
   const singleTokenOutAddress =
     selectedToken === symbol ? addresses[protocolName].token : addresses[protocolName].tenderToken;
@@ -332,4 +336,4 @@ const LPTokensToRemoveInputField: FC<{
   );
 };
 
-export default ExitPool;
+export default RemoveLiquidity;
