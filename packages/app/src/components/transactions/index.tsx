@@ -2,11 +2,11 @@ import { FC, ReactElement, ReactNode } from "react";
 import { Box, Table, TableBody, Text } from "grommet";
 import type { TransactionResponse } from "@ethersproject/providers";
 import {
-  Rinkeby,
   Notification,
   useNotifications,
   useTransactions,
   getStoredTransactionState,
+  getChainById,
   StoredTransaction,
   shortenTransactionHash,
 } from "@usedapp/core";
@@ -88,7 +88,11 @@ export const TransactionListElement: FC<Omit<ListElementProps, "type">> = ({ tra
 const MaybeLink: FC<{ transaction: TransactionResponse | undefined }> = ({ transaction, children }) => {
   if (transaction != null) {
     return (
-      <Link href={Rinkeby.getExplorerTransactionLink(transaction.hash)} target="_blank" rel="noopener noreferrer">
+      <Link
+        href={getChainById(transaction.chainId)?.getExplorerTransactionLink(transaction.hash)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {children}
       </Link>
     );
