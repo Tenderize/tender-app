@@ -170,7 +170,12 @@ const ConfirmSwapModal: FC<Props> = ({
                       </FormField>
                     </Box>
                     <Box pad={{ vertical: "medium" }} justify="center" align="center">
-                      <Text>Price: {`${weiToEthWithDecimals(tokenSpotPrice, 5)} ${tokenSendedSymbol}`} </Text>
+                      <Text>
+                        {`Exchange rate: ${weiToEthWithDecimals(
+                          tokenSpotPrice,
+                          5
+                        )} ${tokenSendedSymbol} / ${tokenReceivedSymbol}`}
+                      </Text>
                     </Box>
                   </Form>
                 )}
