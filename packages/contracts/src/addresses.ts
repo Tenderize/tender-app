@@ -1,4 +1,4 @@
-type ProtocolContracts = {
+export type ProtocolAddresses = {
   faucet: string;
   token: string;
   tenderizer: string;
@@ -8,7 +8,7 @@ type ProtocolContracts = {
   tenderFarm: string;
 };
 
-export const addresses: Record<string, ProtocolContracts> = {
+export const addresses: Record<string, ProtocolAddresses> = {
   livepeer: {
     faucet: "0xD21B8eF6F50eB3468E8bc4Bf8875D6bF2106f68e",
     token: "0xf26B5f9CAd0111450Bc3E98c66A144eE49C0a85E",

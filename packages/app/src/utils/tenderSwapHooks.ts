@@ -10,7 +10,7 @@ const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], deposit: boolean) => {
   const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
 
-  const { value } = useCall(
+  const result = useCall(
     pool &&
       amounts.length === 2 &&
       amounts[0] &&
@@ -19,8 +19,8 @@ export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], de
         method: "calculateTokenAmount",
         args: [amounts, deposit],
       }
-  ) ?? { value: [constants.Zero] };
-  return value?.[0].mul(999).div(1000);
+  );
+  return result?.value?.[0].mul(999).div(1000) ?? constants.Zero;
 };
 
 export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber): [BigNumber, BigNumber] => {
@@ -72,7 +72,7 @@ export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNum
         args: [tokenFrom, amount],
       }
   );
-  return result?.value ?? [constants.Zero];
+  return result?.value?.[0] ?? constants.Zero;
 };
 
 export const useSwapWithPermit = (

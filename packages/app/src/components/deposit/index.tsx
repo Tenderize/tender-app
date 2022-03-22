@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { contracts, addresses } from "@tender/contracts/src";
+import { addresses, contracts } from "@tender/contracts/src";
 import { useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
@@ -16,6 +16,7 @@ import Faucet from "components/faucet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { useDeposit } from "utils/tenderDepositHooks";
+import { ERC20 } from "@tender/contracts/gen/types";
 
 type Props = {
   protocolName: string;

@@ -1,16 +1,17 @@
 import { FC } from "react";
-import { constants, Contract } from "ethers";
+import { constants } from "ethers";
 import { Box, Button, Tip, Text } from "grommet";
 import { useContractFunction } from "@usedapp/core";
 import { useEnsureChain } from "utils/useEnsureRinkebyConnect";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { isPendingTransaction } from "utils/transactions";
+import { ERC20 } from "@tender/contracts/gen/types";
 
 type Props = {
   symbol: string;
   show: boolean;
   spender: string;
-  token: Contract;
+  token: ERC20;
   chainId: number;
 };
 
