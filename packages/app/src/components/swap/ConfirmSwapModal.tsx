@@ -1,6 +1,6 @@
 import { FC, MouseEventHandler, useEffect, useState } from "react";
 import { utils, BigNumber } from "ethers";
-import { contracts } from "@tender/contracts";
+import { contracts } from "@tender/contracts/src";
 import {
   Button,
   Box,

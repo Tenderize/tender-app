@@ -1,39 +1,41 @@
-import { useContractCall, useContractFunction, useEthers } from "@usedapp/core";
-import { abis, contracts, addresses } from "@tender/contracts";
-import { BigNumber, constants, utils } from "ethers";
+import { useCall, useContractFunction, useEthers } from "@usedapp/core";
+import { abis, contracts, addresses } from "@tender/contracts/src";
+import { BigNumber, constants, Contract, utils } from "ethers";
 import { signERC2612Permit } from "eth-permit";
 import { stakers } from "@tender/shared/src/index";
+import { TenderSwap } from "@tender/contracts/gen/types";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
 export const useCalculateLpTokenAmount = (pool: string, amounts: BigNumber[], deposit: boolean) => {
-  const [tokens]: BigNumber[] = useContractCall(
+  const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
+
+  const { value } = useCall(
     pool &&
       amounts.length === 2 &&
       amounts[0] &&
       amounts[1] && {
-        abi: TenderSwapABI,
-        address: pool,
+        contract: swapContract,
         method: "calculateTokenAmount",
         args: [amounts, deposit],
       }
-  ) ?? [constants.Zero];
-  return tokens.mul(999).div(1000);
+  ) ?? { value: [constants.Zero] };
+  return value?.[0].mul(999).div(1000);
 };
 
 export const useCalculateRemoveLiquidity = (pool: string, amount: BigNumber): [BigNumber, BigNumber] => {
-  const [values] = useContractCall(
+  const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
+
+  const result = useCall(
     pool &&
       amount &&
       !amount.isZero() && {
-        abi: TenderSwapABI,
-        address: pool,
+        contract: swapContract,
         method: "calculateRemoveLiquidity",
         args: [amount],
       }
-  ) ?? [[constants.Zero, constants.Zero]];
-
-  return values;
+  );
+  return result?.value?.[0] ?? [constants.Zero, constants.Zero];
 };
 
 export const useCalculateRemoveLiquidityOneToken = (
@@ -41,34 +43,36 @@ export const useCalculateRemoveLiquidityOneToken = (
   amount: BigNumber,
   tokenReceive: string
 ): BigNumber => {
-  const [tokens] = useContractCall(
+  const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
+
+  const result = useCall(
     pool &&
       amount &&
       !amount.isZero() &&
       tokenReceive && {
-        abi: TenderSwapABI,
-        address: pool,
+        contract: swapContract,
         method: "calculateRemoveLiquidityOneToken",
         args: [amount, tokenReceive],
       }
-  ) ?? [constants.Zero];
+  );
 
-  return tokens;
+  return result?.value?.[0] ?? constants.Zero;
 };
 
 export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNumber) => {
-  const [tokens]: BigNumber[] = useContractCall(
+  const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
+
+  const result = useCall(
     pool &&
       tokenFrom &&
       amount &&
       !amount.isZero() && {
-        abi: TenderSwapABI,
-        address: pool,
+        contract: swapContract,
         method: "calculateSwap",
         args: [tokenFrom, amount],
       }
-  ) ?? [constants.Zero];
-  return tokens;
+  );
+  return result?.value ?? [constants.Zero];
 };
 
 export const useSwapWithPermit = (
@@ -80,7 +84,9 @@ export const useSwapWithPermit = (
   spender: string,
   amount: BigNumber
 ) => {
-  const { state, send: multicall } = useContractFunction(contracts[protocolName].tenderSwap, "multicall", {
+  const swapContract = new Contract(protocolName, TenderSwapABI) as TenderSwap;
+
+  const { state, send: multicall } = useContractFunction(swapContract, "multicall", {
     transactionName: `Swap ${tokenSendedSymbol} for ${tokenReceivedSymbol}`,
   });
   const { library } = useEthers();
@@ -123,16 +129,14 @@ export const useExitPoolSingle = (
   symbol: string,
   isLpSharesApproved: boolean
 ) => {
-  const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(
-    contracts[protocolName].tenderSwap,
-    "multicall",
-    {
-      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
-    }
-  );
+  const swapContract = new Contract(protocolName, TenderSwapABI) as TenderSwap;
+
+  const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(swapContract, "multicall", {
+    transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+  });
 
   const { state: removeLiquidityWithApproveTx, send: removeLiquidity } = useContractFunction(
-    contracts[protocolName].tenderSwap,
+    swapContract,
     "removeLiquidityOneToken",
     {
       transactionName: `Remove t${symbol}/${symbol} Liquidity`,
@@ -191,16 +195,14 @@ export const useExitPool = (
   symbol: string,
   isLpSharesApproved: boolean
 ) => {
-  const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(
-    contracts[protocolName].tenderSwap,
-    "multicall",
-    {
-      transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
-    }
-  );
+  const swapContract = new Contract(protocolName, TenderSwapABI) as TenderSwap;
+
+  const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(swapContract, "multicall", {
+    transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
+  });
 
   const { state: removeLiquidityWithApproveTx, send: removeLiquidityFunction } = useContractFunction(
-    contracts[protocolName].tenderSwap,
+    swapContract,
     "removeLiquidity",
     {
       transactionName: `Remove t${symbol}/${symbol} Liquidity`,
@@ -243,17 +245,14 @@ export const useExitPool = (
 };
 
 export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, isTenderApproved: boolean) => {
+  const swapContract = new Contract(protocolName, TenderSwapABI) as TenderSwap;
   const symbol = stakers[protocolName].symbol;
 
-  const { state: addLiquidityWithPermitTx, send: multicall } = useContractFunction(
-    contracts[protocolName].tenderSwap,
-    "multicall",
-    {
-      transactionName: `Add t${symbol}/${symbol} Liquidity`,
-    }
-  );
+  const { state: addLiquidityWithPermitTx, send: multicall } = useContractFunction(swapContract, "multicall", {
+    transactionName: `Add t${symbol}/${symbol} Liquidity`,
+  });
   const { state: addLiquidityWithApproveTx, send: addLiquidityWithApprove } = useContractFunction(
-    contracts[protocolName].tenderSwap,
+    swapContract,
     "addLiquidity",
     { transactionName: `Add t${symbol}/${symbol} Liquidity` }
   );

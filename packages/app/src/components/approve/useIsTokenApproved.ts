@@ -1,6 +1,7 @@
-import { useContractCall } from "@usedapp/core";
-import { constants, utils } from "ethers";
-import { abis } from "@tender/contracts";
+import { useCall } from "@usedapp/core";
+import { Contract, utils } from "ethers";
+import { abis } from "@tender/contracts/src";
+import { ERC20 } from "@tender/contracts/gen/types";
 
 export const useIsTokenApproved = (
   tokenAddress: string,
@@ -8,17 +9,20 @@ export const useIsTokenApproved = (
   spenderAddress: string,
   amount: string
 ): boolean => {
-  const [allowance] = useContractCall(
-    tokenAddress &&
-      ownerAddress &&
-      spenderAddress &&
-      amount && {
-        abi: new utils.Interface(abis.token),
-        address: tokenAddress,
-        method: "allowance",
-        args: [ownerAddress, spenderAddress],
-      }
-  ) ?? [constants.Zero];
+  const contract = new Contract(tokenAddress, new utils.Interface(abis.token)) as ERC20;
+
+  const { value: allowance } =
+    useCall(
+      tokenAddress &&
+        ownerAddress &&
+        spenderAddress &&
+        amount && {
+          contract,
+          method: "allowance",
+          args: [ownerAddress, spenderAddress],
+        }
+    ) ?? {};
+
   const amountWei = utils.parseEther(amount || "0");
-  return allowance.gte(amountWei);
+  return allowance?.[0].gte(amountWei) ?? false;
 };

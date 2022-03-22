@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
 import { ChainId, Config, DAppProvider, useEthers, useTokenBalance, ArbitrumRinkeby, Rinkeby } from "@usedapp/core";
-import { addresses } from "@tender/contracts";
+import { addresses } from "@tender/contracts/src";
 import styled from "styled-components";
 import Deposit from "../../components/deposit";
 import Farm from "../../components/farm";
@@ -222,6 +222,7 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 
   if (props.config == null) return null;
 
+  console.log("render", props.config);
   return (
     <DAppProvider config={dappConfig}>
       <NotificationsList />
@@ -234,7 +235,7 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 
 export const getStaticProps = async () => {
   const CHAIN_URL_MAPPING = {
-    [ChainId.Rinkeby]: process.env.RPC_RINKEBY ?? "",
+    [ChainId.Rinkeby]: process.env.JSON_RPC ?? "",
     // [ChainId.Mainnet]: process.env.RPC_MAINNET ?? "",
     // [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
     [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUMRINKEBY ?? "",
@@ -245,6 +246,7 @@ export const getStaticProps = async () => {
     chainUrlMapping: CHAIN_URL_MAPPING ?? "",
     supportedChains: [ArbitrumRinkeby.chainId, Rinkeby.chainId],
   };
+  console.log("setup", config);
 
   return {
     props: {

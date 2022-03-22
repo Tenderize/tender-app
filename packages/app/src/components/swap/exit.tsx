@@ -1,5 +1,5 @@
 import { FC, useState, useCallback, useEffect, ChangeEventHandler } from "react";
-import { addresses } from "@tender/contracts";
+import { addresses } from "@tender/contracts/src";
 import { BigNumberish, utils } from "ethers";
 import {
   Image,

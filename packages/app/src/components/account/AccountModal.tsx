@@ -1,7 +1,7 @@
 import { FC, useCallback } from "react";
 import styled from "styled-components";
 import { useEthers, useEtherBalance, Rinkeby, useTokenBalance } from "@usedapp/core";
-import { addresses } from "@tender/contracts";
+import { addresses } from "@tender/contracts/src";
 import { TransactionsList } from "../transactions";
 import { formatEther } from "@ethersproject/units";
 import { BigNumber, constants } from "ethers";

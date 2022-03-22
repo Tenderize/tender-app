@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
-import { addresses, contracts } from "@tender/contracts";
-import { BigNumberish, constants } from "ethers";
-import { useContractCall } from "@usedapp/core";
+import { abis, addresses } from "@tender/contracts/src";
+import { BigNumberish, constants, Contract, utils } from "ethers";
+import { useCall } from "@usedapp/core";
 import { useQuery } from "@apollo/client";
 import { Box, Text } from "grommet";
 import Farm from "./farm";
@@ -11,6 +11,7 @@ import { InfoCard, Queries, stakers } from "@tender/shared/src/index";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
+import { TenderFarm as TenderFarmContract } from "@tender/contracts/gen/types";
 
 type Props = {
   protocolName: string;
@@ -24,19 +25,26 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
   const requiredChain = stakers[protocolName].chainId;
   const isCorrectChain = useIsCorrectChain(requiredChain);
 
-  const stakeOf = useContractCall({
-    abi: contracts[protocolName].tenderFarm.interface,
-    address: addresses[protocolName].tenderFarm.toLowerCase(),
+  const farmContract = new Contract(
+    addresses[protocolName].tenderFarm,
+    new utils.Interface(abis.tenderFarm)
+  ) as TenderFarmContract;
+
+  const stakeOfResult = useCall({
+    contract: farmContract,
     method: "stakeOf",
     args: [account],
   });
 
-  const availableRewards = useContractCall({
-    abi: contracts[protocolName].tenderFarm.interface,
-    address: addresses[protocolName].tenderFarm,
+  const stakeOf = stakeOfResult?.value?.[0] ?? constants.Zero;
+
+  const availableRewardsResult = useCall({
+    contract: farmContract,
     method: "availableRewards",
     args: [account],
   });
+
+  const availableRewards = availableRewardsResult?.value?.[0] ?? constants.Zero;
 
   const subgraphName = stakers[protocolName].subgraphId;
   const { data: userData, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
