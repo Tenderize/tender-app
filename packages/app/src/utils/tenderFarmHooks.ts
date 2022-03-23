@@ -1,5 +1,5 @@
 import { useContractFunction, useEthers } from "@usedapp/core";
-import { contracts, addresses } from "@tender/contracts/src";
+import { contracts, addresses } from "@tender/contracts/src/index";
 import { BigNumber } from "ethers";
 import { signERC2612Permit } from "eth-permit";
 import { getDeadline } from "./tenderSwapHooks";

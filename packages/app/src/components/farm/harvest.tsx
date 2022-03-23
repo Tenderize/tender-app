@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { FormClose } from "grommet-icons";
 import { useContractFunction } from "@usedapp/core";
-import { contracts } from "@tender/contracts/src";
+import { contracts } from "@tender/contracts/src/index";
 import { stakers } from "@tender/shared/src/index";
 import { BigNumberish } from "ethers";
 import {

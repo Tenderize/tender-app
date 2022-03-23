@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { abis, addresses } from "@tender/contracts/src";
+import { abis, addresses } from "@tender/contracts/src/index";
 import { BigNumberish, constants, Contract, utils } from "ethers";
 import { useCall } from "@usedapp/core";
 import { useQuery } from "@apollo/client";

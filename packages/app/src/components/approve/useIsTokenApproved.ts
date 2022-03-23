@@ -1,6 +1,6 @@
 import { useCall } from "@usedapp/core";
 import { Contract, utils } from "ethers";
-import { abis } from "@tender/contracts/src";
+import { abis } from "@tender/contracts/src/index";
 import { ERC20 } from "@tender/contracts/gen/types";
 
 export const useIsTokenApproved = (

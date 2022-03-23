@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { contracts } from "@tender/contracts/src";
+import { contracts } from "@tender/contracts/src/index";
 import { Button } from "grommet";
 import { ChainId, useContractFunction, useEtherBalance, useEthers } from "@usedapp/core";
 import Dialog from "components/swap/Dialog";

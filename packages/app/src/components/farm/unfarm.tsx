@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { contracts } from "@tender/contracts/src";
+import { contracts } from "@tender/contracts/src/index";
 import { utils } from "ethers";
 import {
   Box,

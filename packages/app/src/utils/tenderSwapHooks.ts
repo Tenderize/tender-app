@@ -1,5 +1,5 @@
 import { useCall, useContractFunction, useEthers } from "@usedapp/core";
-import { abis, contracts, addresses } from "@tender/contracts/src";
+import { abis, addresses } from "@tender/contracts/src/index";
 import { BigNumber, constants, Contract, utils } from "ethers";
 import { signERC2612Permit } from "eth-permit";
 import { stakers } from "@tender/shared/src/index";

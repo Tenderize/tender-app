@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { addresses, contracts } from "@tender/contracts/src";
+import { addresses, contracts } from "@tender/contracts/src/index";
 import { useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
