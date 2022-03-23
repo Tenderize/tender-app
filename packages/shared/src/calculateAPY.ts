@@ -1,6 +1,14 @@
 import { Queries, stakers, Staker } from "@tender/shared/src/index";
 
-export const calculateAPY = (data: Queries.TenderizerDaysType | undefined) => {
+type ProtocolAPYs = {
+  [key in Staker["name"]]: Staker & { apy: string };
+};
+
+export type APYData = {
+  stakersWithAPY: (Staker & { apy: string })[];
+} & ProtocolAPYs;
+
+export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): APYData => {
   const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;
     if (data != null) {
