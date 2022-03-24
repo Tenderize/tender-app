@@ -22,6 +22,7 @@ import { useBalanceValidation } from "utils/inputValidation";
 import { useContractFunction } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
+import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 
 type Props = {
   protocolName: string;
@@ -49,6 +50,9 @@ const Unfarm: FC<Props> = ({ protocolName, symbol, stake }) => {
   const { state: unfarmTx, send: unfarm } = useContractFunction(contracts[protocolName].tenderFarm, "unfarm", {
     transactionName: `Unfarm ${symbol}`,
   });
+
+  useResetInputAfterTx(unfarmTx, setUnfarmInput);
+
   const unfarmLpTokens = async (e: any) => {
     e.preventDefault();
     await unfarm(utils.parseEther(unfarmInput || "0"));

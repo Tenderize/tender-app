@@ -27,6 +27,7 @@ import { weiToEthWithDecimals } from "utils/amountFormat";
 import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
+import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 
 type Props = {
   protocolName: string;
@@ -35,7 +36,7 @@ type Props = {
   tenderTokenBalance: BigNumberish;
 };
 
-const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBalance }) => {
+const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBalance }) => {
   const staker = stakers[protocolName];
   const bwLogo = `/${staker.bwLogo}`;
   const bwTenderLogo = `/${staker.bwTenderLogo}`;
@@ -113,6 +114,11 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
 
   const { validationMessage: tokenValidationMessage } = useBalanceValidation(tokenInput, tokenBalance);
   const { validationMessage: tenderValidationMessage } = useBalanceValidation(tenderInput, tenderTokenBalance);
+
+  useResetInputAfterTx(addLiquidityTx, (input: string) => {
+    setTokenInput(input);
+    setTenderInput(input);
+  });
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
@@ -234,4 +240,4 @@ const JoinPool: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTokenBa
   );
 };
 
-export default JoinPool;
+export default AddLiquidity;

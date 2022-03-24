@@ -24,6 +24,7 @@ import { useEthers } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 import { useFarm } from "utils/tenderFarmHooks";
 import { weiToEthWithDecimals } from "utils/amountFormat";
+import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 
 type Props = {
   protocolName: string;
@@ -58,6 +59,8 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
 
   // Contract Functions
   const { farmTx, farm } = useFarm(account, protocolName, symbol, isTokenApproved);
+
+  useResetInputAfterTx(farmTx, setFarmInput);
 
   const farmLpTokens = async (e: any) => {
     e.preventDefault();

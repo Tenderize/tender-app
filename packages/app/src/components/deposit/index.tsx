@@ -16,6 +16,7 @@ import Faucet from "components/faucet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { useDeposit } from "utils/tenderDepositHooks";
+import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 
 type Props = {
   protocolName: string;
@@ -72,6 +73,8 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   };
 
   const { tx: depositTx, deposit } = useDeposit(protocolName);
+
+  useResetInputAfterTx(depositTx, setDepositInput);
 
   const depositTokens = async (e: any) => {
     e.preventDefault();
