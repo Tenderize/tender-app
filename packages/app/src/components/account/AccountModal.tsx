@@ -184,7 +184,6 @@ const TokenBalance: FC<{
       <FormField margin="none" plain={true} focusIndicator={false}>
         <Box width="medium">
           <TextInput
-            type="number"
             icon={
               <Box pad="xsmall" direction="row" align="center" gap="small">
                 <Image height="35" src={image} />
