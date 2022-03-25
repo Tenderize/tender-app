@@ -72,7 +72,7 @@ const Navbar: FC = () => {
             target="_blank"
             style={{ paddingLeft: 0 }}
           />
-          <a href="https://rinkeby.tenderize.me" target="_blank">
+          <a href="https://testnet.tenderize.me" target="_blank">
             <Button
               primary
               size="small"
