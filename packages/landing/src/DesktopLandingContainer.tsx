@@ -2,16 +2,16 @@ import { ResponsiveContext } from "grommet";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { AutomaticRewards } from "../components/highlights/AutomaticRewards";
-import { ScrollIndicator } from "../components/highlights/carousel/ScrollIndicator";
-import { ConnectWithDeFi } from "../components/highlights/ConnectWithDeFi";
-import { Deployments } from "../components/highlights/Deployments";
-import { EasyStaking } from "../components/highlights/EasyStaking";
-import { ScreenSize } from "../components/highlights/helper";
-import { Intro } from "../components/highlights/Intro";
-import { NoLockups } from "../components/highlights/NoLockups";
-import { BlogContainer } from "../components/medium/BlogContainer";
-import Navbar from "../components/nav";
+import { AutomaticRewards } from "./components/highlights/AutomaticRewards";
+import { ScrollIndicator } from "./components/highlights/carousel/ScrollIndicator";
+import { ConnectWithDeFi } from "./components/highlights/ConnectWithDeFi";
+import { Deployments } from "./components/highlights/Deployments";
+import { EasyStaking } from "./components/highlights/EasyStaking";
+import { ScreenSize } from "./components/highlights/helper";
+import { Intro } from "./components/highlights/Intro";
+import { NoLockups } from "./components/highlights/NoLockups";
+import { BlogContainer } from "./components/medium/BlogContainer";
+import Navbar from "./components/nav";
 
 const DesktopLandingContainer: FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
