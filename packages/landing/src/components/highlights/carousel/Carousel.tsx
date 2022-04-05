@@ -13,7 +13,6 @@ export const Carousel: FC = () => {
       style={{
         width: "100vw",
         textAlign: "center",
-        overflow: "hidden",
         position: "relative",
       }}
     >

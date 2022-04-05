@@ -1,6 +1,5 @@
 import { Box, Heading, Paragraph, Text } from "grommet";
 import { FC } from "react";
-import { Foot } from "@tender/shared/src/index";
 import { ToText, useMedium } from "./helper";
 
 export const MobileBlogContainer: FC = () => {
@@ -10,7 +9,7 @@ export const MobileBlogContainer: FC = () => {
     if (blog.posts.length === 0) {
       return null;
     }
-    return blog.posts.slice(0, 3).map((post, index) => (
+    return blog.posts.map((post, index) => (
       <a style={{ textDecoration: "none", color: "white" }} href={post.link} rel="noreferrer" target="_blank">
         <Box
           key={index}
@@ -46,15 +45,12 @@ export const MobileBlogContainer: FC = () => {
   return (
     <div
       style={{
-        scrollSnapAlign: "start",
-        flexShrink: 0,
-        width: "100vw",
         backgroundImage: `url("/landing/shad-intro.jpg"), url('/landing/noise.png')`,
         backgroundBlendMode: "darken",
         backgroundRepeat: "no-repeat, repeat",
         backgroundSize: "contain, 50px 50px",
         backgroundPosition: "center",
-        position: "relative",
+
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -67,7 +63,6 @@ export const MobileBlogContainer: FC = () => {
           {blog.isLoading ? "Loading..." : renderPosts()}
         </Box>
       </Box>
-      <Foot />
     </div>
   );
 };

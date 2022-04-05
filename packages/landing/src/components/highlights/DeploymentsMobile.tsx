@@ -9,8 +9,6 @@ export const DeploymentsMobile: FC = () => {
   return (
     <div
       style={{
-        scrollSnapAlign: "start",
-        flexShrink: 0,
         width: "100vw",
         height: "100vh",
         backgroundImage: `url("/landing/shad-deployments.jpg"), url('/landing/noise.png')`,

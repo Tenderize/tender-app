@@ -1,7 +1,11 @@
+import { Foot } from "@tender/shared/src/index";
+import { Main } from "grommet";
 import { Carousel } from "../components/highlights/carousel/Carousel";
 import { DeploymentsMobile } from "../components/highlights/DeploymentsMobile";
 import { IntroMobile } from "../components/highlights/IntroMobile";
 import { MobileBlogContainer } from "../components/medium/MobileBlogContainer";
+
+import { MobileHeader } from "./MobileHeader";
 
 const MobileLandingContainer = () => (
   <div
@@ -12,10 +16,14 @@ const MobileLandingContainer = () => (
       overflowX: "hidden",
     }}
   >
-    <IntroMobile />
-    <DeploymentsMobile />
-    <Carousel />
-    <MobileBlogContainer />
+    <MobileHeader />
+    <Main overflow="hidden">
+      <IntroMobile />
+      <DeploymentsMobile />
+      <Carousel />
+      <MobileBlogContainer />
+    </Main>
+    <Foot />
   </div>
 );
 
