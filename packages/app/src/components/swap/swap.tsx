@@ -1,7 +1,7 @@
 import { ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from "react";
 import { Button, Box, Form, FormField, Image, Text, TextInput, Tip } from "grommet";
 import { BigNumberish, utils } from "ethers";
-import { contracts, addresses } from "@tender/contracts";
+import { contracts, addresses } from "@tender/contracts/src/index";
 import { stakers } from "@tender/shared/src/index";
 import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";

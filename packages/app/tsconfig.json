@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@tender/shared/*": ["../shared/src/*"]
+      "@tender/shared/*": ["../shared/src/*"],
+      "@tender/contracts/*": ["../contracts/src/*"]
     }
   },
   "include": [

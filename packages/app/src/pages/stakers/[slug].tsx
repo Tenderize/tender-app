@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
 import { ChainId, Config, DAppProvider, useEthers, useTokenBalance, ArbitrumRinkeby, Rinkeby } from "@usedapp/core";
-import { addresses } from "@tender/contracts";
+import { addresses } from "@tender/contracts/src/index";
 import styled from "styled-components";
 import Deposit from "../../components/deposit";
 import Farm from "../../components/farm";
@@ -234,10 +234,8 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 
 export const getStaticProps = async () => {
   const CHAIN_URL_MAPPING = {
-    [ChainId.Rinkeby]: process.env.RPC_RINKEBY ?? "",
-    // [ChainId.Mainnet]: process.env.RPC_MAINNET ?? "",
-    // [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
-    [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUMRINKEBY ?? "",
+    [ChainId.Rinkeby]: process.env.RPC_ETHEREUM_RINKEBY ?? "",
+    [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUM_RINKEBY ?? "",
   };
 
   const config: TenderizeConfig = {

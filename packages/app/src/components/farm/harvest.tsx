@@ -1,5 +1,8 @@
 import { FC, useState } from "react";
-import { contracts } from "@tender/contracts";
+import { FormClose } from "grommet-icons";
+import { useContractFunction } from "@usedapp/core";
+import { contracts } from "@tender/contracts/src/index";
+import { stakers } from "@tender/shared/src/index";
 import { BigNumberish } from "ethers";
 import {
   Button,
@@ -17,11 +20,8 @@ import {
   TextInput,
 } from "grommet";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { useContractFunction } from "@usedapp/core";
-import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
-import { stakers } from "@tender/shared/src/index";
 
 type Props = {
   protocolName: string;

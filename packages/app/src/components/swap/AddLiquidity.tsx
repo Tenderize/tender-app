@@ -1,5 +1,5 @@
 import { FC, useState, ChangeEventHandler, MouseEventHandler } from "react";
-import { addresses, contracts } from "@tender/contracts";
+import { addresses, contracts } from "@tender/contracts/src/index";
 import { BigNumberish, utils } from "ethers";
 import {
   Image,
