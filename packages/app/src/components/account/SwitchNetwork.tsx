@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Avatar, Box, Button, Text } from "grommet";
-import { ChainId, DEFAULT_SUPPORTED_CHAINS, getChainName } from "@usedapp/core";
+import { ChainId, DEFAULT_SUPPORTED_CHAINS, getChainById } from "@usedapp/core";
 import { networkAvatar } from "./helpers";
 
 export const addNetwork = async (chainId: number) => {
@@ -45,7 +45,9 @@ export const SwitchNetwork: FC<{ chainId: ChainId; protocol: string }> = ({ chai
   if (isNetworkAdded) {
     return null;
   }
-  const chainName = getChainName(chainId);
+
+  const chainName = getChainById(chainId || ChainId.Mainnet)?.chainName;
+
   return (
     <Box justify="center" align="center" direction="column" gap="medium" pad={{ horizontal: "xsmall" }}>
       <Text>

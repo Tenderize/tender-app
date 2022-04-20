@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
-import { useEthers, shortenAddress, useLookupAddress, useEtherBalance, ChainId, getChainName } from "@usedapp/core";
+import { useEthers, shortenAddress, useLookupAddress, useEtherBalance, ChainId, getChainById } from "@usedapp/core";
 import { Avatar, Box, Button, Card, CardHeader, Heading, Image, Layer, Menu, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
 import { PortisConnector } from "@web3-react/portis-connector";
@@ -38,7 +38,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
             plain
             icon={<Avatar size="small" src={networkAvatar(chainId)} />}
             style={{ color: normalizeColor("white", theme) }}
-            label={<Text>{getChainName(chainId || ChainId.Mainnet)}</Text>}
+            label={<Text>{getChainById(chainId || ChainId.Mainnet)?.chainName}</Text>}
           />
           <Button
             style={{ color: normalizeColor("white", theme), borderColor: normalizeColor("brand", theme) }}

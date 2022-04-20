@@ -1,5 +1,5 @@
 import { ReactElement, useCallback, useState } from "react";
-import { useEthers, getChainName, ChainId } from "@usedapp/core";
+import { useEthers, ChainId, getChainById } from "@usedapp/core";
 import { Box, Button, Card, CardFooter, CardHeader, Heading, Layer } from "grommet";
 
 type InferArguments<T> = T extends (...t: [...infer Arg]) => any ? Arg : never;
@@ -21,14 +21,15 @@ export const useEnsureChain = <TFunc extends (...args: any[]) => any>(
 
   const renderError = () => {
     if (!displayWarning) return <></>;
+
+    const chainName = getChainById(requestedChainId)?.chainName;
+
     return (
       <Layer style={{ overflow: "auto" }} animation="fadeIn" onEsc={onClose} onClickOutside={onClose}>
         <Card flex={false} pad="medium" width="large">
           <CardHeader justify="center" pad="none">
             <Heading level={2} alignSelf="center">
-              {!account
-                ? "Please connect your wallet"
-                : `Please switch to ${getChainName(requestedChainId)} to use Tenderize`}
+              {!account ? "Please connect your wallet" : `Please switch to ${chainName} to use Tenderize`}
             </Heading>
           </CardHeader>
           <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
