@@ -158,7 +158,7 @@ const ConfirmSwapModal: FC<Props> = ({
                           readOnly
                           id="formSwapReceive"
                           placeholder={"0"}
-                          value={utils.formatEther(tokenReceiveAmount || "0")}
+                          value={weiToEthWithDecimals(tokenReceiveAmount || "0", 5)}
                           style={{ textAlign: "right", padding: "20px 50px" }}
                           icon={
                             <Box pad="xsmall" direction="row" align="center" gap="small">
@@ -169,8 +169,14 @@ const ConfirmSwapModal: FC<Props> = ({
                         />
                       </FormField>
                     </Box>
-                    <Box pad={{ vertical: "medium" }} justify="center" align="center">
-                      <Text>
+                    <Box pad={{ vertical: "medium" }} justify="center" align="right">
+                      <Text textAlign="end">
+                        {`Minimum received after 2% slippage: ${weiToEthWithDecimals(
+                          tokenSpotPrice,
+                          5
+                        )} ${tokenSendedSymbol} / ${tokenReceivedSymbol}`}
+                      </Text>
+                      <Text textAlign="end">
                         {`Exchange rate: ${weiToEthWithDecimals(
                           tokenSpotPrice,
                           5
