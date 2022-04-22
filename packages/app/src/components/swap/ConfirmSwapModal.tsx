@@ -174,7 +174,7 @@ const ConfirmSwapModal: FC<Props> = ({
                         {`Minimum received after 2% slippage: ${weiToEthWithDecimals(
                           tokenSpotPrice,
                           5
-                        )} ${tokenSendedSymbol} / ${tokenReceivedSymbol}`}
+                        )} ${tokenReceivedSymbol}`}
                       </Text>
                       <Text textAlign="end">
                         {`Exchange rate: ${weiToEthWithDecimals(
