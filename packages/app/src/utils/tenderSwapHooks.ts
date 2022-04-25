@@ -4,6 +4,7 @@ import { BigNumber, constants, Contract, utils } from "ethers";
 import { signERC2612Permit } from "eth-permit";
 import { stakers } from "@tender/shared/src/index";
 import { TenderSwap } from "@tender/contracts/gen/types";
+import { weiToEthWithDecimals } from "./amountFormat";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -57,6 +58,39 @@ export const useCalculateRemoveLiquidityOneToken = (
   );
 
   return result?.value?.[0] ?? constants.Zero;
+};
+
+export const usePriceImpact = (
+  isSendingToken: boolean,
+  pool: string,
+  inputAmount: string,
+  receiveAmount: BigNumber
+) => {
+  const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
+
+  const resultTenderToken = useCall(
+    pool && {
+      contract: swapContract,
+      method: "getToken0Balance",
+      args: [],
+    }
+  );
+  const resultUnderlyingToken = useCall(
+    pool && {
+      contract: swapContract,
+      method: "getToken1Balance",
+      args: [],
+    }
+  );
+  const tokenBalance = Number.parseInt(weiToEthWithDecimals(resultUnderlyingToken?.value?.[0] ?? constants.One, 5));
+  const tenderTokenBalance = Number.parseInt(weiToEthWithDecimals(resultTenderToken?.value?.[0] ?? constants.One, 5));
+
+  const spotPrice = isSendingToken ? tokenBalance / tenderTokenBalance : tenderTokenBalance / tokenBalance;
+  const spotOutputAmount = Number.parseInt(inputAmount ?? 0) / spotPrice;
+  const priceImpact =
+    (spotOutputAmount - Number.parseInt(weiToEthWithDecimals(receiveAmount ?? constants.One, 5))) / spotOutputAmount;
+
+  return { priceImpact };
 };
 
 export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNumber) => {

@@ -7,10 +7,10 @@ import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
-import { ethWithDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
+import { withDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { isLargerThanMax, isPositive, useBalanceValidation } from "../../utils/inputValidation";
-import { useCalculateSwap } from "../../utils/tenderSwapHooks";
+import { useCalculateSwap, usePriceImpact } from "../../utils/tenderSwapHooks";
 import { useEthers } from "@usedapp/core";
 
 type Props = {
@@ -57,7 +57,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const tokenSpotPrice = useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
+  const executionPrice = useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
 
   const calcOutGivenIn = useCalculateSwap(
     addresses[protocolName].tenderSwap,
@@ -65,6 +65,12 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     utils.parseEther(sendTokenAmount || "0")
   );
 
+  const { priceImpact } = usePriceImpact(
+    isSendingToken,
+    addresses[protocolName].tenderSwap,
+    sendTokenAmount,
+    calcOutGivenIn
+  );
   const usePermit = (): boolean => {
     // if underlying token check if it has permit support
     if (isSendingToken) return hasPermit && !isTokenApproved;
@@ -156,7 +162,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                     }
                     disabled
                     style={{ textAlign: "right", padding: "20px 50px" }}
-                    value={ethWithDecimals(receiveTokenAmount, 8)}
+                    value={withDecimals(receiveTokenAmount, 8)}
                   />
                 </Box>
               </FormField>
@@ -196,7 +202,8 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         tokenReceiveAmount={calcOutGivenIn}
         tokenReceivedSymbol={tokenReceivedSymbol}
         tokenAddress={sendTokenAddress}
-        tokenSpotPrice={tokenSpotPrice}
+        executionPrice={executionPrice}
+        priceImpact={priceImpact}
         protocolName={protocolName}
         usePermit={usePermit()}
         owner={account}

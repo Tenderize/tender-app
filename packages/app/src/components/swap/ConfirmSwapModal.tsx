@@ -24,7 +24,7 @@ import { getDeadline, useSwapWithPermit } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 import { stakers } from "@tender/shared/src/index";
-import { weiToEthWithDecimals } from "utils/amountFormat";
+import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 
 type Props = {
   show: boolean;
@@ -33,7 +33,8 @@ type Props = {
   tokenReceiveAmount: BigNumber;
   tokenSendedSymbol: string;
   tokenReceivedSymbol: string;
-  tokenSpotPrice: BigNumber;
+  executionPrice: BigNumber;
+  priceImpact: number;
   protocolName: string;
   onDismiss: () => void;
   usePermit: boolean;
@@ -47,7 +48,8 @@ const ConfirmSwapModal: FC<Props> = ({
   tokenReceiveAmount,
   tokenSendedSymbol,
   tokenReceivedSymbol,
-  tokenSpotPrice,
+  executionPrice,
+  priceImpact,
   protocolName,
   onDismiss,
   usePermit,
@@ -170,6 +172,7 @@ const ConfirmSwapModal: FC<Props> = ({
                       </FormField>
                     </Box>
                     <Box pad={{ vertical: "medium" }} gap="small" justify="center" align="right">
+                      <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
                       <Text textAlign="end">
                         {`Minimum received after 2% slippage: ${weiToEthWithDecimals(
                           minAmount,
@@ -177,8 +180,8 @@ const ConfirmSwapModal: FC<Props> = ({
                         )} ${tokenReceivedSymbol}`}
                       </Text>
                       <Text textAlign="end">
-                        {`Exchange rate: ${weiToEthWithDecimals(
-                          tokenSpotPrice,
+                        {`Execution price: ${weiToEthWithDecimals(
+                          executionPrice,
                           5
                         )} ${tokenSendedSymbol} / ${tokenReceivedSymbol}`}
                       </Text>
