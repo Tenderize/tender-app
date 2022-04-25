@@ -172,7 +172,7 @@ const ConfirmSwapModal: FC<Props> = ({
                     <Box pad={{ vertical: "medium" }} gap="small" justify="center" align="right">
                       <Text textAlign="end">
                         {`Minimum received after 2% slippage: ${weiToEthWithDecimals(
-                          tokenSpotPrice,
+                          minAmount,
                           5
                         )} ${tokenReceivedSymbol}`}
                       </Text>
