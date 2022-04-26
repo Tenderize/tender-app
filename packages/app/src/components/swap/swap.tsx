@@ -38,6 +38,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   const [isSendingToken, setIsSendingToken] = useState(false);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
+  const [slippage, setSlippage] = useState(2);
   const { account } = useEthers();
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
@@ -207,6 +208,8 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         protocolName={protocolName}
         usePermit={usePermit()}
         owner={account}
+        slippage={slippage}
+        setSlippage={setSlippage}
       />
     </Box>
   );

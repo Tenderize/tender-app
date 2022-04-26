@@ -39,6 +39,8 @@ type Props = {
   onDismiss: () => void;
   usePermit: boolean;
   owner: string | null | undefined;
+  slippage: number;
+  setSlippage: (v: number) => void;
 };
 
 const ConfirmSwapModal: FC<Props> = ({
@@ -54,6 +56,8 @@ const ConfirmSwapModal: FC<Props> = ({
   onDismiss,
   usePermit,
   owner,
+  slippage,
+  setSlippage,
 }) => {
   const staker = stakers[protocolName];
   const symbol = staker.symbol;
@@ -90,7 +94,7 @@ const ConfirmSwapModal: FC<Props> = ({
   const swapTx = usePermit ? swapWithPermitTx : swapWithApproveTx;
   const swap = usePermit ? swapWithPermit : swapWithApprove;
 
-  const minAmount = tokenReceiveAmount.mul(98).div(100);
+  const minAmount = tokenReceiveAmount.mul(100 - slippage).div(100);
 
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
@@ -172,13 +176,32 @@ const ConfirmSwapModal: FC<Props> = ({
                       </FormField>
                     </Box>
                     <Box pad={{ vertical: "medium" }} gap="small" justify="center" align="right">
+                      <Box direction="column" gap="small" alignSelf="end">
+                        <Box direction="row" justify="end" align="center" gap="small">
+                          <Text>Set slippage</Text>
+                          <Button size="small" label="auto" onClick={() => setSlippage(2)} />
+                          <Box>
+                            <TextInput
+                              id="slippage"
+                              value={slippage}
+                              width={30}
+                              maxLength={2}
+                              style={{ textAlign: "right", padding: "5px 5px", width: 60 }}
+                              onChange={(e) =>
+                                setSlippage(Number.parseInt(e.target.value === "" ? "0" : e.target.value))
+                              }
+                            />
+                          </Box>
+                          %
+                        </Box>
+                        <Text textAlign="end">
+                          {`Minimum received after ${slippage}% slippage: ${weiToEthWithDecimals(
+                            minAmount,
+                            5
+                          )} ${tokenReceivedSymbol}`}
+                        </Text>
+                      </Box>
                       <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
-                      <Text textAlign="end">
-                        {`Minimum received after 2% slippage: ${weiToEthWithDecimals(
-                          minAmount,
-                          5
-                        )} ${tokenReceivedSymbol}`}
-                      </Text>
                       <Text textAlign="end">
                         {`Execution price: ${weiToEthWithDecimals(
                           executionPrice,
