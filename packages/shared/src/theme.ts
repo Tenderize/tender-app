@@ -168,9 +168,12 @@ const overrideDefaultTheme: ThemeType = {
     background: "modalBackground",
   },
   tab: {
-    border: undefined,
-    pad: "none",
-    margin: "none",
+    border: {
+      side: undefined,
+      color: "brand",
+    },
+    // pad: "none",
+    // margin: "none",
     active: {
       background: "rgba(0, 0, 0, 0.2)",
     },
@@ -192,19 +195,19 @@ const overrideDefaultTheme: ThemeType = {
       }
       `,
     },
-    header: {
-      extend: `
-        overflow: hidden;
-        border-top-left-radius: 50px;
-        border-top-right-radius: 50px;
-        min-width: 100%;
-        flex: 1 1 auto;
-        align-items: stretch;
-        & > * {
-          min-width: 25%;
-        }
-      `,
-    },
+    // header: {
+    //   extend: `
+    //     overflow: hidden;
+    //     border-top-left-radius: 50px;
+    //     border-top-right-radius: 50px;
+    //     min-width: 100%;
+    //     flex: 1 1 auto;
+    //     align-items: stretch;
+    //     & > * {
+    //       min-width: 25%;
+    //     }
+    //   `,
+    // },
   },
   textInput: {
     extend: `
