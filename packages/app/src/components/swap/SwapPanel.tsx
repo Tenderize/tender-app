@@ -21,10 +21,9 @@ import { useContractFunction } from "@usedapp/core";
 import { TransactionListElement } from "components/transactions";
 import { getDeadline, useCalculateSwap, usePriceImpact, useSwapWithPermit } from "utils/tenderSwapHooks";
 import { isPendingTransaction } from "utils/transactions";
-import { stakers, theme } from "@tender/shared/src/index";
+import { stakers } from "@tender/shared/src/index";
 import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
-import { normalizeColor } from "grommet/utils";
 import TenderBox from "components/tenderbox";
 
 type Props = {
@@ -42,9 +41,9 @@ const SwapPanel: FC<Props> = ({ protocolName, account }) => {
   const logo = `/${staker.bwLogo}`;
   const tenderLogo = `/${staker.bwTenderLogo}`;
 
-  const [sendTokenAmount, setSendTokenAmount] = useState("");
-  const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
-  const [isSendingToken, setIsSendingToken] = useState(false);
+  const [sendTokenAmount] = useState("");
+  //  const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
+  const [isSendingToken] = useState(false);
   const tenderTokenSymbol = `t${staker.symbol}`;
   const sendTokenSymbol = isSendingToken ? tokenSymbol : tenderTokenSymbol;
   const tokenReceivedSymbol = isSendingToken ? tenderTokenSymbol : tokenSymbol;

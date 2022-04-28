@@ -1,4 +1,4 @@
-import { Header, Nav, Image, Box, Tabs, Tab, Button } from "grommet";
+import { Header, Nav, Image, Box, Button } from "grommet";
 import { FC, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AccountButton } from "../account";
