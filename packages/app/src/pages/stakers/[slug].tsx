@@ -39,7 +39,7 @@ const Token: FC = () => {
   }, []);
 
   return (
-    <Box width="100vw" align="center" alignSelf="start">
+    <Box flex width="100vw" align="center" alignSelf="start">
       <TenderBox
         margin={{
           top: "xlarge",
@@ -225,9 +225,11 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   return (
     <DAppProvider config={dappConfig}>
       <NotificationsList />
-      <Navbar config={props.config} />
-      <Token />
-      <Foot />
+      <Box style={{ minHeight: "100%" }}>
+        <Navbar config={props.config} />
+        <Token />
+        <Foot />
+      </Box>
     </DAppProvider>
   );
 };
