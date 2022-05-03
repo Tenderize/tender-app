@@ -45,4 +45,13 @@ export const addresses: Record<string, ProtocolAddresses> = {
     lpToken: "0xa46594B081C0D3f4B66B74a9B6C06F01d9851c0D",
     tenderFarm: "0xD35AE3ABdC7ec0207C02b8c80cf5eecF0D883ad8",
   },
+  dummy: {
+    faucet: "0x93f629909a97De236aa4Cd02A60a1e9fc45Ac5b0",
+    token: "0xb536f8426a32D7A01F91897D78A3d5d7ca03C562",
+    tenderizer: "0x02451F59eB855a1253Db7bA14370F2536740FB46",
+    tenderToken: "0xD99Ac648B8E55958B8EA5c9D1a51653712DF872E",
+    tenderSwap: "0x588F729a9f3D973960074b46F5F0e05D72d73Ea8",
+    lpToken: "0xfC10cf02dFd527F4d8B9E725a676A952078bB487",
+    tenderFarm: "0x52281b6508a82b48fae5207240a0DDF29Dc43CBd",
+  },
 };
