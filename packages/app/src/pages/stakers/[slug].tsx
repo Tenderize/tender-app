@@ -235,6 +235,7 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 };
 
 export const getStaticProps = async () => {
+  console.log("rinkeby", process.env.RPC_ARBITRUM_RINKEBY)
   const CHAIN_URL_MAPPING = {
     [ChainId.Rinkeby]: process.env.RPC_ETHEREUM_RINKEBY ?? "",
     [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUM_RINKEBY ?? "",
