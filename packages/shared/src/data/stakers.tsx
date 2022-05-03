@@ -27,7 +27,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderLPT.svg",
     neonLogo: "landing/neon-lpt.png",
     symbol: "LPT",
-    chainId: ChainId.ArbitrumRinkeby,
+    chainId: ChainId.Arbitrum,
     hasPermit: true,
   },
   graph: {
@@ -41,7 +41,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderGRT.svg",
     neonLogo: "landing/neon-grt.png",
     symbol: "GRT",
-    chainId: ChainId.Rinkeby,
+    chainId: ChainId.Mainnet,
     hasPermit: false,
   },
   matic: {
@@ -55,7 +55,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderMATIC.svg",
     neonLogo: "landing/neon-matic.png",
     symbol: "MATIC",
-    chainId: ChainId.Rinkeby,
+    chainId: ChainId.Mainnet,
     hasPermit: false,
   },
   audius: {
@@ -69,7 +69,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderAUDIO.svg",
     neonLogo: "landing/neon-audio.png",
     symbol: "AUDIO",
-    chainId: ChainId.Rinkeby,
+    chainId: ChainId.Mainnet,
     hasPermit: false,
   },
 };
