@@ -14,7 +14,7 @@ export const addNetwork = async (chainId: number) => {
     });
     isNetworkAdded = true;
   } catch (error: any) {
-    if (error.code === 4902 && chainId === ChainId.ArbitrumRinkeby) {
+    if (error.code === 4902 && chainId === ChainId.Arbitrum) {
       const chainName = DEFAULT_SUPPORTED_CHAINS.find((chain) => chain.chainId === chainId)?.chainName;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -24,8 +24,8 @@ export const addNetwork = async (chainId: number) => {
           {
             chainId: `0x${chainId.toString(16)}`,
             chainName: chainName,
-            rpcUrls: ["https://rinkeby.arbitrum.io/rpc"],
-            blockExplorerUrls: ["https://rinkeby-explorer.arbitrum.io/#/"],
+            rpcUrls: ["https://arb1.arbitrum.io/rpc"],
+            blockExplorerUrls: ["https://explorer.arbitrum.io/#/"],
             nativeCurrency: {
               symbol: "ETH",
               decimals: 18,
