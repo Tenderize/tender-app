@@ -76,7 +76,7 @@ export const stakers: Record<string, Staker> = {
     name: "dummy",
     path: "/stakers/dummy",
     title: "Dummy",
-    subgraphId: "dummyboi",
+    subgraphId: "DummyTenderizer",
     available: true,
     logo: "DUMMY.svg",
     bwLogo: "DUMMY.svg",
