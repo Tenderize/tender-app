@@ -15,6 +15,14 @@ export type Staker = {
   hasPermit: boolean;
 };
 
+export const isProduction = () => {
+  return process.env.NEXT_PUBLIC_BUILD_ENV === "prod" ? true : false;
+};
+
+const getChainId = (main: ChainId, test: ChainId) => {
+  return isProduction() ? main : test;
+};
+
 export const stakers: Record<string, Staker> = {
   livepeer: {
     name: "livepeer",
@@ -27,7 +35,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderLPT.svg",
     neonLogo: "landing/neon-lpt.png",
     symbol: "LPT",
-    chainId: ChainId.Arbitrum,
+    chainId: getChainId(ChainId.Arbitrum, ChainId.ArbitrumRinkeby),
     hasPermit: true,
   },
   graph: {
@@ -41,7 +49,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderGRT.svg",
     neonLogo: "landing/neon-grt.png",
     symbol: "GRT",
-    chainId: ChainId.Mainnet,
+    chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
   },
   matic: {
@@ -55,7 +63,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderMATIC.svg",
     neonLogo: "landing/neon-matic.png",
     symbol: "MATIC",
-    chainId: ChainId.Mainnet,
+    chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
   },
   audius: {
@@ -69,7 +77,7 @@ export const stakers: Record<string, Staker> = {
     bwTenderLogo: "tenderAUDIO.svg",
     neonLogo: "landing/neon-audio.png",
     symbol: "AUDIO",
-    chainId: ChainId.Mainnet,
+    chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
   },
 };
