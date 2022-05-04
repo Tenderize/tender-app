@@ -18,7 +18,7 @@ export const validateIsLargerThanMax =
   () =>
     isLargerThanMax(val, max) ? { message: "Amount exceeds available balance", status: "error" } : undefined;
 
-export const hasValue = (val: BigNumberish) => val != null && val !== "0";
+export const hasValue = (val: BigNumberish) => val && val !== "0";
 
 export const useBalanceValidation = (input: string, balance: BigNumberish, extraDep?: string) => {
   const [validationMessage, setValidationMessage] = useState<string>();

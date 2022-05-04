@@ -7,10 +7,10 @@ import ApproveToken from "../approve/ApproveToken";
 import ConfirmSwapModal from "./ConfirmSwapModal";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { Transaction } from "grommet-icons";
-import { ethWithDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
+import { withDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
-import { isLargerThanMax, isPositive, useBalanceValidation } from "../../utils/inputValidation";
-import { useCalculateSwap } from "../../utils/tenderSwapHooks";
+import { hasValue, isLargerThanMax, isPositive, useBalanceValidation } from "../../utils/inputValidation";
+import { useCalculateSwap, usePriceImpact } from "../../utils/tenderSwapHooks";
 import { useEthers } from "@usedapp/core";
 
 type Props = {
@@ -20,12 +20,6 @@ type Props = {
   tenderTokenBalance: BigNumberish;
   disabled: boolean;
 };
-
-const hasValue = (val: any) => {
-  return val && val !== "0";
-};
-
-const ONE = utils.parseEther("1");
 
 const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protocolName, disabled }) => {
   const logo = `/${stakers[protocolName].bwLogo}`;
@@ -38,6 +32,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   const [isSendingToken, setIsSendingToken] = useState(false);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
+  const [slippage, setSlippage] = useState(2);
   const { account } = useEthers();
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
@@ -57,14 +52,18 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const tokenSpotPrice = useCalculateSwap(addresses[protocolName].tenderSwap, sendTokenAddress, ONE);
-
   const calcOutGivenIn = useCalculateSwap(
     addresses[protocolName].tenderSwap,
     sendTokenAddress,
     utils.parseEther(sendTokenAmount || "0")
   );
 
+  const { priceImpact } = usePriceImpact(
+    isSendingToken,
+    addresses[protocolName].tenderSwap,
+    sendTokenAmount,
+    calcOutGivenIn
+  );
   const usePermit = (): boolean => {
     // if underlying token check if it has permit support
     if (isSendingToken) return hasPermit && !isTokenApproved;
@@ -156,7 +155,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
                     }
                     disabled
                     style={{ textAlign: "right", padding: "20px 50px" }}
-                    value={ethWithDecimals(receiveTokenAmount, 8)}
+                    value={withDecimals(receiveTokenAmount, 8)}
                   />
                 </Box>
               </FormField>
@@ -192,14 +191,16 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
           setSendTokenAmount("");
         }}
         tokenSendedSymbol={sendTokenSymbol}
-        tokenAmount={utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount)}
+        sendTokenAmount={sendTokenAmount}
         tokenReceiveAmount={calcOutGivenIn}
         tokenReceivedSymbol={tokenReceivedSymbol}
         tokenAddress={sendTokenAddress}
-        tokenSpotPrice={tokenSpotPrice}
+        priceImpact={priceImpact}
         protocolName={protocolName}
         usePermit={usePermit()}
         owner={account}
+        slippage={slippage}
+        setSlippage={setSlippage}
       />
     </Box>
   );
