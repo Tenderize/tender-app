@@ -23,7 +23,7 @@ import {
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
-import { useBalanceValidation } from "../../utils/inputValidation";
+import { hasValue, useBalanceValidation } from "../../utils/inputValidation";
 import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { weiToEthWithDecimals } from "../../utils/amountFormat";
@@ -66,9 +66,6 @@ const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) =>
     addresses[protocolName].tenderSwap,
     lpSharesInputMulti || lpSharesInputSingle
   );
-  const hasValue = (val: any) => {
-    return val && val !== "0";
-  };
 
   const { removeLiquiditySingleOut, tx: exitPoolSingleTx } = useExitPoolSingle(
     addresses[protocolName].lpToken,

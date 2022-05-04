@@ -20,38 +20,42 @@ import {
 
 import { useContractFunction } from "@usedapp/core";
 import { TransactionListElement } from "components/transactions";
-import { getDeadline, useSwapWithPermit } from "utils/tenderSwapHooks";
+import { getDeadline, getExecutionPrice, useSwapWithPermit } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 import { stakers } from "@tender/shared/src/index";
-import { weiToEthWithDecimals } from "utils/amountFormat";
+import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 
 type Props = {
   show: boolean;
   tokenAddress: string;
-  tokenAmount: BigNumber;
+  sendTokenAmount: string;
   tokenReceiveAmount: BigNumber;
   tokenSendedSymbol: string;
   tokenReceivedSymbol: string;
-  tokenSpotPrice: BigNumber;
+  priceImpact: number;
   protocolName: string;
   onDismiss: () => void;
   usePermit: boolean;
   owner: string | null | undefined;
+  slippage: number;
+  setSlippage: (v: number) => void;
 };
 
 const ConfirmSwapModal: FC<Props> = ({
   show,
   tokenAddress,
-  tokenAmount,
+  sendTokenAmount,
   tokenReceiveAmount,
   tokenSendedSymbol,
   tokenReceivedSymbol,
-  tokenSpotPrice,
+  priceImpact,
   protocolName,
   onDismiss,
   usePermit,
   owner,
+  slippage,
+  setSlippage,
 }) => {
   const staker = stakers[protocolName];
   const symbol = staker.symbol;
@@ -59,6 +63,10 @@ const ConfirmSwapModal: FC<Props> = ({
   const bwTenderLogo = `/${staker.bwTenderLogo}`;
 
   const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted" | "Success">("None");
+
+  const tokenAmount = utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount);
+  const executionPrice = getExecutionPrice(tokenReceiveAmount, sendTokenAmount);
+  console.log("executionPrice", executionPrice);
 
   // reset to initial state
   useEffect(() => {
@@ -88,7 +96,7 @@ const ConfirmSwapModal: FC<Props> = ({
   const swapTx = usePermit ? swapWithPermitTx : swapWithApproveTx;
   const swap = usePermit ? swapWithPermit : swapWithApprove;
 
-  const minAmount = tokenReceiveAmount.mul(98).div(100);
+  const minAmount = tokenReceiveAmount.mul(100 - slippage).div(100);
 
   const handlePressTrade: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
@@ -158,7 +166,7 @@ const ConfirmSwapModal: FC<Props> = ({
                           readOnly
                           id="formSwapReceive"
                           placeholder={"0"}
-                          value={utils.formatEther(tokenReceiveAmount || "0")}
+                          value={weiToEthWithDecimals(tokenReceiveAmount || "0", 5)}
                           style={{ textAlign: "right", padding: "20px 50px" }}
                           icon={
                             <Box pad="xsmall" direction="row" align="center" gap="small">
@@ -169,10 +177,36 @@ const ConfirmSwapModal: FC<Props> = ({
                         />
                       </FormField>
                     </Box>
-                    <Box pad={{ vertical: "medium" }} justify="center" align="center">
-                      <Text>
-                        {`Exchange rate: ${weiToEthWithDecimals(
-                          tokenSpotPrice,
+                    <Box pad={{ vertical: "medium" }} gap="small" justify="center" align="right">
+                      <Box direction="column" gap="small" alignSelf="end">
+                        <Box direction="row" justify="end" align="center" gap="small">
+                          <Text>Set slippage</Text>
+                          <Button size="small" label="auto" onClick={() => setSlippage(2)} />
+                          <Box>
+                            <TextInput
+                              id="slippage"
+                              value={slippage}
+                              width={30}
+                              maxLength={2}
+                              style={{ textAlign: "right", padding: "5px 5px", width: 60 }}
+                              onChange={(e) =>
+                                setSlippage(Number.parseInt(e.target.value === "" ? "0" : e.target.value))
+                              }
+                            />
+                          </Box>
+                          %
+                        </Box>
+                        <Text textAlign="end">
+                          {`Minimum received after ${slippage}% slippage: ${weiToEthWithDecimals(
+                            minAmount,
+                            5
+                          )} ${tokenReceivedSymbol}`}
+                        </Text>
+                      </Box>
+                      <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
+                      <Text textAlign="end">
+                        {`Execution price: ${weiToEthWithDecimals(
+                          executionPrice,
                           5
                         )} ${tokenSendedSymbol} / ${tokenReceivedSymbol}`}
                       </Text>
