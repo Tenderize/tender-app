@@ -60,10 +60,6 @@ export const useCalculateRemoveLiquidityOneToken = (
   return result?.value?.[0] ?? constants.Zero;
 };
 
-export const getExecutionPrice = (receiveAmount: BigNumber, sendAmount: BigNumber) => {
-  return receiveAmount.div(sendAmount);
-};
-
 export const useSwapPriceImpact = (
   isSendingToken: boolean,
   pool: string,
@@ -94,9 +90,7 @@ export const useSwapPriceImpact = (
     ? getSpotPrice(tokenBalance, tenderTokenBalance)
     : getSpotPrice(tenderTokenBalance, tokenBalance);
 
-  const executionPrice = weiToEthInFloat(
-    getExecutionPrice(receiveAmount, utils.parseEther(inputAmount === "" ? "1" : inputAmount))
-  );
+  const executionPrice = getExecutionPrice(receiveAmount, utils.parseEther(inputAmount === "" ? "1" : inputAmount));
   const priceImpact = (executionPrice - spotPrice) / spotPrice;
 
   return { priceImpact };
@@ -140,6 +134,10 @@ export const useLiquidityPriceImpact = (
   return {
     priceImpact: ((executionPrice - spotPrice) / spotPrice) * 100,
   };
+};
+
+export const getExecutionPrice = (receiveAmount: BigNumber, sendAmount: BigNumber) => {
+  return weiToEthInFloat(receiveAmount) / weiToEthInFloat(sendAmount);
 };
 
 const getSpotPrice = (tokenSendedBalance: BigNumber, tokenReceivedBalance: BigNumber) => {

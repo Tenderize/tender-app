@@ -191,7 +191,9 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
           setSendTokenAmount("");
         }}
         tokenSendedSymbol={sendTokenSymbol}
+        sendTokenBalance={sendTokenBalance}
         sendTokenAmount={sendTokenAmount}
+        setSendTokenAmount={setSendTokenAmount}
         tokenReceiveAmount={calcOutGivenIn}
         tokenReceivedSymbol={tokenReceivedSymbol}
         tokenAddress={sendTokenAddress}
