@@ -1,10 +1,10 @@
 import { Box, Heading, Paragraph, Text } from "grommet";
 import { FC } from "react";
 import styled from "styled-components";
-import { ToText, useMedium } from "./helper";
+import { ToText, useBlog } from "./helper";
 
 export const MobileBlogContainer: FC = () => {
-  const { blog } = useMedium();
+  const { blog } = useBlog();
 
   const renderPosts = () => {
     if (blog.posts.length === 0) {
