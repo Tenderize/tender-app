@@ -91,7 +91,7 @@ export const useSwapPriceImpact = (
     : getSpotPrice(tenderTokenBalance, tokenBalance);
 
   const executionPrice = getExecutionPrice(receiveAmount, utils.parseEther(inputAmount === "" ? "1" : inputAmount));
-  const priceImpact = (executionPrice - spotPrice) / spotPrice;
+  const priceImpact = ((executionPrice - spotPrice) / spotPrice) * 100;
 
   return { priceImpact };
 };

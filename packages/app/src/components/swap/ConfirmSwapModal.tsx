@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, MouseEventHandler, useEffect, useState } from "react";
+import { FC, MouseEventHandler, useEffect, useState } from "react";
 import { utils, BigNumber, BigNumberish } from "ethers";
 import { contracts } from "@tender/contracts/src/index";
 import {
