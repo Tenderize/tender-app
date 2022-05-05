@@ -4,14 +4,14 @@ import styled from "styled-components";
 import { Foot } from "@tender/shared/src/index";
 import { ScreenSize, screenToFontSize } from "../highlights/helper";
 import { HighlightContainer } from "../highlights/HighlightContainer";
-import { useMedium } from "./helper";
+import { useBlog } from "./helper";
 
 export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
   setVisibleIndex,
   index,
 }) => {
-  const { blog } = useMedium();
+  const { blog } = useBlog();
 
   const renderPosts = () => {
     if (blog.posts.length === 0) {

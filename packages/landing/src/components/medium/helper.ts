@@ -10,7 +10,7 @@ export const ToText = (node: any) => {
   return node;
 };
 
-export const useMedium = () => {
+export const useBlog = () => {
   const [blog, setBlog] = useState<{ posts: any[]; isLoading: boolean; error: string | null }>({
     posts: [],
     isLoading: true,
