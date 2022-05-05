@@ -65,8 +65,10 @@ const ConfirmSwapModal: FC<Props> = ({
   const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted" | "Success">("None");
 
   const tokenAmount = utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount);
-  const executionPrice = getExecutionPrice(tokenReceiveAmount, sendTokenAmount);
-  console.log("executionPrice", executionPrice);
+  const executionPrice = getExecutionPrice(
+    tokenReceiveAmount,
+    utils.parseEther(sendTokenAmount === "" ? "1" : sendTokenAmount)
+  );
 
   // reset to initial state
   useEffect(() => {

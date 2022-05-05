@@ -26,12 +26,13 @@ import { LoadingButtonContent } from "../LoadingButtonContent";
 import { hasValue, useBalanceValidation } from "../../utils/inputValidation";
 import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
-import { weiToEthWithDecimals } from "../../utils/amountFormat";
+import { weiToEthWithDecimals, withDecimals } from "../../utils/amountFormat";
 import {
   useCalculateRemoveLiquidity,
   useCalculateRemoveLiquidityOneToken,
   useExitPool,
   useExitPoolSingle,
+  useLiquidityPriceImpact,
 } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
@@ -116,6 +117,13 @@ const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) =>
       await removeLiquiditySingleOut(utils.parseEther(lpSharesInputSingle || "0"), singleTokenOutAddress, singleOut);
     }
   };
+
+  const { priceImpact } = useLiquidityPriceImpact(
+    addresses[protocolName].tenderSwap,
+    false,
+    selectedToken === symbol ? weiToEthWithDecimals(singleOut, 6) : "0",
+    selectedToken === symbol ? "0" : weiToEthWithDecimals(singleOut, 6)
+  );
 
   const onActive = useCallback((nextIndex: number) => {
     setTabIndex(nextIndex);
@@ -258,6 +266,7 @@ const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) =>
                               onChange={() => setSelectedToken(selectedToken === symbol ? `t${symbol}` : symbol)}
                             />
                           </FormField>
+                          <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
                         </Box>
                       </Box>
                     </Form>

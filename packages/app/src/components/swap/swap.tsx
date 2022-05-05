@@ -10,7 +10,7 @@ import { Transaction } from "grommet-icons";
 import { withDecimals, weiToEthWithDecimals } from "../../utils/amountFormat";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { hasValue, isLargerThanMax, isPositive, useBalanceValidation } from "../../utils/inputValidation";
-import { useCalculateSwap, usePriceImpact } from "../../utils/tenderSwapHooks";
+import { useCalculateSwap, useSwapPriceImpact } from "../../utils/tenderSwapHooks";
 import { useEthers } from "@usedapp/core";
 
 type Props = {
@@ -58,7 +58,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     utils.parseEther(sendTokenAmount || "0")
   );
 
-  const { priceImpact } = usePriceImpact(
+  const { priceImpact } = useSwapPriceImpact(
     isSendingToken,
     addresses[protocolName].tenderSwap,
     sendTokenAmount,
