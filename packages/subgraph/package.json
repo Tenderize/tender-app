@@ -11,6 +11,7 @@
     "prepare": "node ./templatify.js",
     "prepare:rinkeby": "NETWORK_NAME=rinkeby node ./templatify.js",
     "prepare:arbitrum-rinkeby": "NETWORK_NAME=arbitrum-rinkeby node ./templatify.js",
+    "prepare:arbitrum": "NETWORK_NAME=arbitrum-one node ./templatify.js",
     "prepare:mainnet": "NETWORK_NAME=mainnet node ./templatify.js",
     "auth": "graph auth https://api.thegraph.com/ $GRAPH_ACCESS_TOKEN",
     "build": "graph build",
