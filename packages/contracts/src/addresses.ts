@@ -1,3 +1,4 @@
+import {constants} from "ethers"
 export type ProtocolAddresses = {
   faucet: string;
   token: string;
@@ -9,7 +10,8 @@ export type ProtocolAddresses = {
 };
 
 export const isProduction = () => {
-  return process.env.NEXT_PUBLIC_BUILD_ENV === "prod" ? true : false;
+  return true;
+  // return process.env.NEXT_PUBLIC_BUILD_ENV === "prod" ? true : false;
 };
 
 const getAddress = (main: string, test: string) => {
@@ -52,5 +54,14 @@ export const addresses: Record<string, ProtocolAddresses> = {
     tenderSwap: getAddress("0x8dA383a947A062fd242c813a0dCc800139db481C", "0x8dA383a947A062fd242c813a0dCc800139db481C"),
     lpToken: getAddress("0xa46594B081C0D3f4B66B74a9B6C06F01d9851c0D", "0xa46594B081C0D3f4B66B74a9B6C06F01d9851c0D"),
     tenderFarm: getAddress("0xD35AE3ABdC7ec0207C02b8c80cf5eecF0D883ad8", "0xD35AE3ABdC7ec0207C02b8c80cf5eecF0D883ad8"),
+  },
+  dummy: {
+    faucet: getAddress(constants.AddressZero, "0x93f629909a97De236aa4Cd02A60a1e9fc45Ac5b0"),
+    token: getAddress("0x95c856Ddac89E2a2e264ECdCC3fcFf9345776220", "0xb536f8426a32D7A01F91897D78A3d5d7ca03C562"),
+    tenderizer: getAddress("0xD6aEff1C6F56510Ec7B3f33C805323B26a283AE5", "0x02451F59eB855a1253Db7bA14370F2536740FB46"),
+    tenderToken: getAddress("0xc60bD28413cc76082fE4eC9bDFa1AA644c89464F", "0xD99Ac648B8E55958B8EA5c9D1a51653712DF872E"),
+    tenderSwap: getAddress("0x9De85ead5015C5627B1d0B4EA054Bc587746E6cb", "0x588F729a9f3D973960074b46F5F0e05D72d73Ea8"),
+    lpToken: getAddress("0x7c890B23cd1dc73714b342913023A5704F61280D", "0xfC10cf02dFd527F4d8B9E725a676A952078bB487"),
+    tenderFarm: getAddress("0x4261e5653Bd91FcDfc58c45D05FfaEfe48Ebe777", "0x52281b6508a82b48fae5207240a0DDF29Dc43CBd"),
   },
 };

@@ -1,7 +1,7 @@
 import { ChainId } from "@usedapp/core";
 
 export type Staker = {
-  name: "livepeer" | "graph" | "matic" | "audius";
+  name: "livepeer" | "graph" | "matic" | "audius" | "dummy";
   subgraphId: string;
   title: string;
   available: boolean;
@@ -16,7 +16,8 @@ export type Staker = {
 };
 
 export const isProduction = () => {
-  return process.env.NEXT_PUBLIC_BUILD_ENV === "prod" ? true : false;
+  return true
+  // return process.env.NEXT_PUBLIC_BUILD_ENV === "prod" ? true : false;
 };
 
 const getChainId = (main: ChainId, test: ChainId) => {
@@ -29,7 +30,7 @@ export const stakers: Record<string, Staker> = {
     path: "/stakers/livepeer",
     title: "Livepeer",
     subgraphId: "Livepeer",
-    available: true,
+    available: false,
     logo: "livepeer.svg",
     bwLogo: "LPT.svg",
     bwTenderLogo: "tenderLPT.svg",
@@ -43,7 +44,7 @@ export const stakers: Record<string, Staker> = {
     path: "/stakers/graph",
     title: "The Graph",
     subgraphId: "Graph",
-    available: true,
+    available: false,
     logo: "graph.svg",
     bwLogo: "GRT.svg",
     bwTenderLogo: "tenderGRT.svg",
@@ -57,7 +58,7 @@ export const stakers: Record<string, Staker> = {
     path: "/stakers/matic",
     title: "Polygon",
     subgraphId: "Matic",
-    available: true,
+    available: false,
     logo: "maticLogo.svg",
     bwLogo: "MATIC.svg",
     bwTenderLogo: "tenderMATIC.svg",
@@ -71,7 +72,7 @@ export const stakers: Record<string, Staker> = {
     path: "/stakers/audius",
     title: "Audius",
     subgraphId: "Audius",
-    available: true,
+    available: false,
     logo: "AUDIO.svg",
     bwLogo: "AUDIO.svg",
     bwTenderLogo: "tenderAUDIO.svg",
@@ -79,5 +80,19 @@ export const stakers: Record<string, Staker> = {
     symbol: "AUDIO",
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
+  },
+  dummy: {
+    name: "dummy",
+    path: "/stakers/dummy",
+    title: "Dummy",
+    subgraphId: "DummyTenderizer",
+    available: true,
+    logo: "DUMMY.svg",
+    bwLogo: "DUMMY.svg",
+    bwTenderLogo: "tenderDUMMY.svg",
+    neonLogo: "landing/neon-audio.png",
+    symbol: "DST",
+    chainId: getChainId(ChainId.Arbitrum, ChainId.ArbitrumRinkeby),
+    hasPermit: true,
   },
 };
