@@ -20,10 +20,10 @@ import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
-import { useCalculateLpTokenAmount, useAddLiquidity } from "utils/tenderSwapHooks";
+import { useCalculateLpTokenAmount, useAddLiquidity, useLiquidityPriceImpact } from "utils/tenderSwapHooks";
 import { hasValue, useBalanceValidation } from "utils/inputValidation";
 import { isPendingTransaction } from "utils/transactions";
-import { weiToEthWithDecimals } from "utils/amountFormat";
+import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
@@ -120,6 +120,8 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
     setTenderInput(input);
   });
 
+  const { priceImpact } = useLiquidityPriceImpact(addresses[protocolName].tenderSwap, true, tokenInput, tenderInput);
+
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
       <Button primary onClick={handleShow} label="Add Liquidity" />
@@ -201,6 +203,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                         }
                       />
                     </FormField>
+                    <Text textAlign="end">{`Price impact: ${withDecimals((priceImpact * 100).toString(), 2)} %`}</Text>
                   </Box>
                 </Form>
               </Box>

@@ -5,7 +5,6 @@ import { signERC2612Permit } from "eth-permit";
 import { stakers } from "@tender/shared/src/index";
 import { TenderSwap } from "@tender/contracts/gen/types";
 import { weiToEthInFloat } from "./amountFormat";
-import { hasValue } from "./inputValidation";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -61,15 +60,54 @@ export const useCalculateRemoveLiquidityOneToken = (
   return result?.value?.[0] ?? constants.Zero;
 };
 
-export const getExecutionPrice = (receiveAmount: BigNumber, sendAmount: string) => {
-  return receiveAmount.div(hasValue(sendAmount) ? sendAmount : 1);
-};
-
-export const usePriceImpact = (
+export const useSwapPriceImpact = (
   isSendingToken: boolean,
   pool: string,
   inputAmount: string,
   receiveAmount: BigNumber
+) => {
+  const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
+
+  const resultVirtualPrice = useCall(
+    pool && {
+      contract: swapContract,
+      method: "getVirtualPrice",
+      args: [],
+    }
+  );
+
+  const virtualPrice = resultVirtualPrice?.value?.[0] ?? constants.One;
+
+  const priceImpact = calculatePriceImpact(
+    utils.parseEther(inputAmount === "" ? "0" : inputAmount),
+    receiveAmount,
+    virtualPrice,
+    !isSendingToken
+  );
+
+  return { priceImpact };
+};
+
+const calculatePriceImpact = (
+  tokenInputAmount: BigNumber,
+  tokenOutputAmount: BigNumber,
+  virtualPrice: BigNumber,
+  isWithdraw = false
+) => {
+  if (tokenInputAmount.lte(0)) {
+    return 0;
+  }
+
+  return isWithdraw
+    ? weiToEthInFloat(tokenOutputAmount) / (weiToEthInFloat(tokenInputAmount) * weiToEthInFloat(virtualPrice)) - 1
+    : (weiToEthInFloat(virtualPrice) * weiToEthInFloat(tokenOutputAmount)) / weiToEthInFloat(tokenInputAmount) - 1;
+};
+
+export const useLiquidityPriceImpact = (
+  pool: string,
+  addLiquidity: boolean,
+  tokenAmount: string,
+  tenderTokenAmount: string
 ) => {
   const swapContract = new Contract(pool, TenderSwapABI) as TenderSwap;
 
@@ -91,14 +129,26 @@ export const usePriceImpact = (
   const tokenBalance = resultUnderlyingToken?.value?.[0] ?? constants.One;
   const tenderTokenBalance = resultTenderToken?.value?.[0] ?? constants.One;
 
-  const spotPrice = isSendingToken
-    ? weiToEthInFloat(tokenBalance) / weiToEthInFloat(tenderTokenBalance)
-    : weiToEthInFloat(tenderTokenBalance) / weiToEthInFloat(tokenBalance);
+  const tokenIn = utils.parseEther(tokenAmount || "0");
+  const tenderIn = utils.parseEther(tenderTokenAmount || "0");
 
-  const executionPrice = weiToEthInFloat(getExecutionPrice(receiveAmount, inputAmount));
-  const priceImpact = spotPrice <= executionPrice ? spotPrice / executionPrice : -spotPrice / executionPrice;
+  const spotPrice = getSpotPrice(tenderTokenBalance, tokenBalance);
+  const executionPrice = getSpotPrice(
+    addLiquidity ? tenderTokenBalance.add(tenderIn) : tenderTokenBalance.sub(tenderIn),
+    addLiquidity ? tokenBalance.add(tokenIn) : tokenBalance.sub(tokenIn)
+  );
 
-  return { priceImpact };
+  return {
+    priceImpact: (executionPrice - spotPrice) / spotPrice,
+  };
+};
+
+export const getExecutionPrice = (receiveAmount: BigNumber, sendAmount: BigNumber) => {
+  return weiToEthInFloat(receiveAmount) / weiToEthInFloat(sendAmount);
+};
+
+const getSpotPrice = (tokenSendedBalance: BigNumber, tokenReceivedBalance: BigNumber) => {
+  return weiToEthInFloat(tokenSendedBalance) / weiToEthInFloat(tokenReceivedBalance);
 };
 
 export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNumber) => {

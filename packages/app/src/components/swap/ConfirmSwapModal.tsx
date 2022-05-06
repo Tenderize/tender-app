@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler, useEffect, useState } from "react";
-import { utils, BigNumber } from "ethers";
+import { utils, BigNumber, BigNumberish } from "ethers";
 import { contracts } from "@tender/contracts/src/index";
 import {
   Button,
@@ -25,12 +25,16 @@ import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 import { stakers } from "@tender/shared/src/index";
 import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
+import { useBalanceValidation } from "utils/inputValidation";
+import { AmountInputFooter } from "components/AmountInputFooter";
 
 type Props = {
   show: boolean;
   tokenAddress: string;
   sendTokenAmount: string;
+  setSendTokenAmount: (v: string) => void;
   tokenReceiveAmount: BigNumber;
+  sendTokenBalance: BigNumberish;
   tokenSendedSymbol: string;
   tokenReceivedSymbol: string;
   priceImpact: number;
@@ -46,6 +50,8 @@ const ConfirmSwapModal: FC<Props> = ({
   show,
   tokenAddress,
   sendTokenAmount,
+  sendTokenBalance,
+  setSendTokenAmount,
   tokenReceiveAmount,
   tokenSendedSymbol,
   tokenReceivedSymbol,
@@ -65,8 +71,10 @@ const ConfirmSwapModal: FC<Props> = ({
   const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted" | "Success">("None");
 
   const tokenAmount = utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount);
-  const executionPrice = getExecutionPrice(tokenReceiveAmount, sendTokenAmount);
-  console.log("executionPrice", executionPrice);
+  const executionPrice = getExecutionPrice(
+    tokenReceiveAmount,
+    utils.parseEther(sendTokenAmount === "" ? "1" : sendTokenAmount)
+  );
 
   // reset to initial state
   useEffect(() => {
@@ -112,6 +120,8 @@ const ConfirmSwapModal: FC<Props> = ({
     }
   }, [swapTx]);
 
+  const { validationMessage } = useBalanceValidation(sendTokenAmount, sendTokenBalance, tokenSendedSymbol);
+
   return (
     <>
       {show && (
@@ -147,10 +157,10 @@ const ConfirmSwapModal: FC<Props> = ({
                     <Box gap="medium">
                       <FormField label={`Send ${tokenSendedSymbol}`}>
                         <TextInput
-                          readOnly
                           id="formSwapSend"
                           type="number"
-                          value={utils.formatEther(tokenAmount || "0")}
+                          value={sendTokenAmount}
+                          onChange={(e) => setSendTokenAmount(e.target.value)}
                           required={true}
                           style={{ textAlign: "right", padding: "20px 50px" }}
                           icon={
@@ -159,6 +169,13 @@ const ConfirmSwapModal: FC<Props> = ({
                               <Text>{tokenSendedSymbol}</Text>
                             </Box>
                           }
+                        />
+                        <Text color="red">{validationMessage}</Text>
+                        <AmountInputFooter
+                          label={`Balance: ${weiToEthWithDecimals(sendTokenBalance, 6)} ${tokenSendedSymbol}`}
+                          onClick={() => {
+                            setSendTokenAmount(utils.formatEther(sendTokenBalance.toString() ?? "0"));
+                          }}
                         />
                       </FormField>
                       <FormField label={`Receive ${tokenReceivedSymbol}`}>
@@ -203,10 +220,13 @@ const ConfirmSwapModal: FC<Props> = ({
                           )} ${tokenReceivedSymbol}`}
                         </Text>
                       </Box>
-                      <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
+                      <Text textAlign="end">{`Price impact: ${withDecimals(
+                        (priceImpact * 100).toString(),
+                        2
+                      )} %`}</Text>
                       <Text textAlign="end">
-                        {`Execution price: ${weiToEthWithDecimals(
-                          executionPrice,
+                        {`Execution price: ${withDecimals(
+                          executionPrice.toString(),
                           5
                         )} ${tokenSendedSymbol} / ${tokenReceivedSymbol}`}
                       </Text>
