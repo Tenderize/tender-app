@@ -220,7 +220,10 @@ const ConfirmSwapModal: FC<Props> = ({
                           )} ${tokenReceivedSymbol}`}
                         </Text>
                       </Box>
-                      <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
+                      <Text textAlign="end">{`Price impact: ${withDecimals(
+                        (priceImpact * 100).toString(),
+                        2
+                      )} %`}</Text>
                       <Text textAlign="end">
                         {`Execution price: ${withDecimals(
                           executionPrice.toString(),

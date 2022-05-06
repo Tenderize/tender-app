@@ -88,21 +88,19 @@ export const useSwapPriceImpact = (
   return { priceImpact };
 };
 
-export const calculatePriceImpact = (
+const calculatePriceImpact = (
   tokenInputAmount: BigNumber,
   tokenOutputAmount: BigNumber,
   virtualPrice: BigNumber,
   isWithdraw = false
 ) => {
   if (tokenInputAmount.lte(0)) {
-    return constants.Zero;
+    return 0;
   }
 
   return isWithdraw
-    ? (weiToEthInFloat(tokenOutputAmount) / (weiToEthInFloat(tokenInputAmount) * weiToEthInFloat(virtualPrice)) - 1) *
-        100
-    : ((weiToEthInFloat(virtualPrice) * weiToEthInFloat(tokenOutputAmount)) / weiToEthInFloat(tokenInputAmount) - 1) *
-        100;
+    ? weiToEthInFloat(tokenOutputAmount) / (weiToEthInFloat(tokenInputAmount) * weiToEthInFloat(virtualPrice)) - 1
+    : (weiToEthInFloat(virtualPrice) * weiToEthInFloat(tokenOutputAmount)) / weiToEthInFloat(tokenInputAmount) - 1;
 };
 
 export const useLiquidityPriceImpact = (
@@ -141,7 +139,7 @@ export const useLiquidityPriceImpact = (
   );
 
   return {
-    priceImpact: ((executionPrice - spotPrice) / spotPrice) * 100,
+    priceImpact: (executionPrice - spotPrice) / spotPrice,
   };
 };
 

@@ -266,7 +266,10 @@ const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) =>
                               onChange={() => setSelectedToken(selectedToken === symbol ? `t${symbol}` : symbol)}
                             />
                           </FormField>
-                          <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
+                          <Text textAlign="end">{`Price impact: ${withDecimals(
+                            (priceImpact * 100).toString(),
+                            2
+                          )} %`}</Text>
                         </Box>
                       </Box>
                     </Form>

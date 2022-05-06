@@ -203,7 +203,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                         }
                       />
                     </FormField>
-                    <Text textAlign="end">{`Price impact: ${withDecimals(priceImpact.toString(), 2)} %`}</Text>
+                    <Text textAlign="end">{`Price impact: ${withDecimals((priceImpact * 100).toString(), 2)} %`}</Text>
                   </Box>
                 </Form>
               </Box>
