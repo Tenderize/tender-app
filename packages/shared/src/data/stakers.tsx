@@ -1,7 +1,7 @@
 import { ChainId } from "@usedapp/core";
 
 export type Staker = {
-  name: "livepeer" | "graph" | "matic" | "audius";
+  name: "livepeer" | "graph" | "matic" | "audius" | "dummy";
   subgraphId: string;
   title: string;
   available: boolean;
@@ -33,7 +33,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     path: "/stakers/livepeer",
     title: "Livepeer",
     subgraphId: "Livepeer",
-    available: true,
+    available: false,
     logo: "livepeer.svg",
     bwLogo: "LPT.svg",
     bwTenderLogo: "tenderLPT.svg",
@@ -65,7 +65,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     path: "/stakers/matic",
     title: "Polygon",
     subgraphId: "Matic",
-    available: true,
+    available: false,
     logo: "maticLogo.svg",
     bwLogo: "MATIC.svg",
     bwTenderLogo: "tenderMATIC.svg",
@@ -91,5 +91,19 @@ export const stakers: Record<ProtocolName, Staker> = {
     hasPermit: true,
     apy: "0",
     tvl: 0,
+  },
+  dummy: {
+    name: "dummy",
+    path: "/stakers/dummy",
+    title: "Dummy",
+    subgraphId: "DummyTenderizer",
+    available: true,
+    logo: "DUMMY.svg",
+    bwLogo: "DUMMY.svg",
+    bwTenderLogo: "tenderDUMMY.svg",
+    neonLogo: "landing/neon-audio.png",
+    symbol: "DST",
+    chainId: getChainId(ChainId.Arbitrum, ChainId.ArbitrumRinkeby),
+    hasPermit: true,
   },
 };
