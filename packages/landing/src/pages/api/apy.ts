@@ -1,9 +1,8 @@
 import { NextApiResponse } from "next";
+import { ChainId } from "@usedapp/core";
 import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampMonthAgo } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
-
-const RinkebyChainId = 4;
-const ArbitrumRinkebyChainId = 421611;
+import { isProduction } from "@tender/shared/src/data/stakers";
 
 const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
   res.setHeader("Cache-Control", `public, s-maxage=${60 * 60}, stale-while-revalidate=${60 * 60 * 2}`);
@@ -18,25 +17,30 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
   }
 
   const monthAgo = getUnixTimestampMonthAgo();
-  const { data: rinkebyData } = await Subgraph.query({
-    query: Queries.GetTenderizerDays,
-    variables: { from: monthAgo },
-    context: { chainId: RinkebyChainId },
-  });
-  const { data: rinkebyArbitrumData } = await SubgraphForLanding.query({
-    query: Queries.GetTenderizerDays,
-    variables: { from: monthAgo },
-    context: { chainId: ArbitrumRinkebyChainId },
-  });
-  const data = { tenderizerDays: [...rinkebyData.tenderizerDays, ...rinkebyArbitrumData.tenderizerDays] };
-  if (data != null) {
-    req.cache.set(cacheKey, {
-      data,
+  try {
+    const { data: ethereumData } = await Subgraph.query({
+      query: Queries.GetTenderizerDays,
+      variables: { from: monthAgo },
+      context: { chainId: isProduction() ? ChainId.Mainnet : ChainId.Rinkeby },
     });
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("X-Cache", "MISS");
+    const { data: arbitrumData } = await SubgraphForLanding.query({
+      query: Queries.GetTenderizerDays,
+      variables: { from: monthAgo },
+      context: { chainId: isProduction() ? ChainId.Arbitrum : ChainId.ArbitrumRinkeby },
+    });
+    const data = { tenderizerDays: [...ethereumData.tenderizerDays, ...arbitrumData.tenderizerDays] };
+    if (data != null) {
+      req.cache.set(cacheKey, {
+        data,
+      });
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("X-Cache", "MISS");
+    }
+    res.status(200).json(data);
+  } catch (e) {
+    console.log(e);
+    res.status(200).json([]);
   }
-  res.status(200).json(data);
 };
 
 export default lruCache(handler);

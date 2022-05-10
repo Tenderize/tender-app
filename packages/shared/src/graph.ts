@@ -6,7 +6,7 @@ const ENDPOINTS: Endpoints = {
   [ChainId.Rinkeby]: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize-staging",
   [ChainId.ArbitrumRinkeby]: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize-arbitrum-staging",
   [ChainId.Arbitrum]: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize-arbitrum",
-  [ChainId.Mainnet]: "https://thegraph.com/explorer/subgraph/tenderize/tenderize-ethereum",
+  [ChainId.Mainnet]: "https://api.thegraph.com/subgraphs/name/tenderize/tenderize-ethereum",
 };
 
 interface Endpoints {
