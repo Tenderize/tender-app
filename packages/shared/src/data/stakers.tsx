@@ -71,7 +71,7 @@ export const stakers: Record<string, Staker> = {
     path: "/stakers/audius",
     title: "Audius",
     subgraphId: "Audius",
-    available: true,
+    available: false,
     logo: "AUDIO.svg",
     bwLogo: "AUDIO.svg",
     bwTenderLogo: "tenderAUDIO.svg",

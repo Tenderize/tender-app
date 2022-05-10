@@ -155,16 +155,23 @@ const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => 
           <Box round={{ size: "large" }}>
             <DropdownBackground style={{ zIndex: 1 }} />
             <Box style={{ zIndex: 2 }}>
-              {options.map((option) => (
-                <DropdownOption
-                  key={option.title}
-                  staker={option}
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    setOpen(false);
-                  }}
-                />
-              ))}
+              {options
+                .map((option) => {
+                  if (option.available === false) {
+                    return null;
+                  }
+                  return (
+                    <DropdownOption
+                      key={option.title}
+                      staker={option}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        setOpen(false);
+                      }}
+                    />
+                  );
+                })
+                .filter((v) => v != null)}
             </Box>
           </Box>
         </Drop>
@@ -176,7 +183,7 @@ const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => 
 const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButtonElement> }> = ({ staker, onClick }) => {
   return (
     <DropdownOptionContainer border={{ side: "bottom" }} onClick={onClick}>
-      <MaybeLink staker={staker}>
+      <Link href={staker.path} passHref>
         <Button fill hoverIndicator={{ color: "rgba(0, 0, 0, 0.1)" }} disabled={!staker.available}>
           <Box direction="row" justify="center" pad={{ vertical: "medium" }} gap="small">
             <Box direction="column" gap="small" align="center" pad={{ bottom: "small" }}>
@@ -185,17 +192,9 @@ const DropdownOption: FC<{ staker: Staker; onClick: MouseEventHandler<HTMLButton
             </Box>
           </Box>
         </Button>
-      </MaybeLink>
+      </Link>
     </DropdownOptionContainer>
   );
-};
-
-const MaybeLink: FC<{ staker: Staker }> = ({ staker, children }) => {
-  if (staker.available) {
-    return <Link href={staker.path}>{children}</Link>;
-  } else {
-    return <>{children}</>;
-  }
 };
 
 const DropdownOptionContainer = styled(Box)`
