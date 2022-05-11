@@ -142,7 +142,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                                   <TokenBalance
                                     staker={staker}
                                     tokenAddress={addresses[staker.name].lpToken}
-                                    symbol={`t${staker.symbol}-${staker.symbol}-SWAP`}
+                                    symbol={`t${staker.symbol}-SWAP`}
                                     image={""}
                                     account={account}
                                   />
@@ -150,7 +150,7 @@ export const AccountModal: FC<AccountModalProps> = ({ showModal, setShowModal })
                                 <TableCell border="bottom">
                                   <AddToken
                                     address={addresses[staker.name].lpToken}
-                                    symbol={`t${staker.symbol}-${staker.symbol}-SWAP`}
+                                    symbol={`t${staker.symbol}-SWAP`}
                                     image={""}
                                   />
                                 </TableCell>
