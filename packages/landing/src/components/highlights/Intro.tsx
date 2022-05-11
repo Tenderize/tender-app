@@ -4,12 +4,14 @@ import Link from "next/link";
 import styled from "styled-components";
 import { HighlightContainer } from "./HighlightContainer";
 import { ScreenSize, screenToFontSize } from "./helper";
+import { isProduction } from "@tender/shared/src/data/stakers";
 
 export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
   setVisibleIndex,
   index,
 }) => {
+  const appUrl = isProduction() ? "https://app.tenderize.me" : "https://testnet.tenderize.me";
   return (
     <HighlightContainer item="intro" setVisibleIndex={setVisibleIndex} index={index}>
       <Box style={{ position: "relative", marginLeft: "45%", marginTop: "11.5%" }}>
@@ -21,11 +23,11 @@ export const Intro: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) =>
         </Paragraph>
         <Box>
           <Box direction="row" gap={screenToFontSize(screenSize)} pad={{ top: "medium" }} margin={{ bottom: "small" }}>
-            <a href="https://testnet.tenderize.me" target="_blank">
+            <a href={appUrl} target="_blank">
               <XLButton secondary size={screenToFontSize(screenSize)} label="Open App" border />
             </a>
 
-            <Link href="#defi">
+            <Link href="#defi" passHref>
               <XLButton
                 secondary
                 size={screenToFontSize(screenSize)}
