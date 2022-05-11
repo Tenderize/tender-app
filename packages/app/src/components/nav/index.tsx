@@ -1,6 +1,5 @@
 import { Header, Nav, Image, Box } from "grommet";
 import { FC, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { AccountButton } from "../account";
 import { TenderizeConfig } from "types";
 
