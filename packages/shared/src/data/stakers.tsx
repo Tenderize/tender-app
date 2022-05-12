@@ -43,7 +43,7 @@ export const stakers: Record<string, Staker> = {
     path: "/stakers/graph",
     title: "The Graph",
     subgraphId: "Graph",
-    available: true,
+    available: false,
     logo: "graph.svg",
     bwLogo: "GRT.svg",
     bwTenderLogo: "tenderGRT.svg",
