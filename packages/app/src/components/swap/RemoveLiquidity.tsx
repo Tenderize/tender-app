@@ -134,7 +134,7 @@ const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) =>
     }
   }, []);
 
-  const symbolFull = `t${symbol}-${symbol}-SWAP`;
+  const symbolFull = `t${symbol}-SWAP`;
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>

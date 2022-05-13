@@ -21,7 +21,7 @@ type Props = {
 };
 
 const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }) => {
-  const symbolFull = `t${symbol}-${symbol}-SWAP`;
+  const symbolFull = `t${symbol}-SWAP`;
   const requiredChain = stakers[protocolName].chainId;
   const isCorrectChain = useIsCorrectChain(requiredChain);
 

@@ -53,7 +53,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
 
   const [tenderInput, setTenderInput] = useState("");
 
-  const lpTokenSymbol = `t${symbol}-${symbol}-SWAP`;
+  const lpTokenSymbol = `t${symbol}-SWAP`;
 
   const handleTenderInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const val = e.target.value;

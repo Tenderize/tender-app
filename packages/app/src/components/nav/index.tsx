@@ -1,6 +1,5 @@
 import { Header, Nav, Image, Box } from "grommet";
 import { FC, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { AccountButton } from "../account";
 import { TenderizeConfig } from "types";
 
@@ -28,9 +27,9 @@ const Navbar: FC<props> = (props) => {
   return (
     <Box>
       <Header justify="between" pad={{ horizontal: "xlarge", vertical: "xsmall" }}>
-        <Link href="/" passHref>
+        <a href={"https://tenderize.me"} target="_blank">
           <Image width="150px" src={"/tenderizeLogo.svg"} alt="header logo" />
-        </Link>
+        </a>
 
         <Box direction="row" align="center" gap="medium">
           <Nav direction="row">
