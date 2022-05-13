@@ -16,7 +16,7 @@ export type Staker = {
 };
 
 export const isProduction = () => {
-  return process.env.NEXT_PUBLIC_BUILD_ENV === "prod" ? true : false;
+  return process.env.NEXT_PUBLIC_BUILD_ENV === "prod";
 };
 
 const getChainId = (main: ChainId, test: ChainId) => {
