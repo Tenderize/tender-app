@@ -5,11 +5,13 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
+import { isProduction } from "@tender/shared/src/data/stakers";
 
 const Navbar: FC = () => {
   const [navBackground, setNavBackground] = useState(false);
   const navRef = useRef<boolean>(false);
   navRef.current = navBackground;
+  const appUrl = isProduction() ? "https://app.tenderize.me" : "https://testnet.tenderize.me";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +74,7 @@ const Navbar: FC = () => {
             target="_blank"
             style={{ paddingLeft: 0 }}
           />
-          <a href="https://testnet.tenderize.me" target="_blank">
+          <a href={appUrl} target="_blank">
             <Button
               primary
               size="small"

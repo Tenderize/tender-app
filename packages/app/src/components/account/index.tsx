@@ -2,7 +2,6 @@ import React, { FC, useCallback, useState } from "react";
 import { useEthers, shortenAddress, useLookupAddress, useEtherBalance, ChainId, getChainById } from "@usedapp/core";
 import { Avatar, Box, Button, Card, CardHeader, Heading, Image, Layer, Menu, Spinner, Text, ThemeType } from "grommet";
 import styled, { css } from "styled-components";
-import { PortisConnector } from "@web3-react/portis-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { WalletLinkConnector } from "@web3-react/walletlink-connector";
 import { AccountModal } from "./AccountModal";
@@ -26,8 +25,6 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   };
 
   const etherBal = useEtherBalance(account);
-
-  const supportedChainIds = Object.keys(config.chainUrlMapping).map((i) => parseInt(i, 10));
 
   return (
     <Account>
@@ -99,18 +96,6 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 handleClick={async () => {
                   const walletConnector = new WalletConnectConnector({
                     rpc: config.chainUrlMapping,
-                  });
-                  await activate(walletConnector);
-                  handleCloseWalletPicker();
-                }}
-              />
-              <ProviderButton
-                label="Portis"
-                image={"/portis.svg"}
-                handleClick={async () => {
-                  const walletConnector = new PortisConnector({
-                    dAppId: config.portisApiKey,
-                    networks: supportedChainIds,
                   });
                   await activate(walletConnector);
                   handleCloseWalletPicker();

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
-import { useEthers } from "@usedapp/core";
+import { ArbitrumRinkeby, Rinkeby, useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
@@ -168,7 +168,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Form>
         )}
       </Box>
-      {chainId === requiredChain && (
+      {chainId === requiredChain && (chainId === Rinkeby.chainId || chainId === ArbitrumRinkeby.chainId) && (
         <Box
           margin={{ top: "medium" }}
           alignSelf="center"
