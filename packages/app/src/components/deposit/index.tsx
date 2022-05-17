@@ -11,7 +11,7 @@ import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { isPendingTransaction } from "utils/transactions";
-import { useBalanceValidation } from "utils/inputValidation";
+import { isLargerThanMax, isPositive, useBalanceValidation } from "utils/inputValidation";
 import Faucet from "components/faucet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
@@ -156,6 +156,8 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     disabled={
                       (!hasPermit && !isTokenApproved) ||
                       !depositInput ||
+                      !isPositive(depositInput) ||
+                      isLargerThanMax(depositInput, tokenBalance) ||
                       depositInput.toString() === "0" ||
                       isPendingTransaction(depositTx)
                     }
