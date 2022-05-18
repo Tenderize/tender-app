@@ -1,10 +1,10 @@
 import { useCall, useContractFunction, useEthers } from "@usedapp/core";
 import { abis, addresses } from "@tender/contracts/src/index";
 import { BigNumber, constants, Contract, utils } from "ethers";
-import { signERC2612Permit } from "eth-permit";
 import { stakers } from "@tender/shared/src/index";
 import { TenderSwap } from "@tender/contracts/gen/types";
 import { weiToEthInFloat } from "./amountFormat";
+import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -378,7 +378,7 @@ export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, 
 
     if (!tokenIn.isZero() && stakers[protocolName].hasPermit && !isTokenApproved) {
       const token = addresses[protocolName].token;
-      const permit: ERC2612Permit = await signERC2612PermitPatched(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         token,
         account ?? "",
@@ -421,27 +421,4 @@ export const getDeadline = () => {
   const DEADLINE_MINUTES = 10;
   const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;
   return Math.floor(deadlineMS / 1000);
-};
-
-type ERC2612Permit = Awaited<ReturnType<typeof signERC2612Permit>>;
-
-const patchPermit = (permit: ERC2612Permit) => {
-  return {
-    ...permit,
-    v: permit.v === 0 || permit.v === 1 ? 27 : permit.v,
-  };
-};
-
-const signERC2612PermitPatched = async (
-  provider: any,
-  token: string,
-  owner: string,
-  spender: string,
-  value?: string | number,
-  deadline?: number | undefined,
-  nonce?: number | undefined
-): Promise<ERC2612Permit> => {
-  const result = await signERC2612Permit(provider, token, owner, spender, value, deadline, nonce);
-
-  return patchPermit(result);
 };

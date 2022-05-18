@@ -1,9 +1,9 @@
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts/src/index";
 import { BigNumber } from "ethers";
-import { signERC2612Permit } from "eth-permit";
 import { stakers } from "@tender/shared/src/index";
 import { getDeadline } from "./tenderSwapHooks";
+import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 
 export const useDeposit = (protocolName: string) => {
   const symbol = stakers[protocolName].symbol;
@@ -29,7 +29,7 @@ export const useDeposit = (protocolName: string) => {
 
   const deposit = async (amount: BigNumber) => {
     if (hasPermit) {
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         addresses[protocolName].token,
         account || "",
