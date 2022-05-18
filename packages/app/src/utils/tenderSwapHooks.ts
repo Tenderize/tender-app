@@ -189,7 +189,7 @@ export const useSwapWithPermit = (
     minAmount: BigNumber,
     deadline: number
   ) => {
-    const permit = await signERC2612Permit(
+    const permit = await signERC2612PermitPatched(
       library?.getSigner(),
       token,
       owner ?? "",
@@ -246,7 +246,7 @@ export const useExitPoolSingle = (
     const deadline = getDeadline();
 
     if (!isLpSharesApproved) {
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         token,
         owner ?? "",
@@ -308,7 +308,7 @@ export const useExitPool = (
     const deadline = getDeadline();
 
     if (!isLpSharesApproved) {
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         token,
         owner ?? "",
@@ -355,7 +355,7 @@ export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, 
   const addLiquidity = async (tenderIn: BigNumber, tokenIn: BigNumber, lpTokenAmount: BigNumber) => {
     if (!isTenderApproved) {
       const tenderToken = addresses[protocolName].tenderToken;
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         tenderToken,
         account ?? "",
@@ -378,7 +378,7 @@ export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, 
 
     if (!tokenIn.isZero() && stakers[protocolName].hasPermit && !isTokenApproved) {
       const token = addresses[protocolName].token;
-      const permit = await signERC2612Permit(
+      const permit: ERC2612Permit = await signERC2612PermitPatched(
         library?.getSigner(),
         token,
         account ?? "",
@@ -421,4 +421,27 @@ export const getDeadline = () => {
   const DEADLINE_MINUTES = 10;
   const deadlineMS = new Date().getTime() + DEADLINE_MINUTES * 60000;
   return Math.floor(deadlineMS / 1000);
+};
+
+type ERC2612Permit = Awaited<ReturnType<typeof signERC2612Permit>>;
+
+const patchPermit = (permit: ERC2612Permit) => {
+  return {
+    ...permit,
+    v: permit.v === 0 || permit.v === 1 ? 27 : permit.v,
+  };
+};
+
+const signERC2612PermitPatched = async (
+  provider: any,
+  token: string,
+  owner: string,
+  spender: string,
+  value?: string | number,
+  deadline?: number | undefined,
+  nonce?: number | undefined
+): Promise<ERC2612Permit> => {
+  const result = await signERC2612Permit(provider, token, owner, spender, value, deadline, nonce);
+
+  return patchPermit(result);
 };
