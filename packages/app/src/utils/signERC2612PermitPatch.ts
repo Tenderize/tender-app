@@ -5,7 +5,7 @@ type ERC2612Permit = Awaited<ReturnType<typeof signERC2612Permit>>;
 const patchPermit = (permit: ERC2612Permit) => {
   return {
     ...permit,
-    v: permit.v === 0 || permit.v === 1 ? permit.v + 27 : permit.v
+    v: permit.v === 0 || permit.v === 1 ? permit.v + 27 : permit.v,
   };
 };
 
