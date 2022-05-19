@@ -1,8 +1,8 @@
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts/src/index";
 import { BigNumber } from "ethers";
-import { signERC2612Permit } from "eth-permit";
 import { getDeadline } from "./tenderSwapHooks";
+import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 
 export const useFarm = (
   owner: string | undefined | null,
@@ -24,7 +24,7 @@ export const useFarm = (
     if (isLpTokenApproved) {
       await send(farmAmount);
     } else {
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         addresses[protocolName].lpToken,
         owner ?? "",

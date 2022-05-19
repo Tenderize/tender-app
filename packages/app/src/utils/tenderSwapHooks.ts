@@ -1,10 +1,10 @@
 import { useCall, useContractFunction, useEthers } from "@usedapp/core";
 import { abis, addresses } from "@tender/contracts/src/index";
 import { BigNumber, constants, Contract, utils } from "ethers";
-import { signERC2612Permit } from "eth-permit";
 import { stakers } from "@tender/shared/src/index";
 import { TenderSwap } from "@tender/contracts/gen/types";
 import { weiToEthInFloat } from "./amountFormat";
+import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -189,7 +189,7 @@ export const useSwapWithPermit = (
     minAmount: BigNumber,
     deadline: number
   ) => {
-    const permit = await signERC2612Permit(
+    const permit = await signERC2612PermitPatched(
       library?.getSigner(),
       token,
       owner ?? "",
@@ -246,7 +246,7 @@ export const useExitPoolSingle = (
     const deadline = getDeadline();
 
     if (!isLpSharesApproved) {
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         token,
         owner ?? "",
@@ -308,7 +308,7 @@ export const useExitPool = (
     const deadline = getDeadline();
 
     if (!isLpSharesApproved) {
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         token,
         owner ?? "",
@@ -355,7 +355,7 @@ export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, 
   const addLiquidity = async (tenderIn: BigNumber, tokenIn: BigNumber, lpTokenAmount: BigNumber) => {
     if (!isTenderApproved) {
       const tenderToken = addresses[protocolName].tenderToken;
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         tenderToken,
         account ?? "",
@@ -378,7 +378,7 @@ export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, 
 
     if (!tokenIn.isZero() && stakers[protocolName].hasPermit && !isTokenApproved) {
       const token = addresses[protocolName].token;
-      const permit = await signERC2612Permit(
+      const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         token,
         account ?? "",
