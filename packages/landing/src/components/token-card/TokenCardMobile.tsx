@@ -1,16 +1,16 @@
 import { FC } from "react";
 import { Box, Text } from "grommet";
 import Image from "next/image";
+import { ApyContent } from "./ApyContent";
 type Props = {
   title: string;
   apy: string;
   neonLogo: string;
   symbol: string;
+  available: boolean;
 };
 
-const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy }) => {
-  const [apyWhole, apyFraction] = apy.split(".");
-
+const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy, available }) => {
   return (
     <Box
       pad="medium"
@@ -37,14 +37,7 @@ const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy }) => {
           </Text>
         </Box>
         <Box direction="column" align="left" gap="small">
-          <Text size="large" weight="bold">
-            <Text size="xxlarge">{apyWhole}</Text>
-            <Text size="medium">.{apyFraction}</Text>
-            <Text size="medium">%</Text>
-            <Text style={{ opacity: 0.5 }} size="small">
-              &nbsp;APY
-            </Text>
-          </Text>
+          <ApyContent apy={apy} available={available} />
         </Box>
       </Box>
     </Box>

@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Box, Text, Image } from "grommet";
+import { ApyContent } from "./ApyContent";
 
 const TokenCard: FC<{
   title: string;
@@ -8,8 +9,6 @@ const TokenCard: FC<{
   neonLogo: string;
   symbol: string;
 }> = ({ neonLogo, symbol, title, available, apy }) => {
-  const [apyWhole, apyFraction] = apy.split(".");
-
   return (
     <Box
       pad={{ vertical: "medium", horizontal: "none" }}
@@ -33,25 +32,7 @@ const TokenCard: FC<{
         </Text>
       </Box>
       <Box pad={{ horizontal: "medium" }} direction="column" align="left" gap="small">
-        {available ? (
-          <>
-            <Text size="large" weight="bold">
-              <Text size="xxlarge">{apyWhole}</Text>
-              <Text size="medium">.{apyFraction}</Text>
-              <Text size="medium">%</Text>
-              <Text style={{ opacity: 0.5 }} size="small">
-                &nbsp;APY
-              </Text>
-            </Text>
-          </>
-        ) : (
-          <>
-            <Text size="medium">Coming Soon</Text>
-            <Text size="large" weight="bold">
-              &nbsp;
-            </Text>
-          </>
-        )}
+        <ApyContent apy={apy} available={available} />
       </Box>
     </Box>
   );
