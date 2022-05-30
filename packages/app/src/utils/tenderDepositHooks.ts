@@ -4,8 +4,9 @@ import { BigNumber } from "ethers";
 import { stakers } from "@tender/shared/src/index";
 import { getDeadline } from "./tenderSwapHooks";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
-export const useDeposit = (protocolName: string) => {
+export const useDeposit = (protocolName: ProtocolName) => {
   const symbol = stakers[protocolName].symbol;
   const hasPermit = stakers[protocolName].hasPermit;
 

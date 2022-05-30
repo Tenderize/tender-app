@@ -13,7 +13,10 @@ export type Staker = {
   symbol: string;
   chainId: ChainId;
   hasPermit: boolean;
+  apy: string;
 };
+
+export type ProtocolName = Staker["name"];
 
 export const isProduction = () => {
   return process.env.NEXT_PUBLIC_BUILD_ENV === "prod";
@@ -23,7 +26,7 @@ const getChainId = (main: ChainId, test: ChainId) => {
   return isProduction() ? main : test;
 };
 
-export const stakers: Record<string, Staker> = {
+export const stakers: Record<ProtocolName, Staker> = {
   livepeer: {
     name: "livepeer",
     path: "/stakers/livepeer",
@@ -37,6 +40,7 @@ export const stakers: Record<string, Staker> = {
     symbol: "LPT",
     chainId: getChainId(ChainId.Arbitrum, ChainId.ArbitrumRinkeby),
     hasPermit: true,
+    apy: "0",
   },
   graph: {
     name: "graph",
@@ -51,6 +55,7 @@ export const stakers: Record<string, Staker> = {
     symbol: "GRT",
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
+    apy: "0",
   },
   matic: {
     name: "matic",
@@ -65,6 +70,7 @@ export const stakers: Record<string, Staker> = {
     symbol: "MATIC",
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
+    apy: "0",
   },
   audius: {
     name: "audius",
@@ -79,5 +85,6 @@ export const stakers: Record<string, Staker> = {
     symbol: "AUDIO",
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
+    apy: "0",
   },
 };

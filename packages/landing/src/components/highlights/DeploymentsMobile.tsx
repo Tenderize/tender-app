@@ -4,7 +4,7 @@ import TokenCardMobile from "../token-card/TokenCardMobile";
 import { useAPYData } from "./useAPYData";
 
 export const DeploymentsMobile: FC = () => {
-  const { stakersWithAPY } = useAPYData();
+  const { graph, livepeer, audius, matic } = useAPYData();
 
   return (
     <div
@@ -36,10 +36,10 @@ export const DeploymentsMobile: FC = () => {
         them.
       </Paragraph>
       <Box direction="column" pad={{ top: "large" }} gap="medium">
-        <TokenCardMobile key={stakersWithAPY[1].path} {...stakersWithAPY[1]} />
-        <TokenCardMobile key={stakersWithAPY[0].path} {...stakersWithAPY[0]} />
-        <TokenCardMobile key={stakersWithAPY[3].path} {...stakersWithAPY[3]} />
-        <TokenCardMobile key={stakersWithAPY[2].path} {...stakersWithAPY[2]} />
+        <TokenCardMobile key={graph.path} {...graph} />
+        <TokenCardMobile key={livepeer.path} {...livepeer} />
+        <TokenCardMobile key={audius.path} {...audius} />
+        <TokenCardMobile key={matic.path} {...matic} />
       </Box>
     </div>
   );

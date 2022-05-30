@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
 import { ChainId } from "@usedapp/core";
-import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampMonthAgo } from "@tender/shared/src/index";
+import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampMonthAgo, calculateAPY } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
 import { isProduction } from "@tender/shared/src/data/stakers";
 
@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
     res.setHeader("Cache-Control", `public,max-age=${CACHE_MAX_AGE_IN_SEC}`);
     res.setHeader("X-Cache", "HIT");
 
-    return res.status(200).json(data);
+    res.status(200).json(calculateAPY(data));
   }
 
   const monthAgo = getUnixTimestampMonthAgo();
@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("X-Cache", "MISS");
     }
-    res.status(200).json(data);
+    res.status(200).json(calculateAPY(data));
   } catch (e) {
     console.log(e);
     res.status(200).json([]);

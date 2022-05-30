@@ -12,9 +12,10 @@ import { AmountInputFooter } from "../AmountInputFooter";
 import { hasValue, isLargerThanMax, isPositive, useBalanceValidation } from "../../utils/inputValidation";
 import { useCalculateSwap, useSwapPriceImpact } from "../../utils/tenderSwapHooks";
 import { useEthers } from "@usedapp/core";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   tokenSymbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;

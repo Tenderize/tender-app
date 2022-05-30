@@ -17,10 +17,11 @@ import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 const Token: FC = () => {
   const router = useRouter();
-  const protocolName = router.query.slug as string;
+  const protocolName = router.query.slug as ProtocolName;
   const info = stakers[protocolName];
   const [tabIndex, setTabIndex] = useState(1);
 

@@ -28,9 +28,10 @@ import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
