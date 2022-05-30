@@ -256,23 +256,21 @@ export function loadOrCreateUserDeploymentDay(timestamp: i32, address: string, p
   return day as UserDeploymentDay;
 }
 
-export function getUSDPrice(protocol: string): BigDecimal {
-  if(dataSource.network() != 'mainnet'){
+export function getUSDPrice(steakToken: string): BigDecimal {
+  if(dataSource.network() != 'mainnet' && dataSource.network() != 'arbitrum-one'){
     return ZERO_BD
   }
 
-  if(protocol == 'livepeer'){
-    let daiLptBPool = OneInch.bind(Address.fromString(config.ONEINCH_ADDRESS))
-    let res = daiLptBPool.getExpectedReturn(
-      Address.fromString(config.DAI_ADDRESS),
-      Address.fromString(config.LPT_ADDRESS),
-      BigInt.fromI32(100),
-      BigInt.fromI32(10),
-      ZERO_BI
-    )
-    return res.value0.divDecimal(BigDecimal.fromString('100'))
-  }
-  return ZERO_BD
+  let oneInch = OneInch.bind(Address.fromString(config.ONEINCH_ADDRESS))
+  let amount = BigInt.fromI32(10).pow(18)
+  let res = oneInch.getExpectedReturn(
+    Address.fromString(steakToken),
+    Address.fromString(config.DAI_ADDRESS),
+    amount,
+    BigInt.fromI32(10),
+    ZERO_BI
+  )
+  return res.value0.divDecimal(BigDecimal.fromString(amount.toString()))
 }
 
 export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {

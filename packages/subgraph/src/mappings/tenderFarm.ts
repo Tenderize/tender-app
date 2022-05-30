@@ -19,7 +19,7 @@ export function handleFarmEvent(farmEvent: Farm): void {
     let tenderFarmAddress = farmEvent.address.toHex()
     let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = farmEvent.params.amount
-    let usdPrice = getUSDPrice(protocolId)
+    let usdPrice = getUSDPrice(Config.load(protocolId).steak)
    
     // Update User data
     let userData = loadOrCreateUserDeployment(farmEvent.params.account.toHex(), protocolId)
@@ -52,7 +52,7 @@ export function handleUnfarmEvent(unfarmEvent: Unfarm): void {
     let tenderFarmAddress = unfarmEvent.address.toHex()
     let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
     let amount = unfarmEvent.params.amount
-    let usdPrice = getUSDPrice(protocolId)
+    let usdPrice = getUSDPrice(Config.load(protocolId).steak)
 
     // Update User data
     let userData = loadOrCreateUserDeployment(unfarmEvent.params.account.toHex(), protocolId)
@@ -85,7 +85,7 @@ export function handleHarvestEvent(harvestEvent: Harvest): void {
   let tenderFarmAddress = harvestEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderFarmAddress(tenderFarmAddress)
   let amount = harvestEvent.params.amount
-  let usdPrice = getUSDPrice(protocolId)
+  let usdPrice = getUSDPrice(Config.load(protocolId).steak)
   
   // Update User data
   let userData = loadOrCreateUserDeployment(harvestEvent.params.account.toHex(), protocolId)
