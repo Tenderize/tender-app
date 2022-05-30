@@ -2,8 +2,8 @@ mainnet:
   networkName: mainnet
   contracts:
     registry:
-      address: "c1c0472c0c80bccdc7f5d01a376bd97a734b8815"
-      startBlock: 500000
+      address: "ac7E1D17C1591de440F2ce3FD8e72d28c0C179f3"
+      startBlock: 14745264
 rinkeby:
   networkName: rinkeby
   contracts:
@@ -20,5 +20,5 @@ arbitrum-one:
   networkName: arbitrum-one
   contracts:
     registry:
-      address: "644173Dbd3CBb9EC1E4E4d5Bbf39141CE6B2D459"
-      startBlock: 11285667
+      address: "87998e0aC7a75f7bac1d5738C997700b0842a42e"
+      startBlock: 11600280
