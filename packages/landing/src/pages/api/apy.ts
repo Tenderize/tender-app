@@ -1,6 +1,12 @@
 import { NextApiResponse } from "next";
 import { ChainId } from "@usedapp/core";
-import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampMonthAgo, calculateAPY } from "@tender/shared/src/index";
+import {
+  Subgraph,
+  SubgraphForLanding,
+  Queries,
+  getUnixTimestampMonthAgo,
+  calculateAPY,
+} from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
 import { isProduction } from "@tender/shared/src/data/stakers";
 
