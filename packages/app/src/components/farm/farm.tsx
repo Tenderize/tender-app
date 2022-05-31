@@ -25,9 +25,10 @@ import { isPendingTransaction } from "utils/transactions";
 import { useFarm } from "utils/tenderFarmHooks";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   tokenBalance: BigNumberish;
 };

@@ -22,9 +22,10 @@ import {
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   availableRewards: BigNumberish;
 };

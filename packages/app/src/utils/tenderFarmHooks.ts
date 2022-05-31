@@ -3,10 +3,11 @@ import { contracts, addresses } from "@tender/contracts/src/index";
 import { BigNumber } from "ethers";
 import { getDeadline } from "./tenderSwapHooks";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 export const useFarm = (
   owner: string | undefined | null,
-  protocolName: string,
+  protocolName: ProtocolName,
   symbol: string,
   isLpTokenApproved: boolean
 ) => {

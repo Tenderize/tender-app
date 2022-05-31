@@ -5,6 +5,7 @@ import { stakers } from "@tender/shared/src/index";
 import { TenderSwap } from "@tender/contracts/gen/types";
 import { weiToEthInFloat } from "./amountFormat";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -169,7 +170,7 @@ export const useCalculateSwap = (pool: string, tokenFrom: string, amount: BigNum
 
 export const useSwapWithPermit = (
   token: string,
-  protocolName: string,
+  protocolName: ProtocolName,
   tokenSendedSymbol: string,
   tokenReceivedSymbol: string,
   owner: string | null | undefined,
@@ -215,7 +216,7 @@ export const useSwapWithPermit = (
 
 export const useExitPoolSingle = (
   token: string,
-  protocolName: string,
+  protocolName: ProtocolName,
   owner: string | null | undefined,
   spender: string,
   symbol: string,
@@ -281,7 +282,7 @@ export const useExitPoolSingle = (
 
 export const useExitPool = (
   token: string,
-  protocolName: string,
+  protocolName: ProtocolName,
   owner: string | null | undefined,
   spender: string,
   symbol: string,
@@ -336,7 +337,7 @@ export const useExitPool = (
   return { removeLiquidity, exitPoolTx: state };
 };
 
-export const useAddLiquidity = (protocolName: string, isTokenApproved: boolean, isTenderApproved: boolean) => {
+export const useAddLiquidity = (protocolName: ProtocolName, isTokenApproved: boolean, isTenderApproved: boolean) => {
   const swapContract = new Contract(addresses[protocolName].tenderSwap, TenderSwapABI) as TenderSwap;
   const symbol = stakers[protocolName].symbol;
 

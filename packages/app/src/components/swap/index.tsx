@@ -9,9 +9,10 @@ import { Box, Text } from "grommet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { stakers } from "@tender/shared/src/index";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
