@@ -20,32 +20,32 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
     res.setHeader("X-Cache", "HIT");
 
     res.status(200).json(calculateAPY(data));
-  }
-
-  const monthAgo = getUnixTimestampMonthAgo();
-  try {
-    const { data: ethereumData } = await Subgraph.query({
-      query: Queries.GetTenderizerDays,
-      variables: { from: monthAgo },
-      context: { chainId: isProduction() ? ChainId.Mainnet : ChainId.Rinkeby },
-    });
-    const { data: arbitrumData } = await SubgraphForLanding.query({
-      query: Queries.GetTenderizerDays,
-      variables: { from: monthAgo },
-      context: { chainId: isProduction() ? ChainId.Arbitrum : ChainId.ArbitrumRinkeby },
-    });
-    const data = { tenderizerDays: [...ethereumData.tenderizerDays, ...arbitrumData.tenderizerDays] };
-    if (data != null) {
-      req.cache.set(cacheKey, {
-        data,
+  } else {
+    const monthAgo = getUnixTimestampMonthAgo();
+    try {
+      const { data: ethereumData } = await Subgraph.query({
+        query: Queries.GetTenderizerDays,
+        variables: { from: monthAgo },
+        context: { chainId: isProduction() ? ChainId.Mainnet : ChainId.Rinkeby },
       });
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("X-Cache", "MISS");
+      const { data: arbitrumData } = await SubgraphForLanding.query({
+        query: Queries.GetTenderizerDays,
+        variables: { from: monthAgo },
+        context: { chainId: isProduction() ? ChainId.Arbitrum : ChainId.ArbitrumRinkeby },
+      });
+      const data = { tenderizerDays: [...ethereumData.tenderizerDays, ...arbitrumData.tenderizerDays] };
+      if (data != null) {
+        req.cache.set(cacheKey, {
+          data,
+        });
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("X-Cache", "MISS");
+      }
+      res.status(200).json(calculateAPY(data));
+    } catch (e) {
+      console.log(e);
+      res.status(200).json([]);
     }
-    res.status(200).json(calculateAPY(data));
-  } catch (e) {
-    console.log(e);
-    res.status(200).json([]);
   }
 };
 
