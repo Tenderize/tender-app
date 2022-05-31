@@ -23,9 +23,10 @@ import { useContractFunction } from "@usedapp/core";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   stake: string;
 };

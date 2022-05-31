@@ -7,10 +7,11 @@ import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { isPendingTransaction } from "../../utils/transactions";
 import { stakers } from "@tender/shared/src/index";
 import { constants } from "ethers";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 const Faucet: FC<{
   symbol: string;
-  protocolName: string;
+  protocolName: ProtocolName;
 }> = ({ symbol, protocolName }) => {
   const { state: requestTx, send: request } = useContractFunction(contracts[protocolName].faucet, "request", {
     transactionName: `Requesting ${symbol} from faucet`,

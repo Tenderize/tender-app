@@ -37,9 +37,10 @@ import {
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   lpTokenBalance: BigNumberish;
 };

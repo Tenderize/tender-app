@@ -1,14 +1,7 @@
 import { Queries, stakers, Staker } from "@tender/shared/src/index";
+import { ProtocolName } from "./data/stakers";
 
-type ProtocolAPYs = {
-  [key in Staker["name"]]: Staker & { apy: string };
-};
-
-export type APYData = {
-  stakersWithAPY: (Staker & { apy: string })[];
-} & ProtocolAPYs;
-
-export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): APYData => {
+export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Record<Staker["name"], Staker> => {
   const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;
     if (data != null) {
@@ -32,11 +25,11 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): APYD
     };
   });
 
-  const stakersWithAPYMap = {} as Record<Staker["name"], Staker & { apy: string }>;
+  const stakersWithAPYMap = {} as Record<ProtocolName, Staker>;
   for (const staker of stakersWithAPY) {
     stakersWithAPYMap[staker.name] = staker;
   }
-  return { ...stakersWithAPYMap, stakersWithAPY };
+  return stakersWithAPYMap;
 };
 
 export const getUnixTimestampMonthAgo = () => {

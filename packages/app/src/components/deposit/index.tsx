@@ -17,9 +17,10 @@ import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { useDeposit } from "utils/tenderDepositHooks";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   logo: string;
   tokenBalance: BigNumberish;
@@ -40,6 +41,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
     context: { chainId: requiredChain },
   });
+
   // update my stake when tokenBalance changes
   useEffect(() => {
     refetch();
@@ -52,9 +54,10 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     variables: { from: monthAgo },
     context: { chainId: requiredChain },
   });
-  const apy =
-    calculateAPY(apyData).stakersWithAPY.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)
-      ?.apy ?? "";
+  const { graph, livepeer, audius, matic } = calculateAPY(apyData);
+  const stakersWithAPY = [graph, livepeer, audius, matic];
+  const apy = stakersWithAPY.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)?.apy ?? "";
+
   // update my stake when chainId changes
   useEffect(() => {
     refetchAPY();

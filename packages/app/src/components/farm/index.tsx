@@ -12,9 +12,10 @@ import { weiToEthWithDecimals } from "utils/amountFormat";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { TenderFarm as TenderFarmContract } from "@tender/contracts/gen/types";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
-  protocolName: string;
+  protocolName: ProtocolName;
   symbol: string;
   account: string;
   lpTokenBalance: BigNumberish;

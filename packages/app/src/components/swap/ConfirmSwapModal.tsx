@@ -27,6 +27,7 @@ import { stakers } from "@tender/shared/src/index";
 import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 import { useBalanceValidation } from "utils/inputValidation";
 import { AmountInputFooter } from "components/AmountInputFooter";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 type Props = {
   show: boolean;
@@ -38,7 +39,7 @@ type Props = {
   tokenSendedSymbol: string;
   tokenReceivedSymbol: string;
   priceImpact: number;
-  protocolName: string;
+  protocolName: ProtocolName;
   onDismiss: () => void;
   usePermit: boolean;
   owner: string | null | undefined;
