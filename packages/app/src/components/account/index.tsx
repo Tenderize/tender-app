@@ -11,7 +11,7 @@ import { TenderizeConfig } from "types";
 import { FormClose } from "grommet-icons";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { networkAvatar } from "./helpers";
-import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
+import { SafeAppConnector } from "@gnosis.pm/safe-apps-web3-react";
 import { constants } from "ethers";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
@@ -32,7 +32,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
     const safeMultisigConnector = new SafeAppConnector();
     safeMultisigConnector.getSafeInfo().then((safeInfo) => {
       if (safeInfo.safeAddress !== constants.AddressZero) {
-        activate(safeMultisigConnector)
+        activate(safeMultisigConnector);
       }
     });
   }, []);
@@ -132,7 +132,7 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 image={"/gnosisSafe.svg"}
                 handleClick={async () => {
                   const safeMultisigConnector = new SafeAppConnector();
-                  await activate(safeMultisigConnector)
+                  await activate(safeMultisigConnector);
                   handleCloseWalletPicker();
                 }}
               />
