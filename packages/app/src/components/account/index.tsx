@@ -11,6 +11,8 @@ import { TenderizeConfig } from "types";
 import { FormClose } from "grommet-icons";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { networkAvatar } from "./helpers";
+import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
+import { constants } from "ethers";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, chainId } = useEthers();
@@ -23,6 +25,17 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const activateWallet = async () => {
     handleShowWalletPicker();
   };
+
+  // hook to automatically connect to a safe
+  // it will automatically connect to the Safe if it detects that it's loaded in Safe App contex
+  React.useEffect(() => {
+    const safeMultisigConnector = new SafeAppConnector();
+    safeMultisigConnector.getSafeInfo().then((safeInfo) => {
+      if (safeInfo.safeAddress !== constants.AddressZero) {
+        activate(safeMultisigConnector)
+      }
+    });
+  }, []);
 
   const etherBal = useEtherBalance(account);
 
@@ -111,6 +124,15 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                     darkMode: true,
                   });
                   await activate(walletConnector);
+                  handleCloseWalletPicker();
+                }}
+              />
+              <ProviderButton
+                label="Gnosis Safe"
+                image={"/gnosisSafe.svg"}
+                handleClick={async () => {
+                  const safeMultisigConnector = new SafeAppConnector();
+                  await activate(safeMultisigConnector)
                   handleCloseWalletPicker();
                 }}
               />
