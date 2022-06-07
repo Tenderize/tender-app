@@ -27,9 +27,10 @@ const Token: FC = () => {
 
   let { account } = useEthers();
   account = account ?? constants.AddressZero;
-  const tokenBalance = useTokenBalance(addresses[protocolName].token, account) || constants.Zero;
-  const tenderBalance = useTokenBalance(addresses[protocolName].tenderToken, account) || constants.Zero;
-  const lpTokenBalance = useTokenBalance(addresses[protocolName].lpToken, account) || constants.Zero;
+  const chainId = stakers[protocolName].chainId;
+  const tokenBalance = useTokenBalance(addresses[protocolName].token, account, { chainId }) || constants.Zero;
+  const tenderBalance = useTokenBalance(addresses[protocolName].tenderToken, account, { chainId }) || constants.Zero;
+  const lpTokenBalance = useTokenBalance(addresses[protocolName].lpToken, account, { chainId }) || constants.Zero;
 
   const onActive = useCallback((nextIndex: number) => {
     if (nextIndex === 0) {
