@@ -61,7 +61,7 @@ type Tenderizer @entity {
   liquidityFeesUSD: BigDecimal!
 
   "Day data for tenderizer"
-  dayData: [TenderizerDay!]
+  dayData: [TenderizerDay!] @derivedFrom(field: "tenderizer")
 }
 
 type TenderFarm @entity {
@@ -84,12 +84,14 @@ type TenderFarm @entity {
   TVL: BigDecimal!
 
   "Day data for tenderFarm"
-  dayData: [TenderFarmDay!]
+  dayData: [TenderFarmDay!] @derivedFrom(field: "tenderfarm")
 }
 
 type TenderizerDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
   id: ID!
+  "Tenderizer"
+  tenderizer: Tenderizer!
   "The date beginning at 12:00am UTC"
   date: Int!
 
@@ -115,6 +117,8 @@ type TenderizerDay @entity {
 type TenderFarmDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
   id: ID!
+  "Tenderfam ID"
+  tenderfarm: TenderFarm!
   "The date beginning at 12:00am UTC"
   date: Int!
 
@@ -160,12 +164,14 @@ type UserDeployment @entity {
   shares: BigInt!
 
   "Day data for User"
-  dayData: [UserDeploymentDay!]
+  dayData: [UserDeploymentDay!] @derivedFrom(field: "userDeployment")
 }
 
 type UserDeploymentDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<wallet-address>_<protocol>"
   id: ID!
+  "User deployment ID"
+  userDeployment: UserDeployment!
   "The date beginning at 12:00am UTC"
   date: Int!
   "Last Tender Token shares of the day"
