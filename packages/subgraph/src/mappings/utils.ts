@@ -23,7 +23,7 @@ import {
   HourlyVolume,
   WeeklyVolume 
 } from "../types/schema";
-import { OneInch } from "../types/templates/Tenderizer/OneInch"
+import { UniswapQuoter } from "../types/templates/Tenderizer/UniswapQuoter"
 import * as config from "./config"
 import { TenderSwap as TenderSwapContact} from "../types/templates/TenderSwap/TenderSwap"
 import { LiquidityPoolToken } from "../types/templates/TenderFarm/LiquidityPoolToken"
@@ -79,7 +79,6 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
     tenderizer.protocolFeesUSD = ZERO_BD
     tenderizer.liquidityFees = ZERO_BI
     tenderizer.liquidityFeesUSD = ZERO_BD
-    tenderizer.dayData = []
   }
 
   return tenderizer as Tenderizer
@@ -97,7 +96,6 @@ export function loadOrCreateTenderFarm(id: string): TenderFarm {
     tenderFarm.currentPrincipal = ZERO_BI
     tenderFarm.pendingRewardShares = ZERO_BI
     tenderFarm.TVL = ZERO_BD
-    tenderFarm.dayData = []
   }
 
   return tenderFarm as TenderFarm
@@ -123,7 +121,6 @@ export function loadOrCreateUserDeployment(address: string, protocolName: string
     userProtocol.farmAmount = ZERO_BI
     userProtocol.farmHarvest = ZERO_BI
     userProtocol.shares = ZERO_BI
-    userProtocol.dayData = []
    
     // Save derived fields
     let user = loadOrCreateUser(address)
@@ -182,6 +179,7 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
   if (day == null) {
     day = new TenderizerDay(dayID)
     let tenderizer = loadOrCreateTenderizer(protocol)
+    day.tenderizer = tenderizer.id
     day.date = dayStartTimestamp
     day.deposits = ZERO_BI
     day.unstakes = ZERO_BI
@@ -191,11 +189,6 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
     day.DPY = ZERO_BD
     day.shares = ZERO_BI
     day.supply = ZERO_BI
-
-    let dayList = tenderizer.dayData
-    dayList.push(day.id)
-    tenderizer.dayData = dayList
-    tenderizer.save()
   }
   return day as TenderizerDay;
 }
@@ -209,6 +202,7 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
   if (day == null) {
     day = new TenderFarmDay(dayID)
     let tenderFarm = loadOrCreateTenderFarm(protocol)
+    day.tenderfarm = tenderFarm.id
     day.date = dayStartTimestamp
     day.deposits = ZERO_BI
     day.withdrawals = ZERO_BI
@@ -217,11 +211,6 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     day.DPY = ZERO_BD
     day.startPrinciple = LPTokenToToken(tenderFarm.currentPrincipal.toBigDecimal(), protocol)
     day.save()
-
-    let dayList = tenderFarm.dayData
-    dayList.push(day.id)
-    tenderFarm.dayData = dayList
-    tenderFarm.save()
   }
   return day as TenderFarmDay;
 }
@@ -235,6 +224,7 @@ export function loadOrCreateUserDeploymentDay(timestamp: i32, address: string, p
   if (day == null) {
     day = new UserDeploymentDay(dayID)
     let user = loadOrCreateUserDeployment(address, protocol)
+    day.userDeployment = user.id
     day.date = dayStartTimestamp
     // Initialize data with previous day data
     // Not needed for just a single value
@@ -247,30 +237,46 @@ export function loadOrCreateUserDeploymentDay(timestamp: i32, address: string, p
       day.shares = previousDay.shares
     }
     day.save()
-
-    dayList = user.dayData
-    dayList.push(day.id)
-    user.dayData = dayList
-    user.save()
   }
   return day as UserDeploymentDay;
 }
 
 export function getUSDPrice(steakToken: string): BigDecimal {
-  if(dataSource.network() != 'mainnet' && dataSource.network() != 'arbitrum-one'){
+  let network = dataSource.network()
+  if(network != 'mainnet' && network != 'arbitrum-one'){
     return ZERO_BD
   }
 
-  let oneInch = OneInch.bind(Address.fromString(config.ONEINCH_ADDRESS))
-  let amount = BigInt.fromI32(10).pow(18)
-  let res = oneInch.getExpectedReturn(
+  let usdc: string
+  if(network == 'mainnet'){
+    usdc = config.USDC_ADDRESS
+  } else if(network == 'arbitrum-one'){
+    usdc = config.USDC_ADDRESS_ARBITURM
+  }
+
+  let TEN_18 = BigInt.fromI32(10).pow(18)
+  let TEN_24 = BigInt.fromI32(10).pow(24) // 18 + 18 - 12
+
+  let uniQuoter = UniswapQuoter.bind(Address.fromString(config.UNISWAP_QUOTER))
+  let tokenToEth = uniQuoter.try_quoteExactInputSingle(
     Address.fromString(steakToken),
-    Address.fromString(config.DAI_ADDRESS),
-    amount,
-    BigInt.fromI32(10),
-    ZERO_BI
+    uniQuoter.WETH9(),
+    3000,
+    TEN_18,
+    BigInt.fromString('0')
   )
-  return res.value0.divDecimal(BigDecimal.fromString(amount.toString()))
+  if(tokenToEth.reverted) return ZERO_BD
+
+  let ethToUSDC = uniQuoter.try_quoteExactInputSingle(
+    uniQuoter.WETH9(),
+    Address.fromString(usdc),
+    3000,
+    TEN_18,
+    BigInt.fromString('0')
+  )
+  if(ethToUSDC.reverted) return ZERO_BD
+
+  return tokenToEth.value.times(ethToUSDC.value).divDecimal(TEN_24.toBigDecimal())
 }
 
 export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {
