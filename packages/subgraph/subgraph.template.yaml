@@ -46,8 +46,8 @@ templates:
         abis:
           - name: Tenderizer
             file: ../contracts/src/abis/Tenderizer.json
-          - name: OneInch
-            file: ../contracts/src/abis/OneInch.json
+          - name: UniswapQuoter
+            file: ../contracts/src/abis/UniswapQuoter.json
           - name: TenderToken
             file: ../contracts/src/abis/TenderToken.json
           - name: TenderSwap
@@ -80,8 +80,8 @@ templates:
         abis:
           - name: TenderFarm
             file: ../contracts/src/abis/TenderFarm.json
-          - name: OneInch
-            file: ../contracts/src/abis/OneInch.json
+          - name: UniswapQuoter
+            file: ../contracts/src/abis/UniswapQuoter.json
           - name: LiquidityPoolToken
             file: ../contracts/src/abis/LiquidityPoolToken.json
           - name: TenderSwap
