@@ -16,6 +16,7 @@ import {
 import { Address } from "@graphprotocol/graph-ts";
 import { TenderToken } from "../types/templates/TenderToken/TenderToken"
 import { TenderSwap } from "../types/templates/TenderSwap/TenderSwap"
+import { ERC20 } from "../types/Registry/ERC20"
 
 export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Create Config entity and save raw event
@@ -32,6 +33,10 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   let tenderSwap = TenderSwap.bind(Address.fromString(protocolConfig.tenderSwap))
   protocolConfig.lpToken = tenderSwap.lpToken().toHex()
   protocolConfigEvent.timestamp = config.block.timestamp
+
+  let underlyingToken = ERC20.bind(params.steak)
+  protocolConfig.symbol = underlyingToken.symbol()
+
   
   protocolConfig.save()
   protocolConfigEvent.save()
