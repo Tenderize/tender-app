@@ -230,6 +230,7 @@ export function handleNewAdminFee(event: NewAdminFee): void {
       exchange.tokensSold = event.params.amountSold
       exchange.boughtId = BigInt.fromI32(boughtId)
       exchange.tokensBought = event.params.amountReceived
+      exchange.steakAddress = Address.fromString(tokens[1])
   
       exchange.block = event.block.number
       exchange.timestamp = event.block.timestamp

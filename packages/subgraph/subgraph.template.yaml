@@ -23,6 +23,8 @@ dataSources:
           file: ../contracts/src/abis/TenderToken.json
         - name: TenderSwap
           file: ../contracts/src/abis/TenderSwap.json
+        - name: ERC20
+          file: ../contracts/src/abis/ERC20.json
       entities:
         - TenderizerConfig
       eventHandlers:
@@ -52,6 +54,8 @@ templates:
             file: ../contracts/src/abis/TenderToken.json
           - name: TenderSwap
             file: ../contracts/src/abis/TenderSwap.json
+          - name: ERC20
+            file: ../contracts/src/abis/ERC20.json
         eventHandlers:
           - event: Deposit(indexed address,uint256)
             handler: handleDepositEvent
@@ -89,7 +93,7 @@ templates:
           - name: TenderToken
             file: ../contracts/src/abis/TenderToken.json
           - name: ERC20
-            file: ../contracts/src/abis/erc20.json
+            file: ../contracts/src/abis/ERC20.json
         eventHandlers:
           - event: Farm(indexed address,uint256)
             handler: handleFarmEvent
@@ -135,7 +139,7 @@ templates:
           - name: TenderSwap
             file: ../contracts/src/abis/TenderSwap.json
           - name: ERC20
-            file: ../contracts/src/abis/erc20.json
+            file: ../contracts/src/abis/ERC20.json
         eventHandlers:
           - event: NewAdminFee(uint256)
             handler: handleNewAdminFee

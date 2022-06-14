@@ -11,6 +11,8 @@ type Config @entity{
   id: ID!
   "Address of the ERC20 token for integration"
   steak: String!
+  "Symbol of the ERC20 token for integration"
+  symbol: String!
   "Address of Tenderizer"
   tenderizer: String!
   "Address of ERC20 Tender Token"
@@ -487,6 +489,7 @@ type TokenExchange implements Exchange @entity {
   tokensBought: BigInt!
   soldId: BigInt!
   tokensSold: BigInt!
+  steakAddress: Bytes!
 
   block: BigInt!
   timestamp: BigInt!
