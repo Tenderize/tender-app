@@ -1,21 +1,5 @@
 import { gql } from "@apollo/client";
 
-export type TenderizerDaysType = {
-  tenderizerDays: {
-    id: string;
-    date: number;
-    DPY: string;
-  }[];
-};
-
-export type UserDeploymentsType = {
-  userDeployments: {
-    tenderizerStake: number;
-    farmHarvest: number;
-    claimedRewards: number;
-  }[];
-};
-
 export const GetUserDeployments = gql`
   query GetUserDeployments($id: ID!) @api(contextKey: "chainId") {
     userDeployments(where: { id: $id }) {

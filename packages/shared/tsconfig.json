@@ -3,9 +3,11 @@
   "compilerOptions": {
     "declaration": true,
     "outDir": "./dist",
-    "noEmit": false
+    "noEmit": false,
+    "jsx": "react-jsx"
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "test/**/*"
   ]
 }

@@ -14,7 +14,6 @@ interface Endpoints {
 }
 
 export const Subgraph = new ApolloClient({
-  connectToDevTools: true,
   link: ApolloLink.from([
     new MultiAPILink({
       endpoints: ENDPOINTS,

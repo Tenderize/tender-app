@@ -6,7 +6,15 @@ import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
-import { getUnixTimestampMonthAgo, InfoCard, Queries, stakers, calculateAPY } from "@tender/shared/src/index";
+import {
+  TenderizerDaysType,
+  getUnixTimestampMonthAgo,
+  InfoCard,
+  Queries,
+  stakers,
+  calculateAPY,
+  UserDeploymentsType,
+} from "@tender/shared/src/index";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -37,7 +45,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const hasPermit = stakers[protocolName].hasPermit;
 
   const subgraphName = stakers[protocolName].subgraphId;
-  const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
+  const { data, refetch } = useQuery<UserDeploymentsType>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
     context: { chainId: requiredChain },
   });
@@ -49,11 +57,12 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   const monthAgo = getUnixTimestampMonthAgo();
 
-  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
+  const { data: apyData, refetch: refetchAPY } = useQuery<TenderizerDaysType>(Queries.GetTenderizerDays, {
     query: Queries.GetTenderizerDays,
     variables: { from: monthAgo },
     context: { chainId: requiredChain },
   });
+  console.log(apyData);
   const { graph, livepeer, audius, matic } = calculateAPY(apyData);
   const stakersWithAPY = [graph, livepeer, audius, matic];
   const apy = stakersWithAPY.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)?.apy ?? "";
