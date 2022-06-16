@@ -62,7 +62,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     variables: { from: monthAgo },
     context: { chainId: requiredChain },
   });
-  console.log(apyData);
+
   const { graph, livepeer, audius, matic } = calculateAPY(apyData);
   const stakersWithAPY = [graph, livepeer, audius, matic];
   const apy = stakersWithAPY.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)?.apy ?? "";
