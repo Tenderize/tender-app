@@ -90,12 +90,12 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   );
 
   const isButtonDisabled = () => {
-    // if either field has an invalid value return false
-    if (!hasValue(tokenInput) || !hasValue(tenderInput)) return false;
-    // if a transaction is pending return false
-    if (isPendingTransaction(addLiquidityTx)) return false;
-    // if underlying token (e.g. LPT) has no permit support and is not approved, return false
-    if (!hasPermit && !isTokenApproved) return false;
+    // if either field has an invalid value return true
+    if (!hasValue(tokenInput) || !hasValue(tenderInput)) return true;
+    // if a transaction is pending return true
+    if (isPendingTransaction(addLiquidityTx)) return true;
+    // if underlying token (e.g. LPT) has no permit support and is not approved, return true
+    if (!hasPermit && !isTokenApproved) return true;
   };
 
   const { addLiquidity, tx: addLiquidityTx } = useAddLiquidity(protocolName, isTokenApproved, isTenderApproved);
