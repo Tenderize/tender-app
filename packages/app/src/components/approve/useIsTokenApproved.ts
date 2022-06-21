@@ -1,5 +1,5 @@
 import { useCall } from "@usedapp/core";
-import { Contract, utils } from "ethers";
+import { Contract, utils, constants, BigNumber } from "ethers";
 import { abis } from "@tender/contracts/src/index";
 import { ERC20 } from "@tender/contracts/gen/types";
 
@@ -15,14 +15,13 @@ export const useIsTokenApproved = (
     useCall(
       tokenAddress &&
         ownerAddress &&
-        spenderAddress &&
-        amount && {
+        spenderAddress && {
           contract,
           method: "allowance",
           args: [ownerAddress, spenderAddress],
         }
     ) ?? {};
-
   const amountWei = utils.parseEther(amount || "0");
-  return allowance?.[0].gte(amountWei) ?? false;
+  const allowanceParsed: BigNumber = allowance?.[0] || constants.Zero;
+  return amountWei ? amountWei.lte(allowanceParsed) : !allowanceParsed.isZero();
 };
