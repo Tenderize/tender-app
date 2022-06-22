@@ -64,6 +64,8 @@ type Tenderizer @entity {
 
   "Day data for tenderizer"
   dayData: [TenderizerDay!] @derivedFrom(field: "tenderizer")
+
+  rewardsClaimedEvents: [RewardsClaimedEvent!] @derivedFrom(field: "tenderizer")
 }
 
 type TenderFarm @entity {
@@ -230,7 +232,8 @@ type WithdrawEvent @entity {
 
 type RewardsClaimedEvent @entity {
   id: ID!
-  tenderizer: String!
+  tenderizer: Tenderizer!
+  tenderizerAddress: String!
   rewards: BigInt!
   currentPrincipal: BigInt!
   oldPrincipal: BigInt!
