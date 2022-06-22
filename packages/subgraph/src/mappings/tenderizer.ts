@@ -188,12 +188,13 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
 
   // Save raw event
   let event = new RewardsClaimedEvent(rewardsClaimedEvent.transaction.hash.toHex());
-  event.tenderizer = tenderizerAddress
+  event.tenderizer = tenderizer.id
+  event.tenderizerAddress = tenderizerAddress
   event.rewards = rewardsClaimedEvent.params.stakeDiff
   event.currentPrincipal = rewardsClaimedEvent.params.currentPrincipal
   event.oldPrincipal = rewardsClaimedEvent.params.oldPrincipal
   event.timestamp = rewardsClaimedEvent.block.timestamp
-  event.save()
+  event.save() 
 }
 
 export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: ProtocolFeeCollected): void {
