@@ -1,10 +1,9 @@
 import { gql } from "@apollo/client";
 
-export type TenderizerDays = {
-  tenderizerDays: {
+export type TenderizerDaysType = {
+  tenderizer: {
     id: string;
-    date: number;
-    DPY: string;
+    rewardsClaimedEvents: { timestamp: number; rewards: string; oldPrincipal: string };
   }[];
 };
 
@@ -64,16 +63,6 @@ export const GetDeployment = gql`
   }
 `;
 
-export const GetTenderizerDays = gql`
-  query GetDPY($from: Int!) @api(contextKey: "chainId") {
-    tenderizerDays(where: { date_gt: $from }) {
-      id
-      date
-      DPY
-    }
-  }
-`;
-
 export const GetConfigs = gql`
   {
     configs {
@@ -102,6 +91,18 @@ export const GetTVL = gql`
     tenderSwaps {
       id
       balances
+    }
+  }
+`;
+export const GetTenderizerDays = gql`
+  query GetDPY($from: Int!) @api(contextKey: "chainId") {
+    tenderizers {
+      id
+      rewardsClaimedEvents(where: { timestamp_gt: $from }) {
+        timestamp
+        rewards
+        oldPrincipal
+      }
     }
   }
 `;
