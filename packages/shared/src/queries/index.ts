@@ -3,7 +3,11 @@ import { gql } from "@apollo/client";
 export type TenderizerDaysType = {
   tenderizer: {
     id: string;
-    rewardsClaimedEvents: { timestamp: number; rewards: string; oldPrincipal: string }[];
+    rewardsClaimedEvents: {
+      timestamp: number;
+      rewards: string;
+      oldPrincipal: string;
+    }[];
   }[];
 };
 

@@ -14,7 +14,7 @@ export const calculateAPY = (data: Queries.TenderizerDays | undefined): Record<S
       if (rewardsClaimedEvents.length === 0) {
         apyInPoints = 0;
       } else {
-        const eventsDataWithAPY = rewardsClaimedEvents
+        const apysBasedOnSingleEvents = rewardsClaimedEvents
           .filter((item) => item.rewards !== "0")
           .map((value, index) => {
             // we need the first value's timestamp but not the rewards
@@ -24,7 +24,7 @@ export const calculateAPY = (data: Queries.TenderizerDays | undefined): Record<S
 
             const currentEvent = value;
             const previousEvent = rewardsClaimedEvents[index - 1];
-            const amount = Number.parseFloat(currentEvent.rewards) / Number.parseFloat(currentEvent.oldPrincipal);
+            const amount = Number.parseFloat(currentEvent.rewards) / Number.parseFloat(previousEvent.oldPrincipal);
             const timeDiff = currentEvent.timestamp - previousEvent.timestamp;
             const compoundsPerYear = Math.floor(YEAR_IN_SECONDS / timeDiff);
             const apy = Math.pow(1 + amount / compoundsPerYear, compoundsPerYear) - 1;
@@ -37,7 +37,8 @@ export const calculateAPY = (data: Queries.TenderizerDays | undefined): Record<S
 
         console.log("reduce");
         //    console.log("eventsDataWithAPY", eventsDataWithAPY);
-        apyInPoints = eventsDataWithAPY.reduce((prev, current) => prev + current, 0) / eventsDataWithAPY.length;
+        apyInPoints =
+          apysBasedOnSingleEvents.reduce((prev, current) => prev + current, 0) / apysBasedOnSingleEvents.length;
         console.log("reduce over");
       }
     }
