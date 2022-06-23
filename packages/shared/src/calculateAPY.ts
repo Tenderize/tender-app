@@ -1,44 +1,48 @@
 import { Queries, stakers, Staker } from "@tender/shared/src/index";
 import { ProtocolName } from "./data/stakers";
-import { BigNumber, constants } from "ethers";
+import { BigNumber, constants, utils } from "ethers";
 
 const YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 
 export const calculateAPY = (data: Queries.TenderizerDays | undefined): Record<Staker["name"], Staker> => {
   const stakersWithAPY = Object.values(stakers).map((staker) => {
-    let apyInPoints = constants.Zero;
+    let apyInPoints = 0;
     if (data != null) {
-      const tenderizerEventsData = data.tenderizer
-        .filter((item) => item.rewardsClaimedEvents.rewards !== "0")
-        .filter((item) => item.id.includes(staker.subgraphId));
-
-      if (tenderizerEventsData.length === 0) {
-        apyInPoints = constants.Zero;
+      const rewardsClaimedEvents = data.tenderizer.filter((item) => item.id.includes(staker.subgraphId))[0]
+        .rewardsClaimedEvents;
+      console.log(rewardsClaimedEvents);
+      if (rewardsClaimedEvents.length === 0) {
+        apyInPoints = 0;
       } else {
-        const eventsDataWithAPY = tenderizerEventsData
+        const eventsDataWithAPY = rewardsClaimedEvents
+          .filter((item) => item.rewards !== "0")
           .map((value, index) => {
             // we need the first value's timestamp but not the rewards
             if (index === 0) {
-              return {
-                ...value,
-                apy: null,
-              };
+              return null;
             }
-            const currentEvent = value.rewardsClaimedEvents;
-            const previousEvent = tenderizerEventsData[index - 1].rewardsClaimedEvents;
-            console.log(currentEvent);
-            const amount = BigNumber.from(currentEvent.rewards);
+
+            const currentEvent = value;
+            const previousEvent = rewardsClaimedEvents[index - 1];
+            const amount = Number.parseFloat(currentEvent.rewards) / Number.parseFloat(currentEvent.oldPrincipal);
             const timeDiff = currentEvent.timestamp - previousEvent.timestamp;
-            const compoundsPerYear = YEAR_IN_SECONDS / timeDiff;
-            const apy = constants.One.add(amount.div(compoundsPerYear)).pow(compoundsPerYear).sub(constants.One);
+            const compoundsPerYear = Math.floor(YEAR_IN_SECONDS / timeDiff);
+            const apy = Math.pow(1 + amount / compoundsPerYear, compoundsPerYear) - 1;
+            console.log("amount", amount);
+            console.log("compoundsPerYear", compoundsPerYear);
 
             return apy;
           })
-          .filter((item): item is BigNumber => item != null);
-        apyInPoints = eventsDataWithAPY.reduce((prev, current) => prev.add(current), constants.Zero);
+          .filter((item): item is number => item != null);
+
+        console.log("reduce");
+        //    console.log("eventsDataWithAPY", eventsDataWithAPY);
+        apyInPoints = eventsDataWithAPY.reduce((prev, current) => prev + current, 0) / eventsDataWithAPY.length;
+        console.log("reduce over");
       }
     }
-    const apy = (apyInPoints.toNumber() * 100).toFixed(2);
+    const apy = (apyInPoints * 100).toFixed(2);
+    console.log("apy", apy);
     return {
       ...staker,
       apy,

@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export type TenderizerDaysType = {
   tenderizer: {
     id: string;
-    rewardsClaimedEvents: { timestamp: number; rewards: string; oldPrincipal: string };
+    rewardsClaimedEvents: { timestamp: number; rewards: string; oldPrincipal: string }[];
   }[];
 };
 
@@ -98,7 +98,7 @@ export const GetTenderizerDays = gql`
   query GetDPY($from: Int!) @api(contextKey: "chainId") {
     tenderizers {
       id
-      rewardsClaimedEvents(where: { timestamp_gt: $from }) {
+      rewardsClaimedEvents(where: { timestamp_gt: $from }, orderBy: timestamp, orderDirection: asc) {
         timestamp
         rewards
         oldPrincipal
