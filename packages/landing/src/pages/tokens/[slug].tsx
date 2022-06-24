@@ -42,23 +42,46 @@ const TickerInfoPage: FC = () => {
           })}
         </Nav>
         <Box>
-        <Table>
+        <Table margin="xlarge">
           <TableBody>
             <TableRow>
-              <TableCell scope="row">
+              <TableCell scope="row" verticalAlign="top" size="small">
                 <strong>Name</strong>
               </TableCell>
               <TableCell>{currentTickerInfo.name}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell scope="row">
+              <TableCell scope="row" verticalAlign="top">
                 <strong>Symbol</strong>
               </TableCell>
               <TableCell>{currentTickerInfo.symbol}</TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell scope="row" verticalAlign="top">
+                <strong>Whitepaper</strong>
+              </TableCell>
+              <TableCell><a href="{currentTickerInfo.whitepaper}">{currentTickerInfo.whitepaper}</a></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell scope="row" verticalAlign="top">
+                <strong>Website</strong>
+              </TableCell>
+              <TableCell><a href="{currentTickerInfo.website}">{currentTickerInfo.website}</a></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell scope="row" verticalAlign="top">
+                <strong>Explorer Link</strong>
+              </TableCell>
+              <TableCell><a href="{currentTickerInfo.explorer_link}">{currentTickerInfo.explorer_link}</a></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell scope="row" verticalAlign="top">
+                <strong>Description</strong>
+              </TableCell>
+              <TableCell>{currentTickerInfo.description}</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
-       <Text>{currentTickerInfo.description}</Text>
         </Box>
       </Box>
       <div
