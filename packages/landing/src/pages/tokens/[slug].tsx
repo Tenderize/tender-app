@@ -23,21 +23,24 @@ const TokenWrapper: FC = () => {
       }}
     >
       <Navbar />
-      <Nav width="medium" gap="small">
-        {tickerInfo.map((ticker) => {
-          const staker = stakersArray.find((staker) => ticker.symbol.includes(staker.symbol));
-          const logo = (ticker.derivative ? staker?.bwTenderLogo : staker?.bwLogo) ?? "";
-          return (
-            <SidebarButton
-              logo={`/${logo}`}
-              label={ticker.symbol}
-              active={ticker.symbol.toLowerCase() === activeToken}
-              key={ticker.symbol}
-              justify="between"
-            />
-          );
-        })}
-      </Nav>
+      <Box direction="row">
+        <Nav width="medium" gap="small">
+          {tickerInfo.map((ticker) => {
+            const staker = stakersArray.find((staker) => ticker.symbol.includes(staker.symbol));
+            const logo = (ticker.derivative ? staker?.bwTenderLogo : staker?.bwLogo) ?? "";
+            return (
+              <SidebarButton
+                logo={`/${logo}`}
+                label={ticker.symbol}
+                active={ticker.symbol.toLowerCase() === activeToken}
+                key={ticker.symbol}
+                justify="between"
+              />
+            );
+          })}
+        </Nav>
+        <Text>{JSON.stringify(tickerInfo.find((item) => activeToken === item.symbol.toLowerCase()))}</Text>
+      </Box>
       <div
         style={{
           position: "absolute",
