@@ -3,4 +3,13 @@ module.exports = {
   experimental: {
     externalDir: true,
   },
+  async redirects() {
+    return [
+      {
+        source: "/tokens",
+        destination: "/tokens/grt",
+        permanent: true,
+      },
+    ];
+  },
 }
