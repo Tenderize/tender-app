@@ -1,21 +1,23 @@
 import { FC, useEffect, useState } from "react";
-import { Box, Button, ButtonExtendedProps, Nav, Text } from "grommet";
+import { Box, Button, ButtonExtendedProps, Nav, Table, TableBody, TableCell, TableRow, Text } from "grommet";
 import { Foot, GrommetWrapper, stakers } from "@tender/shared/src/index";
 import Navbar from "../../components/nav";
-import { tickerInfo } from "data/tickerInfo";
+import { tickerInfo, TickerInfo } from "data/tickerInfo";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
 const stakersArray = Object.values(stakers);
 
-const TokenWrapper: FC = () => {
+const TickerInfoPage: FC = () => {
   const router = useRouter();
   const [activeToken, setActiveToken] = useState(router.query.slug as string);
 
   useEffect(() => {
     setActiveToken(router.query.slug as string);
   }, [router.query.slug]);
+
+  const currentTickerInfo = tickerInfo.find((item) => item.symbol.toLowerCase() === activeToken) as TickerInfo;
   return (
     <GrommetWrapper
       style={{
@@ -39,7 +41,25 @@ const TokenWrapper: FC = () => {
             );
           })}
         </Nav>
-        <Text>{JSON.stringify(tickerInfo.find((item) => activeToken === item.symbol.toLowerCase()))}</Text>
+        <Box>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell scope="row">
+                <strong>Name</strong>
+              </TableCell>
+              <TableCell>{currentTickerInfo.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell scope="row">
+                <strong>Symbol</strong>
+              </TableCell>
+              <TableCell>{currentTickerInfo.symbol}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+       <Text>{currentTickerInfo.description}</Text>
+        </Box>
       </Box>
       <div
         style={{
@@ -88,4 +108,4 @@ export const getStaticPaths = async () => {
   };
 };
 
-export default TokenWrapper;
+export default TickerInfoPage;
