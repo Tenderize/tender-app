@@ -1,13 +1,13 @@
 export type TickerInfo = {
-  symbol:  string;
+  symbol: string;
   name: string;
   issue_time: string;
   whitepaper: string;
   website: string;
   explorer_link: string;
-  description:string;
+  description: string;
   derivative: boolean;
-}
+};
 
 export const tickerInfo: TickerInfo[] = [
   {
