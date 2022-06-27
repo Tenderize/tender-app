@@ -3,7 +3,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faDiscord, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { isProduction } from "@tender/shared/src/data/stakers";
 
@@ -48,6 +48,14 @@ const Navbar: FC = () => {
             style={{ textDecorationLine: "none" }}
           />
           <NavAnchor label="Blog" href="#blog" size="small" color="white" style={{ textDecorationLine: "none" }} />
+          <NavAnchor
+            color="white"
+            title="Check our code on Github"
+            a11yTitle="Check our code on Github"
+            href="https://github.com/Tenderize/"
+            icon={<FontAwesomeIcon icon={faGithub} />}
+            target="_blank"
+          />
           <NavAnchor
             color="white"
             title="Chat with us on Discord"

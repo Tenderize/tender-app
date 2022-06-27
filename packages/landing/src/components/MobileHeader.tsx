@@ -1,11 +1,20 @@
 import { FC } from "react";
 import { Anchor } from "grommet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faDiscord, faTwitter, faGithub } from "@fortawesome/free-brands-svg-icons";
 
 export const MobileHeader: FC = () => {
   return (
     <div style={{ alignSelf: "flex-end", paddingTop: "1rem" }}>
+      <Anchor
+        size="large"
+        color="white"
+        a11yTitle="Check our code on Github"
+        href="https://github.com/Tenderize/"
+        icon={<FontAwesomeIcon icon={faGithub} />}
+        target="_blank"
+        style={{ paddingLeft: 0 }}
+      />
       <Anchor
         size="large"
         color="white"

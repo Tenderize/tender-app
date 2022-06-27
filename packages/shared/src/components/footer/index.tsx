@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Text, Anchor, Footer } from "grommet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faDiscord, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 
@@ -18,6 +18,14 @@ export const Foot: FC = () => {
         © Tenderize Labs Ltd. 2021
       </Text>
       <Box direction="row" gap="xxsmall" justify="center" align="center">
+        <Anchor
+          color="white"
+          title="Check our code on Github"
+          a11yTitle="Check our code on Github"
+          href="https://github.com/Tenderize/"
+          icon={<FontAwesomeIcon icon={faGithub} />}
+          target="_blank"
+        />
         <Anchor
           color="white"
           title="Chat with us on Discord"
