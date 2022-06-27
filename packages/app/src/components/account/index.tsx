@@ -6,7 +6,6 @@ import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { WalletLinkConnector } from "@web3-react/walletlink-connector";
 import { UAuthConnector } from "@uauth/web3-react";
 import { InjectedConnector } from "@web3-react/injected-connector";
-import type { AbstractConnector } from "@web3-react/abstract-connector";
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
