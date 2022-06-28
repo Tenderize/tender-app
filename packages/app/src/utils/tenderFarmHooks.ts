@@ -4,17 +4,19 @@ import { BigNumber } from "ethers";
 import { getDeadline } from "./tenderSwapHooks";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
+import { isGnosisSafe } from "./context" 
 
 export const useFarm = (
   owner: string | undefined | null,
   protocolName: ProtocolName,
   symbol: string,
-  isLpTokenApproved: boolean
 ) => {
+
+  const isSafe = isGnosisSafe()
   // Contract Functions
   const { state: farmTx, send } = useContractFunction(
     contracts[protocolName].tenderFarm,
-    isLpTokenApproved ? "farm" : "farmWithPermit",
+    isSafe ? "farm" : "farmWithPermit",
     {
       transactionName: `Farm ${symbol}`,
     }
@@ -22,7 +24,9 @@ export const useFarm = (
   const { library } = useEthers();
 
   const farm = async (farmAmount: BigNumber) => {
-    if (isLpTokenApproved) {
+    // Since SWAP tokens have permit support by default we don't need to check if the token supports it
+    // We need to check however whether we are using a gnosis safe context or not.
+    if (isSafe) {
       await send(farmAmount);
     } else {
       const permit = await signERC2612PermitPatched(

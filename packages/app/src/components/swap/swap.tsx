@@ -13,6 +13,7 @@ import { hasValue, isLargerThanMax, isPositive, useBalanceValidation } from "../
 import { useCalculateSwap, useSwapPriceImpact } from "../../utils/tenderSwapHooks";
 import { useEthers } from "@usedapp/core";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
+import { isGnosisSafe } from "utils/context";
 
 type Props = {
   protocolName: ProtocolName;
@@ -53,6 +54,15 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
+  const isSafeContext = isGnosisSafe()
+
+  const showApprove = (): boolean => {
+    if (disabled) return false;
+    if (isSafeContext && !isTokenApproved) return true;
+    if (isSendingToken && !hasPermit && !isTokenApproved) return true;
+    return false;
+  }
+
   const calcOutGivenIn = useCalculateSwap(
     addresses[protocolName].tenderSwap,
     sendTokenAddress,
@@ -66,6 +76,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     calcOutGivenIn
   );
   const usePermit = (): boolean => {
+    if (isSafeContext) return true;
     // if underlying token check if it has permit support
     if (isSendingToken) return hasPermit && !isTokenApproved;
     // tender tokens always have permit support, check only if sufficient allowance
@@ -167,7 +178,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
               symbol={sendTokenSymbol}
               spender={addresses[protocolName].tenderSwap}
               token={isSendingToken ? contracts[protocolName].token : contracts[protocolName].tenderToken}
-              show={!disabled && !isTokenApproved && isSendingToken && !hasPermit}
+              show={showApprove()}
               chainId={stakers[protocolName].chainId}
             />
             <Button
