@@ -100,6 +100,7 @@ export const GetTVL = gql`
     }
   }
 `;
+
 export const GetTenderizerDays = gql`
   query GetDPY($from: Int!) @api(contextKey: "chainId") {
     tenderizers {
