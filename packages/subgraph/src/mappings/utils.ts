@@ -171,6 +171,19 @@ export function getProtocolIdByTenderTokenAddress(address: string): string {
   return ''
 }
 
+export function getProtocolIdByTenderSwapAddress(address: string): string {
+  // TODO: Is there a better way to do this?
+  let globals = TenderizeGlobal.load('1')
+  let globalConfigs = globals.configs
+  for (let i = 0; i < globalConfigs.length; i++) { 
+    let c = Config.load(globalConfigs[i]) as Config
+    if(c.tenderSwap == address){
+      return c.id
+    }
+  }
+  return ''
+}
+
 export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): TenderizerDay {
   let dayTimestamp = timestamp / 86400
   let dayID = dayTimestamp.toString() + '_' + protocol
@@ -327,12 +340,13 @@ export function getOrCreateMetaSwap(
   block: ethereum.Block,
   tx: ethereum.Transaction,
 ): TenderSwap {
-  let swap = TenderSwap.load(address.toHexString())
+  let protocolID = getProtocolIdByTenderSwapAddress(address.toHex())
+  let swap = TenderSwap.load(protocolID)
 
   if (swap == null) {
     let info = getMetaSwapInfo(address)
 
-    swap = new TenderSwap(address.toHexString())
+    swap = new TenderSwap(protocolID)
     swap.address = address
     swap.numTokens = info.tokens.length
     swap.tokens = registerTokens(info.tokens, block, tx)
