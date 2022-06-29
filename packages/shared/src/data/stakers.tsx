@@ -42,7 +42,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Arbitrum, ChainId.ArbitrumRinkeby),
     hasPermit: true,
     apy: "0",
-    tvl: "0",
+    tvl: 0,
   },
   graph: {
     name: "graph",
@@ -58,7 +58,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
     apy: "0",
-    tvl: "0",
+    tvl: 0,
   },
   matic: {
     name: "matic",
@@ -74,7 +74,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
     apy: "0",
-    tvl: "0",
+    tvl: 0,
   },
   audius: {
     name: "audius",
@@ -90,6 +90,6 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
     apy: "0",
-    tvl: "0",
+    tvl: 0,
   },
 };
