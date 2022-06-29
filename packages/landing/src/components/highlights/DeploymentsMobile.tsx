@@ -1,10 +1,11 @@
 import { FC } from "react";
 import { Box, Heading, Paragraph } from "grommet";
 import TokenCardMobile from "../token-card/TokenCardMobile";
-import { useAPYData } from "./hooks";
+import { useAPYData, useTVLData } from "./hooks";
 
 export const DeploymentsMobile: FC = () => {
   const { graph, livepeer, audius, matic } = useAPYData();
+  const tvl = useTVLData();
 
   return (
     <div
@@ -36,10 +37,10 @@ export const DeploymentsMobile: FC = () => {
         them.
       </Paragraph>
       <Box direction="column" pad={{ top: "large" }} gap="medium">
-        <TokenCardMobile key={graph.path} {...graph} />
-        <TokenCardMobile key={livepeer.path} {...livepeer} />
-        <TokenCardMobile key={audius.path} {...audius} />
-        <TokenCardMobile key={matic.path} {...matic} />
+        <TokenCardMobile key={graph.path} {...graph} tvl={tvl.graph.tvl} />
+        <TokenCardMobile key={livepeer.path} {...livepeer} tvl={tvl.livepeer.tvl} />
+        <TokenCardMobile key={audius.path} {...audius} tvl={tvl.audius.tvl} />
+        <TokenCardMobile key={matic.path} {...matic} tvl={tvl.matic.tvl} />
       </Box>
     </div>
   );

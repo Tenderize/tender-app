@@ -45,9 +45,7 @@ const TokenCard: FC<{
             </Text>
           </>
         ) : (
-          <>
-            <Text size="medium">Coming Soon</Text>
-          </>
+          <Text size="medium">Coming Soon</Text>
         )}
       </Box>
     </Box>
