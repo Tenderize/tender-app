@@ -52,7 +52,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
 const getTvl = async (
   apolloClient: ApolloClient<NormalizedCacheObject>,
   productionChain: ChainId
-): Record<ProtocolName, Pick<Staker, "name" | "tvl">> => {
+): Promise<Record<ProtocolName, Pick<Staker, "name" | "tvl">>> => {
   const result = await apolloClient.query<TVLData>({
     query: Queries.GetTVL,
     context: { chainId: isProduction() ? productionChain : ChainId.Rinkeby },
