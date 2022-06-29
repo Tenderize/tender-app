@@ -48,7 +48,7 @@ const TenderFarm: FC<Props> = ({ protocolName, symbol, account, lpTokenBalance }
   const availableRewards = availableRewardsResult?.value?.[0] ?? constants.Zero;
 
   const subgraphName = stakers[protocolName].subgraphId;
-  const { data: userData, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
+  const { data: userData, refetch } = useQuery<Queries.UserDeployments>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
     context: { chainId: stakers[protocolName].chainId },
   });

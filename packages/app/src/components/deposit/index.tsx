@@ -37,7 +37,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const hasPermit = stakers[protocolName].hasPermit;
 
   const subgraphName = stakers[protocolName].subgraphId;
-  const { data, refetch } = useQuery<Queries.UserDeploymentsType>(Queries.GetUserDeployments, {
+  const { data, refetch } = useQuery<Queries.UserDeployments>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
     context: { chainId: requiredChain },
   });
@@ -49,7 +49,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   const monthAgo = getUnixTimestampMonthAgo();
 
-  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
+  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDays>(Queries.GetTenderizerDays, {
     query: Queries.GetTenderizerDays,
     variables: { from: monthAgo },
     context: { chainId: requiredChain },

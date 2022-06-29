@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Heading, Paragraph } from "grommet";
 import TokenCardMobile from "../token-card/TokenCardMobile";
-import { useAPYData } from "./useAPYData";
+import { useAPYData } from "./hooks";
 
 export const DeploymentsMobile: FC = () => {
   const { graph, livepeer, audius, matic } = useAPYData();

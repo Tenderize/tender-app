@@ -1,7 +1,7 @@
 import { Queries, stakers, Staker } from "@tender/shared/src/index";
 import { ProtocolName } from "./data/stakers";
 
-export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Record<Staker["name"], Staker> => {
+export const calculateAPY = (data: Queries.TenderizerDays | undefined): Record<Staker["name"], Staker> => {
   const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;
     if (data != null) {

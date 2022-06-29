@@ -14,6 +14,7 @@ export type Staker = {
   chainId: ChainId;
   hasPermit: boolean;
   apy: string;
+  tvl: number;
 };
 
 export type ProtocolName = Staker["name"];
@@ -41,6 +42,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Arbitrum, ChainId.ArbitrumRinkeby),
     hasPermit: true,
     apy: "0",
+    tvl: "0",
   },
   graph: {
     name: "graph",
@@ -56,6 +58,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
     apy: "0",
+    tvl: "0",
   },
   matic: {
     name: "matic",
@@ -71,6 +74,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
     apy: "0",
+    tvl: "0",
   },
   audius: {
     name: "audius",
@@ -86,5 +90,6 @@ export const stakers: Record<ProtocolName, Staker> = {
     chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
     hasPermit: false,
     apy: "0",
+    tvl: "0",
   },
 };

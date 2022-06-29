@@ -3,7 +3,7 @@ import { Grid, Box, Heading, Paragraph } from "grommet";
 import { HighlightContainer } from "./HighlightContainer";
 import TokenCard from "../token-card";
 import { ScreenSize, screenToFontSize } from "./helper";
-import { useAPYData } from "./useAPYData";
+import { useAPYData, useTVLData } from "./hooks";
 
 export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: number) => void; index: number }> = ({
   screenSize,
@@ -11,7 +11,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
   index,
 }) => {
   const { livepeer, audius, graph, matic } = useAPYData();
-
+  const tvl = useTVLData();
   return (
     <HighlightContainer item="deployments" setVisibleIndex={setVisibleIndex} index={index}>
       <Grid columns={["1/2", "1/2"]}>
@@ -34,7 +34,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: 50,
               }}
             >
-              <TokenCard key={livepeer.path} {...livepeer} />
+              <TokenCard key={livepeer.path} {...livepeer} tvl={tvl.livepeer.tvl} />
             </Box>
             <Box
               style={{
@@ -43,7 +43,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: 160,
               }}
             >
-              <TokenCard key={audius.path} {...audius} />
+              <TokenCard key={audius.path} {...audius} tvl={tvl.audius.tvl} />
             </Box>
             <Box
               style={{
@@ -52,7 +52,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: -170,
               }}
             >
-              <TokenCard key={graph.path} {...graph} />
+              <TokenCard key={graph.path} {...graph} tvl={tvl.graph.tvl} />
             </Box>
             <Box
               style={{
@@ -61,7 +61,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: -70,
               }}
             >
-              <TokenCard key={matic.path} {...matic} />
+              <TokenCard key={matic.path} {...matic} tvl={tvl.matic.tvl} />
             </Box>
             <Box
               style={{
