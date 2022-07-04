@@ -29,7 +29,7 @@ import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
-import { useIsGnosisSafe } from "utils/context";
+import { isGnosisSafe } from "utils/context";
 
 type Props = {
   protocolName: ProtocolName;
@@ -90,7 +90,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
     tenderInput
   );
 
-  const isSafeContext = useIsGnosisSafe();
+  const isSafeContext = isGnosisSafe();
 
   const isButtonDisabled = () => {
     // if either field has an invalid value return true

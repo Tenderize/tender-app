@@ -4,10 +4,10 @@ import { BigNumber } from "ethers";
 import { getDeadline } from "./tenderSwapHooks";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
-import { useIsGnosisSafe } from "./context";
+import { isGnosisSafe } from "./context";
 
 export const useFarm = (owner: string | undefined | null, protocolName: ProtocolName, symbol: string) => {
-  const isSafe = useIsGnosisSafe();
+  const isSafe = isGnosisSafe();
   // Contract Functions
   const { state: farmTx, send } = useContractFunction(
     contracts[protocolName].tenderFarm,

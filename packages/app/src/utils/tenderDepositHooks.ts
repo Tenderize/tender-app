@@ -3,7 +3,7 @@ import { contracts, addresses } from "@tender/contracts/src/index";
 import { BigNumber } from "ethers";
 import { stakers } from "@tender/shared/src/index";
 import { getDeadline } from "./tenderSwapHooks";
-import { hasPermit } from "./context";
+import { isGnosisSafe, hasPermit } from "./context";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 
@@ -28,8 +28,8 @@ export const useDeposit = (protocolName: ProtocolName) => {
 
   const { library, account } = useEthers();
 
-  const deposit = async (amount: BigNumber, isSafeContext: boolean) => {
-    if (!hasPermit(protocolName) || isSafeContext) {
+  const deposit = async (amount: BigNumber) => {
+    if (!hasPermit(protocolName) || isGnosisSafe()) {
       // TODO: We expect token to be already approved here but don't actually check such invariant
       await depositWithApprove(amount);
     } else {
