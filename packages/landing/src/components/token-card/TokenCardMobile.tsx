@@ -2,15 +2,18 @@ import { FC } from "react";
 import { Box, Text } from "grommet";
 import Image from "next/image";
 import { ApyContent } from "./ApyContent";
+import { formatCompactCurrency } from "@tender/shared/src";
+
 type Props = {
   title: string;
   apy: string;
+  tvl: number;
   neonLogo: string;
   symbol: string;
   available: boolean;
 };
 
-const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy, available }) => {
+const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy, tvl, available }) => {
   return (
     <Box
       pad="medium"
@@ -37,7 +40,19 @@ const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy, available })
           </Text>
         </Box>
         <Box direction="column" align="left" gap="small">
-          <ApyContent apy={apy} available={available} />
+          {available ? (
+            <>
+              <ApyContent apy={apy} />
+              <Text size="large" weight="bold">
+                <Text size="medium">{formatCompactCurrency(tvl)}</Text>
+                <Text style={{ opacity: 0.5 }} size="small">
+                  &nbsp;TVL
+                </Text>
+              </Text>
+            </>
+          ) : (
+            <Text size="medium">Coming Soon</Text>
+          )}
         </Box>
       </Box>
     </Box>
