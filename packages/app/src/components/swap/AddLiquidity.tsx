@@ -90,7 +90,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
     tenderInput
   );
 
-  const isSafeContext = isGnosisSafe()
+  const isSafeContext = isGnosisSafe();
 
   const isButtonDisabled = () => {
     // if either field has an invalid value return true
@@ -225,18 +225,16 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                       chainId={stakers[protocolName].chainId}
                     />
                   )
-                  }
-                  {
-                  !isTenderApproved && (
-                    <ApproveToken
+                }
+                {!isTenderApproved && (
+                  <ApproveToken
                     symbol={bwTenderLogo}
                     spender={addresses[protocolName].tenderSwap}
                     token={contracts[protocolName].tenderToken}
                     show={isSafeContext && !isTenderApproved}
                     chainId={stakers[protocolName].chainId}
                   />
-                  )
-                }
+                )}
                 <Button
                   primary
                   onClick={handleAddLiquidity}

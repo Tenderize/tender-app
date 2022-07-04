@@ -72,7 +72,7 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
     setFarmInput("");
   };
 
-  const isSafeContext = isGnosisSafe()
+  const isSafeContext = isGnosisSafe();
 
   const { validationMessage } = useBalanceValidation(farmInput, tokenBalance);
 
@@ -123,13 +123,13 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box justify="center" gap="small">
-              <ApproveToken
-                    symbol={symbol}
-                    spender={addresses[protocolName].tenderizer}
-                    token={contracts[protocolName].token}
-                    show={!isTokenApproved && isSafeContext}
-                    chainId={stakers[protocolName].chainId}
-                  />
+                <ApproveToken
+                  symbol={symbol}
+                  spender={addresses[protocolName].tenderizer}
+                  token={contracts[protocolName].token}
+                  show={!isTokenApproved && isSafeContext}
+                  chainId={stakers[protocolName].chainId}
+                />
                 <Button
                   primary
                   style={{ width: 467 }}

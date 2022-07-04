@@ -3,7 +3,7 @@ import { contracts, addresses } from "@tender/contracts/src/index";
 import { BigNumber } from "ethers";
 import { stakers } from "@tender/shared/src/index";
 import { getDeadline } from "./tenderSwapHooks";
-import { isGnosisSafe, hasPermit } from "./context" 
+import { isGnosisSafe, hasPermit } from "./context";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 

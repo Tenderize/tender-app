@@ -100,7 +100,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
   const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
 
-  const isSafeContext = isGnosisSafe()
+  const isSafeContext = isGnosisSafe();
 
   return (
     <Box>

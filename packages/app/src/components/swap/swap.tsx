@@ -54,14 +54,14 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const isSafeContext = isGnosisSafe()
+  const isSafeContext = isGnosisSafe();
 
   const showApprove = (): boolean => {
     if (disabled) return false;
     if (isSafeContext && !isTokenApproved) return true;
     if (isSendingToken && !hasPermit && !isTokenApproved) return true;
     return false;
-  }
+  };
 
   const calcOutGivenIn = useCalculateSwap(
     addresses[protocolName].tenderSwap,
