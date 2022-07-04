@@ -18,6 +18,7 @@ import { constants } from "ethers";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, chainId } = useEthers();
+
   const ens = useLookupAddress();
   const [showAccountInfo, setShowAccountInfo] = useState(false);
   const [showWalletPicker, setShowWalletPicker] = useState(false);

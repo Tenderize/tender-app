@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
+import { isGnosisSafe } from "utils/context";
 import { ArbitrumRinkeby, Rinkeby, useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
@@ -98,6 +99,9 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
   const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
   const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
+
+  const isSafeContext = isGnosisSafe();
+
   return (
     <Box>
       <Box gap="medium" pad={{ bottom: "medium" }}>
@@ -150,7 +154,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     symbol={symbol}
                     spender={addresses[protocolName].tenderizer}
                     token={contracts[protocolName].token}
-                    show={!hasPermit && !isTokenApproved}
+                    show={(!hasPermit || isSafeContext) && !isTokenApproved}
                     chainId={stakers[protocolName].chainId}
                   />
                   <Button

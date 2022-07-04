@@ -1,5 +1,7 @@
 import { FC, useCallback, useState } from "react/index";
-import { addresses } from "@tender/contracts/src/index";
+import { addresses, contracts } from "@tender/contracts/src/index";
+import { stakers } from "@tender/shared/src/index";
+import { isGnosisSafe } from "utils/context";
 import { BigNumberish, utils } from "ethers";
 import {
   Button,
@@ -15,6 +17,7 @@ import {
   Text,
   TextInput,
 } from "grommet";
+import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { FormAdd, FormClose } from "grommet-icons";
@@ -59,7 +62,7 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
   );
 
   // Contract Functions
-  const { farmTx, farm } = useFarm(account, protocolName, symbol, isTokenApproved);
+  const { farmTx, farm } = useFarm(account, protocolName, symbol);
 
   useResetInputAfterTx(farmTx, setFarmInput);
 
@@ -68,6 +71,8 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
     await farm(utils.parseEther(farmInput || "0"));
     setFarmInput("");
   };
+
+  const isSafeContext = isGnosisSafe();
 
   const { validationMessage } = useBalanceValidation(farmInput, tokenBalance);
 
@@ -118,6 +123,13 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
             </CardBody>
             <CardFooter align="center" justify="center" pad={{ top: "medium" }}>
               <Box justify="center" gap="small">
+                <ApproveToken
+                  symbol={symbol}
+                  spender={addresses[protocolName].tenderizer}
+                  token={contracts[protocolName].token}
+                  show={!isTokenApproved && isSafeContext}
+                  chainId={stakers[protocolName].chainId}
+                />
                 <Button
                   primary
                   style={{ width: 467 }}
