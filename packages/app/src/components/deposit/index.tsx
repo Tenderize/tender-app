@@ -50,7 +50,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   const monthAgo = getUnixTimestampMonthAgo();
 
-  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
+  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDays>(Queries.GetTenderizerDays, {
     query: Queries.GetTenderizerDays,
     variables: { from: monthAgo },
     context: { chainId: requiredChain },
