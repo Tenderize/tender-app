@@ -4,6 +4,8 @@ import { Avatar, Box, Button, Card, CardHeader, Heading, Image, Layer, Menu, Spi
 import styled, { css } from "styled-components";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { WalletLinkConnector } from "@web3-react/walletlink-connector";
+import { UAuthConnector } from "@uauth/web3-react";
+import { InjectedConnector } from "@web3-react/injected-connector";
 import { AccountModal } from "./AccountModal";
 import { normalizeColor } from "grommet/utils";
 import { theme } from "@tender/shared/src/index";
@@ -16,6 +18,7 @@ import { constants } from "ethers";
 
 export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
   const { account, deactivate, activate, activateBrowserWallet, chainId } = useEthers();
+
   const ens = useLookupAddress();
   const [showAccountInfo, setShowAccountInfo] = useState(false);
   const [showWalletPicker, setShowWalletPicker] = useState(false);
@@ -133,6 +136,29 @@ export const AccountButton: FC<{ config: TenderizeConfig }> = ({ config }) => {
                 handleClick={async () => {
                   const safeMultisigConnector = new SafeAppConnector();
                   await activate(safeMultisigConnector);
+                  handleCloseWalletPicker();
+                }}
+              />
+              <ProviderButton
+                label="Unstoppable Domains"
+                image={"/unstoppable.jpg"}
+                handleClick={async () => {
+                  const injected = new InjectedConnector({ supportedChainIds: [1] });
+
+                  const walletconnect = new WalletConnectConnector({
+                    rpc: config.chainUrlMapping,
+                    qrcode: true,
+                  });
+
+                  const uauth = new UAuthConnector({
+                    clientID: "9d2070f4-f40e-4008-b6f5-597b403da3a8",
+                    redirectUri: `${window.location.origin}${window.location.pathname}`,
+                    scope: "openid wallet email:optional humanity_check:optional",
+                    postLogoutRedirectUri: "https://app.tenderize.me",
+                    connectors: { injected, walletconnect },
+                  });
+
+                  await activate(uauth);
                   handleCloseWalletPicker();
                 }}
               />

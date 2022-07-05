@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export type TenderizerDaysType = {
+export type TenderizerDays = {
   tenderizerDays: {
     id: string;
     date: number;
@@ -8,11 +8,37 @@ export type TenderizerDaysType = {
   }[];
 };
 
-export type UserDeploymentsType = {
+export type UserDeployments = {
   userDeployments: {
     tenderizerStake: number;
     farmHarvest: number;
     claimedRewards: number;
+  }[];
+};
+
+export type Configs = {
+  configs: {
+    id: string;
+    tenderSwap: string;
+    tenderizer: string;
+    steak: string;
+  }[];
+};
+
+export type CurrentPrincipal = {
+  tenderizer: {
+    currentPrincipal: string;
+  }[];
+};
+
+export type TVLData = {
+  tenderizers: {
+    id: string;
+    currentPrincipal: string;
+  }[];
+  tenderSwaps: {
+    id: string;
+    balances: string[];
   }[];
 };
 
@@ -44,6 +70,38 @@ export const GetTenderizerDays = gql`
       id
       date
       DPY
+    }
+  }
+`;
+
+export const GetConfigs = gql`
+  {
+    configs {
+      id
+      tenderSwap
+      tenderizer
+      steak
+    }
+  }
+`;
+
+export const GetCurrentPrincipal = gql`
+  query getTenderizer($id: ID!) {
+    tenderizer(id: $id) {
+      currentPrincipal
+    }
+  }
+`;
+
+export const GetTVL = gql`
+  query GetTVL @api(contextKey: "chainId") {
+    tenderizers {
+      id
+      currentPrincipal
+    }
+    tenderSwaps {
+      id
+      balances
     }
   }
 `;

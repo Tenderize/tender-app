@@ -8,3 +8,8 @@ export const useAPYData = () => {
   const { data } = useSWR<Record<ProtocolName, Staker>>("/api/apy", fetcher);
   return data ?? stakers;
 };
+
+export const useTVLData = () => {
+  const { data } = useSWR<Record<ProtocolName, Pick<Staker, "name" | "tvl">>>("/api/tvl", fetcher);
+  return data ?? stakers;
+};

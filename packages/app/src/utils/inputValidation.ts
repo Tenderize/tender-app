@@ -35,6 +35,8 @@ export const useBalanceValidation = (input: string, balance: BigNumberish, extra
       } else {
         setValidationMessage(undefined);
       }
+    } else {
+      setValidationMessage(undefined);
     }
   }, [input, balance, extraDep]);
 

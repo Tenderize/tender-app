@@ -21,6 +21,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.17",
+    "ethers": "^5.6.1",
     "grommet": "^2.19.1",
     "grommet-icons": "^4.7.0",
     "lru-cache": "^6.0.0",

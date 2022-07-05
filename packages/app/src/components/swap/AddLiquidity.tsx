@@ -29,6 +29,7 @@ import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
+import { isGnosisSafe } from "utils/context";
 
 type Props = {
   protocolName: ProtocolName;
@@ -89,13 +90,15 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
     tenderInput
   );
 
+  const isSafeContext = isGnosisSafe();
+
   const isButtonDisabled = () => {
     // if either field has an invalid value return true
     if (!hasValue(tokenInput) || !hasValue(tenderInput)) return true;
     // if a transaction is pending return true
     if (isPendingTransaction(addLiquidityTx)) return true;
     // if underlying token (e.g. LPT) has no permit support and is not approved, return true
-    if (!hasPermit && !isTokenApproved) return true;
+    if ((!hasPermit || isSafeContext) && !isTokenApproved) return true;
   };
 
   const { addLiquidity, tx: addLiquidityTx } = useAddLiquidity(protocolName, isTokenApproved, isTenderApproved);
@@ -218,11 +221,20 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                       symbol={symbol}
                       spender={addresses[protocolName].tenderSwap}
                       token={contracts[protocolName].token}
-                      show={!hasPermit && !isTokenApproved}
+                      show={(!hasPermit || isSafeContext) && !isTokenApproved}
                       chainId={stakers[protocolName].chainId}
                     />
                   )
                 }
+                {!isTenderApproved && (
+                  <ApproveToken
+                    symbol={bwTenderLogo}
+                    spender={addresses[protocolName].tenderSwap}
+                    token={contracts[protocolName].tenderToken}
+                    show={isSafeContext && !isTenderApproved}
+                    chainId={stakers[protocolName].chainId}
+                  />
+                )}
                 <Button
                   primary
                   onClick={handleAddLiquidity}

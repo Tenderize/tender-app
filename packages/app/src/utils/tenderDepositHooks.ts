@@ -3,12 +3,12 @@ import { contracts, addresses } from "@tender/contracts/src/index";
 import { BigNumber } from "ethers";
 import { stakers } from "@tender/shared/src/index";
 import { getDeadline } from "./tenderSwapHooks";
+import { isGnosisSafe, hasPermit } from "./context";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 export const useDeposit = (protocolName: ProtocolName) => {
   const symbol = stakers[protocolName].symbol;
-  const hasPermit = stakers[protocolName].hasPermit;
 
   const { state: depositTx, send: depositWithApprove } = useContractFunction(
     contracts[protocolName].tenderizer,
@@ -29,7 +29,10 @@ export const useDeposit = (protocolName: ProtocolName) => {
   const { library, account } = useEthers();
 
   const deposit = async (amount: BigNumber) => {
-    if (hasPermit) {
+    if (!hasPermit(protocolName) || isGnosisSafe()) {
+      // TODO: We expect token to be already approved here but don't actually check such invariant
+      await depositWithApprove(amount);
+    } else {
       const permit = await signERC2612PermitPatched(
         library?.getSigner(),
         addresses[protocolName].token,
@@ -40,10 +43,8 @@ export const useDeposit = (protocolName: ProtocolName) => {
       );
 
       await depositWithPermit(amount, permit.deadline, permit.v, permit.r, permit.s);
-    } else {
-      await depositWithApprove(amount);
     }
   };
 
-  return { deposit, tx: hasPermit ? depositWithPermitTx : depositTx };
+  return { deposit, tx: hasPermit(protocolName) ? depositWithPermitTx : depositTx };
 };
