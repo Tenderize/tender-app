@@ -68,9 +68,6 @@ export function handleTenderizerCreated(config: TenderizerCreated): void {
   // Update day data
   let day = loadOrCreateTernderizerDay(config.block.timestamp.toI32(), params.name)
   day.deposits = day.deposits.plus(amount)
-  let tenderToken = TenderToken.bind(params.tenderToken)
-  day.shares = tenderToken.getTotalShares()
-  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
 
 }

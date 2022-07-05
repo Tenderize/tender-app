@@ -53,8 +53,6 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   // Update day data
   let day = loadOrCreateTernderizerDay(timestamp, protocolId)
   day.deposits = day.deposits.plus(amount)
-  day.shares = tenderToken.getTotalShares()
-  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
 
   // Update Tenderizer data
@@ -106,8 +104,6 @@ export function handleUnstakeEvent(unstakeEvent: Unstake): void {
   // Update day data
   let day = loadOrCreateTernderizerDay(timestamp, protocolId)
   day.unstakes = day.unstakes.plus(amount)
-  day.shares = tenderToken.getTotalShares()
-  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
 
   // Update Tenderizer data
@@ -138,8 +134,6 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   // Update day data
   let day = loadOrCreateTernderizerDay(withdrawEvent.block.timestamp.toI32(), protocolId)
   day.withdrawals = day.withdrawals.plus(amount)
-  day.shares = tenderToken.getTotalShares()
-  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
 
   // Update Tenderizer data
@@ -163,19 +157,10 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = rewardsClaimedEvent.params.stakeDiff
   let usdPrice = getUSDPrice(Config.load(protocolId).steak)
-  let config = Config.load(protocolId)
-  let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
   day.rewards = day.rewards.plus(amount)
-  if(day.startPrinciple.gt(BigInt.fromI32(0))) {
-    day.DPY = day.rewards.divDecimal(day.startPrinciple.toBigDecimal())
-  } else {
-    day.DPY = ZERO_BD
-  }
-  day.shares = tenderToken.getTotalShares()
-  day.supply = tenderToken.getTotalPooledTokens()
   day.save()
   
   // Update Tenderizer data
