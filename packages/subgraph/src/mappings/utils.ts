@@ -199,10 +199,6 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
     day.unstakes = ZERO_BI
     day.withdrawals = ZERO_BI
     day.rewards = ZERO_BI
-    day.startPrinciple = tenderizer.currentPrincipal
-    day.DPY = ZERO_BD
-    day.shares = ZERO_BI
-    day.supply = ZERO_BI
   }
   return day as TenderizerDay;
 }
@@ -368,6 +364,14 @@ export function getOrCreateMetaSwap(
     let system = getSystemInfo(block, tx)
     system.swapCount = system.swapCount.plus(BigInt.fromI32(1))
     system.save()
+  } else {
+    let info = getMetaSwapInfo(address)
+    swap.balances = info.balances
+    swap.lpToken = info.lpToken
+    swap.A = info.A
+    swap.swapFee = info.swapFee
+    swap.virtualPrice = info.virtualPrice
+    swap.save()
   }
 
   return swap as TenderSwap

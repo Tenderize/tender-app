@@ -107,15 +107,6 @@ type TenderizerDay @entity {
   withdrawals: BigInt!
   "staking rewards collected from protocol for the day"
   rewards: BigInt!
-
-  "Principle on the first event of the day"
-  startPrinciple: BigInt!
-  "Day APY - rewards/dayStartPrinciple"
-  DPY: BigDecimal!
-  "Last Total Tender Token shares of the day"
-  shares: BigInt!
-  "Last Total Tender Token supply of the day"
-  supply: BigInt!
 }
 
 type TenderFarmDay @entity {
@@ -138,7 +129,7 @@ type TenderFarmDay @entity {
   "principle in Token (not BPT) value at the start of the day"
   startPrinciple: BigDecimal!
   "Day APY - total rewards / total volume"
-  DPY: BigDecimal!
+  DPY: BigDecimal! # TODO: Remove this?
 }
 
 type User @entity {
