@@ -26,10 +26,10 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
 
             const currentEvent = value;
             const previousEvent = rewardsClaimedEvents[index - 1];
-            const amount = Number.parseFloat(currentEvent.rewards) / Number.parseFloat(currentEvent.oldPrincipal);
+            const rate = Number.parseFloat(currentEvent.rewards) / Number.parseFloat(currentEvent.oldPrincipal);
             const timeDiff = currentEvent.timestamp - previousEvent.timestamp;
             const compoundsPerYear = Math.floor(YEAR_IN_SECONDS / timeDiff);
-            const apy = Math.pow(1 + amount, compoundsPerYear) - 1;
+            const apy = Math.pow(1 + rate, compoundsPerYear) - 1;
             return apy;
           })
           .filter((item): item is number => item != null);
