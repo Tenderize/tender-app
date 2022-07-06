@@ -34,7 +34,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
         context: { chainId: isProduction() ? ChainId.Arbitrum : ChainId.ArbitrumRinkeby },
       });
 
-      const data = { tenderizer: [...ethereumData.tenderizer, ...arbitrumData.tenderizer] };
+      const data = { tenderizers: [...ethereumData.tenderizers, ...arbitrumData.tenderizers] };
       if (data != null) {
         req.cache.set(cacheKey, {
           data,
@@ -45,7 +45,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
       res.status(200).json(calculateAPY(data));
     } catch (e) {
       console.log(e);
-      res.status(200).json([]);
+      res.status(200).json(undefined);
     }
   }
 };

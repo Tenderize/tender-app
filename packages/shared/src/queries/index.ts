@@ -7,7 +7,7 @@ export type RewardsClaimedEvent = {
 };
 
 export type TenderizerDaysType = {
-  tenderizer: {
+  tenderizers: {
     id: string;
     rewardsClaimedEvents: RewardsClaimedEvent[];
   }[];
