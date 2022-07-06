@@ -23,18 +23,18 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
   } else {
     const monthAgo = getUnixTimestampMonthAgo();
     try {
-      const { data: ethereumData } = await Subgraph.query({
+      const { data: ethereumData } = await Subgraph.query<Queries.TenderizerDaysType>({
         query: Queries.GetTenderizerDays,
         variables: { from: monthAgo },
         context: { chainId: isProduction() ? ChainId.Mainnet : ChainId.Rinkeby },
       });
-      const { data: arbitrumData } = await SubgraphForLanding.query({
+      const { data: arbitrumData } = await SubgraphForLanding.query<Queries.TenderizerDaysType>({
         query: Queries.GetTenderizerDays,
         variables: { from: monthAgo },
         context: { chainId: isProduction() ? ChainId.Arbitrum : ChainId.ArbitrumRinkeby },
       });
 
-      const data = { tenderizer: [...ethereumData.tenderizers, ...arbitrumData.tenderizers] };
+      const data = { tenderizer: [...ethereumData.tenderizer, ...arbitrumData.tenderizer] };
       if (data != null) {
         req.cache.set(cacheKey, {
           data,
