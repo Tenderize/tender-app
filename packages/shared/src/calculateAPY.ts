@@ -7,7 +7,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
   const stakersWithAPY = Object.values(stakers).map((staker) => {
     let apyInPoints = 0;
     if (data != null) {
-      const tenderizerData = data.tenderizer.find((item) => item.id.includes(staker.subgraphId)) ?? {
+      const tenderizerData = data.tenderizers.find((item) => item.id.includes(staker.subgraphId)) ?? {
         id: staker.subgraphId,
         rewardsClaimedEvents: [],
       };
