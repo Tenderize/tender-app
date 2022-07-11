@@ -29,7 +29,7 @@ import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
-import { isGnosisSafe } from "utils/context";
+import { useIsGnosisSafe } from "utils/context";
 
 type Props = {
   protocolName: ProtocolName;
@@ -90,7 +90,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
     tenderInput
   );
 
-  const isSafeContext = isGnosisSafe();
+  const isSafeContext = useIsGnosisSafe();
 
   const isButtonDisabled = () => {
     // if either field has an invalid value return true
@@ -113,7 +113,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
-    addLiquidity(tenderIn, tokenIn, lpTokenAmount.sub(1));
+    addLiquidity(tenderIn, tokenIn, lpTokenAmount.sub(1), isSafeContext);
   };
 
   const { validationMessage: tokenValidationMessage } = useBalanceValidation(tokenInput, tokenBalance);
