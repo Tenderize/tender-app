@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from "react/index";
 import { addresses, contracts } from "@tender/contracts/src/index";
 import { stakers } from "@tender/shared/src/index";
-import { isGnosisSafe } from "utils/context";
+import { useIsGnosisSafe } from "utils/context";
 import { BigNumberish, utils } from "ethers";
 import {
   Button,
@@ -72,7 +72,7 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
     setFarmInput("");
   };
 
-  const isSafeContext = isGnosisSafe();
+  const isSafeContext = useIsGnosisSafe();
 
   const { validationMessage } = useBalanceValidation(farmInput, tokenBalance);
 
