@@ -13,7 +13,7 @@ import { hasValue, isLargerThanMax, isPositive, useBalanceValidation } from "../
 import { useCalculateSwap, useSwapPriceImpact } from "../../utils/tenderSwapHooks";
 import { useEthers } from "@usedapp/core";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
-import { isGnosisSafe } from "utils/context";
+import { useIsGnosisSafe } from "utils/context";
 
 type Props = {
   protocolName: ProtocolName;
@@ -54,7 +54,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
 
   const sendInputRef = useRef<HTMLInputElement | null>(null);
 
-  const isSafeContext = isGnosisSafe();
+  const isSafeContext = useIsGnosisSafe();
 
   const showApprove = (): boolean => {
     if (disabled) return false;

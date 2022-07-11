@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
-import { isGnosisSafe } from "utils/context";
+import { useIsGnosisSafe } from "utils/context";
 import { ArbitrumRinkeby, Rinkeby, useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
@@ -80,9 +80,11 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   useResetInputAfterTx(depositTx, setDepositInput);
 
+  const isSafeContext = useIsGnosisSafe();
+
   const depositTokens = async (e: any) => {
     e.preventDefault();
-    await deposit(utils.parseEther(depositInput || "0"));
+    await deposit(utils.parseEther(depositInput || "0"), isSafeContext);
     setDepositInput("");
   };
 
@@ -99,8 +101,6 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
   const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
   const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
-
-  const isSafeContext = isGnosisSafe();
 
   return (
     <Box>

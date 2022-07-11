@@ -6,7 +6,7 @@ import { TenderSwap } from "@tender/contracts/gen/types";
 import { weiToEthInFloat } from "./amountFormat";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
-import { isGnosisSafe, hasPermit } from "./context";
+import { hasPermit } from "./context";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -354,8 +354,13 @@ export const useAddLiquidity = (protocolName: ProtocolName, isTokenApproved: boo
   const { library, account } = useEthers();
   const multicallData: string[] = [];
 
-  const addLiquidity = async (tenderIn: BigNumber, tokenIn: BigNumber, lpTokenAmount: BigNumber) => {
-    if (!isTenderApproved && !isGnosisSafe()) {
+  const addLiquidity = async (
+    tenderIn: BigNumber,
+    tokenIn: BigNumber,
+    lpTokenAmount: BigNumber,
+    isSafeContext: boolean
+  ) => {
+    if (!isTenderApproved && !isSafeContext) {
       const tenderToken = addresses[protocolName].tenderToken;
       const permit = await signERC2612PermitPatched(
         library?.getSigner(),
@@ -378,7 +383,7 @@ export const useAddLiquidity = (protocolName: ProtocolName, isTokenApproved: boo
       );
     }
 
-    if (!tokenIn.isZero() && hasPermit(protocolName) && !isTokenApproved && !isGnosisSafe()) {
+    if (!tokenIn.isZero() && hasPermit(protocolName) && !isTokenApproved && !isSafeContext) {
       const token = addresses[protocolName].token;
       const permit = await signERC2612PermitPatched(
         library?.getSigner(),
