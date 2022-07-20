@@ -76,7 +76,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     calcOutGivenIn
   );
   const usePermit = (): boolean => {
-    if (isSafeContext) return true;
+    if (isSafeContext) return false;
     // if underlying token check if it has permit support
     if (isSendingToken) return hasPermit && !isTokenApproved;
     // tender tokens always have permit support, check only if sufficient allowance
