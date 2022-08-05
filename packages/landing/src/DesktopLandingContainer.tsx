@@ -56,7 +56,7 @@ const DesktopLandingContainer: FC = () => {
           {(size: string) => (
             <>
               <Intro screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={0} />
-              <Subscribe />
+              <Subscribe isMobile={false} />
               <Deployments screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={1} />
               <ConnectWithDeFi screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={2} />
               <EasyStaking screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={3} />

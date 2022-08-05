@@ -11,7 +11,6 @@ export const DeploymentsMobile: FC = () => {
     <div
       style={{
         width: "100vw",
-        height: "100vh",
         backgroundImage: `url("/landing/shad-deployments.jpg"), url('/landing/noise.png')`,
         backgroundBlendMode: "darken",
         backgroundRepeat: "no-repeat, repeat",
@@ -36,7 +35,7 @@ export const DeploymentsMobile: FC = () => {
         Your TenderToken balance will increase as Tenderize earns staking rewards so you earn yield simply by holding
         them.
       </Paragraph>
-      <Box direction="column" pad={{ top: "large" }} gap="medium">
+      <Box direction="column" pad={{ top: "large" }} gap="large">
         <TokenCardMobile key={graph.path} {...graph} tvl={tvl.graph.tvl} />
         <TokenCardMobile key={livepeer.path} {...livepeer} tvl={tvl.livepeer.tvl} />
         <TokenCardMobile key={audius.path} {...audius} tvl={tvl.audius.tvl} />

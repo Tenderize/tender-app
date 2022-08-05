@@ -1,4 +1,5 @@
 import { Foot } from "@tender/shared/src/index";
+import { Subscribe } from "components/Subscribe";
 import { Main } from "grommet";
 import { Carousel } from "./components/highlights/carousel/Carousel";
 import { DeploymentsMobile } from "./components/highlights/DeploymentsMobile";
@@ -19,6 +20,7 @@ const MobileLandingContainer = () => (
     <MobileHeader />
     <Main overflow="hidden">
       <IntroMobile />
+      <Subscribe isMobile={true} />
       <DeploymentsMobile />
       <Carousel />
       <MobileBlogContainer />

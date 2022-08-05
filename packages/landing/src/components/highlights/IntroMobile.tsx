@@ -7,7 +7,6 @@ export const IntroMobile: FC = () => {
       <div
         style={{
           width: "100vw",
-          height: "100vh",
           backgroundImage: `url("/landing/shad-intro.jpg"), url('/landing/noise.png')`,
           backgroundBlendMode: "darken",
           backgroundRepeat: "no-repeat, repeat",
