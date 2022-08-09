@@ -75,7 +75,7 @@ const getTvl = async (
         name: protocolName,
         tvl:
           Number.parseFloat(utils.formatEther(BigNumber.from(token1Balance).add(tenderizer.currentPrincipal))) *
-          prices[coingeckoId].usd,
+          (prices?.[coingeckoId]?.usd ?? 0),
       },
     ];
   });
