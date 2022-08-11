@@ -162,7 +162,7 @@ export function handleNewAdminFee(event: NewAdminFee): void {
     let tokens = swap.tokens
     let tokenAmounts: BigInt[] = []
     for (let i = 0; i < swap.numTokens; i++) {
-      if (event.params.tokenReceived.toHexString() == tokens[i]) {
+      if (event.params.tokenReceived.equals(Address.fromHexString(tokens[i]))) {
         tokenAmounts.push(event.params.receivedAmount)
       } else {
         tokenAmounts.push(BigInt.fromI32(0))
@@ -219,7 +219,7 @@ export function handleNewAdminFee(event: NewAdminFee): void {
       let tokens = swap.tokens
       let soldId = 1
       let boughtId = 0
-      if (event.params.tokenSold.toHexString() === tokens[0]){
+      if (event.params.tokenSold.equals(Address.fromHexString(tokens[0]))){
           soldId = 0
           boughtId = 1
       }
