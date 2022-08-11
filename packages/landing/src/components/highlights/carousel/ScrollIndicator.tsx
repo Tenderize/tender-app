@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FC, useCallback } from "react";
 import styled from "styled-components";
 
@@ -13,9 +14,14 @@ export const ScrollIndicator: FC<{
         const isActive = index === active;
         return (
           <div key={index}>
-            <Bubble
-              style={{ background: isActive ? "transparent" : "grey", borderColor: isActive ? "grey" : "transparent" }}
-            />
+            <Link href={getHref(index)} passHref>
+              <Bubble
+                style={{
+                  background: isActive ? "transparent" : "grey",
+                  borderColor: isActive ? "grey" : "transparent",
+                }}
+              />
+            </Link>
           </div>
         );
       });
@@ -35,6 +41,35 @@ export const ScrollIndicator: FC<{
       {renderDots()}
     </div>
   );
+};
+
+const getHref = (index: number) => {
+  switch (index) {
+    case 0: {
+      return "#intro";
+    }
+    case 1: {
+      return "#deployments";
+    }
+    case 2: {
+      return "#defi";
+    }
+    case 3: {
+      return "#staking";
+    }
+    case 4: {
+      return "#rewards";
+    }
+    case 5: {
+      return "#lockups";
+    }
+    case 6: {
+      return "#blog";
+    }
+    default: {
+      return "#intro";
+    }
+  }
 };
 
 const Bubble = styled.a`
