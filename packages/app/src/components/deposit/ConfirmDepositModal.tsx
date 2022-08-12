@@ -25,6 +25,7 @@ import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { isPendingTransaction } from "utils/transactions";
 import { TransactionStatus } from "@usedapp/core";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
+import { useCalcDepositOut } from "utils/tenderDepositHooks";
 
 type Props = {
   show: boolean;
@@ -63,6 +64,8 @@ const ConfirmDepositModal: FC<Props> = ({
       setConfirmStatus("None");
     }
   }, [show]);
+
+  const tokenOut = useCalcDepositOut(protocolName, utils.formatUnits(utils.parseUnits(tokenAmount, "ether"), "wei"));
 
   const isGRT = symbol === "GRT";
 
@@ -119,7 +122,7 @@ const ConfirmDepositModal: FC<Props> = ({
                         readOnly
                         id="formDepositReceive"
                         placeholder={"0"}
-                        value={isGRT ? Number.parseInt(tokenAmount) * 0.995 : tokenAmount}
+                        value={weiToEthWithDecimals(tokenOut, 6)}
                         style={{ textAlign: "right", padding: "20px 50px" }}
                         icon={
                           <Box pad="xsmall" direction="row" align="center" gap="small">
