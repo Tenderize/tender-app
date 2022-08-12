@@ -43,8 +43,6 @@ type Props = {
   onDismiss: () => void;
   usePermit: boolean;
   owner: string | null | undefined;
-  slippage: number;
-  setSlippage: (v: number) => void;
 };
 
 const ConfirmSwapModal: FC<Props> = ({
@@ -61,8 +59,6 @@ const ConfirmSwapModal: FC<Props> = ({
   onDismiss,
   usePermit,
   owner,
-  slippage,
-  setSlippage,
 }) => {
   const staker = stakers[protocolName];
   const symbol = staker.symbol;
@@ -70,6 +66,7 @@ const ConfirmSwapModal: FC<Props> = ({
   const bwTenderLogo = `/${staker.bwTenderLogo}`;
 
   const [confirmStatus, setConfirmStatus] = useState<"None" | "Waiting" | "Submitted" | "Success">("None");
+  const [slippage, setSlippage] = useState(2);
 
   const tokenAmount = utils.parseEther(sendTokenAmount === "" ? "0.0" : sendTokenAmount);
   const executionPrice = getExecutionPrice(

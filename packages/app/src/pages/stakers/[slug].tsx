@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
-import { ChainId, Config, DAppProvider, useEthers, useTokenBalance, Arbitrum, Mainnet } from "@usedapp/core";
+import {
+  ChainId,
+  Config,
+  DAppProvider,
+  useEthers,
+  useTokenBalance,
+  Arbitrum,
+  ArbitrumRinkeby,
+  Mainnet,
+  Rinkeby,
+} from "@usedapp/core";
 import { addresses } from "@tender/contracts/src/index";
 import styled from "styled-components";
 import Deposit from "../../components/deposit";
@@ -238,13 +248,15 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
 export const getStaticProps = async () => {
   const CHAIN_URL_MAPPING = {
     [ChainId.Mainnet]: process.env.RPC_ETHEREUM ?? "",
+    [ChainId.Rinkeby]: process.env.RPC_ETHEREUM_RINKEBY ?? "",
     [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
+    [ChainId.ArbitrumRinkeby]: process.env.RPC_ARBITRUM_RINKEBY ?? "",
   };
 
   const config: TenderizeConfig = {
     portisApiKey: process.env.PORTIS_API_KEY ?? "",
     chainUrlMapping: CHAIN_URL_MAPPING ?? "",
-    supportedChains: [Arbitrum.chainId, Mainnet.chainId],
+    supportedChains: [ArbitrumRinkeby.chainId, Mainnet.chainId, Arbitrum.chainId, Rinkeby.chainId],
   };
 
   return {

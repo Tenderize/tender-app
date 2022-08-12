@@ -34,7 +34,6 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
   const [isSendingToken, setIsSendingToken] = useState(false);
   const [sendTokenAmount, setSendTokenAmount] = useState("");
   const [receiveTokenAmount, setReceiveTokenAmount] = useState("");
-  const [slippage, setSlippage] = useState(2);
   const { account } = useEthers();
 
   const tenderTokenSymbol = `t${tokenSymbol}`;
@@ -75,7 +74,7 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
     sendTokenAmount,
     calcOutGivenIn
   );
-  const usePermit = (): boolean => {
+  const canUsePermit = () => {
     if (isSafeContext) return false;
     // if underlying token check if it has permit support
     if (isSendingToken) return hasPermit && !isTokenApproved;
@@ -211,10 +210,8 @@ const Swap: FC<Props> = ({ tokenSymbol, tokenBalance, tenderTokenBalance, protoc
         tokenAddress={sendTokenAddress}
         priceImpact={priceImpact}
         protocolName={protocolName}
-        usePermit={usePermit()}
+        usePermit={canUsePermit()}
         owner={account}
-        slippage={slippage}
-        setSlippage={setSlippage}
       />
     </Box>
   );
