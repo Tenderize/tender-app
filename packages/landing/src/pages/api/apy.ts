@@ -1,12 +1,6 @@
 import { NextApiResponse } from "next";
 import { ChainId } from "@usedapp/core";
-import {
-  Subgraph,
-  SubgraphForLanding,
-  Queries,
-  getUnixTimestampMonthAgo,
-  calculateAPY,
-} from "@tender/shared/src/index";
+import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampQuarter, calculateAPY } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
 import { isProduction } from "@tender/shared/src/data/stakers";
 
@@ -21,7 +15,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
 
     res.status(200).json(calculateAPY(data));
   } else {
-    const monthAgo = getUnixTimestampMonthAgo();
+    const monthAgo = getUnixTimestampQuarter();
     try {
       const { data: ethereumData } = await Subgraph.query<Queries.TenderizerDaysType>({
         query: Queries.GetTenderizerDays,
