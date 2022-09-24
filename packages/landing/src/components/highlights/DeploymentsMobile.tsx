@@ -29,7 +29,7 @@ export const DeploymentsMobile: FC = () => {
         size="medium"
         style={{ fontWeight: 500 }}
       >
-        Liquid staking tokens pegged 1:1 to your staked assets
+        Liquid staking tokens mapped 1:1 to your staked assets
       </Paragraph>
       <Paragraph textAlign="center" margin={{ vertical: "small", horizontal: "medium" }} size="medium">
         TenderTokens automatically compound staking rewards which reflects directly in your wallet
