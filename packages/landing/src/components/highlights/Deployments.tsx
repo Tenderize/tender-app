@@ -84,14 +84,13 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
             }}
             size={screenToFontSize(screenSize)}
           >
-            Tender Tokens
+            TenderTokens
           </Heading>
           <Paragraph margin={{ top: "medium" }} size={"large"} style={{ fontWeight: 500 }}>
-            Liquid staking derivatives pegged 1:1 to your staked assets
+            Liquid staking tokens pegged 1:1 to your staked assets
           </Paragraph>
           <Paragraph margin={{ top: "small" }} size={"medium"}>
-            Your TenderToken balance will increase as Tenderize earns staking rewards so you earn yield simply by
-            holding them.
+            TenderTokens automatically compound staking rewards which reflects directly in your wallet
           </Paragraph>
         </Box>
       </Grid>
