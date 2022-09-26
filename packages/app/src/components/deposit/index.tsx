@@ -7,7 +7,7 @@ import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
-import { getUnixTimestampMonthAgo, InfoCard, Queries, stakers, calculateAPY } from "@tender/shared/src/index";
+import { getUnixTimestampQuarter, InfoCard, Queries, stakers, calculateAPY } from "@tender/shared/src/index";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -45,7 +45,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
     query: Queries.GetTenderizerDays,
-    variables: { from: getUnixTimestampMonthAgo() },
+    variables: { from: getUnixTimestampQuarter() },
     context: { chainId: requiredChain },
   });
 
