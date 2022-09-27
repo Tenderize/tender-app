@@ -90,7 +90,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
             Liquid staking tokens mapped 1:1 to your staked assets
           </Paragraph>
           <Paragraph margin={{ top: "small" }} size={"medium"}>
-            TenderTokens automatically compound staking rewards which reflects directly in your wallet
+            TenderTokens automatically compound staking rewards, which reflects directly in your wallet
           </Paragraph>
         </Box>
       </Grid>
