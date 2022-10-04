@@ -1,6 +1,6 @@
-import { useContractFunction, useEthers } from "@usedapp/core";
+import { useCall, useContractFunction, useEthers } from "@usedapp/core";
 import { contracts, addresses } from "@tender/contracts/src/index";
-import { BigNumber } from "ethers";
+import { BigNumber, constants } from "ethers";
 import { stakers } from "@tender/shared/src/index";
 import { getDeadline } from "./tenderSwapHooks";
 import { hasPermit } from "./context";
@@ -47,4 +47,15 @@ export const useDeposit = (protocolName: ProtocolName) => {
   };
 
   return { deposit, tx: hasPermit(protocolName) ? depositWithPermitTx : depositTx };
+};
+
+export const useCalcDepositOut = (protocolName: ProtocolName, amount: string) => {
+  const result = useCall(
+    protocolName && {
+      contract: contracts[protocolName].tenderizer,
+      method: "calcDepositOut",
+      args: [amount],
+    }
+  );
+  return result?.value?.[0] ?? constants.Zero;
 };

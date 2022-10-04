@@ -43,12 +43,14 @@ const TokenCardMobile: FC<Props> = ({ neonLogo, symbol, title, apy, tvl, availab
           {available ? (
             <>
               <ApyContent apy={apy} />
-              <Text size="large" weight="bold">
-                <Text size="medium">{formatCompactCurrency(tvl)}</Text>
-                <Text style={{ opacity: 0.5 }} size="small">
-                  &nbsp;TVL
+              {tvl !== 0 && (
+                <Text size="large" weight="bold">
+                  <Text size="medium">{formatCompactCurrency(tvl)}</Text>
+                  <Text style={{ opacity: 0.5 }} size="small">
+                    &nbsp;TVL
+                  </Text>
                 </Text>
-              </Text>
+              )}
             </>
           ) : (
             <Text size="medium">Coming Soon</Text>

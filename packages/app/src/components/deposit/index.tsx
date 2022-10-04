@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, MouseEventHandler, useEffect, useState } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
 import { useIsGnosisSafe } from "utils/context";
 import { ArbitrumRinkeby, Rinkeby, useEthers } from "@usedapp/core";
@@ -7,7 +7,7 @@ import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
-import { getUnixTimestampMonthAgo, InfoCard, Queries, stakers, calculateAPY } from "@tender/shared/src/index";
+import { getUnixTimestampQuarter, InfoCard, Queries, stakers, calculateAPY } from "@tender/shared/src/index";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -19,6 +19,7 @@ import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { useDeposit } from "utils/tenderDepositHooks";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
+import ConfirmDepositModal from "./ConfirmDepositModal";
 
 type Props = {
   protocolName: ProtocolName;
@@ -29,35 +30,32 @@ type Props = {
 };
 
 const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTokenBalance }) => {
-  const [depositInput, setDepositInput] = useState("");
   const { account, chainId } = useEthers();
+  const [depositInput, setDepositInput] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const requiredChain = stakers[protocolName].chainId;
-
-  // whether supported asset (e.g. LPT) has ERC20 permit support
   const hasPermit = stakers[protocolName].hasPermit;
-
   const subgraphName = stakers[protocolName].subgraphId;
+
   const { data, refetch } = useQuery<Queries.UserDeployments>(Queries.GetUserDeployments, {
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
     context: { chainId: requiredChain },
   });
 
+  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
+    query: Queries.GetTenderizerDays,
+    variables: { from: getUnixTimestampQuarter() },
+    context: { chainId: requiredChain },
+  });
+
+  const protocolAPYs = Object.values(calculateAPY(apyData));
+  const apy = protocolAPYs.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)?.apy ?? "";
+
   // update my stake when tokenBalance changes
   useEffect(() => {
     refetch();
   }, [refetch, tokenBalance]);
-
-  const monthAgo = getUnixTimestampMonthAgo();
-
-  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
-    query: Queries.GetTenderizerDays,
-    variables: { from: monthAgo },
-    context: { chainId: requiredChain },
-  });
-  const { graph, livepeer, audius, matic } = calculateAPY(apyData);
-  const stakersWithAPY = [graph, livepeer, audius, matic];
-  const apy = stakersWithAPY.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)?.apy ?? "";
 
   // update my stake when chainId changes
   useEffect(() => {
@@ -82,10 +80,11 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   const isSafeContext = useIsGnosisSafe();
 
-  const depositTokens = async (e: any) => {
+  const depositTokens: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
     await deposit(utils.parseEther(depositInput || "0"), isSafeContext);
     setDepositInput("");
+    setShowConfirm(false);
   };
 
   const isTokenApproved = useIsTokenApproved(
@@ -168,7 +167,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                       depositInput.toString() === "0" ||
                       isPendingTransaction(depositTx)
                     }
-                    onClick={depositTokens}
+                    onClick={() => setShowConfirm(true)}
                     label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "Stake"}
                   />
                 </Box>
@@ -193,6 +192,20 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           <Faucet symbol={symbol} protocolName={protocolName} />
         </Box>
       )}
+      <ConfirmDepositModal
+        show={showConfirm}
+        onDismiss={() => {
+          setShowConfirm(false);
+          setDepositInput("");
+        }}
+        tokenBalance={tokenBalance}
+        tenderTokenBalance={tenderTokenBalance}
+        tokenAmount={depositInput}
+        setTokenAmount={setDepositInput}
+        protocolName={protocolName}
+        deposit={depositTokens}
+        tx={depositTx}
+      />
     </Box>
   );
 };

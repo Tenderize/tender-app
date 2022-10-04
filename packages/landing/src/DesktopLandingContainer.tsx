@@ -1,3 +1,4 @@
+import { Subscribe } from "components/Subscribe";
 import { ResponsiveContext } from "grommet";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
@@ -43,7 +44,6 @@ const DesktopLandingContainer: FC = () => {
         style={{
           height: "100vh",
           flexDirection: "column",
-          scrollSnapType: "y mandatory",
           alignItems: "center",
           overflowY: "auto",
           scrollBehavior: "smooth",
@@ -56,6 +56,7 @@ const DesktopLandingContainer: FC = () => {
           {(size: string) => (
             <>
               <Intro screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={0} />
+              <Subscribe isMobile={false} />
               <Deployments screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={1} />
               <ConnectWithDeFi screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={2} />
               <EasyStaking screenSize={size as ScreenSize} setVisibleIndex={setVisibleIndex} index={3} />

@@ -51,9 +51,9 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
   return stakersWithAPYMap;
 };
 
-export const getUnixTimestampMonthAgo = () => {
+export const getUnixTimestampQuarter = () => {
   const d = new Date();
-  d.setMonth(d.getMonth() - 1);
+  d.setMonth(d.getMonth() - 3);
   d.setHours(0, 0, 0, 0);
   return d.getTime() / 1000;
 };

@@ -10,7 +10,7 @@ export type Staker = {
   bwTenderLogo: string;
   neonLogo: string;
   path: string;
-  symbol: string;
+  symbol: "LPT" | "GRT" | "MATIC" | "AUDIO";
   chainId: ChainId;
   hasPermit: boolean;
   apy: string;

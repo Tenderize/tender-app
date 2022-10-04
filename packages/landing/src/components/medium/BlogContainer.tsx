@@ -19,9 +19,14 @@ export const BlogContainer: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: nu
     }
 
     return blog.posts.map((post, index) => (
-      <a style={{ textDecoration: "none", color: "white" }} href={post.link} rel="noreferrer" target="_blank">
+      <a
+        key={index}
+        style={{ textDecoration: "none", color: "white" }}
+        href={post.link}
+        rel="noreferrer"
+        target="_blank"
+      >
         <BlogBox
-          key={index}
           style={{
             background: "rgba(15, 15, 15, 0.3)",
             backdropFilter: "blur(35px)",
