@@ -36,7 +36,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
     const normalizeApys = apysBasedOnSingleEvents.slice(1).map(o => o.apy * o.timeDiff)
     const final = normalizeApys.reduce((p, n) => p + n) / totalTimePassed
 
-    const apy = final ? (final * 100).toFixed(2) : 0;
+    const apy = final ? (final * 100).toFixed(2) : "0";
     return {
       ...staker,
       apy,
@@ -45,6 +45,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
 
   const stakersWithAPYMap = {} as Record<ProtocolName, Staker>;
   for (const staker of stakersWithAPY) {
+    if (staker == 0) continue;
     stakersWithAPYMap[staker.name] = staker;
   }
   return stakersWithAPYMap;
