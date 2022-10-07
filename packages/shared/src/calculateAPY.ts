@@ -45,7 +45,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
 
   const stakersWithAPYMap = {} as Record<ProtocolName, Staker>;
   for (const staker of stakersWithAPY) {
-    if (staker == 0) continue;
+    if (staker === 0) continue;
     stakersWithAPYMap[staker.name] = staker;
   }
   return stakersWithAPYMap;
