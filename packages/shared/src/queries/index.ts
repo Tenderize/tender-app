@@ -109,6 +109,7 @@ export const GetTenderizerDays = gql`
         timestamp
         rewards
         oldPrincipal
+        currentPrincipal
       }
     }
   }
