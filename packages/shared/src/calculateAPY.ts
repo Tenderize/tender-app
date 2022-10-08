@@ -15,7 +15,6 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
     const rewardsClaimedEvents = tenderizerData.rewardsClaimedEvents.filter((item) => item.rewards !== "0");
     let totalTimePassed = 0;
     const apysBasedOnSingleEvents: Array<apycalc> = rewardsClaimedEvents.map((value, index) => {
-      console.log(value);
       // we need the first value's timestamp but not the rewards
       if (index === 0) {
         return { apy: 0, timeDiff: 0 };
@@ -32,8 +31,8 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
       return { apy: apy || 0, timeDiff: timeDiff || 0 };
     });
 
-    const normalizeApys = apysBasedOnSingleEvents.slice(1).map((o) => o.apy * o.timeDiff);
-    const final = normalizeApys.reduce((p, n) => p + n) / totalTimePassed;
+    const normalizeApys = apysBasedOnSingleEvents.map((o) => o.apy * o.timeDiff);
+    const final = normalizeApys.length > 0 ? normalizeApys.reduce((p, n) => p + n) / totalTimePassed : 0;
 
     const apy = final ? (final * 100).toFixed(2) : "0";
     return {
