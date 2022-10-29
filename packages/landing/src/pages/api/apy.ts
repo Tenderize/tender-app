@@ -2,7 +2,6 @@ import { NextApiResponse } from "next";
 import { ChainId } from "@usedapp/core";
 import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampQuarter, calculateAPY } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
-import { isProduction } from "@tender/shared/src/data/stakers";
 
 const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
   res.setHeader("Cache-Control", `public, s-maxage=${60 * 60}, stale-while-revalidate=${60 * 60 * 2}`);
@@ -20,12 +19,12 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
       const { data: ethereumData } = await Subgraph.query<Queries.TenderizerDaysType>({
         query: Queries.GetTenderizerDays,
         variables: { from: monthAgo },
-        context: { chainId: isProduction() ? ChainId.Mainnet : ChainId.Rinkeby },
+        context: { chainId: ChainId.Mainnet },
       });
       const { data: arbitrumData } = await SubgraphForLanding.query<Queries.TenderizerDaysType>({
         query: Queries.GetTenderizerDays,
         variables: { from: monthAgo },
-        context: { chainId: isProduction() ? ChainId.Arbitrum : ChainId.ArbitrumRinkeby },
+        context: { chainId: ChainId.Arbitrum },
       });
 
       const data = { tenderizers: [...ethereumData.tenderizers, ...arbitrumData.tenderizers] };

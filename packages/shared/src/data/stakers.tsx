@@ -23,10 +23,6 @@ export const isProduction = () => {
   return process.env.NEXT_PUBLIC_BUILD_ENV === "prod";
 };
 
-const getChainId = (main: ChainId, test: ChainId) => {
-  return isProduction() ? main : test;
-};
-
 export const stakers: Record<ProtocolName, Staker> = {
   livepeer: {
     name: "livepeer",
@@ -39,7 +35,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     bwTenderLogo: "tenderLPT.svg",
     neonLogo: "landing/neon-lpt.png",
     symbol: "LPT",
-    chainId: getChainId(ChainId.Arbitrum, ChainId.ArbitrumRinkeby),
+    chainId: ChainId.Arbitrum,
     hasPermit: true,
     apy: "0",
     tvl: 0,
@@ -55,7 +51,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     bwTenderLogo: "tenderGRT.svg",
     neonLogo: "landing/neon-grt.png",
     symbol: "GRT",
-    chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
+    chainId: ChainId.Mainnet,
     hasPermit: false,
     apy: "0",
     tvl: 0,
@@ -71,7 +67,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     bwTenderLogo: "tenderMATIC.svg",
     neonLogo: "landing/neon-matic.png",
     symbol: "MATIC",
-    chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
+    chainId: ChainId.Mainnet,
     hasPermit: false,
     apy: "0",
     tvl: 0,
@@ -87,7 +83,7 @@ export const stakers: Record<ProtocolName, Staker> = {
     bwTenderLogo: "tenderAUDIO.svg",
     neonLogo: "landing/neon-audio.png",
     symbol: "AUDIO",
-    chainId: getChainId(ChainId.Mainnet, ChainId.Rinkeby),
+    chainId: ChainId.Mainnet,
     hasPermit: true,
     apy: "0",
     tvl: 0,
