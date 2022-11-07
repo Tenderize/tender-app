@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler, useEffect, useState } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
 import { useIsGnosisSafe } from "utils/context";
-import { ArbitrumRinkeby, Rinkeby, useEthers } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils, constants } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import { useQuery } from "@apollo/client";
@@ -13,7 +13,6 @@ import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { isPendingTransaction } from "utils/transactions";
 import { isLargerThanMax, isPositive, useBalanceValidation } from "utils/inputValidation";
-import Faucet from "components/faucet";
 import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
 import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { useDeposit } from "utils/tenderDepositHooks";
@@ -30,7 +29,7 @@ type Props = {
 };
 
 const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTokenBalance }) => {
-  const { account, chainId } = useEthers();
+  const { account } = useEthers();
   const [depositInput, setDepositInput] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -176,22 +175,6 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
           </Form>
         )}
       </Box>
-      {chainId === requiredChain && (chainId === Rinkeby.chainId || chainId === ArbitrumRinkeby.chainId) && (
-        <Box
-          margin={{ top: "medium" }}
-          alignSelf="center"
-          width="large"
-          pad={{ horizontal: "large", top: "medium" }}
-          border={{ side: "top" }}
-          justify="center"
-          align="center"
-          direction="column"
-          gap="medium"
-        >
-          <Text>Get Testnet Tokens</Text>
-          <Faucet symbol={symbol} protocolName={protocolName} />
-        </Box>
-      )}
       <ConfirmDepositModal
         show={showConfirm}
         onDismiss={() => {
