@@ -2,7 +2,7 @@ import { NextApiResponse } from "next";
 import { ChainId } from "@usedapp/core";
 import { Subgraph, SubgraphForLanding, Queries } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
-import { isProduction, ProtocolName, Staker, stakers } from "@tender/shared/src/data/stakers";
+import { ProtocolName, Staker, stakers } from "@tender/shared/src/data/stakers";
 import { TVLData } from "@tender/shared/src/queries";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { BigNumber, utils } from "ethers";
@@ -55,7 +55,7 @@ const getTvl = async (
 ): Promise<Record<ProtocolName, Pick<Staker, "name" | "tvl">>> => {
   const result = await apolloClient.query<TVLData>({
     query: Queries.GetTVL,
-    context: { chainId: isProduction() ? productionChain : ChainId.Rinkeby },
+    context: { chainId: productionChain },
   });
   const pricesResponse = await fetch(
     `https://api.coingecko.com/api/v3/simple/price?ids=${Object.values(coinGeckoApiIds).join("%2C")}&vs_currencies=usd`
