@@ -29,6 +29,7 @@ import { useFarm } from "utils/tenderFarmHooks";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
+import { ERC20 } from "@tender/contracts/gen/types";
 
 type Props = {
   protocolName: ProtocolName;
@@ -126,7 +127,7 @@ const Farm: FC<Props> = ({ protocolName, symbol, tokenBalance }) => {
                 <ApproveToken
                   symbol={symbol}
                   spender={addresses[protocolName].tenderizer}
-                  token={contracts[protocolName].token}
+                  token={contracts[protocolName].lpToken as unknown as ERC20}
                   show={!isTokenApproved && isSafeContext}
                   chainId={stakers[protocolName].chainId}
                 />
