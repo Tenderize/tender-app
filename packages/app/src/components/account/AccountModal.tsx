@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { useEthers, useEtherBalance, getChainById, useTokenBalance } from "@usedapp/core";
 import { addresses } from "@tender/contracts/src/index";
 import { TransactionsList } from "../transactions";
-import { formatEther } from "@ethersproject/units";
-import { BigNumber, constants } from "ethers";
+import { constants } from "ethers";
 import { ShareIcon } from "../transactions/Icons";
 import { Link } from "../base";
 import {
@@ -29,14 +28,7 @@ import {
 import { Staker, stakers } from "@tender/shared/src/index";
 import { AddToken } from "./AddToken";
 import { FormClose } from "grommet-icons";
-
-const formatter = new Intl.NumberFormat("en-us", {
-  minimumFractionDigits: 4,
-  maximumFractionDigits: 4,
-});
-
-const formatBalance = (balance: BigNumber | undefined) =>
-  formatter.format(parseFloat(formatEther(balance ?? BigNumber.from("0"))));
+import { formatBalance } from "components/formatting";
 
 type AccountModalProps = {
   showModal: boolean;

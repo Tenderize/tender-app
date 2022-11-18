@@ -17,7 +17,7 @@ import {
 } from "grommet";
 
 import { FormClose } from "grommet-icons";
-import { stakers, theme } from "@tender/shared/src/index";
+import { stakers } from "@tender/shared/src/index";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { useBalanceValidation } from "utils/inputValidation";
 import { AmountInputFooter } from "components/AmountInputFooter";
@@ -26,8 +26,7 @@ import { isPendingTransaction } from "utils/transactions";
 import { TransactionStatus } from "@usedapp/core";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { useCalcDepositOut } from "utils/tenderDepositHooks";
-import styled from "styled-components";
-import { normalizeColor } from "grommet/utils";
+import { BrandedALink } from "components/BrandedALink";
 
 type Props = {
   show: boolean;
@@ -142,9 +141,9 @@ const ConfirmDepositModal: FC<Props> = ({
                       <Box>
                         <Text>
                           Notice: staking GRT infers a 0.5%{" "}
-                          <StyledA href="https://thegraph.com/docs/en/network/delegating/#the-delegation-tax">
+                          <BrandedALink href="https://thegraph.com/docs/en/network/delegating/#the-delegation-tax">
                             delegation
-                          </StyledA>{" "}
+                          </BrandedALink>{" "}
                           fee towards the Graph Protocol.
                         </Text>
                       </Box>
@@ -179,8 +178,3 @@ const ConfirmDepositModal: FC<Props> = ({
 };
 
 export default ConfirmDepositModal;
-
-const brandColor = normalizeColor("brand", theme);
-const StyledA = styled.a`
-  color: ${brandColor};
-`;

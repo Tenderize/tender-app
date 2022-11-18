@@ -13,12 +13,14 @@ import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
 import { isPendingTransaction } from "utils/transactions";
 import { isLargerThanMax, isPositive, useBalanceValidation } from "utils/inputValidation";
-import { useIsCorrectChain } from "utils/useEnsureRinkebyConnect";
-import { SwitchNetwork } from "components/account/SwitchNetwork";
 import { useDeposit } from "utils/tenderDepositHooks";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import ConfirmDepositModal from "./ConfirmDepositModal";
+import ChangeChainWarning from "components/ChangeChainWarning";
+import UnstakeModal from "./UnstakeModal";
+import { Lock } from "./types";
+import WithdrawModal from "./WithdrawModal";
 
 type Props = {
   protocolName: ProtocolName;
@@ -32,6 +34,9 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const { account } = useEthers();
   const [depositInput, setDepositInput] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showUnstake, setShowUnstake] = useState(false);
+  const [showWithdraw, setShowWithdraw] = useState(false);
+  const [locks, setLocks] = useState<Lock[]>([]);
 
   const requiredChain = stakers[protocolName].chainId;
   const hasPermit = stakers[protocolName].hasPermit;
@@ -41,6 +46,15 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
     context: { chainId: requiredChain },
   });
+
+  const { data: unstakeEventsData, refetch: refetchUnstakeEvents } = useQuery<Queries.PendingWithdrawals>(
+    Queries.GetPendingWithdrawals,
+    {
+      context: { chainId: requiredChain },
+    }
+  );
+
+  console.log(unstakeEventsData);
 
   const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
     query: Queries.GetTenderizerDays,
@@ -56,16 +70,36 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     refetch();
   }, [refetch, tokenBalance]);
 
-  // update my stake when chainId changes
+  // update when chainId changes
   useEffect(() => {
     refetchAPY();
   }, [refetchAPY, requiredChain]);
 
+  useEffect(() => {
+    refetchUnstakeEvents();
+  }, [refetchUnstakeEvents, requiredChain]);
+
+  useEffect(() => {
+    if (unstakeEventsData != null) {
+      const locks = new Array<Lock>();
+      unstakeEventsData.unstakeEvents.forEach((unstakeEvent) => {
+        const withdrawEvent = unstakeEventsData.withdrawEvents.find(
+          (withdrawEvent) => withdrawEvent.unstakeLockID === unstakeEvent.unstakeLockID
+        );
+        if (withdrawEvent == null) {
+          locks.push({
+            ...unstakeEvent,
+            open: false,
+          });
+        }
+      });
+      setLocks(locks);
+    }
+  }, [unstakeEventsData]);
+
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
   };
-
-  const isCorrectChain = useIsCorrectChain(requiredChain);
 
   const handleInputChange = (e: any) => {
     const val = e.target.value;
@@ -119,11 +153,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
         </Box>
       </Box>
       <Box justify="center" align="center">
-        {!isCorrectChain && account ? (
-          <Box pad={{ vertical: "large" }}>
-            <SwitchNetwork chainId={requiredChain} protocol={stakers[protocolName].title} />
-          </Box>
-        ) : (
+        <ChangeChainWarning protocolName={protocolName}>
           <Form>
             <Box align="center" justify="center">
               <Box width="490px" gap="small" direction="column">
@@ -170,10 +200,16 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                     label={isPendingTransaction(depositTx) ? <LoadingButtonContent label="Staking..." /> : "Stake"}
                   />
                 </Box>
+                {BigNumber.from(tenderTokenBalance).gt(0) && (
+                  <Button secondary fill="horizontal" label="Unstake" onClick={() => setShowUnstake(true)} />
+                )}
+                {locks.length > 0 && (
+                  <Button secondary fill="horizontal" label="Withdraw" onClick={() => setShowWithdraw(true)} />
+                )}
               </Box>
             </Box>
           </Form>
-        )}
+        </ChangeChainWarning>
       </Box>
       <ConfirmDepositModal
         show={showConfirm}
@@ -188,6 +224,18 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
         protocolName={protocolName}
         deposit={depositTokens}
         tx={depositTx}
+      />
+      <UnstakeModal
+        show={showUnstake}
+        protocolName={protocolName}
+        tenderTokenBalance={tenderTokenBalance}
+        onDismiss={() => setShowUnstake(false)}
+      />
+      <WithdrawModal
+        show={showWithdraw}
+        protocolName={protocolName}
+        locks={locks}
+        onDismiss={() => setShowUnstake(false)}
       />
     </Box>
   );

@@ -6,6 +6,18 @@ export type RewardsClaimedEvent = {
   oldPrincipal: string;
 };
 
+export type UnstakeEvent = {
+  tenderizer: string;
+  unstakeLockID: string;
+  amount: string;
+  timestamp: string;
+};
+
+export type PendingWithdrawals = {
+  unstakeEvents: UnstakeEvent[];
+  withdrawEvents: UnstakeEvent[];
+};
+
 export type TenderizerDaysType = {
   tenderizers: {
     id: string;
@@ -46,6 +58,23 @@ export type TVLData = {
     balances: string[];
   }[];
 };
+
+export const GetPendingWithdrawals = gql`
+  query GetTVL @api(contextKey: "chainId") {
+    unstakeEvents {
+      unstakeLockID
+      tenderizer
+      amount
+      timestamp
+    }
+    withdrawEvents {
+      unstakeLockID
+      tenderizer
+      amount
+      timestamp
+    }
+  }
+`;
 
 export const GetUserDeployments = gql`
   query GetUserDeployments($id: ID!) @api(contextKey: "chainId") {
