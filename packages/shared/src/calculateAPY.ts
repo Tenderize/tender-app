@@ -14,6 +14,28 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
     };
     const rewardsClaimedEvents = tenderizerData.rewardsClaimedEvents.filter((item) => item.rewards !== "0");
     let totalTimePassed = 0;
+
+    if (staker.name === "graph") {
+      const start = rewardsClaimedEvents[0].timestamp;
+      const end = rewardsClaimedEvents[rewardsClaimedEvents.length - 1].timestamp;
+      const rewards = rewardsClaimedEvents.reduce((prev, curr) => {
+        return {
+          ...curr,
+          rewards: (Number.parseFloat(prev.rewards) + Number.parseFloat(curr.rewards)).toString(),
+        };
+      }).rewards;
+
+      const rate = Number.parseFloat(rewards) / Number.parseFloat(rewardsClaimedEvents[0].oldPrincipal);
+      const timeDiff = end - start;
+      totalTimePassed += timeDiff;
+      const compoundsPerYear = Math.floor(YEAR_IN_SECONDS / timeDiff);
+      const apy = Math.pow(1 + rate, compoundsPerYear) - 1;
+      return {
+        ...staker,
+        apy: (apy * 100).toFixed(2),
+      };
+    }
+
     const apysBasedOnSingleEvents: Array<apycalc> = rewardsClaimedEvents.map((value, index) => {
       // we need the first value's timestamp but not the rewards
       if (index === 0) {
@@ -35,6 +57,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
     const final = normalizeApys.length > 0 ? normalizeApys.reduce((p, n) => p + n) / totalTimePassed : 0;
 
     const apy = final ? (final * 100).toFixed(2) : "0";
+
     return {
       ...staker,
       apy,
