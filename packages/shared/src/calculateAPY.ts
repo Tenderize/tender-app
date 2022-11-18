@@ -15,7 +15,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
     const rewardsClaimedEvents = tenderizerData.rewardsClaimedEvents.filter((item) => item.rewards !== "0");
     let totalTimePassed = 0;
 
-    if (staker.name === "graph") {
+    if (staker.name === "graph" && rewardsClaimedEvents.length > 0) {
       const start = rewardsClaimedEvents[0].timestamp;
       const end = rewardsClaimedEvents[rewardsClaimedEvents.length - 1].timestamp;
       const rewards = rewardsClaimedEvents.reduce((prev, curr) => {
