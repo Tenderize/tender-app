@@ -50,6 +50,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const { data: unstakeEventsData, refetch: refetchUnstakeEvents } = useQuery<Queries.PendingWithdrawals>(
     Queries.GetPendingWithdrawals,
     {
+      variables: { from: `${account?.toLowerCase()}` },
       context: { chainId: requiredChain },
     }
   );
@@ -235,7 +236,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
         show={showWithdraw}
         protocolName={protocolName}
         locks={locks}
-        onDismiss={() => setShowUnstake(false)}
+        onDismiss={() => setShowWithdraw(false)}
       />
     </Box>
   );

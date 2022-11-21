@@ -59,6 +59,16 @@ export const useUnstake = (protocolName: ProtocolName) => {
   return { unstake, tx: depositTx };
 };
 
+export const useWithdraw = (protocolName: ProtocolName) => {
+  const symbol = stakers[protocolName].symbol;
+
+  const { state: withdrawTx, send: withdraw } = useContractFunction(contracts[protocolName].tenderizer, "withdraw", {
+    transactionName: `Withdraw ${symbol}`,
+  });
+
+  return { withdraw, tx: withdrawTx };
+};
+
 export const useCalcDepositOut = (protocolName: ProtocolName, amount: string) => {
   const result = useCall(
     protocolName && {

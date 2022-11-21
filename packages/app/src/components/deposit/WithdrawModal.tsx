@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Button,
   Box,
@@ -23,6 +23,11 @@ import { stakers } from "@tender/shared/src/index";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { Lock } from "./types";
 import { blockTimestampToDate, formatBalance } from "components/formatting";
+import { abis, addresses } from "@tender/contracts/src";
+import { Tenderizer } from "@tender/contracts/gen/types";
+import { Contract, utils } from "ethers";
+import { useEthers } from "@usedapp/core";
+import { useWithdraw } from "utils/tenderDepositHooks";
 
 type Props = {
   show: boolean;
@@ -34,6 +39,39 @@ type Props = {
 const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
   const staker = stakers[protocolName];
   const symbol = staker.symbol;
+  const [locksUpdated, setLocksUpdated] = useState<Lock[]>([]);
+  const { library } = useEthers();
+
+  const { withdraw } = useWithdraw(protocolName);
+
+  useEffect(() => {
+    const simulateWithdraw = async () => {
+      const updatedLocks = await Promise.all(
+        locks.map(async (lock) => {
+          const tenderizer = addresses[protocolName].tenderizer;
+          const contract = new Contract(
+            tenderizer,
+            new utils.Interface(abis.tenderizer),
+            library?.getSigner()
+          ) as Tenderizer;
+          try {
+            await contract.callStatic.withdraw(lock.unstakeLockID);
+            return {
+              ...lock,
+              open: true,
+            };
+          } catch (error) {
+            return {
+              ...lock,
+              open: false,
+            };
+          }
+        })
+      );
+      setLocksUpdated(updatedLocks);
+    };
+    simulateWithdraw();
+  }, [library, locks]);
 
   return (
     <>
@@ -74,9 +112,9 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {locks.map((lock) => {
+                    {locksUpdated.map((lock) => {
                       return (
-                        <TableRow>
+                        <TableRow key={lock.unstakeLockID}>
                           <TableCell scope="row" border="bottom">
                             <Box pad="small" direction="row" align="center" justify="between">
                               <Box width="medium">
@@ -105,10 +143,12 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                           <TableCell border="bottom">
                             <Button
                               primary
+                              disabled={lock.open === false}
                               style={{ padding: "5px 5px" }}
                               onClick={async (e) => {
                                 e.preventDefault();
-                                //   await addToken(address, symbol, image);
+                                await withdraw(lock.unstakeLockID);
+                                onDismiss();
                               }}
                               label="Withdraw"
                             />

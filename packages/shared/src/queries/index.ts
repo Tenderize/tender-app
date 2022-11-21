@@ -11,6 +11,7 @@ export type UnstakeEvent = {
   unstakeLockID: string;
   amount: string;
   timestamp: string;
+  from: string;
 };
 
 export type PendingWithdrawals = {
@@ -60,18 +61,20 @@ export type TVLData = {
 };
 
 export const GetPendingWithdrawals = gql`
-  query GetTVL @api(contextKey: "chainId") {
-    unstakeEvents {
+  query GetTVL($from: String) @api(contextKey: "chainId") {
+    unstakeEvents(where: { from: $from }) {
       unstakeLockID
       tenderizer
       amount
       timestamp
+      from
     }
-    withdrawEvents {
+    withdrawEvents(where: { from: $from }) {
       unstakeLockID
       tenderizer
       amount
       timestamp
+      from
     }
   }
 `;
