@@ -19,15 +19,21 @@ import {
 } from "grommet";
 
 import { FormClose } from "grommet-icons";
-import { stakers } from "@tender/shared/src/index";
+import { Queries, stakers } from "@tender/shared/src/index";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { Lock } from "./types";
-import { blockTimestampToDate, formatBalance } from "components/formatting";
+import {
+  blockTimestampToDate,
+  daysBetweenBlockTimestamps,
+  daysBetweenDates,
+  formatBalance,
+} from "components/formatting";
 import { abis, addresses } from "@tender/contracts/src";
 import { Tenderizer } from "@tender/contracts/gen/types";
 import { Contract, utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import { useWithdraw } from "utils/tenderDepositHooks";
+import { useQuery } from "@apollo/client";
 
 type Props = {
   show: boolean;
@@ -43,6 +49,22 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
   const { library } = useEthers();
 
   const { withdraw } = useWithdraw(protocolName);
+
+  const requiredChain = stakers[protocolName].chainId;
+  const { data: lastGovUnstakeEvent, refetch: refetchLastGovUnstakeEvent } = useQuery<Queries.LastGovernanceUnstake>(
+    Queries.GetPendingWithdrawals,
+    {
+      variables: {
+        from: getGov(protocolName).toLowerCase(),
+        tenderizer: addresses[protocolName].tenderizer.toLowerCase(),
+      },
+      context: { chainId: requiredChain },
+    }
+  );
+
+  useEffect(() => {
+    refetchLastGovUnstakeEvent();
+  }, [refetchLastGovUnstakeEvent, requiredChain]);
 
   useEffect(() => {
     const simulateWithdraw = async () => {
@@ -80,7 +102,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
           <Card
             flex={false}
             pad={{ vertical: "medium", horizontal: "xlarge" }}
-            width="xlarge"
+            width="large"
             style={{ position: "relative" }}
           >
             <Button
@@ -103,10 +125,13 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                         Asset
                       </TableCell>
                       <TableCell scope="col" border="bottom">
+                        Balance
+                      </TableCell>
+                      <TableCell scope="col" border="bottom">
                         Unstake
                       </TableCell>
                       <TableCell scope="col" border="bottom">
-                        Withdraw Date
+                        Withdraw
                       </TableCell>
                       <TableCell scope="col" border="bottom" />
                     </TableRow>
@@ -116,19 +141,19 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                       return (
                         <TableRow key={lock.unstakeLockID}>
                           <TableCell scope="row" border="bottom">
-                            <Box pad="small" direction="row" align="center" justify="between">
-                              <Box width="medium">
+                            <Box pad="xsmall" direction="row" align="center" gap="small">
+                              <Image height="35" src={`/${staker.bwLogo}`} />
+                              <Text>{symbol}</Text>
+                            </Box>
+                          </TableCell>
+                          <TableCell scope="row" border="bottom">
+                            <Box direction="row" align="center" justify="between">
+                              <Box width="small">
                                 <TextInput
-                                  icon={
-                                    <Box pad="xsmall" direction="row" align="center" gap="small">
-                                      <Image height="35" src={`/${staker.bwLogo}`} />
-                                      <Text>{symbol}</Text>
-                                    </Box>
-                                  }
+                                  style={{ padding: 0 }}
                                   readOnly
                                   plain={true}
                                   focusIndicator={false}
-                                  style={{ textAlign: "right", padding: "20px 50px" }}
                                   value={formatBalance(lock.amount)}
                                 />
                               </Box>
@@ -138,7 +163,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                             <Text>{blockTimestampToDate(lock.timestamp).toLocaleDateString("en-US")}</Text>
                           </TableCell>
                           <TableCell border="bottom">
-                            <Text>{getUnlockDateForProtocol(protocolName, lock.timestamp)}</Text>
+                            <Text>{getUnlockDateForProtocol(protocolName, lock, lastGovUnstakeEvent)}</Text>
                           </TableCell>
                           <TableCell border="bottom">
                             <Button
@@ -170,47 +195,79 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
 
 export default WithdrawModal;
 
-const getUnlockDateForProtocol = (protocolName: ProtocolName, timestamp: string): string => {
+const getUnlockDateForProtocol = (
+  protocolName: ProtocolName,
+  lock: Lock,
+  govUnstakeEvent: Queries.LastGovernanceUnstake | undefined
+): string => {
+  if (lock.open) {
+    return "Ready";
+  }
   switch (protocolName) {
-    case "audius": {
-      const unstakeDate = blockTimestampToDate(timestamp);
-      unstakeDate.setDate(unstakeDate.getDate() + 7);
-      const endDate = new Date(unstakeDate);
-      endDate.setDate(unstakeDate.getDate() + 7);
-      if (endDate < new Date()) {
-        return "Ready to Withdraw";
+    case "graph": {
+      if (govUnstakeEvent != null) {
+        const daysSinceLastGovUnstake = daysBetweenBlockTimestamps(
+          govUnstakeEvent.unstakeEvents[0].timestamp,
+          lock.timestamp
+        );
+        if (lock.unstakeLockID < govUnstakeEvent.unstakeEvents[0].unstakeLockID) {
+          return `${28 - daysSinceLastGovUnstake} days remaining`;
+        } else {
+          return `${28 + 28 - daysSinceLastGovUnstake} days remaining`;
+        }
       } else {
-        return `Between ${unstakeDate.toLocaleDateString("en-US")} and ${unstakeDate.toLocaleDateString("en-US")}`;
+        return "Loading...";
       }
     }
-    case "graph": {
-      const unstakeDate = blockTimestampToDate(timestamp);
-      unstakeDate.setDate(unstakeDate.getDate() + 28);
-      const endDate = new Date(unstakeDate);
-      endDate.setDate(unstakeDate.getDate() + 28);
-      if (endDate < new Date()) {
-        return "Ready to Withdraw";
+    case "audius": {
+      const unstakeDate = blockTimestampToDate(lock.timestamp);
+      const unlockDate = new Date(unstakeDate);
+      unlockDate.setDate(unstakeDate.getDate() + 7);
+      const daysUntilUnlock = daysBetweenDates(unstakeDate, unlockDate);
+      if (daysUntilUnlock < 0) {
+        return "Ready";
       } else {
-        return `Between ${unstakeDate.toLocaleDateString("en-US")} and ${unstakeDate.toLocaleDateString("en-US")}`;
+        return `${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days remaining`;
       }
     }
     case "livepeer": {
-      const unstakeDate = blockTimestampToDate(timestamp);
-      unstakeDate.setDate(unstakeDate.getDate() + 7);
-      if (unstakeDate < new Date()) {
-        return "Ready to Withdraw";
+      const unstakeDate = blockTimestampToDate(lock.timestamp);
+      const unlockDate = new Date(unstakeDate);
+      unlockDate.setDate(unstakeDate.getDate() + 7);
+      const daysUntilUnlock = daysBetweenDates(unstakeDate, unlockDate);
+      if (daysUntilUnlock < 0) {
+        return "Ready";
       } else {
-        return `Approx. ${unstakeDate.toLocaleDateString("en-US")}`;
+        return `${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days remaining`;
       }
     }
     case "matic": {
-      const unstakeDate = blockTimestampToDate(timestamp);
-      unstakeDate.setDate(unstakeDate.getDate() + 3);
-      if (unstakeDate < new Date()) {
-        return "Ready to Withdraw";
+      const unstakeDate = blockTimestampToDate(lock.timestamp);
+      const unlockDate = new Date(unstakeDate);
+      unlockDate.setDate(unstakeDate.getDate() + 3);
+      const daysUntilUnlock = daysBetweenDates(unstakeDate, unlockDate);
+      if (daysUntilUnlock < 0) {
+        return "Ready";
       } else {
-        return `Approx. ${unstakeDate.toLocaleDateString("en-US")}`;
+        return `${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days remaining`;
       }
+    }
+  }
+};
+
+const getGov = (protocolName: ProtocolName): string => {
+  switch (protocolName) {
+    case "livepeer": {
+      return "0xc1cfab553835d74717c4499793eea6ef198a3031";
+    }
+    case "audius": {
+      return "0x5542b58080FEE48dBE6f38ec0135cE9011519d96";
+    }
+    case "graph": {
+      return "0x5542b58080FEE48dBE6f38ec0135cE9011519d96";
+    }
+    case "matic": {
+      return "0x5542b58080FEE48dBE6f38ec0135cE9011519d96";
     }
   }
 };

@@ -19,6 +19,10 @@ export type PendingWithdrawals = {
   withdrawEvents: UnstakeEvent[];
 };
 
+export type LastGovernanceUnstake = {
+  unstakeEvents: UnstakeEvent[];
+};
+
 export type TenderizerDaysType = {
   tenderizers: {
     id: string;
@@ -70,6 +74,18 @@ export const GetPendingWithdrawals = gql`
       from
     }
     withdrawEvents(where: { from: $from }) {
+      unstakeLockID
+      tenderizer
+      amount
+      timestamp
+      from
+    }
+  }
+`;
+
+export const GetGovernanceUnstake = gql`
+  query GetGovernanceUnstake($from: String, $tenderizer: String) @api(contextKey: "chainId") {
+    unstakeEvents(where: { from: $from, tenderizer: $tenderizer }) {
       unstakeLockID
       tenderizer
       amount

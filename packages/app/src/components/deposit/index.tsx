@@ -47,15 +47,13 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
     context: { chainId: requiredChain },
   });
 
-  const { data: unstakeEventsData, refetch: refetchUnstakeEvents } = useQuery<Queries.PendingWithdrawals>(
+  const { data: unstakeEvents, refetch: refetchUnstakeEvents } = useQuery<Queries.PendingWithdrawals>(
     Queries.GetPendingWithdrawals,
     {
       variables: { from: `${account?.toLowerCase()}` },
       context: { chainId: requiredChain },
     }
   );
-
-  console.log(unstakeEventsData);
 
   const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
     query: Queries.GetTenderizerDays,
@@ -81,10 +79,10 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   }, [refetchUnstakeEvents, requiredChain]);
 
   useEffect(() => {
-    if (unstakeEventsData != null) {
+    if (unstakeEvents != null) {
       const locks = new Array<Lock>();
-      unstakeEventsData.unstakeEvents.forEach((unstakeEvent) => {
-        const withdrawEvent = unstakeEventsData.withdrawEvents.find(
+      unstakeEvents.unstakeEvents.forEach((unstakeEvent) => {
+        const withdrawEvent = unstakeEvents.withdrawEvents.find(
           (withdrawEvent) => withdrawEvent.unstakeLockID === unstakeEvent.unstakeLockID
         );
         if (withdrawEvent == null) {
@@ -96,7 +94,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
       });
       setLocks(locks);
     }
-  }, [unstakeEventsData]);
+  }, [unstakeEvents]);
 
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
