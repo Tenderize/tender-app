@@ -206,11 +206,14 @@ const getUnlockDateForProtocol = (
   switch (protocolName) {
     case "graph": {
       if (govUnstakeEvent != null) {
-        const daysSinceLastGovUnstake = daysBetweenBlockTimestamps(
-          govUnstakeEvent.unstakeEvents[0].timestamp,
-          lock.timestamp
-        );
-        if (lock.unstakeLockID < govUnstakeEvent.unstakeEvents[0].unstakeLockID) {
+        const daysSinceLastGovUnstake =
+          govUnstakeEvent.unstakeEvents[0] == null
+            ? 0
+            : daysBetweenBlockTimestamps(govUnstakeEvent.unstakeEvents[0].timestamp, lock.timestamp);
+        if (
+          govUnstakeEvent.unstakeEvents[0] == null ||
+          lock.unstakeLockID < govUnstakeEvent.unstakeEvents[0].unstakeLockID
+        ) {
           return `${28 - daysSinceLastGovUnstake} days remaining`;
         } else {
           return `${28 + 28 - daysSinceLastGovUnstake} days remaining`;
