@@ -12,10 +12,10 @@ Handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
 function getNetworkNameForSubgraph() {
   switch (process.env.SUBGRAPH) {
     case undefined:
-    case "livepeer/livepeer":
+    case "tenderize/tenderize":
       return "mainnet";
-    case "livepeer/livepeer-rinkeby":
-      return "rinkeby";
+    case "tenderize/tenderize-arbitrum":
+      return "arbitrum";
     default:
       return null;
   }

@@ -38,21 +38,17 @@ Replace `paulrberg/create-eth-app` in the package.json script with your subgraph
 
 You may also want to [read more about the hosted service](https://thegraph.com/docs/quick-start#hosted-service).
 
-## Learn More
+## Deploy Subgraph Locally
 
-To learn The Graph, check out the [The Graph documentation](https://thegraph.com/docs).
+1. Install [Docker](https://docs.docker.com) and [Docker Compose](https://docs.docker.com/compose/install/)
+2. Inside `docker-compose.yml`, set the `ethereum` value under the `environment` section to an archive node that has tracing enabled. If you don't have access to an archive node we recommend using [Alchemy](https://alchemyapi.io/).
+3. In the root of this project run `docker-compose up`. This command will look for the `docker-compose.yml` file and automatically provision a server with rust, postgres, and ipfs, and spin up a graph node with a GraphiQL interface at `http://127.0.0.1:8000/`.
 
----
+4. Run `yarn create:local` to create the subgraph
+5. Run `yarn deploy:local` to deploy it
 
-1. Generate types
-2. Build distributable files
-3. Deploy to the remote API
-
-## Learn More
-
-You can learn more in the [The Graph documentation](https://thegraph.com/docs).<br/>
-
-Also consider joining [The Graph Discord server](https://discord.gg/vtvv7FP), where you can seek out help.
+After downloading the latest blocks from Ethereum, you should begin to see smart contract events flying in. Open a GraphiQL browser at
+localhost:8000 to query the Graph Node.s
 
 ## Common Errors
 
@@ -71,7 +67,7 @@ Make sure that you followed the instructions listed above for [yarn auth](#yarn-
 
 ### Failed to Deploy
 
-> ✖ Failed to deploy to Graph node https://api.thegraph.com/deploy/: Invalid account name or access token
+> ✖ Failed to deploy to Graph node <https://api.thegraph.com/deploy/>: Invalid account name or access token
 
 Make sure that you:
 
