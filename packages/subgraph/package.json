@@ -8,17 +8,18 @@
   },
   "license": "MIT",
   "scripts": {
-    "create:local": "graph create tenderize/tenderize --node http://127.0.0.1:8020",
+    "create:local": "graph create tenderize/tenderize-localhost --node http://127.0.0.1:8020",
     "prepare": "node ./templatify.js",
     "prepare:rinkeby": "NETWORK_NAME=rinkeby node ./templatify.js",
     "prepare:arbitrum-rinkeby": "NETWORK_NAME=arbitrum-rinkeby node ./templatify.js",
     "prepare:mainnet": "NETWORK_NAME=mainnet node ./templatify.js",
+    "prepare:localhost": "NETWORK_NAME=localhost node ./templatify.js",
     "auth": "graph auth https://api.thegraph.com/ $GRAPH_ACCESS_TOKEN",
     "build": "graph build",
     "codegen": "graph codegen --output-dir src/types/",
     "deploy": "graph deploy tenderize/tenderize --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:staging": "graph deploy tenderize/tenderize-staging --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy:local": "graph deploy tenderize/tenderize --debug --ipfs http://127.0.0.1:5001 --node http://127.0.0.1:8020"
+    "deploy:local": "graph deploy tenderize/tenderize-localhost --debug --ipfs http://127.0.0.1:5001 --node http://127.0.0.1:8020"
   },
   "devDependencies": {
     "fs-extra": "^10.0.0",

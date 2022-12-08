@@ -16,3 +16,9 @@ arbitrum-rinkeby:
     registry:
       address: "6D0DD63BA7136892154ED57f0F5Fd0080145a385"
       startBlock: 9588525
+localhost:
+  networkName: localhost
+  contracts:
+    registry:
+      address: "b7278A61aa25c888815aFC32Ad3cC52fF24fE575"
+      startBlock: 0
