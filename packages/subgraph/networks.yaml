@@ -22,3 +22,9 @@ arbitrum-one:
     registry:
       address: "87998e0aC7a75f7bac1d5738C997700b0842a42e"
       startBlock: 11600280
+localhost:
+  networkName: localhost
+  contracts:
+    registry:
+      address: "b7278A61aa25c888815aFC32Ad3cC52fF24fE575" # replace with locally deployed registry address
+      startBlock: 0
