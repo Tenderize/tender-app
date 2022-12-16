@@ -1,13 +1,12 @@
-import { FC, MouseEventHandler, useEffect, useState } from "react";
+import { FC, MouseEventHandler, useState } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
 import { useIsGnosisSafe } from "utils/context";
 import { useEthers } from "@usedapp/core";
-import { BigNumber, BigNumberish, utils, constants } from "ethers";
+import { BigNumber, BigNumberish, utils } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
-import { useQuery } from "@apollo/client";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
-import { getUnixTimestampQuarter, InfoCard, Queries, stakers, calculateAPY } from "@tender/shared/src/index";
+import { InfoCard, stakers } from "@tender/shared/src/index";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -19,8 +18,11 @@ import { ProtocolName } from "@tender/shared/src/data/stakers";
 import ConfirmDepositModal from "./ConfirmDepositModal";
 import ChangeChainWarning from "components/ChangeChainWarning";
 import UnstakeModal from "./UnstakeModal";
-import { Lock } from "./types";
 import WithdrawModal from "./WithdrawModal";
+import Faucet from "components/faucet";
+import { useLocks } from "utils/useUnstakeEvents";
+import { useAPY } from "utils/useAPY";
+import { useRewards } from "utils/useRewards";
 
 type Props = {
   protocolName: ProtocolName;
@@ -36,81 +38,21 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
   const [showConfirm, setShowConfirm] = useState(false);
   const [showUnstake, setShowUnstake] = useState(false);
   const [showWithdraw, setShowWithdraw] = useState(false);
-  const [locks, setLocks] = useState<Lock[]>([]);
 
-  const requiredChain = stakers[protocolName].chainId;
   const hasPermit = stakers[protocolName].hasPermit;
-  const subgraphName = stakers[protocolName].subgraphId;
 
-  const { data, refetch } = useQuery<Queries.UserDeployments>(Queries.GetUserDeployments, {
-    variables: { id: `${account?.toLowerCase()}_${subgraphName}` },
-    context: { chainId: requiredChain },
-  });
-
-  const { data: unstakeEvents, refetch: refetchUnstakeEvents } = useQuery<Queries.PendingWithdrawals>(
-    Queries.GetPendingWithdrawals,
-    {
-      variables: { from: `${account?.toLowerCase()}` },
-      context: { chainId: requiredChain },
-    }
-  );
-
-  const { data: apyData, refetch: refetchAPY } = useQuery<Queries.TenderizerDaysType>(Queries.GetTenderizerDays, {
-    query: Queries.GetTenderizerDays,
-    variables: { from: getUnixTimestampQuarter() },
-    context: { chainId: requiredChain },
-  });
-
-  const protocolAPYs = Object.values(calculateAPY(apyData));
-  const apy = protocolAPYs.find((staker) => staker.subgraphId === stakers[protocolName].subgraphId)?.apy ?? "";
-
-  // update my stake when tokenBalance changes
-  useEffect(() => {
-    refetch();
-  }, [refetch, tokenBalance]);
-
-  // update when chainId changes
-  useEffect(() => {
-    refetchAPY();
-  }, [refetchAPY, requiredChain]);
-
-  useEffect(() => {
-    refetchUnstakeEvents();
-  }, [refetchUnstakeEvents, requiredChain]);
-
-  useEffect(() => {
-    if (unstakeEvents != null) {
-      const locks = new Array<Lock>();
-      unstakeEvents.unstakeEvents.forEach((unstakeEvent) => {
-        const withdrawEvent = unstakeEvents.withdrawEvents.find(
-          (withdrawEvent) => withdrawEvent.unstakeLockID === unstakeEvent.unstakeLockID
-        );
-        if (withdrawEvent == null) {
-          locks.push({
-            ...unstakeEvent,
-            open: false,
-          });
-        }
-      });
-      setLocks(locks);
-    }
-  }, [unstakeEvents]);
+  const { locks } = useLocks(stakers[protocolName]);
+  const { apy } = useAPY(stakers[protocolName]);
+  const { rewards } = useRewards(stakers[protocolName], tokenBalance, tenderTokenBalance);
+  const isSafeContext = useIsGnosisSafe();
 
   const maxDeposit = () => {
     setDepositInput(utils.formatEther(tokenBalance.toString()));
   };
 
-  const handleInputChange = (e: any) => {
-    const val = e.target.value;
-    if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
-    setDepositInput(val);
-  };
-
   const { tx: depositTx, deposit } = useDeposit(protocolName);
 
   useResetInputAfterTx(depositTx, setDepositInput);
-
-  const isSafeContext = useIsGnosisSafe();
 
   const depositTokens: MouseEventHandler<HTMLElement> = async (e) => {
     e.preventDefault();
@@ -128,11 +70,6 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   const { validationMessage } = useBalanceValidation(depositInput, tokenBalance);
 
-  const claimedRewards = BigNumber.from(data?.userDeployments?.[0]?.claimedRewards ?? "0");
-  const tenderizerStake = BigNumber.from(data?.userDeployments?.[0]?.tenderizerStake ?? "0");
-  const myRewards = claimedRewards.add(tenderTokenBalance).sub(tenderizerStake);
-  const nonNegativeRewards = myRewards.isNegative() ? constants.Zero : myRewards;
-
   return (
     <Box>
       <Box gap="medium" pad={{ bottom: "medium" }}>
@@ -147,7 +84,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
             />
           </Box>
           <Box>
-            <InfoCard title={`Rewards`} text={`${weiToEthWithDecimals(nonNegativeRewards ?? "0", 3)} t${symbol}`} />
+            <InfoCard title={`Rewards`} text={`${weiToEthWithDecimals(rewards ?? "0", 3)} t${symbol}`} />
           </Box>
         </Box>
       </Box>
@@ -159,7 +96,11 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
                 <FormField fill label="Stake Amount" name="depositAmount">
                   <TextInput
                     value={depositInput}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val && !val.match(/^(\d+\.?\d*|\.\d+)$/)) return;
+                      setDepositInput(val);
+                    }}
                     type="number"
                     icon={
                       <Box pad="xsmall" direction="row" align="center" gap="small">
@@ -209,6 +150,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
             </Box>
           </Form>
         </ChangeChainWarning>
+        <Faucet symbol={symbol} protocolName={protocolName} />
       </Box>
       <ConfirmDepositModal
         show={showConfirm}

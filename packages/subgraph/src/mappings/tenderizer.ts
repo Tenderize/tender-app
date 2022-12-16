@@ -5,6 +5,8 @@ import {
   ProtocolFeeCollectedEvent,
   RewardsClaimedEvent,
   UnstakeEvent,
+  ProcessUnstakesEvent,
+
   WithdrawEvent,
 } from "../types/schema";
 import { 
@@ -12,6 +14,7 @@ import {
   LiquidityFeeCollected,
   ProtocolFeeCollected,
   RewardsClaimed,
+  ProcessUnstakes,
   Unstake,
   Withdraw 
 } from "../types/templates/Tenderizer/Tenderizer"
@@ -122,6 +125,17 @@ export function handleUnstakeEvent(unstakeEvent: Unstake): void {
   event.save()
 }
 
+export function handleProcessUnstakesEvent(processUnstakesEvent: ProcessUnstakes): void {
+  let tenderizerAddress = processUnstakesEvent.address.toHex()
+  // Save raw event
+  let event = new ProcessUnstakesEvent(processUnstakesEvent.transaction.hash.toHex());
+  event.tenderizer = tenderizerAddress
+  event.from = processUnstakesEvent.params.from.toHex()
+  event.node = processUnstakesEvent.params.node.toHex()
+  event.amount = processUnstakesEvent.params.amount
+  event.timestamp = processUnstakesEvent.block.timestamp
+  event.save()
+}
 
 export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizerAddress = withdrawEvent.address.toHex()

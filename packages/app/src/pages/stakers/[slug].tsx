@@ -219,6 +219,8 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   const dappConfig: Config = {
     pollingInterval: 2500,
     readOnlyUrls: props.config?.chainUrlMapping,
+    // readOnlyChainId: ChainId.Hardhat,
+    // multicallAddresses: { 31337: "0x21dF544947ba3E8b3c32561399E88B52Dc8b2823" },
   };
 
   if (props.config == null) return null;
@@ -239,12 +241,13 @@ export const getStaticProps = async () => {
   const CHAIN_URL_MAPPING = {
     [ChainId.Mainnet]: process.env.RPC_ETHEREUM ?? "",
     [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
+    [ChainId.Hardhat]: "http://127.0.0.1:8545" ?? "",
   };
 
   const config: TenderizeConfig = {
     portisApiKey: process.env.PORTIS_API_KEY ?? "",
     chainUrlMapping: CHAIN_URL_MAPPING ?? "",
-    supportedChains: [Mainnet.chainId, Arbitrum.chainId],
+    supportedChains: [Mainnet.chainId, Arbitrum.chainId, ChainId.Hardhat],
   };
 
   return {

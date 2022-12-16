@@ -22,12 +22,7 @@ import { FormClose } from "grommet-icons";
 import { Queries, stakers } from "@tender/shared/src/index";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { Lock } from "./types";
-import {
-  blockTimestampToDate,
-  daysBetweenBlockTimestamps,
-  daysBetweenDates,
-  formatBalance,
-} from "components/formatting";
+import { blockTimestampToDate, daysBetweenDates, formatBalance } from "components/formatting";
 import { abis, addresses } from "@tender/contracts/src";
 import { Tenderizer } from "@tender/contracts/gen/types";
 import { Contract, utils } from "ethers";
@@ -43,6 +38,7 @@ type Props = {
 };
 
 const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
+  const { account } = useEthers();
   const staker = stakers[protocolName];
   const symbol = staker.symbol;
   const [locksUpdated, setLocksUpdated] = useState<Lock[]>([]);
@@ -51,11 +47,11 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
   const { withdraw } = useWithdraw(protocolName);
 
   const requiredChain = stakers[protocolName].chainId;
-  const { data: lastGovUnstakeEvent, refetch: refetchLastGovUnstakeEvent } = useQuery<Queries.LastGovernanceUnstake>(
-    Queries.GetPendingWithdrawals,
+
+  const { data: processUnstakesEvents, refetch: refetchLastGovUnstakeEvent } = useQuery<Queries.ProcessUnstakes>(
+    Queries.GetProcessUnstakes,
     {
       variables: {
-        from: getGov(protocolName).toLowerCase(),
         tenderizer: addresses[protocolName].tenderizer.toLowerCase(),
       },
       context: { chainId: requiredChain },
@@ -64,7 +60,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
 
   useEffect(() => {
     refetchLastGovUnstakeEvent();
-  }, [refetchLastGovUnstakeEvent, requiredChain]);
+  }, [refetchLastGovUnstakeEvent, requiredChain, account]);
 
   useEffect(() => {
     const simulateWithdraw = async () => {
@@ -163,7 +159,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                             <Text>{blockTimestampToDate(lock.timestamp).toLocaleDateString("en-US")}</Text>
                           </TableCell>
                           <TableCell border="bottom">
-                            <Text>{getUnlockDateForProtocol(protocolName, lock, lastGovUnstakeEvent)}</Text>
+                            <Text>{getUnlockDateForProtocol(protocolName, lock, processUnstakesEvents)}</Text>
                           </TableCell>
                           <TableCell border="bottom">
                             <Button
@@ -198,22 +194,27 @@ export default WithdrawModal;
 const getUnlockDateForProtocol = (
   protocolName: ProtocolName,
   lock: Lock,
-  govUnstakeEvent: Queries.LastGovernanceUnstake | undefined
+  processUnstakeEvents: Queries.ProcessUnstakes | undefined
 ): string => {
   if (lock.open) {
     return "Ready";
   }
   switch (protocolName) {
     case "graph": {
-      if (govUnstakeEvent != null) {
-        const daysSinceLastGovUnstake =
-          govUnstakeEvent.unstakeEvents[0] == null
-            ? 0
-            : daysBetweenBlockTimestamps(govUnstakeEvent.unstakeEvents[0].timestamp, lock.timestamp);
-        if (
-          govUnstakeEvent.unstakeEvents[0] == null ||
-          lock.unstakeLockID < govUnstakeEvent.unstakeEvents[0].unstakeLockID
-        ) {
+      if (processUnstakeEvents != null) {
+        const lastProcessUnstake = processUnstakeEvents.processUnstakesEvents.reduce((prev, current) => {
+          if (current.timestamp > prev.timestamp) {
+            return current;
+          } else {
+            return prev;
+          }
+        }, processUnstakeEvents.processUnstakesEvents[0]);
+
+        const daysSinceLastGovUnstake = daysBetweenDates(
+          new Date("2023-01-17T10:30:00.000Z"),
+          blockTimestampToDate(lastProcessUnstake.timestamp)
+        );
+        if (lastProcessUnstake == null || lock.timestamp < lastProcessUnstake.timestamp) {
           return `${28 - daysSinceLastGovUnstake} days remaining`;
         } else {
           return `${28 + 28 - daysSinceLastGovUnstake} days remaining`;
@@ -254,23 +255,6 @@ const getUnlockDateForProtocol = (
       } else {
         return `${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days remaining`;
       }
-    }
-  }
-};
-
-const getGov = (protocolName: ProtocolName): string => {
-  switch (protocolName) {
-    case "livepeer": {
-      return "0xc1cfab553835d74717c4499793eea6ef198a3031";
-    }
-    case "audius": {
-      return "0x5542b58080FEE48dBE6f38ec0135cE9011519d96";
-    }
-    case "graph": {
-      return "0x5542b58080FEE48dBE6f38ec0135cE9011519d96";
-    }
-    case "matic": {
-      return "0x5542b58080FEE48dBE6f38ec0135cE9011519d96";
     }
   }
 };

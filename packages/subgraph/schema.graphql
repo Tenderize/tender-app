@@ -222,6 +222,15 @@ type WithdrawEvent @entity {
   timestamp: BigInt!
 }
 
+type ProcessUnstakesEvent @entity {
+  id: ID!
+  tenderizer: String!
+  from: String!
+  amount: BigInt!
+  node: String!
+  timestamp: BigInt!
+}
+
 type RewardsClaimedEvent @entity {
   id: ID!
   tenderizer: Tenderizer!

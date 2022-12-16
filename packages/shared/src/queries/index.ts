@@ -14,13 +14,21 @@ export type UnstakeEvent = {
   from: string;
 };
 
+export type ProcessUnstakesEvent = {
+  from: string;
+  node: string;
+  tenderizer: string;
+  amount: string;
+  timestamp: string;
+};
+
+export type ProcessUnstakes = {
+  processUnstakesEvents: ProcessUnstakesEvent[];
+};
+
 export type PendingWithdrawals = {
   unstakeEvents: UnstakeEvent[];
   withdrawEvents: UnstakeEvent[];
-};
-
-export type LastGovernanceUnstake = {
-  unstakeEvents: UnstakeEvent[];
 };
 
 export type TenderizerDaysType = {
@@ -83,14 +91,14 @@ export const GetPendingWithdrawals = gql`
   }
 `;
 
-export const GetGovernanceUnstake = gql`
-  query GetGovernanceUnstake($from: String, $tenderizer: String) @api(contextKey: "chainId") {
-    unstakeEvents(where: { from: $from, tenderizer: $tenderizer }) {
-      unstakeLockID
+export const GetProcessUnstakes = gql`
+  query GetProcessUnstakes($tenderizer: String) @api(contextKey: "chainId") {
+    processUnstakesEvents(where: { tenderizer: $tenderizer }) {
+      from
+      node
       tenderizer
       amount
       timestamp
-      from
     }
   }
 `;
