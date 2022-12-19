@@ -15,6 +15,6 @@ export const daysBetweenBlockTimestamps = (timestamp1: string, timestamp2: strin
   return daysBetweenDates(blockTimestampToDate(timestamp1), blockTimestampToDate(timestamp2));
 };
 export const daysBetweenDates = (date1: Date, date2: Date): number => {
-  const diff = date1.getTime() - date2.getTime();
+  const diff = date2.getTime() - date1.getTime();
   return Math.floor(diff / (1000 * 3600 * 24));
 };

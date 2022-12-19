@@ -127,7 +127,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                         Unstake
                       </TableCell>
                       <TableCell scope="col" border="bottom">
-                        Withdraw
+                        Withdraw Estimate
                       </TableCell>
                       <TableCell scope="col" border="bottom" />
                     </TableRow>
@@ -211,8 +211,8 @@ const getUnlockDateForProtocol = (
         }, processUnstakeEvents.processUnstakesEvents[0]);
 
         const daysSinceLastGovUnstake = daysBetweenDates(
-          new Date("2023-01-17T10:30:00.000Z"),
-          blockTimestampToDate(lastProcessUnstake.timestamp)
+          blockTimestampToDate(lastProcessUnstake.timestamp),
+          new Date()
         );
         if (lastProcessUnstake == null || lock.timestamp < lastProcessUnstake.timestamp) {
           return `${28 - daysSinceLastGovUnstake} days remaining`;
