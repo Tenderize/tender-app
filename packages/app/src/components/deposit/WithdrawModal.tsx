@@ -124,10 +124,13 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                         Balance
                       </TableCell>
                       <TableCell scope="col" border="bottom">
-                        Unstake
+                        ID
                       </TableCell>
                       <TableCell scope="col" border="bottom">
-                        Withdraw Estimate
+                        Date
+                      </TableCell>
+                      <TableCell style={{whiteSpace: "nowrap"}} scope="col" border="bottom">
+                        Time Left
                       </TableCell>
                       <TableCell scope="col" border="bottom" />
                     </TableRow>
@@ -137,13 +140,13 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                       return (
                         <TableRow key={lock.unstakeLockID}>
                           <TableCell scope="row" border="bottom">
-                            <Box pad="xsmall" direction="row" align="center" gap="small">
-                              <Image height="35" src={`/${staker.bwLogo}`} />
+                            <Box pad="none" direction="row" align="center" >
                               <Text>{symbol}</Text>
                             </Box>
                           </TableCell>
                           <TableCell scope="row" border="bottom">
-                            <Box direction="row" align="center" justify="between">
+                            <Box direction="row" align="center" justify="between" gap="small">
+                              <Image height="35" src={`/${staker.bwLogo}`} />
                               <Box width="small">
                                 <TextInput
                                   style={{ padding: 0 }}
@@ -156,10 +159,13 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                             </Box>
                           </TableCell>
                           <TableCell border="bottom">
+                            <Text>{lock.unstakeLockID}</Text>
+                          </TableCell>
+                          <TableCell border="bottom">
                             <Text>{blockTimestampToDate(lock.timestamp).toLocaleDateString("en-US")}</Text>
                           </TableCell>
                           <TableCell border="bottom">
-                            <Text>{getUnlockDateForProtocol(protocolName, lock, processUnstakesEvents)}</Text>
+                            <Text style={{whiteSpace: "nowrap"}}>{getUnlockDateForProtocol(protocolName, lock, processUnstakesEvents)}</Text>
                           </TableCell>
                           <TableCell border="bottom">
                             <Button
@@ -210,14 +216,14 @@ const getUnlockDateForProtocol = (
           }
         }, processUnstakeEvents.processUnstakesEvents[0]);
 
-        const daysSinceLastGovUnstake = daysBetweenDates(
+        const daysSinceProcessUnstake = daysBetweenDates(
           blockTimestampToDate(lastProcessUnstake.timestamp),
           new Date()
         );
         if (lastProcessUnstake == null || lock.timestamp < lastProcessUnstake.timestamp) {
-          return `${28 - daysSinceLastGovUnstake} days remaining`;
+          return `~ ${28 - daysSinceProcessUnstake} days`;
         } else {
-          return `${28 + 28 - daysSinceLastGovUnstake} days remaining`;
+          return `~ ${28 + 28 - daysSinceProcessUnstake} days`;
         }
       } else {
         return "Loading...";
@@ -227,33 +233,33 @@ const getUnlockDateForProtocol = (
       const unstakeDate = blockTimestampToDate(lock.timestamp);
       const unlockDate = new Date(unstakeDate);
       unlockDate.setDate(unstakeDate.getDate() + 7);
-      const daysUntilUnlock = daysBetweenDates(unstakeDate, unlockDate);
+      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
       if (daysUntilUnlock < 0) {
         return "Ready";
       } else {
-        return `${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days remaining`;
+        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
       }
     }
     case "livepeer": {
       const unstakeDate = blockTimestampToDate(lock.timestamp);
       const unlockDate = new Date(unstakeDate);
       unlockDate.setDate(unstakeDate.getDate() + 7);
-      const daysUntilUnlock = daysBetweenDates(unstakeDate, unlockDate);
+      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
       if (daysUntilUnlock < 0) {
         return "Ready";
       } else {
-        return `${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days remaining`;
+        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
       }
     }
     case "matic": {
       const unstakeDate = blockTimestampToDate(lock.timestamp);
       const unlockDate = new Date(unstakeDate);
       unlockDate.setDate(unstakeDate.getDate() + 3);
-      const daysUntilUnlock = daysBetweenDates(unstakeDate, unlockDate);
+      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
       if (daysUntilUnlock < 0) {
         return "Ready";
       } else {
-        return `${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days remaining`;
+        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
       }
     }
   }

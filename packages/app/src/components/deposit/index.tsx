@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler, useState } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
 import { useIsGnosisSafe } from "utils/context";
-import { useEthers } from "@usedapp/core";
+import { ChainId, useEthers, useNetwork } from "@usedapp/core";
 import { BigNumber, BigNumberish, utils } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import ApproveToken from "components/approve/ApproveToken";
@@ -34,6 +34,7 @@ type Props = {
 
 const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTokenBalance }) => {
   const { account } = useEthers();
+  const network = useNetwork();
   const [depositInput, setDepositInput] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [showUnstake, setShowUnstake] = useState(false);
@@ -150,7 +151,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
             </Box>
           </Form>
         </ChangeChainWarning>
-        <Faucet symbol={symbol} protocolName={protocolName} />
+        {network.network.chainId === ChainId.Hardhat && <Faucet symbol={symbol} protocolName={protocolName} />}
       </Box>
       <ConfirmDepositModal
         show={showConfirm}

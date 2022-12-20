@@ -9,7 +9,7 @@ dataSources:
     network: {{networkName}}
     source:
       startBlock: {{contracts.registry.startBlock}}
-      address: {{contracts.registry.address}}
+      address: "{{contracts.registry.address}}"
       abi: Registry
     mapping:
       kind: ethereum/events
