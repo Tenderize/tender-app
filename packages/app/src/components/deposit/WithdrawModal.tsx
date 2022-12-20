@@ -129,7 +129,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                       <TableCell scope="col" border="bottom">
                         Date
                       </TableCell>
-                      <TableCell style={{whiteSpace: "nowrap"}} scope="col" border="bottom">
+                      <TableCell style={{ whiteSpace: "nowrap" }} scope="col" border="bottom">
                         Time Left
                       </TableCell>
                       <TableCell scope="col" border="bottom" />
@@ -140,7 +140,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                       return (
                         <TableRow key={lock.unstakeLockID}>
                           <TableCell scope="row" border="bottom">
-                            <Box pad="none" direction="row" align="center" >
+                            <Box pad="none" direction="row" align="center">
                               <Text>{symbol}</Text>
                             </Box>
                           </TableCell>
@@ -165,7 +165,9 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                             <Text>{blockTimestampToDate(lock.timestamp).toLocaleDateString("en-US")}</Text>
                           </TableCell>
                           <TableCell border="bottom">
-                            <Text style={{whiteSpace: "nowrap"}}>{getUnlockDateForProtocol(protocolName, lock, processUnstakesEvents)}</Text>
+                            <Text style={{ whiteSpace: "nowrap" }}>
+                              {getUnlockDateForProtocol(protocolName, lock, processUnstakesEvents)}
+                            </Text>
                           </TableCell>
                           <TableCell border="bottom">
                             <Button
