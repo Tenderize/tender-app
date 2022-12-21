@@ -42,7 +42,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
 
   const hasPermit = stakers[protocolName].hasPermit;
 
-  const { locks } = useLocks(stakers[protocolName]);
+  const { locks } = useLocks(stakers[protocolName], tenderTokenBalance);
   const { apy } = useAPY(stakers[protocolName]);
   const { rewards } = useRewards(stakers[protocolName], tokenBalance, tenderTokenBalance);
   const isSafeContext = useIsGnosisSafe();

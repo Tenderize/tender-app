@@ -2,9 +2,10 @@ import { useQuery } from "@apollo/client";
 import { Queries, Staker } from "@tender/shared/src";
 import { useEthers } from "@usedapp/core";
 import { Lock } from "components/deposit/types";
+import { BigNumberish } from "ethers";
 import { useEffect, useState } from "react";
 
-export const useLocks = (staker: Staker) => {
+export const useLocks = (staker: Staker, tenderTokenBalance: BigNumberish) => {
   const { account } = useEthers();
   const requiredChain = staker.chainId;
   const [locks, setLocks] = useState<Lock[]>([]);
@@ -19,7 +20,7 @@ export const useLocks = (staker: Staker) => {
 
   useEffect(() => {
     refetchUnstakeEvents();
-  }, [refetchUnstakeEvents, requiredChain, account]);
+  }, [refetchUnstakeEvents, requiredChain, account, tenderTokenBalance]);
 
   useEffect(() => {
     if (unstakeEvents != null) {
