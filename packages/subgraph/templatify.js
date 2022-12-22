@@ -15,7 +15,7 @@ function getNetworkNameForSubgraph() {
     case "tenderize/tenderize":
       return "mainnet";
     case "tenderize/tenderize-localhost":
-      return "mainnet";
+      return "localhost";
     case "tenderize/tenderize-arbitrum":
       return "arbitrum";
     default:

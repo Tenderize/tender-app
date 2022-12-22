@@ -1,12 +1,13 @@
-type TenderizeGlobal @entity { # Global Values/ TODO: better name?
+type TenderizeGlobal
+  @entity { # Global Values/ TODO: better name?
   "Fixed ID of '1'"
   id: ID!
   "List of congifs for all integrations"
   configs: [Config!]!
-  # TODO: Add global totals 
+  # TODO: Add global totals
 }
 
-type Config @entity{
+type Config @entity {
   "Name of the protocol eg. 'livepeer'"
   id: ID!
   "Address of the ERC20 token for integration"
@@ -139,7 +140,7 @@ type User @entity {
   deployments: [UserDeployment!]! @derivedFrom(field: "user")
 }
 
-type UserDeployment @entity { 
+type UserDeployment @entity {
   "<wallet-address>_<protocol>"
   id: ID!
   "Protocol"
@@ -218,6 +219,15 @@ type WithdrawEvent @entity {
   from: String!
   amount: BigInt!
   unstakeLockID: BigInt!
+  timestamp: BigInt!
+}
+
+type ProcessUnstakesEvent @entity {
+  id: ID!
+  tenderizer: String!
+  from: String!
+  amount: BigInt!
+  node: String!
   timestamp: BigInt!
 }
 

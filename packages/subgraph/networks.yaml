@@ -26,5 +26,5 @@ localhost:
   networkName: localhost
   contracts:
     registry:
-      address: "b7278A61aa25c888815aFC32Ad3cC52fF24fE575" # replace with locally deployed registry address
+      address: "0x5A569Ad19272Afa97103fD4DbadF33B2FcbaA175" # replace with locally deployed registry address
       startBlock: 0
