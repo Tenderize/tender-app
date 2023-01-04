@@ -22,13 +22,14 @@ import { FormClose } from "grommet-icons";
 import { Queries, stakers } from "@tender/shared/src/index";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { Lock } from "./types";
-import { blockTimestampToDate, formatBalance, minutesBetweenDates } from "components/formatting";
+import { blockTimestampToDate, formatBalance } from "components/formatting";
 import { abis, addresses } from "@tender/contracts/src";
 import { Tenderizer } from "@tender/contracts/gen/types";
 import { Contract, utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import { useWithdraw } from "utils/tenderDepositHooks";
 import { useQuery } from "@apollo/client";
+import { getUnlockDateForProtocol } from "./helpers";
 
 type Props = {
   show: boolean;
@@ -198,74 +199,3 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
 };
 
 export default WithdrawModal;
-
-const getUnlockDateForProtocol = (
-  protocolName: ProtocolName,
-  lock: Lock,
-  processUnstakeEvents: Queries.ProcessUnstakes | undefined
-): string => {
-  if (lock.open) {
-    return "Ready";
-  }
-  switch (protocolName) {
-    case "graph": {
-      if (processUnstakeEvents != null) {
-        const lastProcessUnstake = processUnstakeEvents.processUnstakesEvents.reduce((prev, current) => {
-          if (current.timestamp > prev.timestamp) {
-            return current;
-          } else {
-            return prev;
-          }
-        }, processUnstakeEvents.processUnstakesEvents[0]);
-
-        const minutesSinceProcessUnstake = minutesBetweenDates(
-          blockTimestampToDate(lastProcessUnstake.timestamp),
-          new Date()
-        );
-
-        let remainingMinutes = 0;
-        if (lastProcessUnstake == null || lock.timestamp < lastProcessUnstake.timestamp) {
-          remainingMinutes = 28 * 24 * 60 - minutesSinceProcessUnstake;
-        } else {
-          remainingMinutes = 28 * 24 * 60 + 28 * 24 * 60 - minutesSinceProcessUnstake;
-        }
-        return getTimeRemainingLabel(remainingMinutes);
-      } else {
-        return "Loading...";
-      }
-    }
-    case "audius": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 7);
-      const minutesUntilUnlock = minutesBetweenDates(new Date(), unlockDate);
-      return getTimeRemainingLabel(minutesUntilUnlock);
-    }
-    case "livepeer": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 7);
-      const minutesUntilUnlock = minutesBetweenDates(new Date(), unlockDate);
-      return getTimeRemainingLabel(minutesUntilUnlock);
-    }
-    case "matic": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 2);
-      const minutesUntilUnlock = minutesBetweenDates(new Date(), unlockDate);
-      return getTimeRemainingLabel(minutesUntilUnlock);
-    }
-  }
-};
-
-const getTimeRemainingLabel = (remainingMinutes: number) => {
-  if (remainingMinutes < 0) {
-    return `Ready`;
-  } else if (remainingMinutes < 60) {
-    return `~ ${remainingMinutes} minutes`;
-  } else if (remainingMinutes < 24 * 60) {
-    return `~ ${Math.floor(remainingMinutes / 60)} hours`;
-  } else {
-    return `~ ${Math.floor(remainingMinutes / (60 * 24))} days`;
-  }
-};
