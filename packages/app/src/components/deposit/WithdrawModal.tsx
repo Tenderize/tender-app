@@ -22,7 +22,7 @@ import { FormClose } from "grommet-icons";
 import { Queries, stakers } from "@tender/shared/src/index";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { Lock } from "./types";
-import { blockTimestampToDate, daysBetweenDates, formatBalance } from "components/formatting";
+import { blockTimestampToDate, formatBalance, minutesBetweenDates } from "components/formatting";
 import { abis, addresses } from "@tender/contracts/src";
 import { Tenderizer } from "@tender/contracts/gen/types";
 import { Contract, utils } from "ethers";
@@ -218,15 +218,18 @@ const getUnlockDateForProtocol = (
           }
         }, processUnstakeEvents.processUnstakesEvents[0]);
 
-        const daysSinceProcessUnstake = daysBetweenDates(
+        const minutesSinceProcessUnstake = minutesBetweenDates(
           blockTimestampToDate(lastProcessUnstake.timestamp),
           new Date()
         );
+
+        let remainingMinutes = 0;
         if (lastProcessUnstake == null || lock.timestamp < lastProcessUnstake.timestamp) {
-          return `~ ${28 - daysSinceProcessUnstake} days`;
+          remainingMinutes = 28 * 24 * 60 - minutesSinceProcessUnstake;
         } else {
-          return `~ ${28 + 28 - daysSinceProcessUnstake} days`;
+          remainingMinutes = 28 * 24 * 60 + 28 * 24 * 60 - minutesSinceProcessUnstake;
         }
+        return getTimeRemainingLabel(remainingMinutes);
       } else {
         return "Loading...";
       }
@@ -235,34 +238,34 @@ const getUnlockDateForProtocol = (
       const unstakeDate = blockTimestampToDate(lock.timestamp);
       const unlockDate = new Date(unstakeDate);
       unlockDate.setDate(unstakeDate.getDate() + 7);
-      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
-      if (daysUntilUnlock < 0) {
-        return "Ready";
-      } else {
-        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
-      }
+      const minutesUntilUnlock = minutesBetweenDates(new Date(), unlockDate);
+      return getTimeRemainingLabel(minutesUntilUnlock);
     }
     case "livepeer": {
       const unstakeDate = blockTimestampToDate(lock.timestamp);
       const unlockDate = new Date(unstakeDate);
       unlockDate.setDate(unstakeDate.getDate() + 7);
-      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
-      if (daysUntilUnlock < 0) {
-        return "Ready";
-      } else {
-        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
-      }
+      const minutesUntilUnlock = minutesBetweenDates(new Date(), unlockDate);
+      return getTimeRemainingLabel(minutesUntilUnlock);
     }
     case "matic": {
       const unstakeDate = blockTimestampToDate(lock.timestamp);
       const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 3);
-      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
-      if (daysUntilUnlock < 0) {
-        return "Ready";
-      } else {
-        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
-      }
+      unlockDate.setDate(unstakeDate.getDate() + 2);
+      const minutesUntilUnlock = minutesBetweenDates(new Date(), unlockDate);
+      return getTimeRemainingLabel(minutesUntilUnlock);
     }
+  }
+};
+
+const getTimeRemainingLabel = (remainingMinutes: number) => {
+  if (remainingMinutes < 0) {
+    return `Ready`;
+  } else if (remainingMinutes < 60) {
+    return `~ ${remainingMinutes} minutes`;
+  } else if (remainingMinutes < 24 * 60) {
+    return `~ ${Math.floor(remainingMinutes / 60)} hours`;
+  } else {
+    return `~ ${Math.floor(remainingMinutes / (60 * 24))} days`;
   }
 };
