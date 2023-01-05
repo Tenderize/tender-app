@@ -22,13 +22,14 @@ import { FormClose } from "grommet-icons";
 import { Queries, stakers } from "@tender/shared/src/index";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { Lock } from "./types";
-import { blockTimestampToDate, daysBetweenDates, formatBalance } from "components/formatting";
+import { blockTimestampToDate, formatBalance } from "components/formatting";
 import { abis, addresses } from "@tender/contracts/src";
 import { Tenderizer } from "@tender/contracts/gen/types";
 import { Contract, utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import { useWithdraw } from "utils/tenderDepositHooks";
 import { useQuery } from "@apollo/client";
+import { getUnlockDateForProtocol } from "./helpers";
 
 type Props = {
   show: boolean;
@@ -198,71 +199,3 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
 };
 
 export default WithdrawModal;
-
-const getUnlockDateForProtocol = (
-  protocolName: ProtocolName,
-  lock: Lock,
-  processUnstakeEvents: Queries.ProcessUnstakes | undefined
-): string => {
-  if (lock.open) {
-    return "Ready";
-  }
-  switch (protocolName) {
-    case "graph": {
-      if (processUnstakeEvents != null) {
-        const lastProcessUnstake = processUnstakeEvents.processUnstakesEvents.reduce((prev, current) => {
-          if (current.timestamp > prev.timestamp) {
-            return current;
-          } else {
-            return prev;
-          }
-        }, processUnstakeEvents.processUnstakesEvents[0]);
-
-        const daysSinceProcessUnstake = daysBetweenDates(
-          blockTimestampToDate(lastProcessUnstake.timestamp),
-          new Date()
-        );
-        if (lastProcessUnstake == null || lock.timestamp < lastProcessUnstake.timestamp) {
-          return `~ ${28 - daysSinceProcessUnstake} days`;
-        } else {
-          return `~ ${28 + 28 - daysSinceProcessUnstake} days`;
-        }
-      } else {
-        return "Loading...";
-      }
-    }
-    case "audius": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 7);
-      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
-      if (daysUntilUnlock < 0) {
-        return "Ready";
-      } else {
-        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
-      }
-    }
-    case "livepeer": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 7);
-      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
-      if (daysUntilUnlock < 0) {
-        return "Ready";
-      } else {
-        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
-      }
-    }
-    case "matic": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 3);
-      const daysUntilUnlock = daysBetweenDates(new Date(), unlockDate);
-      if (daysUntilUnlock < 0) {
-        return "Ready";
-      } else {
-        return `~ ${daysUntilUnlock === 0 ? 1 : daysUntilUnlock} days`;
-      }
-    }
-  }
-};
