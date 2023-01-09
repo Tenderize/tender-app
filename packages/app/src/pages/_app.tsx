@@ -2,14 +2,27 @@ import { AppProps } from "next/app";
 import { FC } from "react";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
+import { Banner } from "components/Banner";
 
 import { GrommetWrapper, Subgraph } from "@tender/shared/src/index";
 
 import "./index.css";
+import { useRouter } from "next/router";
+import { ProtocolName } from "@tender/shared/src/data/stakers";
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
+  const router = useRouter();
+  const protocolName = router.query.slug as ProtocolName;
+
   return (
-    <>
+    <GrommetWrapper style={{}}>
+      {protocolName === "graph" && (
+        <Banner
+          message={
+            "Stake migration to a different indexer is in progress and that rewards can temporarily be lower until the transition is complete"
+          }
+        />
+      )}
       <Head>
         <title>Tenderize App</title>
         <meta name="description" content="Liquid staking and yield aggregation protocol, bridging Web3 And DeFi" />
@@ -23,7 +36,7 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
           <Component {...pageProps} />
         </ApolloProvider>
       </GrommetWrapper>
-    </>
+    </GrommetWrapper>
   );
 };
 
