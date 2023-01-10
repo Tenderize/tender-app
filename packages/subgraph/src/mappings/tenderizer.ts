@@ -111,7 +111,8 @@ export function handleUnstakeEvent(unstakeEvent: Unstake): void {
 
   // Update Tenderizer data
   let tenderizer = loadOrCreateTenderizer(protocolId)
-  tenderizer.currentPrincipal = tenderizer.currentPrincipal.minus(amount)
+  if(unstakeEvent.params.from.notEqual(unstakeEvent.address))
+    tenderizer.currentPrincipal = tenderizer.currentPrincipal.minus(amount)
   tenderizer.save()
 
   // Save raw event
@@ -151,10 +152,12 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   day.save()
 
   // Update Tenderizer data
-  let tenderizer = loadOrCreateTenderizer(protocolId)
-  tenderizer.withdrawals = tenderizer.withdrawals.plus(amount)
-  tenderizer.TVL = tenderizer.currentPrincipal.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
-  tenderizer.save()
+  if(withdrawEvent.params.from.notEqual(withdrawEvent.address)){
+    let tenderizer = loadOrCreateTenderizer(protocolId)
+    tenderizer.withdrawals = tenderizer.withdrawals.plus(amount)
+    tenderizer.TVL = tenderizer.currentPrincipal.divDecimal(exponentToBigDecimal(BI_18)).times(usdPrice)
+    tenderizer.save()
+  }
 
   // Save raw event
   let event = new WithdrawEvent(withdrawEvent.transaction.hash.toHex());
