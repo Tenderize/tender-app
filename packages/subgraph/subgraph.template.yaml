@@ -9,7 +9,7 @@ dataSources:
     network: {{networkName}}
     source:
       startBlock: {{contracts.registry.startBlock}}
-      address: {{contracts.registry.address}}
+      address: "{{contracts.registry.address}}"
       abi: Registry
     mapping:
       kind: ethereum/events
@@ -23,6 +23,8 @@ dataSources:
           file: ../contracts/src/abis/TenderToken.json
         - name: TenderSwap
           file: ../contracts/src/abis/TenderSwap.json
+        - name: ERC20
+          file: ../contracts/src/abis/ERC20.json
       entities:
         - TenderizerConfig
       eventHandlers:
@@ -31,127 +33,131 @@ dataSources:
       file: ./src/mappings/registry.ts
       language: wasm/assemblyscript
 templates:
-    - name: Tenderizer
-      kind: ethereum/contract
-      network: {{networkName}}
-      source:
-        abi: Tenderizer
-      mapping:
-        kind: ethereum/events
-        apiVersion: 0.0.1
-        language: wasm/assemblyscript
-        file: ./src/mappings/tenderizer.ts
-        entities:
-          - Tenderizer
-        abis:
-          - name: Tenderizer
-            file: ../contracts/src/abis/Tenderizer.json
-          - name: OneInch
-            file: ../contracts/src/abis/OneInch.json
-          - name: TenderToken
-            file: ../contracts/src/abis/TenderToken.json
-          - name: TenderSwap
-            file: ../contracts/src/abis/TenderSwap.json
-        eventHandlers:
-          - event: Deposit(indexed address,uint256)
-            handler: handleDepositEvent
-          - event: Unstake(indexed address,indexed address,uint256,uint256)
-            handler: handleUnstakeEvent
-          - event: Withdraw(indexed address,uint256,uint256)
-            handler: handleWithdrawEvent
-          - event: RewardsClaimed(int256,uint256,uint256)
-            handler: handleRewardsClaimedEvent
-          - event: ProtocolFeeCollected(uint256)
-            handler: handleProtocolFeeCollectedEvent
-          - event: LiquidityFeeCollected(uint256)
-            handler: handleLiquidityFeeCollectedEvent
-    - name: TenderFarm
-      kind: ethereum/contract
-      network: {{networkName}}
-      source:
-        abi: TenderFarm
-      mapping:
-        kind: ethereum/events
-        apiVersion: 0.0.1
-        language: wasm/assemblyscript
-        file: ./src/mappings/tenderFarm.ts
-        entities:
-          - Tenderizer
-        abis:
-          - name: TenderFarm
-            file: ../contracts/src/abis/TenderFarm.json
-          - name: OneInch
-            file: ../contracts/src/abis/OneInch.json
-          - name: LiquidityPoolToken
-            file: ../contracts/src/abis/LiquidityPoolToken.json
-          - name: TenderSwap
-            file: ../contracts/src/abis/TenderSwap.json
-          - name: TenderToken
-            file: ../contracts/src/abis/TenderToken.json
-          - name: ERC20
-            file: ../contracts/src/abis/erc20.json
-        eventHandlers:
-          - event: Farm(indexed address,uint256)
-            handler: handleFarmEvent
-          - event: Unfarm(indexed address,uint256)
-            handler: handleUnfarmEvent
-          - event: Harvest(indexed address,uint256)
-            handler: handleHarvestEvent
-          - event: RewardsAdded(uint256)
-            handler: handleRewardsAddedEvent
-    - name: TenderToken
-      kind: ethereum/contract
-      network: {{networkName}}
-      source:
-        abi: TenderToken
-      mapping:
-        kind: ethereum/events
-        apiVersion: 0.0.1
-        language: wasm/assemblyscript
-        file: ./src/mappings/tenderToken.ts
-        entities:
-          - Tenderizer
-        abis:
-          - name: TenderToken
-            file: ../contracts/src/abis/TenderToken.json
-          - name: TenderSwap
-            file: ../contracts/src/abis/TenderSwap.json
-        eventHandlers:
-          - event: Transfer(indexed address,indexed address,uint256)
-            handler: handleTransferEvent
-    - name: TenderSwap
-      kind: ethereum/contract
-      network: {{networkName}}
-      source:
-        abi: TenderSwap
-      mapping:
-        kind: ethereum/events
-        apiVersion: 0.0.1
-        language: wasm/assemblyscript
-        file: ./src/mappings/tenderSwap.ts
-        entities:
-          - Tenderizer
-        abis:
-          - name: TenderSwap
-            file: ../contracts/src/abis/TenderSwap.json
-          - name: ERC20
-            file: ../contracts/src/abis/erc20.json
-        eventHandlers:
-          - event: NewAdminFee(uint256)
-            handler: handleNewAdminFee
-          - event: NewSwapFee(uint256)
-            handler: handleNewSwapFee
-          - event: RampA(uint256,uint256,uint256,uint256)
-            handler: handleRampA
-          - event: StopRampA(uint256,uint256)
-            handler: handleStopRampA
-          - event: AddLiquidity(indexed address,uint256[2],uint256[2],uint256,uint256)
-            handler: handleAddLiquidity
-          - event: RemoveLiquidity(indexed address,uint256[2],uint256)
-            handler: handleRemoveLiquidity
-          - event: RemoveLiquidityImbalance(indexed address,uint256[2],uint256[2],uint256,uint256)
-            handler: handleRemoveLiquidityImbalance
-          - event: RemoveLiquidityOne(indexed address,uint256,uint256,address,uint256)
-            handler: handleRemoveLiquidityOne
-          - event: Swap(indexed address,address,uint256,uint256)
-            handler: handleSwapEvent
+  - name: Tenderizer
+    kind: ethereum/contract
+    network: {{networkName}}
+    source:
+      abi: Tenderizer
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      file: ./src/mappings/tenderizer.ts
+      entities:
+        - Tenderizer
+      abis:
+        - name: Tenderizer
+          file: ../contracts/src/abis/Tenderizer.json
+        - name: UniswapQuoter
+          file: ../contracts/src/abis/UniswapQuoter.json
+        - name: TenderToken
+          file: ../contracts/src/abis/TenderToken.json
+        - name: TenderSwap
+          file: ../contracts/src/abis/TenderSwap.json
+        - name: ERC20
+          file: ../contracts/src/abis/ERC20.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256)
+          handler: handleDepositEvent
+        - event: Unstake(indexed address,indexed address,uint256,uint256)
+          handler: handleUnstakeEvent
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdrawEvent
+        - event: RewardsClaimed(int256,uint256,uint256)
+          handler: handleRewardsClaimedEvent
+        - event: ProtocolFeeCollected(uint256)
+          handler: handleProtocolFeeCollectedEvent
+        - event: LiquidityFeeCollected(uint256)
+          handler: handleLiquidityFeeCollectedEvent
+        - event: ProcessUnstakes(indexed address,indexed address,uint256)
+          handler: handleProcessUnstakesEvent
+  - name: TenderFarm
+    kind: ethereum/contract
+    network: {{networkName}}
+    source:
+      abi: TenderFarm
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      file: ./src/mappings/tenderFarm.ts
+      entities:
+        - Tenderizer
+      abis:
+        - name: TenderFarm
+          file: ../contracts/src/abis/TenderFarm.json
+        - name: UniswapQuoter
+          file: ../contracts/src/abis/UniswapQuoter.json
+        - name: LiquidityPoolToken
+          file: ../contracts/src/abis/LiquidityPoolToken.json
+        - name: TenderSwap
+          file: ../contracts/src/abis/TenderSwap.json
+        - name: TenderToken
+          file: ../contracts/src/abis/TenderToken.json
+        - name: ERC20
+          file: ../contracts/src/abis/ERC20.json
+      eventHandlers:
+        - event: Farm(indexed address,uint256)
+          handler: handleFarmEvent
+        - event: Unfarm(indexed address,uint256)
+          handler: handleUnfarmEvent
+        - event: Harvest(indexed address,uint256)
+          handler: handleHarvestEvent
+        - event: RewardsAdded(uint256)
+          handler: handleRewardsAddedEvent
+  - name: TenderToken
+    kind: ethereum/contract
+    network: {{networkName}}
+    source:
+      abi: TenderToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      file: ./src/mappings/tenderToken.ts
+      entities:
+        - Tenderizer
+      abis:
+        - name: TenderToken
+          file: ../contracts/src/abis/TenderToken.json
+        - name: TenderSwap
+          file: ../contracts/src/abis/TenderSwap.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransferEvent
+  - name: TenderSwap
+    kind: ethereum/contract
+    network: {{networkName}}
+    source:
+      abi: TenderSwap
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      file: ./src/mappings/tenderSwap.ts
+      entities:
+        - Tenderizer
+      abis:
+        - name: TenderSwap
+          file: ../contracts/src/abis/TenderSwap.json
+        - name: ERC20
+          file: ../contracts/src/abis/ERC20.json
+      eventHandlers:
+        - event: NewAdminFee(uint256)
+          handler: handleNewAdminFee
+        - event: NewSwapFee(uint256)
+          handler: handleNewSwapFee
+        - event: RampA(uint256,uint256,uint256,uint256)
+          handler: handleRampA
+        - event: StopRampA(uint256,uint256)
+          handler: handleStopRampA
+        - event: AddLiquidity(indexed address,uint256[2],uint256[2],uint256,uint256)
+          handler: handleAddLiquidity
+        - event: RemoveLiquidity(indexed address,uint256[2],uint256)
+          handler: handleRemoveLiquidity
+        - event: RemoveLiquidityImbalance(indexed address,uint256[2],uint256[2],uint256,uint256)
+          handler: handleRemoveLiquidityImbalance
+        - event: RemoveLiquidityOne(indexed address,uint256,uint256,address,uint256)
+          handler: handleRemoveLiquidityOne
+        - event: Swap(indexed address,address,uint256,uint256)
+          handler: handleSwapEvent

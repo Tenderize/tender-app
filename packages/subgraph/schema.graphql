@@ -1,16 +1,19 @@
-type TenderizeGlobal @entity { # Global Values/ TODO: better name?
+type TenderizeGlobal
+  @entity { # Global Values/ TODO: better name?
   "Fixed ID of '1'"
   id: ID!
   "List of congifs for all integrations"
   configs: [Config!]!
-  # TODO: Add global totals 
+  # TODO: Add global totals
 }
 
-type Config @entity{
+type Config @entity {
   "Name of the protocol eg. 'livepeer'"
   id: ID!
   "Address of the ERC20 token for integration"
   steak: String!
+  "Symbol of the ERC20 token for integration"
+  symbol: String!
   "Address of Tenderizer"
   tenderizer: String!
   "Address of ERC20 Tender Token"
@@ -61,7 +64,9 @@ type Tenderizer @entity {
   liquidityFeesUSD: BigDecimal!
 
   "Day data for tenderizer"
-  dayData: [TenderizerDay!]
+  dayData: [TenderizerDay!] @derivedFrom(field: "tenderizer")
+
+  rewardsClaimedEvents: [RewardsClaimedEvent!] @derivedFrom(field: "tenderizer")
 }
 
 type TenderFarm @entity {
@@ -84,12 +89,14 @@ type TenderFarm @entity {
   TVL: BigDecimal!
 
   "Day data for tenderFarm"
-  dayData: [TenderFarmDay!]
+  dayData: [TenderFarmDay!] @derivedFrom(field: "tenderfarm")
 }
 
 type TenderizerDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
   id: ID!
+  "Tenderizer"
+  tenderizer: Tenderizer!
   "The date beginning at 12:00am UTC"
   date: Int!
 
@@ -101,20 +108,13 @@ type TenderizerDay @entity {
   withdrawals: BigInt!
   "staking rewards collected from protocol for the day"
   rewards: BigInt!
-
-  "Principle on the first event of the day"
-  startPrinciple: BigInt!
-  "Day APY - rewards/dayStartPrinciple"
-  DPY: BigDecimal!
-  "Last Total Tender Token shares of the day"
-  shares: BigInt!
-  "Last Total Tender Token supply of the day"
-  supply: BigInt!
 }
 
 type TenderFarmDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<protocol>"
   id: ID!
+  "Tenderfam ID"
+  tenderfarm: TenderFarm!
   "The date beginning at 12:00am UTC"
   date: Int!
 
@@ -130,7 +130,7 @@ type TenderFarmDay @entity {
   "principle in Token (not BPT) value at the start of the day"
   startPrinciple: BigDecimal!
   "Day APY - total rewards / total volume"
-  DPY: BigDecimal!
+  DPY: BigDecimal! # TODO: Remove this?
 }
 
 type User @entity {
@@ -140,7 +140,7 @@ type User @entity {
   deployments: [UserDeployment!]! @derivedFrom(field: "user")
 }
 
-type UserDeployment @entity { 
+type UserDeployment @entity {
   "<wallet-address>_<protocol>"
   id: ID!
   "Protocol"
@@ -160,12 +160,14 @@ type UserDeployment @entity {
   shares: BigInt!
 
   "Day data for User"
-  dayData: [UserDeploymentDay!]
+  dayData: [UserDeploymentDay!] @derivedFrom(field: "userDeployment")
 }
 
 type UserDeploymentDay @entity {
   "<Timestamp rounded to current day by dividing by 86400>_<wallet-address>_<protocol>"
   id: ID!
+  "User deployment ID"
+  userDeployment: UserDeployment!
   "The date beginning at 12:00am UTC"
   date: Int!
   "Last Tender Token shares of the day"
@@ -220,9 +222,19 @@ type WithdrawEvent @entity {
   timestamp: BigInt!
 }
 
-type RewardsClaimedEvent @entity {
+type ProcessUnstakesEvent @entity {
   id: ID!
   tenderizer: String!
+  from: String!
+  amount: BigInt!
+  node: String!
+  timestamp: BigInt!
+}
+
+type RewardsClaimedEvent @entity {
+  id: ID!
+  tenderizer: Tenderizer!
+  tenderizerAddress: String!
   rewards: BigInt!
   currentPrincipal: BigInt!
   oldPrincipal: BigInt!
@@ -481,6 +493,7 @@ type TokenExchange implements Exchange @entity {
   tokensBought: BigInt!
   soldId: BigInt!
   tokensSold: BigInt!
+  steakAddress: Bytes!
 
   block: BigInt!
   timestamp: BigInt!

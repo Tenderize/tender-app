@@ -12,10 +12,12 @@ Handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
 function getNetworkNameForSubgraph() {
   switch (process.env.SUBGRAPH) {
     case undefined:
-    case "livepeer/livepeer":
+    case "tenderize/tenderize":
       return "mainnet";
-    case "livepeer/livepeer-rinkeby":
-      return "rinkeby";
+    case "tenderize/tenderize-localhost":
+      return "localhost";
+    case "tenderize/tenderize-arbitrum":
+      return "arbitrum";
     default:
       return null;
   }
@@ -23,22 +25,15 @@ function getNetworkNameForSubgraph() {
 
 (async () => {
   const networksFilePath = path.join(__dirname, "networks.yaml");
-  const networks = yaml.load(
-    await fs.readFile(networksFilePath, { encoding: "utf-8" })
-  );
+  const networks = yaml.load(await fs.readFile(networksFilePath, { encoding: "utf-8" }));
 
   const networkName = process.env.NETWORK_NAME || getNetworkNameForSubgraph();
   const network = t(networks, networkName).safeObject;
   if (t(network).isFalsy) {
-    throw new Error(
-      'Please set either a "NETWORK_NAME" or a "SUBGRAPH" environment variable'
-    );
+    throw new Error('Please set either a "NETWORK_NAME" or a "SUBGRAPH" environment variable');
   }
 
-  const subgraphTemplateFilePath = path.join(
-    __dirname,
-    "subgraph.template.yaml"
-  );
+  const subgraphTemplateFilePath = path.join(__dirname, "subgraph.template.yaml");
   const source = await fs.readFile(subgraphTemplateFilePath, "utf-8");
   const template = Handlebars.compile(source);
   const result = template(network);

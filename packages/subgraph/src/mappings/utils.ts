@@ -23,7 +23,7 @@ import {
   HourlyVolume,
   WeeklyVolume 
 } from "../types/schema";
-import { OneInch } from "../types/templates/Tenderizer/OneInch"
+import { UniswapQuoter } from "../types/templates/Tenderizer/UniswapQuoter"
 import * as config from "./config"
 import { TenderSwap as TenderSwapContact} from "../types/templates/TenderSwap/TenderSwap"
 import { LiquidityPoolToken } from "../types/templates/TenderFarm/LiquidityPoolToken"
@@ -34,6 +34,7 @@ import { decimal } from "@protofire/subgraph-toolkit"
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
 export let ZERO_BD = BigDecimal.fromString('0')
+export let ONE_BD = BigDecimal.fromString('0')
 export let BI_18 = BigInt.fromI32(18)
 export let BD_100 = BigDecimal.fromString('100')
 
@@ -79,7 +80,6 @@ export function loadOrCreateTenderizer(id: string): Tenderizer {
     tenderizer.protocolFeesUSD = ZERO_BD
     tenderizer.liquidityFees = ZERO_BI
     tenderizer.liquidityFeesUSD = ZERO_BD
-    tenderizer.dayData = []
   }
 
   return tenderizer as Tenderizer
@@ -97,7 +97,6 @@ export function loadOrCreateTenderFarm(id: string): TenderFarm {
     tenderFarm.currentPrincipal = ZERO_BI
     tenderFarm.pendingRewardShares = ZERO_BI
     tenderFarm.TVL = ZERO_BD
-    tenderFarm.dayData = []
   }
 
   return tenderFarm as TenderFarm
@@ -123,7 +122,6 @@ export function loadOrCreateUserDeployment(address: string, protocolName: string
     userProtocol.farmAmount = ZERO_BI
     userProtocol.farmHarvest = ZERO_BI
     userProtocol.shares = ZERO_BI
-    userProtocol.dayData = []
    
     // Save derived fields
     let user = loadOrCreateUser(address)
@@ -173,6 +171,19 @@ export function getProtocolIdByTenderTokenAddress(address: string): string {
   return ''
 }
 
+export function getProtocolIdByTenderSwapAddress(address: string): string {
+  // TODO: Is there a better way to do this?
+  let globals = TenderizeGlobal.load('1')
+  let globalConfigs = globals.configs
+  for (let i = 0; i < globalConfigs.length; i++) { 
+    let c = Config.load(globalConfigs[i]) as Config
+    if(c.tenderSwap == address){
+      return c.id
+    }
+  }
+  return ''
+}
+
 export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): TenderizerDay {
   let dayTimestamp = timestamp / 86400
   let dayID = dayTimestamp.toString() + '_' + protocol
@@ -182,20 +193,12 @@ export function loadOrCreateTernderizerDay(timestamp: i32, protocol: string): Te
   if (day == null) {
     day = new TenderizerDay(dayID)
     let tenderizer = loadOrCreateTenderizer(protocol)
+    day.tenderizer = tenderizer.id
     day.date = dayStartTimestamp
     day.deposits = ZERO_BI
     day.unstakes = ZERO_BI
     day.withdrawals = ZERO_BI
     day.rewards = ZERO_BI
-    day.startPrinciple = tenderizer.currentPrincipal
-    day.DPY = ZERO_BD
-    day.shares = ZERO_BI
-    day.supply = ZERO_BI
-
-    let dayList = tenderizer.dayData
-    dayList.push(day.id)
-    tenderizer.dayData = dayList
-    tenderizer.save()
   }
   return day as TenderizerDay;
 }
@@ -209,6 +212,7 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
   if (day == null) {
     day = new TenderFarmDay(dayID)
     let tenderFarm = loadOrCreateTenderFarm(protocol)
+    day.tenderfarm = tenderFarm.id
     day.date = dayStartTimestamp
     day.deposits = ZERO_BI
     day.withdrawals = ZERO_BI
@@ -217,11 +221,6 @@ export function loadOrCreateTenderFarmDay(timestamp: i32, protocol: string): Ten
     day.DPY = ZERO_BD
     day.startPrinciple = LPTokenToToken(tenderFarm.currentPrincipal.toBigDecimal(), protocol)
     day.save()
-
-    let dayList = tenderFarm.dayData
-    dayList.push(day.id)
-    tenderFarm.dayData = dayList
-    tenderFarm.save()
   }
   return day as TenderFarmDay;
 }
@@ -235,6 +234,7 @@ export function loadOrCreateUserDeploymentDay(timestamp: i32, address: string, p
   if (day == null) {
     day = new UserDeploymentDay(dayID)
     let user = loadOrCreateUserDeployment(address, protocol)
+    day.userDeployment = user.id
     day.date = dayStartTimestamp
     // Initialize data with previous day data
     // Not needed for just a single value
@@ -247,32 +247,46 @@ export function loadOrCreateUserDeploymentDay(timestamp: i32, address: string, p
       day.shares = previousDay.shares
     }
     day.save()
-
-    dayList = user.dayData
-    dayList.push(day.id)
-    user.dayData = dayList
-    user.save()
   }
   return day as UserDeploymentDay;
 }
 
-export function getUSDPrice(protocol: string): BigDecimal {
-  if(dataSource.network() != 'mainnet'){
+export function getUSDPrice(steakToken: string): BigDecimal {
+  let network = dataSource.network()
+  if(network != 'mainnet' && network != 'arbitrum-one'){
     return ZERO_BD
   }
 
-  if(protocol == 'livepeer'){
-    let daiLptBPool = OneInch.bind(Address.fromString(config.ONEINCH_ADDRESS))
-    let res = daiLptBPool.getExpectedReturn(
-      Address.fromString(config.DAI_ADDRESS),
-      Address.fromString(config.LPT_ADDRESS),
-      BigInt.fromI32(100),
-      BigInt.fromI32(10),
-      ZERO_BI
-    )
-    return res.value0.divDecimal(BigDecimal.fromString('100'))
+  let usdc: string
+  if(network == 'mainnet'){
+    usdc = config.USDC_ADDRESS
+  } else if(network == 'arbitrum-one'){
+    usdc = config.USDC_ADDRESS_ARBITURM
   }
-  return ZERO_BD
+
+  let TEN_18 = BigInt.fromI32(10).pow(18)
+  let TEN_24 = BigInt.fromI32(10).pow(24) // 18 + 18 - 12
+
+  let uniQuoter = UniswapQuoter.bind(Address.fromString(config.UNISWAP_QUOTER))
+  let tokenToEth = uniQuoter.try_quoteExactInputSingle(
+    Address.fromString(steakToken),
+    uniQuoter.WETH9(),
+    3000,
+    TEN_18,
+    BigInt.fromString('0')
+  )
+  if(tokenToEth.reverted) return ZERO_BD
+
+  let ethToUSDC = uniQuoter.try_quoteExactInputSingle(
+    uniQuoter.WETH9(),
+    Address.fromString(usdc),
+    3000,
+    TEN_18,
+    BigInt.fromString('0')
+  )
+  if(ethToUSDC.reverted) return ZERO_BD
+
+  return tokenToEth.value.times(ethToUSDC.value).divDecimal(TEN_24.toBigDecimal())
 }
 
 export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {
@@ -322,12 +336,13 @@ export function getOrCreateMetaSwap(
   block: ethereum.Block,
   tx: ethereum.Transaction,
 ): TenderSwap {
-  let swap = TenderSwap.load(address.toHexString())
+  let protocolID = getProtocolIdByTenderSwapAddress(address.toHex())
+  let swap = TenderSwap.load(protocolID)
 
   if (swap == null) {
     let info = getMetaSwapInfo(address)
 
-    swap = new TenderSwap(address.toHexString())
+    swap = new TenderSwap(protocolID)
     swap.address = address
     swap.numTokens = info.tokens.length
     swap.tokens = registerTokens(info.tokens, block, tx)
@@ -349,6 +364,14 @@ export function getOrCreateMetaSwap(
     let system = getSystemInfo(block, tx)
     system.swapCount = system.swapCount.plus(BigInt.fromI32(1))
     system.save()
+  } else {
+    let info = getMetaSwapInfo(address)
+    swap.balances = info.balances
+    swap.lpToken = info.lpToken
+    swap.A = info.A
+    swap.swapFee = info.swapFee
+    swap.virtualPrice = info.virtualPrice
+    swap.save()
   }
 
   return swap as TenderSwap
