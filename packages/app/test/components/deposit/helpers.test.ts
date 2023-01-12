@@ -1,4 +1,4 @@
-import { ProcessUnstakes } from "@tender/shared/src/queries";
+import { ProcessUnstakesEvent } from "@tender/shared/src/queries";
 import { getUnlockDateForProtocol } from "../../../src/components/deposit/helpers";
 import { Lock } from "../../../src/components/deposit/types";
 
@@ -550,16 +550,12 @@ describe("graph unlock labels", () => {
       from: "0xTEST",
       open: false,
     };
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (now.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (now.getTime() / 1000).toString(),
     };
     const label = getUnlockDateForProtocol("graph", lock, processUnstakeEvents, now);
 
@@ -579,16 +575,12 @@ describe("graph unlock labels", () => {
 
     const now = new Date();
     now.setTime(now.getTime() + DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (now.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (now.getTime() / 1000).toString(),
     };
     const label = getUnlockDateForProtocol("graph", lock, processUnstakeEvents, now);
 
@@ -608,16 +600,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 2 * DAY);
@@ -640,16 +628,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + 4 * DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 5 * DAY);
@@ -672,16 +656,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + 2 * DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 29 * DAY);
@@ -704,16 +684,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + 2 * DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 29 * DAY + 1 * HOUR);
@@ -736,16 +712,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + 2 * DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 29 * DAY + 23 * HOUR);
@@ -768,16 +740,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + 2 * DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 29 * DAY + 23 * HOUR + 20 * MINUTE);
@@ -800,16 +768,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + 2 * DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 30 * DAY);
@@ -832,16 +796,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + 2 * DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 30 * DAY + SEC);
@@ -864,16 +824,12 @@ describe("graph unlock labels", () => {
 
     const processUnstakesTime = new Date();
     processUnstakesTime.setTime(processUnstakesTime.getTime() + DAY);
-    const processUnstakeEvents: ProcessUnstakes = {
-      processUnstakesEvents: [
-        {
-          from: "",
-          node: "",
-          tenderizer: "",
-          amount: "100",
-          timestamp: (processUnstakesTime.getTime() / 1000).toString(),
-        },
-      ],
+    const processUnstakeEvents: ProcessUnstakesEvent = {
+      from: "",
+      node: "",
+      tenderizer: "",
+      amount: "100",
+      timestamp: (processUnstakesTime.getTime() / 1000).toString(),
     };
     const now = new Date();
     now.setTime(now.getTime() + 41 * DAY);

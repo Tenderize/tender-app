@@ -6,7 +6,7 @@ import { BigNumber, BigNumberish, utils } from "ethers";
 import { Button, Box, Form, FormField, Image, Text, TextInput } from "grommet";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
-import { InfoCard, stakers } from "@tender/shared/src/index";
+import { InfoCard, Queries, stakers } from "@tender/shared/src/index";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { weiToEthWithDecimals } from "utils/amountFormat";
@@ -30,9 +30,17 @@ type Props = {
   logo: string;
   tokenBalance: BigNumberish;
   tenderTokenBalance: BigNumberish;
+  lastProcessUnstakesEvent: Queries.ProcessUnstakesEvent | undefined;
 };
 
-const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTokenBalance }) => {
+const Deposit: FC<Props> = ({
+  protocolName,
+  symbol,
+  logo,
+  tokenBalance,
+  tenderTokenBalance,
+  lastProcessUnstakesEvent,
+}) => {
   const { account } = useEthers();
   const network = useNetwork();
   const [depositInput, setDepositInput] = useState("");
@@ -178,6 +186,7 @@ const Deposit: FC<Props> = ({ protocolName, symbol, logo, tokenBalance, tenderTo
         protocolName={protocolName}
         locks={locks}
         onDismiss={() => setShowWithdraw(false)}
+        lastProcessUnstakesEvent={lastProcessUnstakesEvent}
       />
     </Box>
   );
