@@ -28,7 +28,6 @@ import { Tenderizer } from "@tender/contracts/gen/types";
 import { Contract, utils } from "ethers";
 import { useEthers } from "@usedapp/core";
 import { useWithdraw } from "utils/tenderDepositHooks";
-import { useQuery } from "@apollo/client";
 import { getUnlockDateForProtocol } from "./helpers";
 
 type Props = {
@@ -36,32 +35,15 @@ type Props = {
   locks: Lock[];
   protocolName: ProtocolName;
   onDismiss: () => void;
+  lastProcessUnstakesEvent: Queries.ProcessUnstakesEvent | undefined;
 };
 
-const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
-  const { account } = useEthers();
+const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss, lastProcessUnstakesEvent }) => {
   const staker = stakers[protocolName];
   const symbol = staker.symbol;
   const [locksUpdated, setLocksUpdated] = useState<Lock[]>([]);
   const { library } = useEthers();
-
   const { withdraw } = useWithdraw(protocolName);
-
-  const requiredChain = stakers[protocolName].chainId;
-
-  const { data: processUnstakesEvents, refetch: refetchLastGovUnstakeEvent } = useQuery<Queries.ProcessUnstakes>(
-    Queries.GetProcessUnstakes,
-    {
-      variables: {
-        tenderizer: addresses[protocolName].tenderizer.toLowerCase(),
-      },
-      context: { chainId: requiredChain },
-    }
-  );
-
-  useEffect(() => {
-    refetchLastGovUnstakeEvent();
-  }, [refetchLastGovUnstakeEvent, requiredChain, account]);
 
   useEffect(() => {
     const simulateWithdraw = async () => {
@@ -167,7 +149,7 @@ const WithdrawModal: FC<Props> = ({ show, locks, protocolName, onDismiss }) => {
                           </TableCell>
                           <TableCell border="bottom">
                             <Text style={{ whiteSpace: "nowrap" }}>
-                              {getUnlockDateForProtocol(protocolName, lock, processUnstakesEvents)}
+                              {getUnlockDateForProtocol(protocolName, lock, lastProcessUnstakesEvent)}
                             </Text>
                           </TableCell>
                           <TableCell border="bottom">

@@ -6,7 +6,7 @@ import { Lock } from "./types";
 export const getUnlockDateForProtocol = (
   protocolName: ProtocolName,
   lock: Lock,
-  processUnstakeEvents: Queries.ProcessUnstakes | undefined,
+  lastProcessUnstakesEvent: Queries.ProcessUnstakesEvent | undefined,
   testDate?: Date
 ): string => {
   if (lock.open) {
@@ -16,19 +16,13 @@ export const getUnlockDateForProtocol = (
   const now = testDate ?? new Date();
   switch (protocolName) {
     case "graph": {
-      if (processUnstakeEvents != null) {
-        const lastProcessUnstake = processUnstakeEvents.processUnstakesEvents.reduce((prev, current) => {
-          if (current.timestamp > prev.timestamp) {
-            return current;
-          } else {
-            return prev;
-          }
-        }, processUnstakeEvents.processUnstakesEvents[0]);
-
-        const minutesSinceProcessUnstake = minutesBetweenDates(blockTimestampToDate(lastProcessUnstake.timestamp), now);
-
+      if (lastProcessUnstakesEvent != null) {
+        const minutesSinceProcessUnstake = minutesBetweenDates(
+          blockTimestampToDate(lastProcessUnstakesEvent.timestamp),
+          now
+        );
         let remainingMinutes = 0;
-        if (lastProcessUnstake == null || lock.timestamp < lastProcessUnstake.timestamp) {
+        if (lastProcessUnstakesEvent == null || lock.timestamp < lastProcessUnstakesEvent.timestamp) {
           remainingMinutes = 28 * 24 * 60 - minutesSinceProcessUnstake;
         } else {
           remainingMinutes = 28 * 24 * 60 + 28 * 24 * 60 - minutesSinceProcessUnstake;
