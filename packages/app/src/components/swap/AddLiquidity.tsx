@@ -1,6 +1,6 @@
-import { FC, useState, ChangeEventHandler, MouseEventHandler } from "react";
+import { FC, useState, ChangeEventHandler, MouseEventHandler, useEffect } from "react";
 import { addresses, contracts } from "@tender/contracts/src/index";
-import { BigNumberish, utils } from "ethers";
+import { BigNumberish, constants, utils } from "ethers";
 import {
   Image,
   Button,
@@ -23,13 +23,14 @@ import { LoadingButtonContent } from "components/LoadingButtonContent";
 import { useCalculateLpTokenAmount, useAddLiquidity, useLiquidityPriceImpact } from "utils/tenderSwapHooks";
 import { hasValue, useBalanceValidation } from "utils/inputValidation";
 import { isPendingTransaction } from "utils/transactions";
-import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
+import { weiToEthInFloat, weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
 import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { useIsGnosisSafe } from "utils/context";
+import { SlippageInput } from "components/SlippageInput";
 
 type Props = {
   protocolName: ProtocolName;
@@ -44,7 +45,6 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   const bwTenderLogo = `/${staker.bwTenderLogo}`;
   const [show, setShow] = useState(false);
   const { account } = useEthers();
-
   // whether supported asset (e.g. LPT) has ERC20 permit support
   const hasPermit = stakers[protocolName].hasPermit;
 
@@ -52,7 +52,6 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   const handleShow = () => setShow(true);
 
   const [tokenInput, setTokenInput] = useState("");
-
   const [tenderInput, setTenderInput] = useState("");
 
   const lpTokenSymbol = `t${symbol}-SWAP`;
@@ -103,17 +102,39 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
 
   const { addLiquidity, tx: addLiquidityTx } = useAddLiquidity(protocolName, isTokenApproved, isTenderApproved);
 
-  const lpTokenAmount = useCalculateLpTokenAmount(
+  const defaultLPTokenOut = useCalculateLpTokenAmount(
     addresses[protocolName].tenderSwap,
     [utils.parseEther(tenderInput || "0"), utils.parseEther(tokenInput || "0")],
     true
   );
 
+  const [lpTokenMinOut, setLPTokenMinOut] = useState(defaultLPTokenOut);
+
+  const sumIn = utils.parseEther(tokenInput || "0").add(utils.parseEther(tenderInput || "0"));
+  const defaultSlippage = defaultLPTokenOut.eq(constants.Zero)
+    ? 0
+    : Math.round(Math.abs((1 - weiToEthInFloat(sumIn) / weiToEthInFloat(defaultLPTokenOut)) * 100) * 100) / 100;
+  const [slippage, setSlippage] = useState(defaultSlippage);
+
+  useEffect(() => {
+    if (!defaultLPTokenOut.eq(constants.Zero)) {
+      setSlippage(defaultSlippage);
+    }
+  }, [defaultLPTokenOut]);
+
+  useEffect(() => {
+    const tokenIn = utils.parseEther(tokenInput || "0");
+    const tenderIn = utils.parseEther(tenderInput || "0");
+    const sumIn = tokenIn.add(tenderIn);
+    const outMin = sumIn.sub(sumIn.mul(slippage * 100).div(10000));
+    setLPTokenMinOut(outMin);
+  }, [slippage, tokenInput, tenderInput]);
+
   const handleAddLiquidity: MouseEventHandler<HTMLButtonElement & HTMLAnchorElement> = async (e) => {
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
-    addLiquidity(tenderIn, tokenIn, lpTokenAmount.sub(1), isSafeContext);
+    addLiquidity(tenderIn, tokenIn, lpTokenMinOut.sub(1), isSafeContext);
   };
 
   const { validationMessage: tokenValidationMessage } = useBalanceValidation(tokenInput, tokenBalance);
@@ -196,7 +217,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                       <TextInput
                         readOnly
                         disabled
-                        value={weiToEthWithDecimals(lpTokenAmount, 6)}
+                        value={weiToEthWithDecimals(lpTokenMinOut, 6)}
                         placeholder={"0"}
                         type="number"
                         style={{ textAlign: "right", padding: "20px 50px" }}
@@ -207,6 +228,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                         }
                       />
                     </FormField>
+                    <SlippageInput slippage={slippage} setSlippage={setSlippage} auto={defaultSlippage} />
                     <Text textAlign="end">{`Price impact: ${withDecimals((priceImpact * 100).toString(), 2)} %`}</Text>
                   </Box>
                 </Form>
