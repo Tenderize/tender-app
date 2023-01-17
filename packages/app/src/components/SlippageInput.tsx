@@ -19,6 +19,7 @@ export const SlippageInput: FC<{ slippage: number; setSlippage: (v: number) => v
       <Box>
         <TextInput
           id="slippage"
+          type="number"
           value={slippage}
           width={30}
           maxLength={2}

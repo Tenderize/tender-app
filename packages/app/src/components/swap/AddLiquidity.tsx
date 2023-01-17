@@ -117,10 +117,8 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   const [slippage, setSlippage] = useState(defaultSlippage);
 
   useEffect(() => {
-    if (!defaultLPTokenOut.eq(constants.Zero)) {
-      setSlippage(defaultSlippage);
-    }
-  }, [defaultLPTokenOut]);
+    setSlippage(defaultSlippage);
+  }, [defaultSlippage]);
 
   useEffect(() => {
     const tokenIn = utils.parseEther(tokenInput || "0");
