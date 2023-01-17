@@ -24,11 +24,11 @@ export const useLPTokenOut = (protocolName: ProtocolName, tenderInput: string, t
   }, [suggestedSlippage]);
 
   useEffect(() => {
-    const tokenIn = utils.parseEther(tokenInput || "0");
-    const tenderIn = utils.parseEther(tenderInput || "0");
-    const sumIn = tokenIn.add(tenderIn);
-    const outMin = sumIn.sub(sumIn.mul(slippage * 100).div(10000));
-    setLPTokenMinOut(outMin);
+    const tokenIn = Number.parseFloat(tokenInput || "0");
+    const tenderIn = Number.parseFloat(tenderInput || "0");
+    const sumIn = tokenIn + tenderIn;
+    const outMin = sumIn - (sumIn * slippage) / 100;
+    setLPTokenMinOut(utils.parseEther(outMin.toString()) ?? constants.Zero);
   }, [slippage, tokenInput, tenderInput]);
 
   return {

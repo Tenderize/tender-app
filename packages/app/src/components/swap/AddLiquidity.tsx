@@ -254,7 +254,11 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                 />
                 {errorMessage != null && (
                   <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
-                    <Text color="red">{errorMessage}</Text>
+                    <Text color="red">
+                      {errorInfo?.includes("Couldn't mint min requested")
+                        ? "Slippage threshold is too low."
+                        : errorMessage}
+                    </Text>
                     <Tip
                       plain
                       dropProps={{
