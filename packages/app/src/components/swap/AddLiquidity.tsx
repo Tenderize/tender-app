@@ -192,7 +192,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                         onClick={maxTenderTokenDeposit}
                       />
                     </FormField>
-                    <FormField label={`Amount of ${lpTokenSymbol} to receive`}>
+                    <FormField label={`Minimum amount of ${lpTokenSymbol} to receive`}>
                       <TextInput
                         readOnly
                         disabled
