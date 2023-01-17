@@ -7,7 +7,7 @@ export const useWarningOnTxFailure = (tx: TransactionStatus) => {
 
   useEffect(() => {
     if (tx.status === "Exception" || tx.status === "Fail") {
-      setErrorMessage(`There was a problem creating the transaction.`);
+      setErrorMessage(`There was a problem preparing your transaction. This might happen due to low slippage.`);
       setErrorInfo(`${tx.errorMessage}`);
     }
   }, [tx.status]);
