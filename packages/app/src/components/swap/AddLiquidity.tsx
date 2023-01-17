@@ -15,6 +15,7 @@ import {
   TextInput,
   Text,
   Heading,
+  Tip,
 } from "grommet";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
@@ -32,6 +33,7 @@ import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { useIsGnosisSafe } from "utils/context";
 import { SlippageInput } from "components/SlippageInput";
 import { useLPTokenOut } from "utils/useLPTokenOut";
+import { useWarningOnTxFailure } from "utils/useWarningOnTxFailure";
 
 type Props = {
   protocolName: ProtocolName;
@@ -94,7 +96,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
 
   const isButtonDisabled = () => {
     // if either field has an invalid value return true
-    if (!hasValue(tokenInput) || !hasValue(tenderInput)) return true;
+    if (!hasValue(tokenInput) && !hasValue(tenderInput)) return true;
     // if a transaction is pending return true
     if (isPendingTransaction(addLiquidityTx)) return true;
     // if underlying token (e.g. LPT) has no permit support and is not approved, return true
@@ -125,6 +127,8 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   });
 
   const { priceImpact } = useLiquidityPriceImpact(addresses[protocolName].tenderSwap, true, tokenInput, tenderInput);
+
+  const { errorMessage, errorInfo } = useWarningOnTxFailure(addLiquidityTx);
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
@@ -248,6 +252,38 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                     )
                   }
                 />
+                {errorMessage != null && (
+                  <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
+                    <Text color="red">{errorMessage}</Text>
+                    <Tip
+                      plain
+                      dropProps={{
+                        round: {
+                          size: "20px",
+                        },
+                        background: "rgba(0,0,0,0.7)",
+                        elevation: "none",
+                      }}
+                      content={
+                        <Box width="medium" elevation="none" pad="medium">
+                          <Text>{errorInfo}</Text>
+                        </Box>
+                      }
+                    >
+                      <span
+                        style={{
+                          border: "1px solid red",
+                          borderRadius: "50%",
+                          paddingLeft: "5px",
+                          paddingRight: "5px",
+                          color: "red",
+                        }}
+                      >
+                        &#8505;
+                      </span>
+                    </Tip>
+                  </Box>
+                )}
               </Box>
             </CardFooter>
           </Card>
