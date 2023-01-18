@@ -20,7 +20,6 @@ import {
   Paragraph,
   Heading,
 } from "grommet";
-import { useIsTokenApproved } from "../approve/useIsTokenApproved";
 import { AmountInputFooter } from "../AmountInputFooter";
 import { LoadingButtonContent } from "../LoadingButtonContent";
 import { hasValue, useBalanceValidation } from "../../utils/inputValidation";
@@ -36,8 +35,10 @@ import {
 } from "utils/tenderSwapHooks";
 import { FormClose } from "grommet-icons";
 import { isPendingTransaction } from "utils/transactions";
-import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { useCloseAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName, Staker } from "@tender/shared/src/data/stakers";
+import { useWarningOnTxFailure } from "utils/useWarningOnTxFailure";
+import { TxWarning } from "components/deposit/TxWarning";
 
 type Props = {
   protocolName: ProtocolName;
@@ -93,6 +94,7 @@ const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) =>
                     symbol={symbol}
                     staker={staker}
                     setSelectedToken={setSelectedToken}
+                    handleClose={handleClose}
                   />
                 </Tab>
                 <Tab
@@ -110,6 +112,7 @@ const RemoveLiquidity: FC<Props> = ({ protocolName, symbol, lpTokenBalance }) =>
                     symbol={symbol}
                     staker={staker}
                     setSelectedToken={setSelectedToken}
+                    handleClose={handleClose}
                   />
                 </Tab>
               </Tabs>
@@ -129,26 +132,21 @@ const RemoveMulti: FC<{
   symbol: string;
   staker: Staker;
   setSelectedToken: (v: string) => void;
-}> = ({ lpTokenBalance, symbolFull, symbol, staker, protocolName }) => {
+  handleClose: () => void;
+}> = ({ lpTokenBalance, symbolFull, symbol, staker, protocolName, handleClose }) => {
   const { account } = useEthers();
 
   const [lpSharesInputMulti, setLpSharesInputMulti] = useState("");
   const [tokenOutput, setTokenOutput] = useState("");
   const [tenderOutput, setTenderOutput] = useState("");
 
-  const isLpSharesApproved = useIsTokenApproved(
-    addresses[protocolName].lpToken,
-    account,
-    addresses[protocolName].tenderSwap,
-    lpSharesInputMulti
-  );
   const { removeLiquidity, exitPoolTx } = useExitPool(
     addresses[protocolName].lpToken,
     protocolName,
     account,
     addresses[protocolName].tenderSwap,
     symbol,
-    isLpSharesApproved
+    lpSharesInputMulti
   );
 
   const [tenderOut, tokenOut] = useCalculateRemoveLiquidity(
@@ -161,7 +159,7 @@ const RemoveMulti: FC<{
     setTenderOutput(weiToEthWithDecimals(tenderOut, 6));
   }, [tenderOut, tokenOut]);
 
-  useResetInputAfterTx(exitPoolTx, setLpSharesInputMulti);
+  useCloseAfterTx(exitPoolTx, handleClose);
 
   const handleRemoveLiquidity = async (e: any) => {
     e.preventDefault();
@@ -215,7 +213,7 @@ const RemoveMulti: FC<{
           </FormField>
         </Box>
       </Form>
-      <Box style={{ width: "100%" }} pad={{ horizontal: "large" }} justify="center" gap="small">
+      <Box style={{ width: "100%" }} pad={{ horizontal: "large", top: "large" }} justify="center" gap="small">
         <Button
           primary
           onClick={handleRemoveLiquidity}
@@ -241,7 +239,8 @@ const RemoveSingle: FC<{
   symbol: string;
   staker: Staker;
   setSelectedToken: (v: string) => void;
-}> = ({ lpTokenBalance, symbolFull, protocolName, symbol, selectedToken, staker, setSelectedToken }) => {
+  handleClose: () => void;
+}> = ({ lpTokenBalance, symbolFull, protocolName, symbol, selectedToken, staker, setSelectedToken, handleClose }) => {
   const { account } = useEthers();
 
   const [lpSharesInputSingle, setLpSharesInputSingle] = useState("");
@@ -249,24 +248,17 @@ const RemoveSingle: FC<{
   const singleTokenOutAddress =
     selectedToken === symbol ? addresses[protocolName].token : addresses[protocolName].tenderToken;
 
-  const singleOut = useCalculateRemoveLiquidityOneToken(
+  const singleTokenMinOut = useCalculateRemoveLiquidityOneToken(
     addresses[protocolName].tenderSwap,
     utils.parseEther(lpSharesInputSingle || "0"),
     singleTokenOutAddress
   );
 
-  const isLpSharesApproved = useIsTokenApproved(
-    addresses[protocolName].lpToken,
-    account,
-    addresses[protocolName].tenderSwap,
-    lpSharesInputSingle
-  );
-
   const { priceImpact } = useLiquidityPriceImpact(
     addresses[protocolName].tenderSwap,
     false,
-    selectedToken === symbol ? weiToEthWithDecimals(singleOut, 6) : "0",
-    selectedToken === symbol ? "0" : weiToEthWithDecimals(singleOut, 6)
+    selectedToken === symbol ? weiToEthWithDecimals(singleTokenMinOut, 6) : "0",
+    selectedToken === symbol ? "0" : weiToEthWithDecimals(singleTokenMinOut, 6)
   );
 
   const { removeLiquiditySingleOut, tx: exitPoolSingleTx } = useExitPoolSingle(
@@ -275,13 +267,20 @@ const RemoveSingle: FC<{
     account,
     addresses[protocolName].tenderSwap,
     symbol,
-    isLpSharesApproved
+    lpSharesInputSingle
   );
-  useResetInputAfterTx(exitPoolSingleTx, setLpSharesInputSingle);
+
+  useCloseAfterTx(exitPoolSingleTx, handleClose);
+
+  const { errorMessage, errorInfo } = useWarningOnTxFailure(exitPoolSingleTx);
 
   const handleRemoveLiquidity = async (e: any) => {
     e.preventDefault();
-    await removeLiquiditySingleOut(utils.parseEther(lpSharesInputSingle || "0"), singleTokenOutAddress, singleOut);
+    await removeLiquiditySingleOut(
+      utils.parseEther(lpSharesInputSingle || "0"),
+      singleTokenOutAddress,
+      singleTokenMinOut
+    );
   };
 
   return (
@@ -301,7 +300,7 @@ const RemoveSingle: FC<{
                   <TextInput
                     disabled
                     readOnly
-                    value={utils.formatEther(singleOut)}
+                    value={utils.formatEther(singleTokenMinOut)}
                     placeholder={"0"}
                     type="number"
                     style={{ textAlign: "right", padding: "20px 50px", border: "none" }}
@@ -334,7 +333,7 @@ const RemoveSingle: FC<{
           </Box>
         </Box>
       </Form>
-      <Box style={{ width: "100%" }} pad={{ horizontal: "large" }} justify="center" gap="small">
+      <Box style={{ width: "100%" }} pad={{ horizontal: "large", top: "large" }} justify="center" gap="small">
         <Button
           primary
           onClick={handleRemoveLiquidity}
@@ -346,6 +345,14 @@ const RemoveSingle: FC<{
               "Remove Liquidity"
             )
           }
+        />
+        <TxWarning
+          errorMessage={
+            errorInfo?.includes("AMOUNT_EXCEEDS_AVAILABLE")
+              ? `Not enough ${selectedToken} liquidity in the pool.`
+              : errorMessage
+          }
+          errorInfo={errorInfo}
         />
       </Box>
     </Box>

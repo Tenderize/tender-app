@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 
 type ValidateFunction = () => { message: string; status: "error" | "info" } | undefined;
 
-export const isPositive = (val: string): boolean =>
-  val !== "" && !utils.parseEther(val).isNegative() && !utils.parseEther(val).isZero();
-
+export const isPositive = (val: string): boolean => {
+  return hasValue(val) && !utils.parseEther(val).isNegative() && !utils.parseEther(val).isZero();
+};
 export const isLargerThanMax = (val: string, max: BigNumberish): boolean => utils.parseEther(val).gt(max);
 
 export const validateIsPositive =
@@ -18,7 +18,7 @@ export const validateIsLargerThanMax =
   () =>
     isLargerThanMax(val, max) ? { message: "Amount exceeds available balance", status: "error" } : undefined;
 
-export const hasValue = (val: BigNumberish) => val && val !== "0";
+export const hasValue = (val: BigNumberish): boolean => !!val && val !== "0";
 
 export const useBalanceValidation = (input: string, balance: BigNumberish, extraDep?: string) => {
   const [validationMessage, setValidationMessage] = useState<string>();

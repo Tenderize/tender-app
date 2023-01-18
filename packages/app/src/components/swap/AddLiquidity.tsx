@@ -15,7 +15,6 @@ import {
   TextInput,
   Text,
   Heading,
-  Tip,
 } from "grommet";
 import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
@@ -28,11 +27,12 @@ import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
-import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { useCloseAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { useIsGnosisSafe } from "utils/context";
 import { SlippageInput } from "components/SlippageInput";
 import { useLPTokenOut } from "utils/useLPTokenOut";
+import { TxWarning } from "components/deposit/TxWarning";
 import { useWarningOnTxFailure } from "utils/useWarningOnTxFailure";
 
 type Props = {
@@ -121,10 +121,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   const { validationMessage: tokenValidationMessage } = useBalanceValidation(tokenInput, tokenBalance);
   const { validationMessage: tenderValidationMessage } = useBalanceValidation(tenderInput, tenderTokenBalance);
 
-  useResetInputAfterTx(addLiquidityTx, (input: string) => {
-    setTokenInput(input);
-    setTenderInput(input);
-  });
+  useCloseAfterTx(addLiquidityTx, handleClose);
 
   const { priceImpact } = useLiquidityPriceImpact(addresses[protocolName].tenderSwap, true, tokenInput, tenderInput);
 
@@ -252,42 +249,12 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                     )
                   }
                 />
-                {errorMessage != null && (
-                  <Box justify="center" align="center" direction="row" gap="small" pad={{ horizontal: "xsmall" }}>
-                    <Text color="red">
-                      {errorInfo?.includes("Couldn't mint min requested")
-                        ? "Slippage threshold is too low."
-                        : errorMessage}
-                    </Text>
-                    <Tip
-                      plain
-                      dropProps={{
-                        round: {
-                          size: "20px",
-                        },
-                        background: "rgba(0,0,0,0.7)",
-                        elevation: "none",
-                      }}
-                      content={
-                        <Box width="medium" elevation="none" pad="medium">
-                          <Text>{errorInfo}</Text>
-                        </Box>
-                      }
-                    >
-                      <span
-                        style={{
-                          border: "1px solid red",
-                          borderRadius: "50%",
-                          paddingLeft: "5px",
-                          paddingRight: "5px",
-                          color: "red",
-                        }}
-                      >
-                        &#8505;
-                      </span>
-                    </Tip>
-                  </Box>
-                )}
+                <TxWarning
+                  errorMessage={
+                    errorInfo?.includes("Couldn't mint min requested") ? "Slippage threshold is too low." : errorMessage
+                  }
+                  errorInfo={errorInfo}
+                />
               </Box>
             </CardFooter>
           </Card>
