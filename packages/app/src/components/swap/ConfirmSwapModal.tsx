@@ -28,6 +28,7 @@ import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 import { useBalanceValidation } from "utils/inputValidation";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
+import { SlippageInput } from "components/SlippageInput";
 
 type Props = {
   show: boolean;
@@ -194,23 +195,7 @@ const ConfirmSwapModal: FC<Props> = ({
                     </Box>
                     <Box pad={{ vertical: "medium" }} gap="small" justify="center" align="right">
                       <Box direction="column" gap="small" alignSelf="end">
-                        <Box direction="row" justify="end" align="center" gap="small">
-                          <Text>Set slippage</Text>
-                          <Button size="small" label="auto" onClick={() => setSlippage(2)} />
-                          <Box>
-                            <TextInput
-                              id="slippage"
-                              value={slippage}
-                              width={30}
-                              maxLength={2}
-                              style={{ textAlign: "right", padding: "5px 5px", width: 60 }}
-                              onChange={(e) =>
-                                setSlippage(Number.parseInt(e.target.value === "" ? "0" : e.target.value))
-                              }
-                            />
-                          </Box>
-                          %
-                        </Box>
+                        <SlippageInput slippage={slippage} setSlippage={setSlippage} auto={2} />
                         <Text textAlign="end">
                           {`Minimum received after ${slippage}% slippage: ${weiToEthWithDecimals(
                             minAmount,
