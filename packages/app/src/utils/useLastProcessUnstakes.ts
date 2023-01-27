@@ -32,8 +32,6 @@ export const useLastProcessUnstakes = (protocolName: ProtocolName) => {
         return prev;
       }
     }, processUnstakesEvents.processUnstakesEvents[0]);
-
-    console.log(lastProcessUnstakesEvent);
   }
   return { lastProcessUnstakesEvent };
 };

@@ -20,16 +20,20 @@ import ApproveToken from "components/approve/ApproveToken";
 import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
 import { AmountInputFooter } from "components/AmountInputFooter";
 import { LoadingButtonContent } from "components/LoadingButtonContent";
-import { useCalculateLpTokenAmount, useAddLiquidity, useLiquidityPriceImpact } from "utils/tenderSwapHooks";
+import { useAddLiquidity, useLiquidityPriceImpact } from "utils/tenderSwapHooks";
 import { hasValue, useBalanceValidation } from "utils/inputValidation";
 import { isPendingTransaction } from "utils/transactions";
 import { weiToEthWithDecimals, withDecimals } from "utils/amountFormat";
 import { stakers } from "@tender/shared/src/index";
 import { useEthers } from "@usedapp/core";
 import { FormClose } from "grommet-icons";
-import { useResetInputAfterTx } from "utils/useResetInputAfterTx";
+import { useCloseAfterTx } from "utils/useResetInputAfterTx";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { useIsGnosisSafe } from "utils/context";
+import { SlippageInput } from "components/SlippageInput";
+import { useLPTokenOut } from "utils/useLPTokenOut";
+import { TxWarning } from "components/deposit/TxWarning";
+import { useWarningOnTxFailure } from "utils/useWarningOnTxFailure";
 
 type Props = {
   protocolName: ProtocolName;
@@ -44,7 +48,6 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   const bwTenderLogo = `/${staker.bwTenderLogo}`;
   const [show, setShow] = useState(false);
   const { account } = useEthers();
-
   // whether supported asset (e.g. LPT) has ERC20 permit support
   const hasPermit = stakers[protocolName].hasPermit;
 
@@ -52,7 +55,6 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
   const handleShow = () => setShow(true);
 
   const [tokenInput, setTokenInput] = useState("");
-
   const [tenderInput, setTenderInput] = useState("");
 
   const lpTokenSymbol = `t${symbol}-SWAP`;
@@ -94,7 +96,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
 
   const isButtonDisabled = () => {
     // if either field has an invalid value return true
-    if (!hasValue(tokenInput) || !hasValue(tenderInput)) return true;
+    if (!hasValue(tokenInput) && !hasValue(tenderInput)) return true;
     // if a transaction is pending return true
     if (isPendingTransaction(addLiquidityTx)) return true;
     // if underlying token (e.g. LPT) has no permit support and is not approved, return true
@@ -103,28 +105,27 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
 
   const { addLiquidity, tx: addLiquidityTx } = useAddLiquidity(protocolName, isTokenApproved, isTenderApproved);
 
-  const lpTokenAmount = useCalculateLpTokenAmount(
-    addresses[protocolName].tenderSwap,
-    [utils.parseEther(tenderInput || "0"), utils.parseEther(tokenInput || "0")],
-    true
+  const { lpTokenMinOut, slippage, setSlippage, suggestedSlippage } = useLPTokenOut(
+    protocolName,
+    tenderInput,
+    tokenInput
   );
 
   const handleAddLiquidity: MouseEventHandler<HTMLButtonElement & HTMLAnchorElement> = async (e) => {
     e.preventDefault();
     const tokenIn = utils.parseEther(tokenInput || "0");
     const tenderIn = utils.parseEther(tenderInput || "0");
-    addLiquidity(tenderIn, tokenIn, lpTokenAmount.sub(1), isSafeContext);
+    addLiquidity(tenderIn, tokenIn, lpTokenMinOut.sub(1), isSafeContext);
   };
 
   const { validationMessage: tokenValidationMessage } = useBalanceValidation(tokenInput, tokenBalance);
   const { validationMessage: tenderValidationMessage } = useBalanceValidation(tenderInput, tenderTokenBalance);
 
-  useResetInputAfterTx(addLiquidityTx, (input: string) => {
-    setTokenInput(input);
-    setTenderInput(input);
-  });
+  useCloseAfterTx(addLiquidityTx, handleClose);
 
   const { priceImpact } = useLiquidityPriceImpact(addresses[protocolName].tenderSwap, true, tokenInput, tenderInput);
+
+  const { errorMessage, errorInfo } = useWarningOnTxFailure(addLiquidityTx);
 
   return (
     <Box pad={{ horizontal: "large", top: "small" }}>
@@ -192,11 +193,11 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                         onClick={maxTenderTokenDeposit}
                       />
                     </FormField>
-                    <FormField label={`Amount of ${lpTokenSymbol} to receive`}>
+                    <FormField label={`Minimum amount of ${lpTokenSymbol} to receive`}>
                       <TextInput
                         readOnly
                         disabled
-                        value={weiToEthWithDecimals(lpTokenAmount, 6)}
+                        value={weiToEthWithDecimals(lpTokenMinOut, 6)}
                         placeholder={"0"}
                         type="number"
                         style={{ textAlign: "right", padding: "20px 50px" }}
@@ -207,6 +208,7 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                         }
                       />
                     </FormField>
+                    <SlippageInput slippage={slippage} setSlippage={setSlippage} auto={suggestedSlippage} />
                     <Text textAlign="end">{`Price impact: ${withDecimals((priceImpact * 100).toString(), 2)} %`}</Text>
                   </Box>
                 </Form>
@@ -246,6 +248,12 @@ const AddLiquidity: FC<Props> = ({ protocolName, symbol, tokenBalance, tenderTok
                       "Add Liquidity"
                     )
                   }
+                />
+                <TxWarning
+                  errorMessage={
+                    errorInfo?.includes("Couldn't mint min requested") ? "Slippage threshold is too low." : errorMessage
+                  }
+                  errorInfo={errorInfo}
                 />
               </Box>
             </CardFooter>

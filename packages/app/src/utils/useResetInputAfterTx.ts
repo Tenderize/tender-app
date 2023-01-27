@@ -8,3 +8,11 @@ export const useResetInputAfterTx = (tx: TransactionStatus, resetInput: (resetIn
     }
   }, [tx.status]);
 };
+
+export const useCloseAfterTx = (tx: TransactionStatus, handleClose: () => void) => {
+  useEffect(() => {
+    if (tx.status === "Success") {
+      handleClose();
+    }
+  }, [tx.status]);
+};

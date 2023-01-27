@@ -7,6 +7,7 @@ import { weiToEthInFloat } from "./amountFormat";
 import { signERC2612PermitPatched } from "./signERC2612PermitPatch";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { hasPermit } from "./context";
+import { useIsTokenApproved } from "components/approve/useIsTokenApproved";
 
 const TenderSwapABI = new utils.Interface(abis.tenderSwap);
 
@@ -221,9 +222,18 @@ export const useExitPoolSingle = (
   owner: string | null | undefined,
   spender: string,
   symbol: string,
-  isLpSharesApproved: boolean
+  lpSharesInputSingle: string
 ) => {
   const swapContract = new Contract(addresses[protocolName].tenderSwap, TenderSwapABI) as TenderSwap;
+
+  const { account } = useEthers();
+
+  const isLpSharesApproved = useIsTokenApproved(
+    addresses[protocolName].lpToken,
+    account,
+    addresses[protocolName].tenderSwap,
+    lpSharesInputSingle
+  );
 
   const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(swapContract, "multicall", {
     transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
@@ -287,9 +297,17 @@ export const useExitPool = (
   owner: string | null | undefined,
   spender: string,
   symbol: string,
-  isLpSharesApproved: boolean
+  lpSharesInputMulti: string
 ) => {
   const swapContract = new Contract(addresses[protocolName].tenderSwap, TenderSwapABI) as TenderSwap;
+
+  const { account } = useEthers();
+  const isLpSharesApproved = useIsTokenApproved(
+    addresses[protocolName].lpToken,
+    account,
+    addresses[protocolName].tenderSwap,
+    lpSharesInputMulti
+  );
 
   const { state: removeLiquidityWithPermitTx, send: multicall } = useContractFunction(swapContract, "multicall", {
     transactionName: `exit t${symbol}/${symbol} Liquidity Pool`,
