@@ -27,7 +27,7 @@ export const useLPTokenOut = (protocolName: ProtocolName, tenderInput: string, t
     const tokenIn = Number.parseFloat(tokenInput || "0");
     const tenderIn = Number.parseFloat(tenderInput || "0");
     const sumIn = tokenIn + tenderIn;
-    const outMin = sumIn - (sumIn * slippage) / 100;
+    const outMin = (sumIn - (sumIn * slippage) / 100).toFixed(18);
     setLPTokenMinOut(utils.parseEther(outMin.toString()) ?? constants.Zero);
   }, [slippage, tokenInput, tenderInput]);
 
