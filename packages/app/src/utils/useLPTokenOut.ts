@@ -16,7 +16,7 @@ export const useLPTokenOut = (protocolName: ProtocolName, tenderInput: string, t
   const sumIn = utils.parseEther(tokenInput || "0").add(utils.parseEther(tenderInput || "0"));
   const suggestedSlippage = defaultLPTokenOut.eq(constants.Zero)
     ? 0
-    : Math.round(Math.abs((1 - weiToEthInFloat(sumIn) / weiToEthInFloat(defaultLPTokenOut)) * 100) * 100) / 100;
+    : round(Math.abs((1 - weiToEthInFloat(sumIn) / weiToEthInFloat(defaultLPTokenOut)) * 100));
   const [slippage, setSlippage] = useState(suggestedSlippage);
 
   useEffect(() => {
@@ -24,11 +24,15 @@ export const useLPTokenOut = (protocolName: ProtocolName, tenderInput: string, t
   }, [suggestedSlippage]);
 
   useEffect(() => {
-    const tokenIn = Number.parseFloat(tokenInput || "0");
-    const tenderIn = Number.parseFloat(tenderInput || "0");
-    const sumIn = tokenIn + tenderIn;
-    const outMin = (sumIn - (sumIn * slippage) / 100).toFixed(18);
-    setLPTokenMinOut(utils.parseEther(outMin.toString()) ?? constants.Zero);
+    const sumIn = utils.parseEther(tokenInput || "0").add(utils.parseEther(tenderInput || "0"));
+    const outMin = sumIn.sub(
+      sumIn
+        .mul(slippage * 100)
+        .div(100)
+        .div(100)
+    );
+
+    setLPTokenMinOut(outMin ?? constants.Zero);
   }, [slippage, tokenInput, tenderInput]);
 
   return {
@@ -37,4 +41,8 @@ export const useLPTokenOut = (protocolName: ProtocolName, tenderInput: string, t
     setSlippage,
     suggestedSlippage,
   };
+};
+
+const round = (v: number): number => {
+  return Math.round(v * 100) / 100;
 };
