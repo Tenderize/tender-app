@@ -6,6 +6,8 @@ export const networkAvatar = (chain: ChainId | undefined) => {
       return "/arbitrum.svg";
     case ChainId.Mainnet:
       return "/ethereum.png";
+    case ChainId.Goerli:
+      return "/ethereum.png";
     default:
       return "";
   }
