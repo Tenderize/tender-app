@@ -144,13 +144,13 @@ export default UnstakeModal;
 
 const getWithdrawLink = (protocolName: ProtocolName): string => {
   switch (protocolName) {
-    case "audius":
-      return "https://docs.audius.org/token/staking#staking-on-audius";
+    // case "audius":
+    //   return "https://docs.audius.org/token/staking#staking-on-audius";
     case "graph":
       return "https://thegraph.com/docs/en/network/delegating/#the-delegation-tax";
-    case "livepeer":
-      return "https://www.figment.io/resources/livepeer-staking-delegation-guide-2";
-    case "matic":
-      return "https://polygon.technology/staking/";
+    // case "livepeer":
+    //   return "https://www.figment.io/resources/livepeer-staking-delegation-guide-2";
+    // case "matic":
+    //   return "https://polygon.technology/staking/";
   }
 };

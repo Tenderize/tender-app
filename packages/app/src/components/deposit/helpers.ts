@@ -32,27 +32,27 @@ export const getUnlockDateForProtocol = (
         return "Loading...";
       }
     }
-    case "audius": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 7);
-      const minutesUntilUnlock = minutesBetweenDates(now, unlockDate);
-      return getTimeRemainingLabel(minutesUntilUnlock);
-    }
-    case "livepeer": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 7);
-      const minutesUntilUnlock = minutesBetweenDates(now, unlockDate);
-      return getTimeRemainingLabel(minutesUntilUnlock);
-    }
-    case "matic": {
-      const unstakeDate = blockTimestampToDate(lock.timestamp);
-      const unlockDate = new Date(unstakeDate);
-      unlockDate.setDate(unstakeDate.getDate() + 2);
-      const minutesUntilUnlock = minutesBetweenDates(now, unlockDate);
-      return getTimeRemainingLabel(minutesUntilUnlock);
-    }
+    // case "audius": {
+    //   const unstakeDate = blockTimestampToDate(lock.timestamp);
+    //   const unlockDate = new Date(unstakeDate);
+    //   unlockDate.setDate(unstakeDate.getDate() + 7);
+    //   const minutesUntilUnlock = minutesBetweenDates(now, unlockDate);
+    //   return getTimeRemainingLabel(minutesUntilUnlock);
+    // }
+    // case "livepeer": {
+    //   const unstakeDate = blockTimestampToDate(lock.timestamp);
+    //   const unlockDate = new Date(unstakeDate);
+    //   unlockDate.setDate(unstakeDate.getDate() + 7);
+    //   const minutesUntilUnlock = minutesBetweenDates(now, unlockDate);
+    //   return getTimeRemainingLabel(minutesUntilUnlock);
+    // }
+    // case "matic": {
+    //   const unstakeDate = blockTimestampToDate(lock.timestamp);
+    //   const unlockDate = new Date(unstakeDate);
+    //   unlockDate.setDate(unstakeDate.getDate() + 2);
+    //   const minutesUntilUnlock = minutesBetweenDates(now, unlockDate);
+    //   return getTimeRemainingLabel(minutesUntilUnlock);
+    // }
   }
 };
 
