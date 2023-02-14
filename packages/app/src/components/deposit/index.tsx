@@ -21,7 +21,7 @@ import UnstakeModal from "./UnstakeModal";
 import WithdrawModal from "./WithdrawModal";
 import Faucet from "components/faucet";
 import { useLocks } from "utils/useUnstakeEvents";
-import { useAPY } from "utils/useAPY";
+// import { useAPY } from "utils/useAPY";
 import { useRewards } from "utils/useRewards";
 
 type Props = {
@@ -51,7 +51,8 @@ const Deposit: FC<Props> = ({
   const hasPermit = stakers[protocolName].hasPermit;
 
   const { locks } = useLocks(stakers[protocolName], tenderTokenBalance);
-  const { apy } = useAPY(stakers[protocolName]);
+  // const { apy } = useAPY(stakers[protocolName]);
+  const apy = "10";
   const { rewards } = useRewards(stakers[protocolName], tokenBalance, tenderTokenBalance);
   const isSafeContext = useIsGnosisSafe();
 

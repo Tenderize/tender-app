@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { constants } from "ethers";
-import { ChainId, Config, DAppProvider, useEthers, useTokenBalance, Arbitrum, Mainnet } from "@usedapp/core";
+import { ChainId, Config, DAppProvider, useEthers, useTokenBalance, Arbitrum, Mainnet, Goerli } from "@usedapp/core";
 import { addresses } from "@tender/contracts/src/index";
 import styled from "styled-components";
 import Deposit from "../../components/deposit";
@@ -264,12 +264,13 @@ export const getStaticProps = async () => {
   const CHAIN_URL_MAPPING = {
     [ChainId.Mainnet]: process.env.RPC_ETHEREUM ?? "",
     [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
+    [ChainId.Goerli]: process.env.RPC_ETHEREUM_GOERLI ?? "",
   };
 
   const config: TenderizeConfig = {
     portisApiKey: process.env.PORTIS_API_KEY ?? "",
     chainUrlMapping: CHAIN_URL_MAPPING,
-    supportedChains: [Mainnet.chainId, Arbitrum.chainId],
+    supportedChains: [Mainnet.chainId, Arbitrum.chainId, Goerli.chainId],
   };
 
   return {
