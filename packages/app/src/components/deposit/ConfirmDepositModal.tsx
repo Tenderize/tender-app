@@ -140,7 +140,7 @@ const ConfirmDepositModal: FC<Props> = ({
                     {isGRT && (
                       <Box>
                         <Text>
-                          Notice: staking GRT infers a 0.5%{" "}
+                          Notice: staking GRT incurs a 0.5%{" "}
                           <BrandedALink href="https://thegraph.com/docs/en/network/delegating/#the-delegation-tax">
                             delegation
                           </BrandedALink>{" "}
