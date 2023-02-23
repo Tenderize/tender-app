@@ -10,6 +10,12 @@ rinkeby:
     registry:
       address: "bD37ca301D6031455FB8FBA696c68861e70ED694"
       startBlock: 10208627
+goerli:
+  networkName: goerli
+  contracts:
+    registry:
+      address: "a34d3094bd94bb89Da3d02d57B185578b96d110E"
+      startBlock:  8490171
 arbitrum-rinkeby:
   networkName: arbitrum-rinkeby
   contracts:
