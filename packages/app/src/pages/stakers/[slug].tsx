@@ -11,14 +11,13 @@ import styled from "styled-components";
 import Deposit from "../../components/deposit";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
-import { Staker, stakers, Foot, Queries } from "@tender/shared/src/index";
+import { Staker, stakers, Foot } from "@tender/shared/src/index";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
 import { useHover } from "utils/useHover";
 import { TenderizeConfig } from "types";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
-import { Banner } from "components/Banner";
 import { useLastProcessUnstakes } from "utils/useLastProcessUnstakes";
 
 const Token: FC = () => {
@@ -34,8 +33,6 @@ const Token: FC = () => {
   const tenderBalance = useTokenBalance(addresses[protocolName].tenderToken, account, { chainId }) || constants.Zero;
   const lpTokenBalance = useTokenBalance(addresses[protocolName].lpToken, account, { chainId }) || constants.Zero;
   const { lastProcessUnstakesEvent } = useLastProcessUnstakes(protocolName);
-
-  const daysUntilGRTBanner = getDaysToGRTRedelegationFinish(lastProcessUnstakesEvent);
 
   const onActive = useCallback((nextIndex: number) => {
     if (nextIndex === 0) {
@@ -68,14 +65,6 @@ const Token: FC = () => {
               </Tip>
             }
           >
-            {protocolName === "graph" && daysUntilGRTBanner > 0 && (
-              <Banner
-                message={`GRT redelegation in progress, rewards will be lower for the next ${`${daysUntilGRTBanner} day${
-                  daysUntilGRTBanner > 1 ? "s" : ""
-                }`}`}
-              />
-            )}
-
             <Box round={{ corner: "bottom" }} border={protocolName === "graph" ? undefined : "top"} pad="medium">
               <Deposit
                 protocolName={protocolName}
@@ -134,17 +123,6 @@ const Token: FC = () => {
       </TenderBox>
     </Box>
   );
-};
-
-const getDaysToGRTRedelegationFinish = (lastProcessUnstakesEvent: Queries.ProcessUnstakesEvent | undefined) => {
-  if (lastProcessUnstakesEvent == null) {
-    return 0;
-  }
-  const now = new Date();
-  const nowSeconds = now.getTime() / 1000;
-
-  const secs = nowSeconds - Number.parseInt(lastProcessUnstakesEvent.timestamp);
-  return Math.floor(28 - secs / (60 * 60 * 24));
 };
 
 const TokenDropdown: FC<{ logo: string; title: string }> = ({ logo, title }) => {
