@@ -134,7 +134,7 @@ export function loadOrCreateUserDeployment(address: string, protocolName: string
 
 export function getProtocolIdByTenderizerAddress(address: string): string {
   // TODO: Is there a better way to do this?
-  let globals = TenderizeGlobal.load('1')
+  let globals = TenderizeGlobal.load('1')!
   let globalConfigs = globals.configs
   for (let i = 0; i < globalConfigs.length; i++) { 
     let c = Config.load(globalConfigs[i]) as Config
@@ -147,7 +147,7 @@ export function getProtocolIdByTenderizerAddress(address: string): string {
 
 export function getProtocolIdByTenderFarmAddress(address: string): string {
   // TODO: Is there a better way to do this?
-  let globals = TenderizeGlobal.load('1')
+  let globals = TenderizeGlobal.load('1')!
   let globalConfigs = globals.configs
   for (let i = 0; i < globalConfigs.length; i++) { 
     let c = Config.load(globalConfigs[i]) as Config
@@ -160,7 +160,7 @@ export function getProtocolIdByTenderFarmAddress(address: string): string {
 
 export function getProtocolIdByTenderTokenAddress(address: string): string {
   // TODO: Is there a better way to do this?
-  let globals = TenderizeGlobal.load('1')
+  let globals = TenderizeGlobal.load('1')!
   let globalConfigs = globals.configs
   for (let i = 0; i < globalConfigs.length; i++) { 
     let c = Config.load(globalConfigs[i]) as Config
@@ -173,7 +173,7 @@ export function getProtocolIdByTenderTokenAddress(address: string): string {
 
 export function getProtocolIdByTenderSwapAddress(address: string): string {
   // TODO: Is there a better way to do this?
-  let globals = TenderizeGlobal.load('1')
+  let globals = TenderizeGlobal.load('1')!
   let globalConfigs = globals.configs
   for (let i = 0; i < globalConfigs.length; i++) { 
     let c = Config.load(globalConfigs[i]) as Config
@@ -239,12 +239,12 @@ export function loadOrCreateUserDeploymentDay(timestamp: i32, address: string, p
     // Initialize data with previous day data
     // Not needed for just a single value
     let dayList = user.dayData
-    if(dayList.length == 0) {
-      day.shares = ZERO_BI
-    } else {
+    if(dayList) {
       let previousDayID = dayList.pop()
-      let previousDay = UserDeploymentDay.load(previousDayID)
+      let previousDay = UserDeploymentDay.load(previousDayID)!
       day.shares = previousDay.shares
+    } else {
+      day.shares = ZERO_BI
     }
     day.save()
   }
@@ -257,10 +257,8 @@ export function getUSDPrice(steakToken: string): BigDecimal {
     return ZERO_BD
   }
 
-  let usdc: string
-  if(network == 'mainnet'){
-    usdc = config.USDC_ADDRESS
-  } else if(network == 'arbitrum-one'){
+  let usdc = config.USDC_ADDRESS
+  if(network == 'arbitrum-one'){
     usdc = config.USDC_ADDRESS_ARBITURM
   }
 
@@ -290,7 +288,7 @@ export function getUSDPrice(steakToken: string): BigDecimal {
 }
 
 export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal {
-  let config = Config.load(protocol)
+  let config = Config.load(protocol)!
   let tenderSwap = TenderSwapContact.bind(Address.fromString(config.tenderSwap))
   let lpToken = LiquidityPoolToken.bind(tenderSwap.lpToken())
   let totalSupply = lpToken.totalSupply().toBigDecimal()
@@ -300,12 +298,12 @@ export function LPTokenToToken(amount: BigDecimal, protocol: string): BigDecimal
 }
 
 export function tokensToShares(amount: BigInt, protocol: string): BigInt {
-  let config = Config.load(protocol)
+  let config = Config.load(protocol)!
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
   return tenderToken.tokensToShares(amount)
 }
 
-export function addressIsContract(config: Config, address: Address): Boolean {
+export function addressIsContract(config: Config, address: Address): boolean {
   let addressString = address.toHex()
   return (
   addressString.includes(config.tenderToken) ||
@@ -313,7 +311,7 @@ export function addressIsContract(config: Config, address: Address): Boolean {
   addressString.includes(config.tenderSwap) ||
   addressString.includes(config.tenderFarm) ||
   addressString.includes(config.tenderizer)
-  ) as Boolean
+  )
 }
 
 // Tenderswap helpers
@@ -496,7 +494,7 @@ export function getHourlyTradeVolume(
     volume.volume = decimal.ZERO
   }
 
-  return volume!
+  return volume
 }
 
 export function getDailyTradeVolume(
@@ -516,7 +514,7 @@ export function getDailyTradeVolume(
     volume.volume = decimal.ZERO
   }
 
-  return volume!
+  return volume
 }
 
 export function getWeeklyTradeVolume(
@@ -536,5 +534,5 @@ export function getWeeklyTradeVolume(
     volume.volume = decimal.ZERO
   }
 
-  return volume!
+  return volume
 }

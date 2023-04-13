@@ -13,7 +13,7 @@ dataSources:
       abi: Registry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.5
       abis:
         - name: Registry
           file: ../contracts/src/abis/Registry.json
@@ -40,7 +40,7 @@ templates:
       abi: Tenderizer
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/tenderizer.ts
       entities:
@@ -78,7 +78,7 @@ templates:
       abi: TenderFarm
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/tenderFarm.ts
       entities:
@@ -112,7 +112,7 @@ templates:
       abi: TenderToken
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/tenderToken.ts
       entities:
@@ -132,7 +132,7 @@ templates:
       abi: TenderSwap
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/tenderSwap.ts
       entities:

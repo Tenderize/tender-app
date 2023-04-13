@@ -354,7 +354,8 @@ type TenderSwap @entity {
   weeklyVolumes: [WeeklyVolume!] @derivedFrom(field: "swap")
 }
 
-interface TradeVolume @entity {
+interface TradeVolume {
+  id: ID!
   swap: TenderSwap!
   timestamp: BigInt!
   volume: BigDecimal!
@@ -381,7 +382,8 @@ type WeeklyVolume implements TradeVolume @entity {
   volume: BigDecimal!
 }
 
-interface SwapEvent @entity {
+interface SwapEvent {
+  id: ID!
   swap: TenderSwap!
 
   block: BigInt!
@@ -472,6 +474,7 @@ type RemoveLiquidityEvent implements SwapEvent @entity {
 }
 
 interface Exchange {
+  id: ID!
   swap: TenderSwap!
 
   buyer: Bytes!

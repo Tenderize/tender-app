@@ -36,8 +36,8 @@ export function handleDepositEvent(depositEvent: Deposit): void {
   let tenderizerAddress = depositEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = depositEvent.params.amount
-  let usdPrice = getUSDPrice(Config.load(protocolId).steak)
-  let config = Config.load(protocolId)
+  let config = Config.load(protocolId)!
+  let usdPrice = getUSDPrice(config.steak)
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
   let timestamp = depositEvent.block.timestamp.toI32()
   let userAddress = depositEvent.params.from.toHex()
@@ -79,7 +79,7 @@ export function handleUnstakeEvent(unstakeEvent: Unstake): void {
   let tenderizerAddress = unstakeEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = unstakeEvent.params.amount
-  let config = Config.load(protocolId)
+  let config = Config.load(protocolId)!
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
   let timestamp = unstakeEvent.block.timestamp.toI32()
 
@@ -142,8 +142,8 @@ export function handleWithdrawEvent(withdrawEvent: Withdraw): void {
   let tenderizerAddress = withdrawEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = withdrawEvent.params.amount
-  let usdPrice = getUSDPrice(Config.load(protocolId).steak)
-  let config = Config.load(protocolId)
+  let usdPrice = getUSDPrice(Config.load(protocolId)!.steak)
+  let config = Config.load(protocolId)!
   let tenderToken = TenderToken.bind(Address.fromString(config.tenderToken))
 
   // Update day data
@@ -173,7 +173,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
   let tenderizerAddress = rewardsClaimedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
   let amount = rewardsClaimedEvent.params.stakeDiff
-  let usdPrice = getUSDPrice(Config.load(protocolId).steak)
+  let usdPrice = getUSDPrice(Config.load(protocolId)!.steak)
 
   // Update day data
   let day = loadOrCreateTernderizerDay(rewardsClaimedEvent.block.timestamp.toI32(), protocolId)
@@ -202,7 +202,7 @@ export function handleRewardsClaimedEvent(rewardsClaimedEvent: RewardsClaimed): 
 export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: ProtocolFeeCollected): void {
   let tenderizerAddress = protocolFeeCollectedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
-  let usdPrice = getUSDPrice(Config.load(protocolId).steak)
+  let usdPrice = getUSDPrice(Config.load(protocolId)!.steak)
 
   // Update Tenderizer totals
   let tenderizer = loadOrCreateTenderizer(protocolId)
@@ -221,7 +221,7 @@ export function handleProtocolFeeCollectedEvent(protocolFeeCollectedEvent: Proto
 export function handleLiquidityFeeCollectedEvent(liquidityFeeCollectedEvent: LiquidityFeeCollected): void {
   let tenderizerAddress = liquidityFeeCollectedEvent.address.toHex()
   let protocolId  = getProtocolIdByTenderizerAddress(tenderizerAddress)
-  let usdPrice = getUSDPrice(Config.load(protocolId).steak)
+  let usdPrice = getUSDPrice(Config.load(protocolId)!.steak)
 
   // Update Tenderizer totals
   let tenderizer = loadOrCreateTenderizer(protocolId)
