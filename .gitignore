@@ -26,6 +26,7 @@ yarn-error.log*
 
 # subgraph
 packages/subgraph/build/
+packages/subgraph/generated/
 packages/subgraph/data/
 packages/subgraph/src/types/
 packages/subgraph/subgraph.yaml
