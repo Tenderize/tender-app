@@ -32,5 +32,8 @@
     "packages": [
       "packages/*"
     ]
+  },
+  "resolutions": {
+    "prettier": "2.3.1"
   }
 }
