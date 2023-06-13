@@ -4,7 +4,7 @@ import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
 
 const ENDPOINTS: Endpoints = {
   [ChainId.Arbitrum]: "https://gateway.thegraph.com/api/process.env.GRAPH_API_KEY/subgraphs/id/tenderize-arbitrum",
-  [ChainId.Mainnet]: "hhttps://gateway.thegraph.com/api/process.env.GRAPH_API_KEY/subgraphs/id/tenderize-ethereum",
+  [ChainId.Mainnet]: "https://gateway.thegraph.com/api/process.env.GRAPH_API_KEY/subgraphs/id/tenderize-ethereum",
   [ChainId.Hardhat]: "http://127.0.0.1:8000/subgraphs/name/tenderize/tenderize-localhost",
 };
 
