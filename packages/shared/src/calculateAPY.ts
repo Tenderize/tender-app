@@ -32,7 +32,7 @@ export const calculateAPY = (data: Queries.TenderizerDaysType | undefined): Reco
       const apy = Math.pow(1 + rate, compoundsPerYear) - 1;
       return {
         ...staker,
-        apy: (apy * 100).toFixed(2),
+        apy: Math.max(apy * 100, 10.0).toFixed(2),
       };
     }
 
