@@ -5,7 +5,6 @@ import Head from "next/head";
 import { GrommetWrapper } from "@tender/shared/src/index";
 import "./index.css";
 
-
 const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <GrommetWrapper style={{}}>

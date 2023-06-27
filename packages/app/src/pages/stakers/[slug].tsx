@@ -20,7 +20,6 @@ import { TenderizeConfig, Endpoints } from "types";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { useLastProcessUnstakes } from "utils/useLastProcessUnstakes";
 
-
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client";
 
@@ -262,7 +261,6 @@ export const getStaticProps = async () => {
     supportedChains: [Mainnet.chainId, Arbitrum.chainId],
     subgraphEndpoints: ENDPOINTS,
   };
-
 
   return {
     props: {
