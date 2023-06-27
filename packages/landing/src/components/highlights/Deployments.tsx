@@ -34,7 +34,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: 50,
               }}
             >
-              <TokenCard key={livepeer.path} {...livepeer} tvl={tvl.livepeer.tvl} />
+              <TokenCard key={livepeer.path} {...livepeer} tvl={tvl?.livepeer?.tvl} />
             </Box>
             <Box
               style={{
@@ -43,7 +43,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: 160,
               }}
             >
-              <TokenCard key={audius.path} {...audius} tvl={tvl.audius.tvl} />
+              <TokenCard key={audius.path} {...audius} tvl={tvl?.audius?.tvl} />
             </Box>
             <Box
               style={{
@@ -52,7 +52,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: -170,
               }}
             >
-              <TokenCard key={graph.path} {...graph} tvl={tvl.graph.tvl} />
+              <TokenCard key={graph.path} {...graph} tvl={tvl?.graph?.tvl} />
             </Box>
             <Box
               style={{
@@ -61,7 +61,7 @@ export const Deployments: FC<{ screenSize: ScreenSize; setVisibleIndex: (v: numb
                 left: -70,
               }}
             >
-              <TokenCard key={matic.path} {...matic} tvl={tvl.matic.tvl} />
+              <TokenCard key={matic.path} {...matic} tvl={tvl?.matic?.tvl} />
             </Box>
             <Box
               style={{
