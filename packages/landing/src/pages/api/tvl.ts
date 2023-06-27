@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
 import { ChainId } from "@usedapp/core";
-import { Subgraph, SubgraphForLanding, Queries } from "@tender/shared/src/index";
+import { SubgraphForLanding, Queries } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
 import { ProtocolName, Staker, stakers } from "@tender/shared/src/data/stakers";
 import { TVLData } from "@tender/shared/src/queries";
@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
     res.status(200).json(data);
   } else {
     try {
-      const ethereumData = await getTvl(Subgraph, ChainId.Mainnet);
+      const ethereumData = await getTvl(SubgraphForLanding, ChainId.Mainnet);
       const arbitrumData = await getTvl(SubgraphForLanding, ChainId.Arbitrum);
       const data = { ...ethereumData, ...arbitrumData };
 
