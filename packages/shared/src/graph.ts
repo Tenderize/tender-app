@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, ApolloLink, createHttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloLink, createHttpLink, NormalizedCacheObject } from "@apollo/client";
 import { ChainId } from "@usedapp/core";
 import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
 
@@ -12,17 +12,18 @@ interface Endpoints {
   [chainId: string]: string;
 }
 
-export const Subgraph = new ApolloClient({
-  connectToDevTools: true,
-  link: ApolloLink.from([
-    new MultiAPILink({
-      endpoints: ENDPOINTS,
-      httpSuffix: "",
-      createHttpLink: () => createHttpLink(),
-    }),
-  ]),
-  cache: new InMemoryCache(),
-});
+export const Subgraph = (endPoints: Endpoints): ApolloClient<NormalizedCacheObject> => {
+  return new ApolloClient({
+    link: ApolloLink.from([
+      new MultiAPILink({
+        endpoints: endPoints,
+        httpSuffix: "",
+        createHttpLink: () => createHttpLink(),
+      }),
+    ]),
+    cache: new InMemoryCache(),
+  });
+}
 
 export const SubgraphForLanding = new ApolloClient({
   link: ApolloLink.from([
