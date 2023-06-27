@@ -3,8 +3,8 @@ import { ChainId } from "@usedapp/core";
 import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
 
 const ENDPOINTS: Endpoints = {
-  [ChainId.Arbitrum]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/tenderize-arbitrum`,
-  [ChainId.Mainnet]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/tenderize-ethereum`,
+  [ChainId.Arbitrum]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/Gr4Kn4E1CwNbjBxFXdnKEunAGrC4d714TFMPw4NbmbPk`,
+  [ChainId.Mainnet]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/2x67A1XaRrMBMcYaPE6JbJEUnrtadx3HznbbGEFJtN2u`,
   [ChainId.Hardhat]: "http://127.0.0.1:8000/subgraphs/name/tenderize/tenderize-localhost",
 };
 
