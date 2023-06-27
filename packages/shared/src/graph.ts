@@ -23,7 +23,7 @@ export const Subgraph = (endPoints: Endpoints): ApolloClient<NormalizedCacheObje
     ]),
     cache: new InMemoryCache(),
   });
-}
+};
 
 export const SubgraphForLanding = new ApolloClient({
   link: ApolloLink.from([
