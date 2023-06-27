@@ -11,14 +11,16 @@ import styled from "styled-components";
 import Deposit from "../../components/deposit";
 import Farm from "../../components/farm";
 import LiquidityPool from "../../components/swap";
-import { Staker, stakers, Foot } from "@tender/shared/src/index";
+import { Subgraph, Staker, stakers, Foot } from "@tender/shared/src/index";
 import TenderBox from "../../components/tenderbox";
 import Navbar from "../../components/nav";
 import { NotificationsList } from "../../components/transactions";
 import { useHover } from "utils/useHover";
-import { TenderizeConfig } from "types";
+import { TenderizeConfig, Endpoints } from "types";
 import { ProtocolName } from "@tender/shared/src/data/stakers";
 import { useLastProcessUnstakes } from "utils/useLastProcessUnstakes";
+
+import { ApolloProvider } from "@apollo/client";
 
 const Token: FC = () => {
   const router = useRouter();
@@ -220,21 +222,23 @@ const DropdownBackground = styled.div`
 
 const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   const dappConfig: Config = {
-    pollingInterval: 2500,
+    pollingInterval: 5000,
     readOnlyUrls: props.config?.chainUrlMapping,
   };
 
   if (props.config == null) return null;
 
   return (
-    <DAppProvider config={dappConfig}>
-      <NotificationsList />
-      <Box style={{ minHeight: "100%" }}>
-        <Navbar config={props.config} />
-        <Token />
-        <Foot />
-      </Box>
-    </DAppProvider>
+    <ApolloProvider client={Subgraph(props.config.subgraphEndpoints)}>
+      <DAppProvider config={dappConfig}>
+        <NotificationsList />
+        <Box style={{ minHeight: "100%" }}>
+          <Navbar config={props.config} />
+          <Token />
+          <Foot />
+        </Box>
+      </DAppProvider>
+    </ApolloProvider>
   );
 };
 
@@ -244,10 +248,17 @@ export const getStaticProps = async () => {
     [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
   };
 
+  const ENDPOINTS: Endpoints = {
+    [ChainId.Arbitrum]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/Gr4Kn4E1CwNbjBxFXdnKEunAGrC4d714TFMPw4NbmbPk`,
+    [ChainId.Mainnet]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/2x67A1XaRrMBMcYaPE6JbJEUnrtadx3HznbbGEFJtN2u`,
+    [ChainId.Hardhat]: "http://127.0.0.1:8000/subgraphs/name/tenderize/tenderize-localhost",
+  };
+
   const config: TenderizeConfig = {
     portisApiKey: process.env.PORTIS_API_KEY ?? "",
     chainUrlMapping: CHAIN_URL_MAPPING,
     supportedChains: [Mainnet.chainId, Arbitrum.chainId],
+    subgraphEndpoints: ENDPOINTS,
   };
 
   return {
