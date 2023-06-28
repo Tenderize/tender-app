@@ -15,7 +15,6 @@ const ENDPOINTS = {
   [ChainId.Hardhat]: "http://127.0.0.1:8000/subgraphs/name/tenderize/tenderize-localhost",
 };
 
-
 const coinGeckoApiIds: Record<ProtocolName, string> = {
   audius: "audius",
   livepeer: "livepeer",
