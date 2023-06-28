@@ -9,6 +9,12 @@ import { BigNumber, utils } from "ethers";
 
 const stakersArray = Object.values(stakers);
 
+const ENDPOINTS = {
+  [ChainId.Arbitrum]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/Gr4Kn4E1CwNbjBxFXdnKEunAGrC4d714TFMPw4NbmbPk`,
+  [ChainId.Mainnet]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/2x67A1XaRrMBMcYaPE6JbJEUnrtadx3HznbbGEFJtN2u`,
+  [ChainId.Hardhat]: "http://127.0.0.1:8000/subgraphs/name/tenderize/tenderize-localhost",
+};
+
 const coinGeckoApiIds: Record<ProtocolName, string> = {
   audius: "audius",
   livepeer: "livepeer",
@@ -30,8 +36,8 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
     res.status(200).json(data);
   } else {
     try {
-      const ethereumData = await getTvl(Subgraph, ChainId.Mainnet);
-      const arbitrumData = await getTvl(SubgraphForLanding, ChainId.Arbitrum);
+      const ethereumData = await getTvl(SubgraphForLanding, ChainId.Mainnet);
+      const arbitrumData = await getTvl(Subgraph(ENDPOINTS), ChainId.Arbitrum);
       const data = { ...ethereumData, ...arbitrumData };
 
       if (data != null) {

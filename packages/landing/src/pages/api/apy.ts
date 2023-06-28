@@ -3,6 +3,12 @@ import { ChainId } from "@usedapp/core";
 import { Subgraph, SubgraphForLanding, Queries, getUnixTimestampQuarter, calculateAPY } from "@tender/shared/src/index";
 import { NextApiRequestWithCache, lruCache, CACHE_MAX_AGE_IN_SEC } from "../../utils/middlewares/cache";
 
+const ENDPOINTS = {
+  [ChainId.Arbitrum]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/Gr4Kn4E1CwNbjBxFXdnKEunAGrC4d714TFMPw4NbmbPk`,
+  [ChainId.Mainnet]: `https://gateway.thegraph.com/api/${process.env.GRAPH_API_KEY}/subgraphs/id/2x67A1XaRrMBMcYaPE6JbJEUnrtadx3HznbbGEFJtN2u`,
+  [ChainId.Hardhat]: "http://127.0.0.1:8000/subgraphs/name/tenderize/tenderize-localhost",
+};
+
 const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
   res.setHeader("Cache-Control", `public, s-maxage=${60 * 60}, stale-while-revalidate=${60 * 60 * 2}`);
   const cacheKey = encodeURIComponent(req.url ?? "apy");
@@ -16,12 +22,12 @@ const handler = async (req: NextApiRequestWithCache, res: NextApiResponse) => {
   } else {
     const monthAgo = getUnixTimestampQuarter();
     try {
-      const { data: ethereumData } = await Subgraph.query<Queries.TenderizerDaysType>({
+      const { data: ethereumData } = await SubgraphForLanding.query<Queries.TenderizerDaysType>({
         query: Queries.GetTenderizerDays,
         variables: { from: monthAgo },
         context: { chainId: ChainId.Mainnet },
       });
-      const { data: arbitrumData } = await SubgraphForLanding.query<Queries.TenderizerDaysType>({
+      const { data: arbitrumData } = await Subgraph(ENDPOINTS).query<Queries.TenderizerDaysType>({
         query: Queries.GetTenderizerDays,
         variables: { from: monthAgo },
         context: { chainId: ChainId.Arbitrum },
