@@ -242,7 +242,7 @@ const TokenWrapper: FC<{ config?: TenderizeConfig }> = (props) => {
   );
 };
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const CHAIN_URL_MAPPING = {
     [ChainId.Mainnet]: process.env.RPC_ETHEREUM ?? "",
     [ChainId.Arbitrum]: process.env.RPC_ARBITRUM ?? "",
@@ -265,13 +265,6 @@ export const getStaticProps = async () => {
     props: {
       config,
     },
-  };
-};
-
-export const getStaticPaths = async () => {
-  return {
-    paths: Object.values(stakers).map((staker) => ({ params: { slug: staker.name } })),
-    fallback: false,
   };
 };
 
